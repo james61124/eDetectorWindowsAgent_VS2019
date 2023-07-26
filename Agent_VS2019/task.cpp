@@ -100,16 +100,16 @@ int Task::CheckConnect() {
 
 int Task::GiveDetectInfoFirst() {
     char* buff = new char[STRINGMESSAGELEN];
-    char* functionName = new char[100];
-    strcpy_s(functionName, 100, "GiveDetectInfoFirst\0");
+    char* functionName = new char[24];
+    strcpy_s(functionName, 24, "GiveDetectInfoFirst\0");
     snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
     return socketsend->SendMessageToServer(functionName, buff);
 }
 
 int Task::GiveDetectInfo() {
     char* buff = new char[STRINGMESSAGELEN];
-    char* functionName = new char[40];
-    strcpy_s(functionName, 40, "GiveDetectInfo");
+    char* functionName = new char[24];
+    strcpy_s(functionName, 24, "GiveDetectInfo");
     snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
     return socketsend->SendMessageToServer(functionName, buff);
 }
