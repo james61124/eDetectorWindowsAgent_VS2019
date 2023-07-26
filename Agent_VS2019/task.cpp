@@ -70,13 +70,13 @@ int Task::GiveInfo() {
     if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
     else printf("copy sign failed\n");
 
-    if (strcpy_s(functionName, 24, "GiveInfo\0") == 0) printf("copy function success\n");
+    if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
     else printf("copy function failed\n");
 
-    //char* WorkNew = new char[WorkSize+1];
+    //char* WorkNew = new char[sizeof(functionName)+1];
     //printf("sizeof work %d", WorkSize);
     //strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
-    //WorkNew[sizeof(WorkNew) - 1] = '\0';
+    functionName[8] = '\0';
     //printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
 
     snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, 1988, 1989, BootTime, Key, DigitalSignatureHash);
