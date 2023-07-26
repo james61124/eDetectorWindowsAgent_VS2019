@@ -70,7 +70,7 @@ int Task::GiveInfo() {
     if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
     else printf("copy sign failed\n");
 
-    if (strcpy_s(functionName, sizeof(functionName), "GiveInfo\0") == 0) printf("copy function success\n");
+    if (strcpy_s(functionName, 24, "GiveInfo\0") == 0) printf("copy function success\n");
     else printf("copy function failed\n");
 
     //char* WorkNew = new char[WorkSize+1];
