@@ -73,11 +73,7 @@ int Task::GiveInfo() {
     if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
     else printf("copy function failed\n");
 
-    //char* WorkNew = new char[sizeof(functionName)+1];
-    //printf("sizeof work %d", WorkSize);
-    //strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
-    //functionName[8] = '\0';
-    //printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
+
 
     snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, 1988, 1989, BootTime, Key, DigitalSignatureHash);
     

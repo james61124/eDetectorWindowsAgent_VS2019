@@ -25,11 +25,14 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
 
-	Work[23] = '\0';
-	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
+	char* WorkNew = new char[8+1];
+	strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
+	WorkNew[sizeof(WorkNew)-1] = '\0';
+	printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
+
+	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
-	printf("send %d\n", sizeof(GetServerMessage.DoWorking));
 	char* buff = (char*)&GetServerMessage;
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
