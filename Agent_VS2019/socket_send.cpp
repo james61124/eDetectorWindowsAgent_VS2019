@@ -26,6 +26,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
 
 	char WorkNew[sizeof(Work)+1];
+	printf("sizeof work %d", sizeof(Work));
 	strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
 	WorkNew[sizeof(WorkNew) - 1] = '\0';
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
