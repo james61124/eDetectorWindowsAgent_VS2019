@@ -27,6 +27,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 
 
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
+	Mgs[23] = '\0';
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	printf("send %d\n", sizeof(GetServerMessage.DoWorking));
