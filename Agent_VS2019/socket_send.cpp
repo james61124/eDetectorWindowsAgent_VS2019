@@ -29,6 +29,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
+	printf("send %d\n", sizeof(GetServerMessage.DoWorking));
 	char* buff = (char*)&GetServerMessage;
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
