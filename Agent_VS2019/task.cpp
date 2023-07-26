@@ -60,7 +60,7 @@ int Task::GiveInfo() {
     unsigned long long BootTime = tool.GetBootTime();
     char* Key = new char[10];
     char* DigitalSignatureHash = new char[10];
-    char* functionName = new char[40];
+    char* functionName = new char[24];
 
     strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
 
@@ -70,8 +70,14 @@ int Task::GiveInfo() {
     if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
     else printf("copy sign failed\n");
 
-    if (strcpy_s(functionName, 40, "GiveInfo") == 0) printf("copy function success\n");
+    if (strcpy_s(functionName, sizeof(functionName), "GiveInfo\0") == 0) printf("copy function success\n");
     else printf("copy function failed\n");
+
+    //char* WorkNew = new char[WorkSize+1];
+    //printf("sizeof work %d", WorkSize);
+    //strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
+    //WorkNew[sizeof(WorkNew) - 1] = '\0';
+    //printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
 
     snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, 1988, 1989, BootTime, Key, DigitalSignatureHash);
     
@@ -99,7 +105,7 @@ int Task::CheckConnect() {
 int Task::GiveDetectInfoFirst() {
     char* buff = new char[STRINGMESSAGELEN];
     char* functionName = new char[100];
-    strcpy_s(functionName, 100, "GiveDetectInfoFirst");
+    strcpy_s(functionName, 100, "GiveDetectInfoFirst\0");
     snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
     return socketsend->SendMessageToServer(functionName, buff);
 }
