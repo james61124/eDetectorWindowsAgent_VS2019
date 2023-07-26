@@ -29,7 +29,8 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	printf("sizeof work %d", sizeof(Work));
 	strncpy_s(WorkNew, sizeof(WorkNew), Work, sizeof(Work));
 	WorkNew[sizeof(WorkNew) - 1] = '\0';
-	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
+	printf("sizeof work %d %s", sizeof(WorkNew), WorkNew);
+	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	char* buff = (char*)&GetServerMessage;
