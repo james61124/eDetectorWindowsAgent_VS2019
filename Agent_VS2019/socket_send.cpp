@@ -25,12 +25,13 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
 
-	char* WorkNew = new char[24];
-	strcpy_s(WorkNew, sizeof(WorkNew), Work);
-	WorkNew[sizeof(WorkNew)-1] = '\0';
-	printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
+	//char* WorkNew = new char[24];
+	//strcpy_s(WorkNew, sizeof(WorkNew), Work);
+	//WorkNew[sizeof(WorkNew)-1] = '\0';
+	//printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
+	std::cout << strlen(Work) << std::endl;
 
-	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
+	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	char* buff = (char*)&GetServerMessage;
