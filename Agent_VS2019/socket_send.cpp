@@ -26,18 +26,20 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
 
 	//char* WorkNew = new char[24];
-	//strcpy_s(WorkNew, sizeof(WorkNew), Work);
-	//WorkNew[sizeof(WorkNew)-1] = '\0';
+	char WorkNew[24];
+	strcpy_s(WorkNew, sizeof(WorkNew), Work);
+	WorkNew[strlen(Work)] = '\0';
 	//printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
-	std::cout << strlen(Work) << std::endl;
+	
 
-	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
+	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	char* buff = (char*)&GetServerMessage;
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
 	int ret = sendTCP(buff, STRPACKETSIZE);
+	std::cout << "doworkoing " << GetServerMessage.DoWorking << std::endl;
 	printf("send %s\n", Work);
 	//if (!ret) printf("send %s\n", GetServerMessage.DoWorking);
 	//else printf("send function:%d %s %s %s %s\n", sizeof(GetServerMessage.MAC), Work, GetServerMessage.DoWorking, Mgs, GetServerMessage.csMsg);
