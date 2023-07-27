@@ -223,7 +223,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				printf("copy stop\n");
 				delete[] cTempStr;
 				printf("delete cTempStr\n");
-				delete[] wTempStr;
+				//delete[] wTempStr;
 				printf("entering abnormal dll\n");
 
 				if (!vit->second.Abnormal_dll.empty())
