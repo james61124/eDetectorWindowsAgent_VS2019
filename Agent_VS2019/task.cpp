@@ -222,6 +222,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
 				printf("copy stop\n");
 				delete[] cTempStr;
+				printf("delete cTempStr\n");
 				delete[] wTempStr;
 				printf("entering abnormal dll\n");
 
