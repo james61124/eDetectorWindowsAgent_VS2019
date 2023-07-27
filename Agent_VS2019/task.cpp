@@ -204,19 +204,23 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			int ret = socketsend->SendMessageToServer(functionName_GiveScanDataInfo, TempStr);
 			if (ret <= 0)
 			{
+				printf("data info send failed\n");
 				delete[] str1;
 				delete[] wtr1;
 				break;
 			}
 			else
 			{
+				printf("data info send success\n");
 				wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
 				swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%lu|ProcessScan|%s|%s|%s|%s|%s|%lu|%s|%s|%d,%s|%d|%d|%d|%s|%d,%d"
 					, vit->first, vit->second.ProcessCTime, vit->second.ProcessTime, vit->second.ProcessName, vit->second.ProcessPath, vit->second.ProcessHash,
 					vit->second.ParentID, vit->second.ParentCTime, vit->second.ParentPath, vit->second.Injected, vit->second.UnKnownHash, vit->second.StartRun, vit->second.HideAttribute, vit->second.HideProcess
 					, vit->second.SignerSubjectName, vit->second.InjectionPE, vit->second.InjectionOther);
 				char* cTempStr = CStringToCharArray(wTempStr, CP_UTF8);
+				printf("start copy\n");
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
+				printf("copy stop\n");
 				delete[] cTempStr;
 				delete[] wTempStr;
 				printf("entering abnormal dll\n");
