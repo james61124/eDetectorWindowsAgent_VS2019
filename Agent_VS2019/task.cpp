@@ -216,7 +216,7 @@ int Task::GiveProcessData() {
 				{
 					printf("send in\n");
 					//int ret = m_Client->SendDataMsgToServer(pMAC, pIP, "GiveProcessData", TempStr);
-					int ret = socketsend->SendMessageToServer(functionName_GiveProcessData, TempStr);
+					int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
 					if (ret == 0 || ret == -1)
 					{
 						delete[] m_DataStr;
@@ -233,7 +233,7 @@ int Task::GiveProcessData() {
 			{
 				printf("send start second in\n");
 				//MessageBoxA(0,TempStr,0,0);
-				int ret = socketsend->SendMessageToServer(functionName_GiveProcessData, TempStr);
+				int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
 				if (ret == 0 || ret == -1)
 				{
 					delete[] TempStr;

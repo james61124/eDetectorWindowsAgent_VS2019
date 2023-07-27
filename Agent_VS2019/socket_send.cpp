@@ -5,17 +5,27 @@ SocketSend::SocketSend(Info* infoInstance) {
 }
 
 int SocketSend::SendDataToServer(char* Work, char* Mgs) {
-	StrDataPacket GetServerMessage;
+	StrPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
-	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), Work);
+
+	//char* WorkNew = new char[24];
+	char WorkNew[24];
+	strcpy_s(WorkNew, sizeof(WorkNew), Work);
+	WorkNew[strlen(Work)] = '\0';
+	//printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
+
+
+	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	char* buff = (char*)&GetServerMessage;
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
+	printf("send data %s\n", Work);
+
 	return ret;
 }
 
