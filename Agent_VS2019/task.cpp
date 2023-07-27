@@ -219,9 +219,11 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
 				delete[] cTempStr;
 				delete[] wTempStr;
+				printf("entering abnormal dll\n");
 
 				if (!vit->second.Abnormal_dll.empty())
 				{
+					printf("abnormal dll not empty\n");
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
 					set<string>::iterator dllit;
 					for (dllit = vit->second.Abnormal_dll.begin(); dllit != vit->second.Abnormal_dll.end(); dllit++)
