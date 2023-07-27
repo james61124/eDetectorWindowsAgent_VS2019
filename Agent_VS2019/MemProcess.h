@@ -118,6 +118,10 @@ public:
 	void ParserProcessRisk(/*ThreadProcessInfo * pInfo*/process_info_Ex* pInfo, set<DWORD>* pApiName, TCHAR* pMyPath, vector<UnKnownDataInfo>* pMembuf);
 	void InjectionNewProcess(ThreadInfo* pInfo);
 	void LoadingProcessOnlyID(map<DWORD, DWORD>* pPID);
+
+	bool EnumProcess(map<DWORD, process_info>* pInfo, time_t& LoadProcessTime);
+	void GetProcessInfo(DWORD pid, TCHAR* pPath, TCHAR* pTimeStr, TCHAR* pUserName, TCHAR* pComStr);
+
 private:
 	vector<string> m_ProcessHistory1;
 	vector<string> m_ProcessHistory2;
@@ -133,7 +137,7 @@ private:
 	vector<UnKnownDataInfo> m_UnKnownData2;
 	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
 	void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr = NULL, TCHAR* pCTimeStr = NULL);
-	void GetProcessInfo(DWORD pid, TCHAR* pPath, TCHAR* pTimeStr, TCHAR* pUserName, TCHAR* pComStr);
+	
 	void GetProcessDetectInfo(DWORD pid, TCHAR* pPath, TCHAR* pComStr);
 	BOOL DumpExecute(DWORD pid, wchar_t* pName, set<DWORD>* pApiBace, set<DWORD>* pStr, TCHAR* pProcessPath, set<string>* pIsAbnormal_dll);
 	void ParserProcessApi(set<string>* pApiBace, vector<BYTE>* pExecuteData, int pExecuteDataSize, vector<string>* pStr);
@@ -167,7 +171,7 @@ private:
 	void InjectionProcess(DWORD pid, TCHAR* pPath);
 	bool WindowsMainProcess(map<DWORD, wstring>* pSystemPID, DWORD pParentId);
 	void SearchExecutePath(DWORD pid, TCHAR* pPath, TCHAR* pName);
-	bool EnumProcess(map<DWORD, process_info>* pInfo, time_t& LoadProcessTime);
+	
 	bool EnumProcessEx(map<DWORD, process_info_Ex>* pInfo/*,time_t & LoadProcessTime*/);
 	void CheckInjectionPtn(set<DWORD>* pStringsHash, BOOL& pIsOther, BOOL& pIsPE);
 	void GetUnKnownHash(BYTE* pBuffer, SIZE_T pBufferSize, TCHAR* pUnKnownHash, SIZE_T ptype);
