@@ -10,5 +10,6 @@ int main(int argc, char* argv[]) {
     printf("thread is going to open\n");
     std::thread RecieveFunction([&socketManager]() { socketManager.receiveTCP(); });
     socketManager.HandleTaskToServer("GiveInfo");
+    socketManager.HandleTaskToServer("GiveProcessData");
     RecieveFunction.join();
 }
