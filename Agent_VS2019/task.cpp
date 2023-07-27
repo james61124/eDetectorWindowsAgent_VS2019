@@ -111,7 +111,9 @@ int Task::GiveDetectInfo() {
     char* functionName = new char[24];
     strcpy_s(functionName, 24, "GiveDetectInfo");
     snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
-    return socketsend->SendMessageToServer(functionName, buff);
+	int ret = socketsend->SendMessageToServer(functionName, buff);
+	GiveProcessData();
+    return ret;
 }
 
 

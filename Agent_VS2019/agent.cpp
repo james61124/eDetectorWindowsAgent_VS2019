@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     SocketManager socketManager(1988, 1989, info, socketsend);
     printf("thread is going to open\n");
     std::thread RecieveFunction([&socketManager]() { socketManager.receiveTCP(); });
-    //socketManager.HandleTaskToServer("GiveInfo");
-    socketManager.HandleTaskToServer("GiveProcessData");
+    socketManager.HandleTaskToServer("GiveInfo");
+    
     RecieveFunction.join();
 }
