@@ -204,18 +204,17 @@ int Task::GiveProcessData() {
 				//wprintf(L"%s\n",wstr);
 				char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
 				strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				//int ret = m_Client->SendDataMsgToServer(pMAC,pIP,"GiveExplorerData",m_DataStr);
-				delete[] wstr;
+
+				//delete[] wstr;
 				delete[] m_UserName;
 				delete[] ParentName;
-				//delete [] m_Time;
 				delete[] m_ComStr;
 				delete[] m_Path;
+
 				printf("send start %d\n", DataCount);
 				if ((DataCount % 30) == 0 && DataCount >= 30)
 				{
-					printf("send in\n");
-					//int ret = m_Client->SendDataMsgToServer(pMAC, pIP, "GiveProcessData", TempStr);
+					printf("%s\n", TempStr);
 					int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
 					if (ret == 0 || ret == -1)
 					{

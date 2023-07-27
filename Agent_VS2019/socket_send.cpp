@@ -5,7 +5,6 @@ SocketSend::SocketSend(Info* infoInstance) {
 }
 
 int SocketSend::SendDataToServer(char* Work, char* Mgs) {
-	printf("start send data %s\n", Work);
 	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -20,7 +19,6 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
-	printf("finish copy\n");
 
 	char* buff = (char*)&GetServerMessage;
 	SetKeys(BIT128, AESKey);
