@@ -218,11 +218,8 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					vit->second.ParentID, vit->second.ParentCTime, vit->second.ParentPath, vit->second.Injected, vit->second.UnKnownHash, vit->second.StartRun, vit->second.HideAttribute, vit->second.HideProcess
 					, vit->second.SignerSubjectName, vit->second.InjectionPE, vit->second.InjectionOther);
 				char* cTempStr = CStringToCharArray(wTempStr, CP_UTF8);
-				printf("start copy\n");
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
-				printf("copy stop\n");
 				delete[] cTempStr;
-				printf("delete cTempStr\n");
 				//delete[] wTempStr;
 				printf("entering abnormal dll\n");
 
@@ -231,8 +228,10 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					printf("abnormal dll not empty\n");
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
 					set<string>::iterator dllit;
+					printf("loop start\n");
 					for (dllit = vit->second.Abnormal_dll.begin(); dllit != vit->second.Abnormal_dll.end(); dllit++)
 					{
+						printf("sending GiveScanData\n");
 						char* dllstr = new char[4096];
 						sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
 						if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
