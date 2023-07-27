@@ -234,8 +234,10 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 						printf("sending GiveScanData\n");
 						char* dllstr = new char[4096];
 						sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
+						printf("sprintf_s success\n");
 						if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 						{
+							printf("length bigger than DATASTRINGMESSAGELEN\n");
 							ret = socketsend->SendMessageToServer(functionName_GiveScanData, TempStr);
 							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 							if (ret <= 0)
@@ -243,6 +245,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 								delete[] dllstr;
 								break;
 							}
+						}
+						else {
+							printf("length smaller than DATASTRINGMESSAGELEN\n");
 						}
 						strcat_s(TempStr, DATASTRINGMESSAGELEN, dllstr);
 						delete[] dllstr;
