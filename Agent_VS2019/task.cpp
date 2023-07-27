@@ -152,20 +152,21 @@ int Task::GiveProcessData() {
 		bool ret = false;
 		time_t LoadProcessTime = 0;
 		MemProcess* m_MemPro = new MemProcess;
-		printf("start enumprocess\n");
 		ret = m_MemPro->EnumProcess(&process_list, LoadProcessTime);
-		printf("stop enumprocess\n");
 
 		if (ret)
 		{
 			printf("ret true\n");
 			char* TempStr = new char[DATASTRINGMESSAGELEN];
 			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+			printf("memset success\n");
 			int DataCount = 0;
 			map<DWORD, process_info>::iterator it;
 			map<DWORD, process_info>::iterator st;
+			printf("entering for loop\n");
 			for (it = process_list.begin(); it != process_list.end(); it++)
 			{
+				printf("enter for loop\n");
 				TCHAR* m_Path = new TCHAR[512];
 				TCHAR* m_ComStr = new TCHAR[512];
 				//TCHAR * m_Time = new TCHAR[20];
@@ -178,12 +179,14 @@ int Task::GiveProcessData() {
 				//_tcscpy_s(m_Time,20,_T("null"));
 				_tcscpy_s(ParentName, MAX_PATH, _T("null"));
 				_tcscpy_s(m_UserName, _MAX_FNAME, _T("null"));
+				printf("CheckIsPackedPE start\n");
 				m_MemPro->GetProcessInfo(it->first, m_Path, NULL, m_UserName, m_ComStr);
 				if (_tcscmp(m_Path, _T("null")))
 				{
 					IsPacked = CheckIsPackedPE(m_Path);
 				}
 				st = process_list.find(it->second.parent_pid);
+				printf("process create time start\n");
 				if (st != process_list.end())
 				{
 					if (st->second.ProcessCreateTime <= it->second.ProcessCreateTime)
@@ -208,6 +211,7 @@ int Task::GiveProcessData() {
 				//delete [] m_Time;
 				delete[] m_ComStr;
 				delete[] m_Path;
+				printf("send start\n");
 				if ((DataCount % 30) == 0 && DataCount >= 30)
 				{
 					//int ret = m_Client->SendDataMsgToServer(pMAC, pIP, "GiveProcessData", TempStr);
@@ -236,7 +240,6 @@ int Task::GiveProcessData() {
 			}
 			delete[] TempStr;
 		}
-		else printf("ret false\n");
 		Checkprocess_list.clear();
 		process_list.clear();
 		return 1;
