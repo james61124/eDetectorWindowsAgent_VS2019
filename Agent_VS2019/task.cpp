@@ -152,10 +152,13 @@ int Task::GiveProcessData() {
 		bool ret = false;
 		time_t LoadProcessTime = 0;
 		MemProcess* m_MemPro = new MemProcess;
+		printf("start enumprocess\n");
 		ret = m_MemPro->EnumProcess(&process_list, LoadProcessTime);
+		printf("stop enumprocess\n");
 
 		if (ret)
 		{
+			printf("ret true\n");
 			char* TempStr = new char[DATASTRINGMESSAGELEN];
 			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 			int DataCount = 0;
@@ -233,6 +236,7 @@ int Task::GiveProcessData() {
 			}
 			delete[] TempStr;
 		}
+		else printf("ret false\n");
 		Checkprocess_list.clear();
 		process_list.clear();
 		return 1;
