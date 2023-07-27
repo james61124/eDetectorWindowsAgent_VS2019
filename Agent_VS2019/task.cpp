@@ -211,9 +211,10 @@ int Task::GiveProcessData() {
 				//delete [] m_Time;
 				delete[] m_ComStr;
 				delete[] m_Path;
-				printf("send start\n");
+				printf("send start %d\n", DataCount);
 				if ((DataCount % 30) == 0 && DataCount >= 30)
 				{
+					printf("send in\n");
 					//int ret = m_Client->SendDataMsgToServer(pMAC, pIP, "GiveProcessData", TempStr);
 					int ret = socketsend->SendMessageToServer(functionName_GiveProcessData, TempStr);
 					if (ret == 0 || ret == -1)
@@ -227,8 +228,10 @@ int Task::GiveProcessData() {
 				}
 				delete[] m_DataStr;
 			}
+			printf("send start second\n");
 			if (TempStr[0] != '\0')
 			{
+				printf("send start second in\n");
 				//MessageBoxA(0,TempStr,0,0);
 				int ret = socketsend->SendMessageToServer(functionName_GiveProcessData, TempStr);
 				if (ret == 0 || ret == -1)
