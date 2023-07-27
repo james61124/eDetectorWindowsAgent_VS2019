@@ -1,6 +1,6 @@
 #include "tools.h"
 #include <VersionHelpers.h>
-#include <Windows.h>
+//#include <Windows.h>
 
 
 std::vector<std::string> Tool::SplitMsg(char* msg) {
@@ -126,29 +126,29 @@ unsigned long long Tool::GetBootTime() {
 
 
 //
-//void Tool::LoadApiPattern(std::set<DWORD>* pApiName) {
-//    pApiName->insert(2923117684);//CreateProcessA
-//    pApiName->insert(2922200202);//CreateProcessW
-//    pApiName->insert(2413463320);//CreateRemoteThread
-//    pApiName->insert(1791678813);//GetThreadContext
-//    pApiName->insert(1588018759);//NtAllocateVirtualMemory
-//    pApiName->insert(2141139445);//NtCreateProcess
-//    pApiName->insert(2999148978);//NtCreateProcessEx
-//    pApiName->insert(1810605166);//NtCreateThread
-//    pApiName->insert(748668459);//NtCreateThreadEx
-//    pApiName->insert(73416223);//NtGetContextThread
-//    pApiName->insert(3307083059);//NtOpenProcess
-//    pApiName->insert(1789965451);//NtResumeThread
-//    pApiName->insert(2806968875);//NtSetContextThread
-//    pApiName->insert(2845710125);//NtWriteVirtualMemory
-//    pApiName->insert(3767103601);//OpenProcess
-//    pApiName->insert(1383550409);//ResumeThread
-//    pApiName->insert(1863699581);//RtlCreateUserThread
-//    pApiName->insert(963218793);//SetThreadContext
-//    pApiName->insert(2707265234);//VirtualAlloc
-//    pApiName->insert(2959245455);//VirtualAllocEx
-//    pApiName->insert(3481317475);//WriteProcessMemory
-//}
+void Tool::LoadApiPattern(std::set<DWORD>* pApiName) {
+    pApiName->insert(2923117684);//CreateProcessA
+    pApiName->insert(2922200202);//CreateProcessW
+    pApiName->insert(2413463320);//CreateRemoteThread
+    pApiName->insert(1791678813);//GetThreadContext
+    pApiName->insert(1588018759);//NtAllocateVirtualMemory
+    pApiName->insert(2141139445);//NtCreateProcess
+    pApiName->insert(2999148978);//NtCreateProcessEx
+    pApiName->insert(1810605166);//NtCreateThread
+    pApiName->insert(748668459);//NtCreateThreadEx
+    pApiName->insert(73416223);//NtGetContextThread
+    pApiName->insert(3307083059);//NtOpenProcess
+    pApiName->insert(1789965451);//NtResumeThread
+    pApiName->insert(2806968875);//NtSetContextThread
+    pApiName->insert(2845710125);//NtWriteVirtualMemory
+    pApiName->insert(3767103601);//OpenProcess
+    pApiName->insert(1383550409);//ResumeThread
+    pApiName->insert(1863699581);//RtlCreateUserThread
+    pApiName->insert(963218793);//SetThreadContext
+    pApiName->insert(2707265234);//VirtualAlloc
+    pApiName->insert(2959245455);//VirtualAllocEx
+    pApiName->insert(3481317475);//WriteProcessMemory
+}
 //
 //void Tool::ScanRunNowProcess(void* argv, std::map<DWORD, ProcessInfoData>* pInfo, std::set<DWORD>* pApiName, std::vector<UnKnownDataInfo>* pMembuf) {
 //    // TransportData * m_Client = (TransportData *)argv;

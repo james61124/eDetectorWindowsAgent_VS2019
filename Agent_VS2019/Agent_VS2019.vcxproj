@@ -20,17 +20,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp" />
+    <ClCompile Include="AutoRun.cpp" />
     <ClCompile Include="caes.cpp" />
+    <ClCompile Include="GlobalFunction.cpp" />
     <ClCompile Include="info.cpp" />
+    <ClCompile Include="MemProcess.cpp" />
+    <ClCompile Include="PeFunction.cpp" />
     <ClCompile Include="socket_manager.cpp" />
     <ClCompile Include="socket_send.cpp" />
     <ClCompile Include="task.cpp" />
     <ClCompile Include="tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AutoRun.h" />
     <ClInclude Include="caes.h" />
+    <ClInclude Include="GlobalFunction.h" />
     <ClInclude Include="info.h" />
-    <ClInclude Include="Proess.h" />
+    <ClInclude Include="MemProcess.h" />
+    <ClInclude Include="PeFunction.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="socket_manager.h" />
     <ClInclude Include="socket_send.h" />
     <ClInclude Include="StrPacket.h" />
@@ -147,10 +155,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;WIN32_LEAN_AND_MEAN;_HAS_STD_BYTE=0;UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <AdditionalOptions>/utf-16 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

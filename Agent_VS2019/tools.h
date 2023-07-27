@@ -15,7 +15,6 @@
 #include <tchar.h>
 #include <Sddl.h>
 #include <Shobjidl.h>
-#include <TlHelp32.h>
 #include <wintrust.h>
 #include <dbghelp.h>
 #include <Iphlpapi.h>
@@ -23,11 +22,11 @@
 #include <cwchar>  // For std::wcsftime
 
 // #include "StrPacket.h"
-#include "Process.h"
+//#include "Process.h"
 // #include "PeFunction.h"
 
-#define MAX_KEY_LENGTH 255
-#define MAX_VALUE_NAME 16383
+
+
 
 
 typedef void (WINAPI* PGNSI)(LPSYSTEM_INFO);
@@ -49,7 +48,7 @@ public:
 
     // Process
 
-    //void LoadApiPattern(std::set<DWORD>* pApiName);
+    void LoadApiPattern(std::set<DWORD>* pApiName);
     //void ScanRunNowProcess(void* argv, std::map<DWORD, ProcessInfoData>* pInfo, std::set<DWORD>* pApiName, std::vector<UnKnownDataInfo>* pMembuf);
     //void GetTcpInformationEx(std::vector<TCPInformation>* pInfo);
     //int CheckIsStartRun(std::map<std::wstring, BOOL>* pService, std::set<std::wstring>* pStartRun, DWORD pid/*,BOOL & isServiceHide*/);

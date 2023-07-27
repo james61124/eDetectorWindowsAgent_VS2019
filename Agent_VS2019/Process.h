@@ -1,16 +1,29 @@
-#define WIN32_LEAN_AND_MEAN
+#ifndef PROCESS_H
+#define PROCESS_H
+
+#pragma comment(lib, "Crypt32.lib")
 #include <string>
 #include <cstring>
 #include <set>
+#include <vector>
 #include <Windows.h>
-#include <Ntdef.h> 
+#include <Sddl.h>
+#include <Psapi.h>
+#include <winternl.h>
+#include <TlHelp32.h>
+//#include <ntdef.h>
+
+//#include <Ntdef.h> 
 
 #include <Mstcpip.h>
+#include <IPHlpApi.h>
 
 #define MAX_PATH 260
 #define MAX_PATH_EX 512
 #define MemoryMappedFilenameInformation 2
 #define ENCODING (X509_ASN_ENCODING | PKCS_7_ASN_ENCODING)
+#define MAX_KEY_LENGTH 255
+#define MAX_VALUE_NAME 16383
 
 struct ProcessInfoData
 {
@@ -93,11 +106,11 @@ struct SerivceInformation
 	wchar_t lpServiceDll[1024];
 };
 
-struct AutoRunInfo {
+typedef struct AutoRunInfo_ {
 	wchar_t m_Command[MAX_PATH_EX];
 	wchar_t StartName[MAX_PATH];
 	wchar_t InfoLocation[MAX_PATH_EX];
-};
+}AutoRunInfo;
 
 struct DigitalSignatureInfo
 {
@@ -166,13 +179,44 @@ typedef struct _LOADED_IMAGE32 {
 	ULONG                 SizeOfImage;
 } LOADED_IMAGE32, * PLOADED_IMAGE32;
 
-DWORD(WINAPI* pGetExtendedTcpTable)(
-	PVOID pTcpTable,
-	PDWORD pdwSize,
-	BOOL bOrder,
-	ULONG ulAf,
-	TCP_TABLE_CLASS TableClass,
-	ULONG Reserved
-	);
+
+
+//DWORD(WINAPI* pGetExtendedTcpTable)(
+//	PVOID pTcpTable,
+//	PDWORD pdwSize,
+//	BOOL bOrder,
+//	ULONG ulAf,
+//	TCP_TABLE_CLASS TableClass,
+//	ULONG Reserved
+//	);
+
+
 
 typedef PBYTE ALIGNED_BUF;
+
+
+// add 
+
+struct StartRunInfoData
+{
+	TCHAR FileName[MAX_PATH];
+	TCHAR FilePath[MAX_PATH_EX];
+	TCHAR FileHash[40];
+};
+
+struct TaskSchedulerInfo
+{
+	TCHAR Command[MAX_PATH_EX];
+	TCHAR TaskName[MAX_PATH];
+	TCHAR UserId[_MAX_FNAME];
+	TCHAR LastRunTime[64];
+	TCHAR NextRunTime[64];
+	TCHAR Triggers[64];
+	TCHAR Status[32];
+	TCHAR Argument[1024];
+	TCHAR HighPrivilege[32];
+	TCHAR Author[1024];
+	TCHAR RunOnNetwork[32];
+};
+
+#endif // PROCESS_H

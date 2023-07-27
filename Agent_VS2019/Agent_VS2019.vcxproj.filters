@@ -36,11 +36,20 @@
     <ClCompile Include="tools.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
+    <ClCompile Include="AutoRun.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="MemProcess.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="PeFunction.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalFunction.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Proess.h">
-      <Filter>資源檔</Filter>
-    </ClInclude>
     <ClInclude Include="StrPacket.h">
       <Filter>資源檔</Filter>
     </ClInclude>
@@ -60,6 +69,21 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="tools.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoRun.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="MemProcess.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="PeFunction.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalFunction.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Process.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

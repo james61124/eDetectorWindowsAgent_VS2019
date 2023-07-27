@@ -41,6 +41,9 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	int ret = sendTCP(buff, STRPACKETSIZE);
 
 	printf("send %s\n", Work);
+
+	delete[] Work;
+	delete[] Mgs;
 	//if (!ret) printf("send %s\n", GetServerMessage.DoWorking);
 	//else printf("send function:%d %s %s %s %s\n", sizeof(GetServerMessage.MAC), Work, GetServerMessage.DoWorking, Mgs, GetServerMessage.csMsg);
 	return ret;
