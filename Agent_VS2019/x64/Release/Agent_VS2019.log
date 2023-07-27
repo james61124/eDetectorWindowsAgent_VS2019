@@ -1,5 +1,5 @@
 ﻿cl : 命令列 warning D9002: 忽略未知的選項 '/utf-16'
-  task.cpp
+  agent.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(222,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
@@ -128,14 +128,8 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%lld'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%Id'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
   正在產生程式碼
-  3 of 1877 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  1 of 1877 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   已完成程式碼產生
