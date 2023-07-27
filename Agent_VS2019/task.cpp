@@ -121,6 +121,7 @@ int Task::GetScanInfoData() {
 }
 
 int Task::GiveProcessData() {
+	printf("sending GiveProcessData\n");
 	char* Scan = new char[5];
 	strcpy_s(Scan, 5, "Scan");
 
