@@ -6,7 +6,7 @@ SocketSend::SocketSend(Info* infoInstance) {
 
 int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	printf("start send data %s\n", Work);
-	StrPacket GetServerMessage;
+	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
