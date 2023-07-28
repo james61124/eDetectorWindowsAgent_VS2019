@@ -53,7 +53,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
 	int ret = sendTCP(buff, STRPACKETSIZE);
 
-	printf("send %s\n", Work);
+	printf("send %s %s\n", Work, Mgs);
 
 	delete[] Work;
 	delete[] Mgs;
