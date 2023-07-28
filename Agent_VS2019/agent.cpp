@@ -10,6 +10,7 @@ int main(int argc, char* argv[]) {
     printf("thread is going to open\n");
     std::thread RecieveFunction([&socketManager]() { socketManager.receiveTCP(); });
     socketManager.HandleTaskToServer("GiveInfo");
-    
     RecieveFunction.join();
+
+    std::this_thread::sleep_for(std::chrono::seconds(30));
 }
