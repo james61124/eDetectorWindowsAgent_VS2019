@@ -63,7 +63,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 }
 
 bool SocketSend::sendTCP(char* data, long len) {
-	int ret = send(*(info->tcpSocket), data, strlen(data), 0);
+	int ret = send(*(info->tcpSocket), data, len, 0);
 	if (ret) {
 
 		std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
