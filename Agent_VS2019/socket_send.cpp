@@ -10,8 +10,8 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
 	strcpy_s(GetServerMessage.UUID, sizeof(GetServerMessage.UUID), info->UUID);
 
-	//char* WorkNew = new char[24];
-	char WorkNew[24];
+	char* WorkNew = new char[24];
+	//char WorkNew[24];
 	strcpy_s(WorkNew, sizeof(WorkNew), Work);
 	WorkNew[strlen(Work)] = '\0';
 	//printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
@@ -25,6 +25,10 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
 	printf("send data %s\n", Work);
+
+	delete[] Work;
+	delete[] Mgs;
+	delete[] WorkNew;
 
 	return ret;
 }
