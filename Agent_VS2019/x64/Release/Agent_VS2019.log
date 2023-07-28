@@ -1,6 +1,6 @@
 ﻿cl : 命令列 warning D9002: 忽略未知的選項 '/utf-16'
   socket_send.cpp
-C:\james\Agent_VS2019\Agent_VS2019\socket_send.cpp(67,58): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\james\Agent_VS2019\Agent_VS2019\socket_send.cpp(66,58): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
   正在產生程式碼
   2 of 919 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
