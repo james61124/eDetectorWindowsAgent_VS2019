@@ -24,7 +24,7 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
-	printf("send data %s\n", Work);
+	printf("send data %s %s\n", Work, Mgs);
 
 	delete[] Work;
 	delete[] Mgs;
@@ -53,7 +53,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
 	int ret = sendTCP(buff, STRPACKETSIZE);
 
-	printf("send %s %s\n", Work, Mgs);
+	printf("send %s\n", Work);
 
 	delete[] Work;
 	delete[] Mgs;
