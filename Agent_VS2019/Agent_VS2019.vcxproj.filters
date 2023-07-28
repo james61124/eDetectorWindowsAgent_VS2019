@@ -13,21 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{dda86cb7-1442-4200-8d12-e7dcd0ae3146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scan">
+      <UniqueIdentifier>{55e95325-2b4b-43a3-b061-0d82897050c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File">
+      <UniqueIdentifier>{809f5c03-c55f-41e3-94da-f3d7633f4ccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File\FAT32">
+      <UniqueIdentifier>{5b762de4-0e2e-407a-8d49-faa4cb622536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File\NTFS">
+      <UniqueIdentifier>{0a0b940e-ca8e-4283-8f37-cedf6a694f7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="caes.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
     <ClCompile Include="info.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
-    <ClCompile Include="socket_manager.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
-    <ClCompile Include="socket_send.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
     <ClCompile Include="task.cpp">
@@ -36,33 +42,57 @@
     <ClCompile Include="tools.cpp">
       <Filter>資源檔</Filter>
     </ClCompile>
-    <ClCompile Include="AutoRun.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
-    <ClCompile Include="MemProcess.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
-    <ClCompile Include="PeFunction.cpp">
-      <Filter>資源檔</Filter>
-    </ClCompile>
     <ClCompile Include="GlobalFunction.cpp">
       <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="socket_manager.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="socket_send.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="caes.cpp">
+      <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoRun.cpp">
+      <Filter>Scan</Filter>
+    </ClCompile>
+    <ClCompile Include="MemProcess.cpp">
+      <Filter>Scan</Filter>
+    </ClCompile>
+    <ClCompile Include="PeFunction.cpp">
+      <Filter>Scan</Filter>
+    </ClCompile>
+    <ClCompile Include="CEntry.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileEntry.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileSystem.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="CFolderEntry.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="CRootFolder.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="CVolumeAccess.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="FAT32General.cpp">
+      <Filter>File\FAT32</Filter>
+    </ClCompile>
+    <ClCompile Include="NTFSSearchCore.cpp">
+      <Filter>File\NTFS</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StrPacket.h">
       <Filter>資源檔</Filter>
     </ClInclude>
-    <ClInclude Include="caes.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
     <ClInclude Include="info.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="socket_manager.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="socket_send.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="task.h">
@@ -71,20 +101,77 @@
     <ClInclude Include="tools.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="AutoRun.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="MemProcess.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="PeFunction.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
     <ClInclude Include="GlobalFunction.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
+    <ClInclude Include="socket_manager.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="socket_send.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="caes.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoRun.h">
+      <Filter>Scan</Filter>
+    </ClInclude>
+    <ClInclude Include="MemProcess.h">
+      <Filter>Scan</Filter>
+    </ClInclude>
+    <ClInclude Include="PeFunction.h">
+      <Filter>Scan</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntry.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileEntry.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileSystem.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="CFolderEntry.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="CRootFolder.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="CVolumeAccess.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="FAT32General.h">
+      <Filter>File\FAT32</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFS.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFS_Attribute.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFS_Common.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFS_DataType.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFS_FileRecord.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
+    <ClInclude Include="NTFSSearchCore.h">
+      <Filter>File\NTFS</Filter>
+    </ClInclude>
     <ClInclude Include="Process.h">
-      <Filter>標頭檔</Filter>
+      <Filter>Scan</Filter>
+    </ClInclude>
+    <ClInclude Include="general.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="internal.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>File</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

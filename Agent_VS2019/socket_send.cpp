@@ -24,10 +24,10 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
-	printf("send data %s %s\n", Work, Mgs);
+	printf("send data %s\n", Work);
 
-	delete[] Work;
-	delete[] Mgs;
+	//delete[] Work;
+	//delete[] Mgs;
 
 	return ret;
 }

@@ -1,9 +1,8 @@
 ﻿cl : 命令列 warning D9002: 忽略未知的選項 '/utf-16'
-  socket_send.cpp
-C:\james\Agent_VS2019\Agent_VS2019\socket_send.cpp(66,58): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+  NTFSSearchCore.cpp
   正在產生程式碼
-  7 of 919 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  254 of 1155 functions (22.0%) were compiled, the rest were copied from previous compilation.
+    230 functions were new in current compilation
+    34 functions had inline decision re-evaluated but remain unchanged
   已完成程式碼產生
   Agent_VS2019.vcxproj -> C:\james\Agent_VS2019\x64\Release\Agent_VS2019.exe

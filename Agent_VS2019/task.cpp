@@ -214,7 +214,7 @@ int Task::GiveProcessData() {
 				printf("send start %d\n", DataCount);
 				if ((DataCount % 30) == 0 && DataCount >= 30)
 				{
-					printf("%s\n", TempStr);
+					//printf("%s\n", TempStr);
 					int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
 					if (ret == 0 || ret == -1)
 					{
