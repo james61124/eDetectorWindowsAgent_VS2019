@@ -12,5 +12,5 @@ int main(int argc, char* argv[]) {
     socketManager.HandleTaskToServer("GiveInfo");
     RecieveFunction.join();
 
-    std::this_thread::sleep_for(std::chrono::seconds(30));
+    while (true) {};
 }

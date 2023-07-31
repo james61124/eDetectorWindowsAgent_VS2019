@@ -8,6 +8,8 @@
 #include <future>
 
 
+
+
 SocketManager::SocketManager(int port, int detect_port, Info* infoInstance, SocketSend* socketSendInstance) {
 
     Port = port;

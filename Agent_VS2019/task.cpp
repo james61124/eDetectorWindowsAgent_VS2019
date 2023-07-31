@@ -6,6 +6,7 @@
 #include "task.h"
 
 
+
 Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
     functionMap["GiveInfo"] = std::bind(&Task::GiveInfo, this);
     functionMap["GiveDetectInfoFirst"] = std::bind(&Task::GiveDetectInfoFirst, this);
@@ -31,7 +32,7 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
     functionFromServerMap["GetScanInfoData"] = &Task::GetScanInfoData_;
     functionFromServerMap["GetProcessInfo"] = &Task::GetProcessInfo;
     functionFromServerMap["GetDrive"] = &Task::GetDrive;
-    functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo;
+    //functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo;
     functionFromServerMap["TransportExplorer"] = &Task::TransportExplorer;
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
     functionFromServerMap["GetCollectInfoData"] = &Task::GetCollectInfoData;
@@ -63,15 +64,16 @@ int Task::GiveInfo() {
     char* functionName = new char[24];
 
     strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
+	strcpy_s(Key, sizeof(Key), "");
+	strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456");
+	strcpy_s(functionName, 24, "GiveInfo");
 
-    if (strcpy_s(Key, sizeof(Key), "") == 0) printf("copy key success\n");
-    else printf("copy key failed\n");
-
-    if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
-    else printf("copy sign failed\n");
-
-    if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
-    else printf("copy function failed\n");
+    //if (strcpy_s(Key, sizeof(Key), "") == 0) printf("copy key success\n");
+    //else printf("copy key failed\n");
+    //if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
+    //else printf("copy sign failed\n");
+    //if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
+    //else printf("copy function failed\n");
 
 
 
@@ -156,17 +158,17 @@ int Task::GiveProcessData() {
 
 		if (ret)
 		{
-			printf("ret true\n");
+			//printf("ret true\n");
 			char* TempStr = new char[DATASTRINGMESSAGELEN];
 			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-			printf("memset success\n");
+			//printf("memset success\n");
 			int DataCount = 0;
 			map<DWORD, process_info>::iterator it;
 			map<DWORD, process_info>::iterator st;
-			printf("entering for loop\n");
+			//printf("entering for loop\n");
 			for (it = process_list.begin(); it != process_list.end(); it++)
 			{
-				printf("enter for loop\n");
+				//printf("enter for loop\n");
 				TCHAR* m_Path = new TCHAR[512];
 				TCHAR* m_ComStr = new TCHAR[512];
 				//TCHAR * m_Time = new TCHAR[20];
@@ -179,14 +181,14 @@ int Task::GiveProcessData() {
 				//_tcscpy_s(m_Time,20,_T("null"));
 				_tcscpy_s(ParentName, MAX_PATH, _T("null"));
 				_tcscpy_s(m_UserName, _MAX_FNAME, _T("null"));
-				printf("CheckIsPackedPE start\n");
+				//printf("CheckIsPackedPE start\n");
 				m_MemPro->GetProcessInfo(it->first, m_Path, NULL, m_UserName, m_ComStr);
 				if (_tcscmp(m_Path, _T("null")))
 				{
 					IsPacked = CheckIsPackedPE(m_Path);
 				}
 				st = process_list.find(it->second.parent_pid);
-				printf("process create time start\n");
+				//printf("process create time start\n");
 				if (st != process_list.end())
 				{
 					if (st->second.ProcessCreateTime <= it->second.ProcessCreateTime)
@@ -199,6 +201,7 @@ int Task::GiveProcessData() {
 					//	ParentTime = 0;
 				}
 				wchar_t* wstr = new wchar_t[2048];
+				// swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.process_name, m_ComStr, m_Path, it->second.parent_pid, ParentName);
 				swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.parent_pid, it->second.process_name, it->second.ProcessCreateTime, ParentName, ParentTime, m_Path, m_UserName, IsPacked, m_ComStr, it->second.IsHide);
 				DataCount++;
 				//wprintf(L"%s\n",wstr);
@@ -211,7 +214,7 @@ int Task::GiveProcessData() {
 				delete[] m_ComStr;
 				delete[] m_Path;
 
-				printf("send start %d\n", DataCount);
+				//printf("send start %d\n", DataCount);
 				if ((DataCount % 30) == 0 && DataCount >= 30)
 				{
 					//printf("%s\n", TempStr);
@@ -227,10 +230,10 @@ int Task::GiveProcessData() {
 				}
 				delete[] m_DataStr;
 			}
-			printf("send start second\n");
+			//printf("send start second\n");
 			if (TempStr[0] != '\0')
 			{
-				printf("send start second in\n");
+				//printf("send start second in\n");
 				//MessageBoxA(0,TempStr,0,0);
 				int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
 				if (ret == 0 || ret == -1)
@@ -491,6 +494,227 @@ int Task::GiveScanProgress() { return 0; }
 int Task::GiveDriveInfo() { return 0; }
 int Task::Explorer() { return 0; }
 int Task::GiveExplorerData() {
+	//char* functionName_GiveExplorerData = new char[24];
+	//strcpy_s(functionName_GiveExplorerData, 24, "GiveExplorerData");
+	//char* functionName_GiveExplorerEnd = new char[24];
+	//strcpy_s(functionName_GiveExplorerEnd, 24, "GiveExplorerEnd");
+	//char* functionName_GiveExplorerError = new char[24];
+	//strcpy_s(functionName_GiveExplorerError, 24, "GiveExplorerError");
+
+
+	////wchar_t* wMgs = CharArrayToWString(Mgs->csMsg, CP_UTF8);
+	//ExplorerInfo* m_Info = new ExplorerInfo;
+	//CFileSystem* pfat;
+	////LoadExplorerInfo(wMgs, m_Info);
+	//m_Info->Drive = L'C';
+	//wcscpy_s(m_Info->DriveInfo, L"NTFS");
+
+	//wchar_t* drive = new wchar_t[5];
+	//swprintf_s(drive, 5, L"%c:\\", m_Info->Drive);
+	//wchar_t* volname = new wchar_t[_MAX_FNAME];
+	//wchar_t* filesys = new wchar_t[_MAX_FNAME];
+	//DWORD VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
+	//if (GetVolumeInformation(drive, volname, _MAX_FNAME, &VolumeSerialNumber, &MaximumComponentLength, &FileSystemFlags, filesys, _MAX_FNAME))
+	//{
+	//	if ((wcsstr(m_Info->DriveInfo, filesys) != 0))
+	//	{
+	//		if (!wcscmp(filesys, L"NTFS"))
+	//		{
+	//			NTFSSearchCore* searchCore = new NTFSSearchCore;
+	//			int ret = 0;
+	//			try
+	//			{
+	//				ret = searchCore->Search(this, m_Info->Drive, info->MAC, info->IP);
+	//			}
+	//			catch (...)
+	//			{
+	//				ret = 1;
+	//			}
+	//			if (ret == 0)
+	//			{
+	//				SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerEnd", "");
+	//			}
+	//			else
+	//			{
+	//				SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerError", "*Error Loading MFT Table");
+	//			}
+	//			delete searchCore;
+	//		}
+	//		else if (!wcscmp(filesys, L"FAT32"))
+	//		{
+	//			int ret1 = 1;
+	//			char* TempStr = new char[DATASTRINGMESSAGELEN];
+	//			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//			char* m_DataStr = new char[1000];
+	//			sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null,null,null|0|1\n");
+	//			strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+	//			vector<DeleteFATFileInfo> FATDeleteFile;
+	//			DWORD LastCluster = 0;
+	//			unsigned int Count = 1;
+	//			unsigned int ProgressCount = 1;
+	//			clock_t start;
+	//			start = clock();
+	//			bool ret = pfat->initFDT(this, info->MAC, info->IP, TempStr, ProgressCount, Count, LastCluster, &FATDeleteFile, start);
+	//			if (ret)
+	//			{
+	//				if (!FATDeleteFile.empty())
+	//				{
+	//					vector<DeleteFATFileInfo>::iterator it;
+	//					for (it = FATDeleteFile.begin(); it != FATDeleteFile.end(); it++)
+	//					{
+	//						LastCluster++;
+	//						if (LastCluster == 5)
+	//							LastCluster++;
+	//						wchar_t* wstr = new wchar_t[1024];
+	//						DWORD FirstClister = (*it).FirstDataCluster + 5;
+	//						if ((*it).isDirectory == 0)
+	//						{
+	//							TCHAR* m_MD5Str = new TCHAR[50];
+	//							memset(m_MD5Str, '\0', 50);
+	//							TCHAR* Signaturestr = new TCHAR[20];
+	//							memset(Signaturestr, '\0', 20);
+	//							//DWORD FirstCluster = newEntry->GetTheFirstDataCluster()+5;
+	//							if (pfat->FileHashAndSignature((*it).FirstDataCluster, (*it).FileSize, (*it).FileName, m_MD5Str, Signaturestr))
+	//							{
+	//								swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,%lu|%lu|1\n",
+	//									LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+	//									, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+	//									(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+	//									(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, m_MD5Str, Signaturestr, FirstClister, (*it).FileSize);
+	//							}
+	//							else
+	//							{
+	//								swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
+	//									LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+	//									, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+	//									(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+	//									(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
+	//							}
+	//							delete[] Signaturestr;
+	//							delete[] m_MD5Str;
+	//						}
+	//						else
+	//						{
+	//							swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
+	//								LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+	//								, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+	//								(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+	//								(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
+	//						}
+	//						char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
+	//						strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+	//						ProgressCount++;
+	//						Count++;
+	//						clock_t endTime = clock();
+	//						if ((endTime - start) > 300000)
+	//						{
+	//							char* ProgressStr = new char[10];
+	//							sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+	//							strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+	//							ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+	//							if (ret1 <= 0)
+	//							{
+	//								delete[] ProgressStr;
+	//								delete[] m_DataStr;
+	//								delete[] wstr;
+	//								break;
+	//							}
+	//							start = clock();
+	//							Count = 0;
+	//							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//							delete[] ProgressStr;
+	//						}
+	//						else
+	//						{
+	//							if ((Count % 60) == 0 && Count >= 60)
+	//							{
+	//								char* ProgressStr = new char[10];
+	//								sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+	//								strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+	//								ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+	//								if (ret1 <= 0)
+	//								{
+	//									delete[] ProgressStr;
+	//									delete[] m_DataStr;
+	//									delete[] wstr;
+	//									break;
+	//								}
+	//								start = clock();
+	//								Count = 0;
+	//								memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//								delete[] ProgressStr;
+	//							}
+	//						}
+	//						delete[] m_DataStr;
+	//						delete[] wstr;
+	//					}
+	//				}
+	//				if (ret1 > 0)
+	//				{
+	//					if (TempStr[0] != '\0')
+	//					{
+	//						char* ProgressStr = new char[10];
+	//						sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+	//						strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+	//						ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+	//						delete[] ProgressStr;
+	//					}
+	//				}
+	//				if (ret1 > 0)
+	//					SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerEnd", "");
+	//			}
+	//			else
+	//				SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerError", "*Error Loading FAT Table");
+	//			FATDeleteFile.clear();
+	//			delete[] m_DataStr;
+	//			delete[] TempStr;
+	//		}
+	//		else
+	//		{
+	//			char* TempStr = new char[DATASTRINGMESSAGELEN];
+	//			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//			char* m_DataStr = new char[1000];
+	//			sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
+	//			strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+	//			//wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
+	//			unsigned int ProgressCount = 1;
+	//			unsigned int Index = 5;
+	//			unsigned int Count = 1;
+	//			int ret = 1;
+	//			SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
+	//			if (TempStr[0] != '\0')
+	//			{
+	//				char* ProgressStr = new char[10];
+	//				sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+	//				strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+	//				ret = SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerData", TempStr);
+	//				if (ret <= 0)
+	//				{
+	//					Client_Socket->Close();
+	//				}
+	//				delete[] ProgressStr;
+	//			}
+	//			//if(Client_Socket->IsOpened())
+	//			if (ret > 0)
+	//				SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerEnd", "");
+	//			delete[] m_DataStr;
+	//			delete[] TempStr;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerError", "*Error Not Format");
+	//	}
+	//}
+	//else
+	//{
+	//	SendDataMsgToServer(MyMAC, MyIP, "GiveExplorerError", "*Error No Drive");
+	//}
+	//delete[] filesys;
+	//delete[] volname;
+	//delete[] drive;
+	//delete m_Info;
+	//delete[] wMgs;
     return 0;
 
 }
@@ -530,7 +754,7 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 int Task::GetProcessInfo(StrPacket* udata) { return 0; }
 int Task::GetDrive(StrPacket* udata) { return 0; }
 int Task::GetScanInfoData_(StrPacket* udata) { return GiveProcessData(); }
-int Task::ExplorerInfo(StrPacket* udata) { return 0; }
+//int Task::ExplorerInfo(StrPacket* udata) { return 0; }
 int Task::TransportExplorer(StrPacket* udata) { return 0; }
 int Task::GetCollectInfo(StrPacket* udata) { return 0; }
 int Task::GetCollectInfoData(StrPacket* udata) { return 0; }

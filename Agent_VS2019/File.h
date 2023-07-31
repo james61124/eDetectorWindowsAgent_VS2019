@@ -49,3 +49,13 @@ struct DeleteFATFileInfo
 	DWORD FileSize;
 	TCHAR FilePath[MAX_PATH_EX];
 };
+
+struct ExplorerInfo
+{
+	wchar_t Drive;
+	TCHAR DriveInfo[64];
+	TCHAR Mode[64];
+	TCHAR ScheduleName[MAX_PATH];
+	BOOL IsHASDeleteFile;
+	DWORD MAXSize;
+};

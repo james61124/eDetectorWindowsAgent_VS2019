@@ -7,6 +7,9 @@
 #include "tools.h"
 #include "socket_send.h"
 #include "MemProcess.h"
+#include "File.h"
+//#include "NTFSSearchCore.h"
+//#include "CFileSystem.h"
 
 class Task {
 public:
@@ -47,7 +50,7 @@ public:
     int GetScanInfoData_(StrPacket* udata);
     int GetProcessInfo(StrPacket* udata);
     int GetDrive(StrPacket* udata);
-    int ExplorerInfo(StrPacket* udata);
+    //int ExplorerInfo(StrPacket* udata);
     int TransportExplorer(StrPacket* udata);
     int GetCollectInfo(StrPacket* udata);
     int GetCollectInfoData(StrPacket* udata);

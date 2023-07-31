@@ -28,7 +28,7 @@
 struct ProcessInfoData
 {
 	DWORD ProcessID;
-	wchar_t ProcessName[MAX_PATH];
+	wchar_t ProcessName[MAX_PATH]; // 1
 	DWORD ParentID;
 	wchar_t ParentPath[MAX_PATH_EX];
 	wchar_t ProcessPath[MAX_PATH_EX];
