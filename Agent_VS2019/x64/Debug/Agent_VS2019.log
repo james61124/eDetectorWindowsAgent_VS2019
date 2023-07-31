@@ -1,5 +1,4 @@
-﻿cl : 命令列  warning D9002: 忽略未知的選項 '/utf-16'
-  agent.cpp
+﻿  agent.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549,1): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(223,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
@@ -217,6 +216,8 @@ C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4637,12): warning C4
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,17): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,17): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
   NTFSSearchCore.cpp
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\NTFS_Attribute.h(1746,3): error C3861: 'IsNonResident': 找不到識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\NTFS_Attribute.h(1753,2): message : 請參考正在進行編譯的 類別 樣板 具現化 'CAttr_Data<TYPE_RESIDENT>'
   PeFunction.cpp
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(353,16): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'ULONGLONG'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(353,16): message : 請考慮在格式字串中使用 '%llx'
@@ -644,3 +645,4 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612,1): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14874,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613,1): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+  正在產生程式碼...
