@@ -297,12 +297,13 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
 
 				std::cout << "openprocess" << std::endl;
-				HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
-				MemProcess* m_MemPro = new MemProcess;
+				/*HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
+				MemProcess* m_MemPro = new MemProcess;*/
 				TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
-				DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
-				if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
-				CloseHandle(processHandle);
+				//DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
+				//if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
+				_tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
+				//CloseHandle(processHandle);
 
 				std::cout << "find parent" << std::endl;
 				TCHAR* ParentName = new TCHAR[MAX_PATH];
