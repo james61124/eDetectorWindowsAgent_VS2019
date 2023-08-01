@@ -336,7 +336,6 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
 				delete[] cTempStr;
 				//delete[] wTempStr;
-				printf("entering abnormal dll\n");
 				if (!vit->second.Abnormal_dll.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
@@ -440,84 +439,84 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 
 
 			ret = socketsend->SendDataToServer(functionName_GiveScanDataOver, TempStr);
-			if (ret <= 0)
-				break;
-			else
-				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+			printf("%s\n", TempStr);
+			if (ret <= 0) break;
+			else memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		}
 		m_Count++;
 	}
 
 	//m_Hash.clear();
 
-	if (!pUnKnownData->empty())
-	{
-		printf("pUnKnownData\n");
-		vector<UnKnownDataInfo>::iterator ut;
-		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-		wchar_t* wUnKownInfoStr = new wchar_t[DATASTRINGMESSAGELEN];
-		int ret = 1;
-		char* cUnKownInfoStr = NULL;
-		for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
-		{
-			swprintf_s(wUnKownInfoStr, DATASTRINGMESSAGELEN, L"%lu|%s|%d", (*ut).Pid, (*ut).ProcessName, (*ut).SizeInfo);
-			cUnKownInfoStr = CStringToCharArray(wUnKownInfoStr, CP_UTF8);
-			sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s", cUnKownInfoStr);
-			ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TempStr);
-			if (ret <= 0)
-				break;
-			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-			if ((*ut).SizeInfo > DATASTRINGMESSAGELEN /*&& ret != -3*/)
-			{
-				int tmplen = (*ut).SizeInfo;
-				for (DWORD i = 0; i < (*ut).SizeInfo; i += DATASTRINGMESSAGELEN)
-				{
-					char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-					if (tmplen < DATASTRINGMESSAGELEN)
-						memcpy(TmpBuffer, (*ut).Data + i, tmplen);
-					else
-					{
-						memcpy(TmpBuffer, (*ut).Data + i, DATASTRINGMESSAGELEN);
-						tmplen -= DATASTRINGMESSAGELEN;
-					}
-					ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
-					//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
-					delete[] TmpBuffer;
-					if (ret <= 0)
-					{
-						break;
-					}
-				}
-				if (ret <= 0)
-					break;
-			}
-			else
-			{
-				char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-				memcpy(TmpBuffer, (*ut).Data, (*ut).SizeInfo);
-				ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
-				//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
-				delete[] TmpBuffer;
-				if (ret <= 0)
-					break;
-			}
-			
-			ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownEnd, null);
-			if (ret <= 0)
-				break;
-			delete[] cUnKownInfoStr;
-			cUnKownInfoStr = NULL;
-		}
-		if (cUnKownInfoStr != NULL)
-			delete[] cUnKownInfoStr;
-		delete[] wUnKownInfoStr;
-		for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
-		{
-			delete[](*ut).Data;
-		}
-	}
+	//if (!pUnKnownData->empty())
+	//{
+	//	printf("pUnKnownData\n");
+	//	vector<UnKnownDataInfo>::iterator ut;
+	//	memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//	wchar_t* wUnKownInfoStr = new wchar_t[DATASTRINGMESSAGELEN];
+	//	int ret = 1;
+	//	char* cUnKownInfoStr = NULL;
+	//	for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
+	//	{
+	//		swprintf_s(wUnKownInfoStr, DATASTRINGMESSAGELEN, L"%lu|%s|%d", (*ut).Pid, (*ut).ProcessName, (*ut).SizeInfo);
+	//		cUnKownInfoStr = CStringToCharArray(wUnKownInfoStr, CP_UTF8);
+	//		sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s", cUnKownInfoStr);
+	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TempStr);
+	//		if (ret <= 0)
+	//			break;
+	//		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//		if ((*ut).SizeInfo > DATASTRINGMESSAGELEN /*&& ret != -3*/)
+	//		{
+	//			int tmplen = (*ut).SizeInfo;
+	//			for (DWORD i = 0; i < (*ut).SizeInfo; i += DATASTRINGMESSAGELEN)
+	//			{
+	//				char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+	//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+	//				if (tmplen < DATASTRINGMESSAGELEN)
+	//					memcpy(TmpBuffer, (*ut).Data + i, tmplen);
+	//				else
+	//				{
+	//					memcpy(TmpBuffer, (*ut).Data + i, DATASTRINGMESSAGELEN);
+	//					tmplen -= DATASTRINGMESSAGELEN;
+	//				}
+	//				ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
+	//				//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
+	//				delete[] TmpBuffer;
+	//				if (ret <= 0)
+	//				{
+	//					break;
+	//				}
+	//			}
+	//			if (ret <= 0)
+	//				break;
+	//		}
+	//		else
+	//		{
+	//			char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+	//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+	//			memcpy(TmpBuffer, (*ut).Data, (*ut).SizeInfo);
+	//			ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
+	//			//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
+	//			delete[] TmpBuffer;
+	//			if (ret <= 0)
+	//				break;
+	//		}
+	//		
+	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownEnd, null);
+	//		if (ret <= 0)
+	//			break;
+	//		delete[] cUnKownInfoStr;
+	//		cUnKownInfoStr = NULL;
+	//	}
+	//	if (cUnKownInfoStr != NULL)
+	//		delete[] cUnKownInfoStr;
+	//	delete[] wUnKownInfoStr;
+	//	for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
+	//	{
+	//		delete[](*ut).Data;
+	//	}
+	//}
+
 	delete[] TempStr;
 	socketsend->SendMessageToServer(functionName_GiveScanDataEnd, pMode);
 }
