@@ -2,6 +2,8 @@
 #include <map>
 
 #include "File.h"
+#include "NTFS.h"
+
 #include "GlobalFunction.h"
 #include "StrPacket.h"
 

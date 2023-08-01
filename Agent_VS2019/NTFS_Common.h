@@ -1,3 +1,4 @@
+#pragma once
 #ifndef	__NTFS_COMMON_H_CYB70289
 #define	__NTFS_COMMON_H_CYB70289
 

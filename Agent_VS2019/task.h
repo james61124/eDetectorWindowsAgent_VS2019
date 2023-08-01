@@ -7,9 +7,12 @@
 #include "tools.h"
 #include "socket_send.h"
 #include "MemProcess.h"
-#include "File.h"
+
+//#include "File.h"
 //#include "NTFSSearchCore.h"
-//#include "CFileSystem.h"
+
+
+//#include "NTFS.h"
 
 class Task {
 public:
@@ -48,6 +51,7 @@ public:
     int OpenCheckthread(StrPacket* udata);
     int UpdateDetectMode(StrPacket* udata);
     int GetScanInfoData_(StrPacket* udata);
+    int GetScan(StrPacket* udata);
     int GetProcessInfo(StrPacket* udata);
     int GetDrive(StrPacket* udata);
     //int ExplorerInfo(StrPacket* udata);
@@ -59,4 +63,5 @@ public:
 private:
     Tool tool;
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
+    int NTFSSearch(void* argv, wchar_t vol_name, char* pMAC, char* pIP);
 };

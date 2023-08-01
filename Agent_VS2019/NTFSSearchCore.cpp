@@ -1,7 +1,7 @@
 //#include "stdafx.h"
 #include "NTFSSearchCore.h"
-#include "NTFS.h"
-#include "AES.h"
+//#include "NTFS.h"
+//#include "AES.h"
 #include "internal.h"
 //#include "TransportData.h"
 

@@ -1,5 +1,9 @@
+#pragma once
 #ifndef	__NTFS_FILERECORD_H_CYB70289
 #define	__NTFS_FILERECORD_H_CYB70289
+
+//#include "NTFS_Common.h"
+
 
 
 ///////////////////////////////////////
