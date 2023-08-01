@@ -279,33 +279,32 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 		std::cout << m_Count << std::endl;
 		if (_tcscmp(vit->second.ProcessHash, _T("null")))
 		{
-			TCHAR* wtr1 = new TCHAR[4096];
+			/*TCHAR* wtr1 = new TCHAR[4096];
 			swprintf_s(wtr1, 4096, _T("%lu|%s|%s|%s|%d"), vit->first, vit->second.ProcessName, vit->second.ProcessPath, vit->second.ProcessHash, vit->second.Injected);
 			char* str1 = CStringToCharArray(wtr1, CP_UTF8);
 			sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s|%s|%d|%d|0", str1, pMode, m_Count, AllCount);
-			int ret = socketsend->SendDataToServer(functionName_GiveScanDataInfo, TempStr);
+			int ret = socketsend->SendDataToServer(functionName_GiveScanDataInfo, TempStr);*/
+			int ret = 1;
 			if (ret <= 0)
 			{
 				printf("data info send failed\n");
-				delete[] str1;
-				delete[] wtr1;
+				//delete[] str1;
+				//delete[] wtr1;
 				break;
 			}
 			else
 			{
-				printf("data info send success\n");
+				/*printf("data info send success\n");*/
 				wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
 
-				std::cout << "openprocess" << std::endl;
-				/*HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
-				MemProcess* m_MemPro = new MemProcess;*/
-				TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
-				//DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
-				//if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
-				_tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
-				//CloseHandle(processHandle);
 
-				std::cout << "find parent" << std::endl;
+				HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
+				MemProcess* m_MemPro = new MemProcess;
+				TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
+				DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
+				if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
+				CloseHandle(processHandle);
+
 				TCHAR* ParentName = new TCHAR[MAX_PATH];
 				TCHAR* ParentPath = new TCHAR[MAX_PATH];
 				_tcscpy_s(ParentName, 512, _T("null"));
@@ -425,8 +424,8 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 
 
 			}
-			delete[] str1;
-			delete[] wtr1;
+			//delete[] str1;
+			//delete[] wtr1;
 
 
 			//if(ret <= 0)
@@ -447,13 +446,8 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			else
 				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		}
-		else {
-			printf("out of if\n");
-		}
 		m_Count++;
 	}
-
-	printf("out of for loop\n");
 
 	//m_Hash.clear();
 
