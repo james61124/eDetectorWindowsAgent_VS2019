@@ -276,6 +276,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	int m_Count = 0;
 	for (vit = pFileInfo->begin(); vit != pFileInfo->end(); vit++)
 	{
+		std::cout << m_Count << std::endl;
 		if (_tcscmp(vit->second.ProcessHash, _T("null")))
 		{
 			TCHAR* wtr1 = new TCHAR[4096];
@@ -295,6 +296,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				printf("data info send success\n");
 				wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
 
+				std::cout << "openprocess" << std::endl;
 				HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
 				MemProcess* m_MemPro = new MemProcess;
 				TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
@@ -302,6 +304,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
 				CloseHandle(processHandle);
 
+				std::cout << "find parent" << std::endl;
 				TCHAR* ParentName = new TCHAR[MAX_PATH];
 				TCHAR* ParentPath = new TCHAR[MAX_PATH];
 				_tcscpy_s(ParentName, 512, _T("null"));
@@ -334,9 +337,6 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				delete[] cTempStr;
 				//delete[] wTempStr;
 				printf("entering abnormal dll\n");
-
-
-
 				if (!vit->second.Abnormal_dll.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
