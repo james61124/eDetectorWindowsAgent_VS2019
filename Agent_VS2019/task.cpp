@@ -347,7 +347,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 						sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
 						if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 						{
-							ret = socketsend->SendMessageToServer(functionName_GiveScanData, TempStr);
+							ret = socketsend->SendDataToServer(functionName_GiveScanData, TempStr);
 							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 							if (ret <= 0)
 							{
@@ -376,7 +376,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 						sprintf_s(Inlinestr, 4096, "%s;", (*Inlineit).c_str());
 						if ((strlen(Inlinestr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 						{
-							ret = socketsend->SendMessageToServer(functionName_GiveScanData, TempStr);
+							ret = socketsend->SendDataToServer(functionName_GiveScanData, TempStr);
 							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 							if (ret <= 0)
 							{
@@ -405,7 +405,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 						sprintf_s(netstr, 4096, "%s;", (*netit).c_str());
 						if ((strlen(netstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 						{
-							ret = socketsend->SendMessageToServer(functionName_GiveScanData, TempStr);
+							ret = socketsend->SendDataToServer(functionName_GiveScanData, TempStr);
 							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 							if (ret <= 0)
 							{
@@ -438,7 +438,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			//	else
 			//		memset(TempStr,'\0',DATASTRINGMESSAGELEN);
 			//}
-			ret = socketsend->SendMessageToServer(functionName_GiveScanDataOver, TempStr);
+			ret = socketsend->SendDataToServer(functionName_GiveScanDataOver, TempStr);
 
 			if (ret <= 0)
 				break;
