@@ -5,6 +5,10 @@
 #include <Setupapi.h>
 #include <initguid.h> 
 #include <algorithm>
+
+#include <iostream>
+
+
 #pragma comment(lib,"version.lib")
 #pragma comment(lib,"setupapi.lib")
 DEFINE_GUID(GUID_DEVINTERFACE_USB_DISK,
