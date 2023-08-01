@@ -365,7 +365,6 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 
 
-				printf("entering inline hook\n");
 				if (!vit->second.InlineHookInfo.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");

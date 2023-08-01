@@ -135,8 +135,8 @@ C:\james\Agent_VS2019\Agent_VS2019\task.cpp(80,40): message : 請考慮在格式
 C:\james\Agent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
 C:\james\Agent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
   正在產生程式碼
-  19 of 2170 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+  1 of 2170 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    26 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   已完成程式碼產生
   Agent_VS2019.vcxproj -> C:\james\Agent_VS2019\x64\Release\Agent_VS2019.exe
