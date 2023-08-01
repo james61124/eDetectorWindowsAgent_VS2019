@@ -366,7 +366,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 
 
-
+				printf("entering inline hook\n");
 				if (!vit->second.InlineHookInfo.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
@@ -439,18 +439,27 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			//	else
 			//		memset(TempStr,'\0',DATASTRINGMESSAGELEN);
 			//}
-			ret = socketsend->SendDataToServer(functionName_GiveScanDataOver, TempStr);
 
+
+			ret = socketsend->SendDataToServer(functionName_GiveScanDataOver, TempStr);
 			if (ret <= 0)
 				break;
 			else
 				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		}
+		else {
+			printf("out of if\n");
+		}
 		m_Count++;
 	}
+
+	printf("out of for loop\n");
+
 	//m_Hash.clear();
+
 	if (!pUnKnownData->empty())
 	{
+		printf("pUnKnownData\n");
 		vector<UnKnownDataInfo>::iterator ut;
 		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		wchar_t* wUnKownInfoStr = new wchar_t[DATASTRINGMESSAGELEN];
