@@ -137,8 +137,9 @@ int Task::GiveProcessData() {
     std::map<DWORD, ProcessInfoData> m_ProcessInfo;
     std::vector<UnKnownDataInfo> m_UnKnownData;
     MemProcess* m_MemPro = new MemProcess;
+	printf("start scan...\n");
     m_MemPro->ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData);
-    
+	printf("finish scan...\n");
     if (!m_ProcessInfo.empty()) GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData);
 
 	delete m_MemPro;
