@@ -28,6 +28,9 @@
     <Filter Include="File\NTFS">
       <UniqueIdentifier>{0a0b940e-ca8e-4283-8f37-cedf6a694f7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collect">
+      <UniqueIdentifier>{2c0a37e6-49f1-4b1b-b765-8cbcfd58fd2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="NTFSSearchCore.cpp">
       <Filter>File\NTFS</Filter>
+    </ClCompile>
+    <ClCompile Include="Collect.cpp">
+      <Filter>Collect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="File.h">
       <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="Collect.h">
+      <Filter>Collect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

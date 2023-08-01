@@ -121,6 +121,7 @@ public:
 
 	bool EnumProcess(map<DWORD, process_info>* pInfo, time_t& LoadProcessTime);
 	void GetProcessInfo(DWORD pid, TCHAR* pPath, TCHAR* pTimeStr, TCHAR* pUserName, TCHAR* pComStr);
+	DWORD GetRemoteCommandLineW(HANDLE hProcess, LPWSTR pszBuffer, UINT bufferLength);
 
 private:
 	vector<string> m_ProcessHistory1;
@@ -152,7 +153,7 @@ private:
 	BOOL CheckCreateTimeRight(map<DWORD, process_info_Ex>* pData, __int64 pCreateTime);
 	BOOL CheckCreateTimeMatch(map<DWORD, process_info_Ex>* pData, process_info_Ex* pInfo);
 	int CheckIsStartRun(map<wstring, BOOL>* pService, set<wstring>* pStartRun, DWORD pid/*,BOOL & isServiceHide*/);
-	DWORD GetRemoteCommandLineW(HANDLE hProcess, LPWSTR pszBuffer, UINT bufferLength);
+	
 	void CheckModulePath(TCHAR* pProcessPath, TCHAR* pModulePath, set<string>* pIsAbnormal_dll);
 	void CheckIsInlineHook(DWORD pid, set<string>* pInlineHook);
 	//void EnumExportedFunctions(wchar_t *szFilename,wchar_t * Filename,DWORD psys,DWORD pid,set<string> * pInlineHook);

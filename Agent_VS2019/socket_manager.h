@@ -35,10 +35,7 @@ public:
 
     void getSystemInfo();
     bool connectTCP(const std::string& serverIP, int port);
-    // bool sendTCP(char* data, long len);
     void receiveTCP();
-    // int SendMessageToServer(char* Work,char* Mgs); 
-    // int SendDataToServer(char* Work,char* Mgs);
     void closeTCP();
 
     void HandleTaskToServer(std::string functionName);

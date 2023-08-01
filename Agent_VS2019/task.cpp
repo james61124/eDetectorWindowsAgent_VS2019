@@ -114,7 +114,10 @@ int Task::GiveDetectInfo() {
     strcpy_s(functionName, 24, "GiveDetectInfo");
     snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
 	int ret = socketsend->SendMessageToServer(functionName, buff);
+
+	// test
 	GiveProcessData();
+
     return ret;
 }
 
@@ -126,128 +129,122 @@ int Task::GetScanInfoData() {
 
 int Task::GiveProcessData() {
 	printf("sending GiveProcessData\n");
-	//char* Scan = new char[5];
-	//strcpy_s(Scan, 5, "Scan");
+	char* Scan = new char[5];
+	strcpy_s(Scan, 5, "Scan");
 
- //   std::set<DWORD> m_ApiName;
- //   tool.LoadApiPattern(&m_ApiName);
- //   std::map<DWORD, ProcessInfoData> m_ProcessInfo;
- //   std::vector<UnKnownDataInfo> m_UnKnownData;
- //   MemProcess* m_MemPro = new MemProcess;
- //   m_MemPro->ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData);
- //   
- //   if (!m_ProcessInfo.empty()) GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData);
+    std::set<DWORD> m_ApiName;
+    tool.LoadApiPattern(&m_ApiName);
+    std::map<DWORD, ProcessInfoData> m_ProcessInfo;
+    std::vector<UnKnownDataInfo> m_UnKnownData;
+    MemProcess* m_MemPro = new MemProcess;
+    m_MemPro->ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData);
+    
+    if (!m_ProcessInfo.empty()) GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData);
 
-	//delete m_MemPro;
- //   m_UnKnownData.clear();
- //   m_ProcessInfo.clear();
- //   m_ApiName.clear();
- //   int ret = 1;
- //   return ret;
+	delete m_MemPro;
+    m_UnKnownData.clear();
+    m_ProcessInfo.clear();
+    m_ApiName.clear();
+    int ret = 1;
+    return ret;
 
-	char* functionName_GiveProcessData = new char[24];
-	strcpy_s(functionName_GiveProcessData, 24, "GiveProcessData");
+	//char* functionName_GiveProcessData = new char[24];
+	//strcpy_s(functionName_GiveProcessData, 24, "GiveProcessData");
 
 
-		map<DWORD, process_info> process_list;
-		map<DWORD, process_info> Checkprocess_list;
-		bool ret = false;
-		time_t LoadProcessTime = 0;
-		MemProcess* m_MemPro = new MemProcess;
-		ret = m_MemPro->EnumProcess(&process_list, LoadProcessTime);
+	//map<DWORD, process_info> process_list;
+	//bool ret = false;
+	//time_t LoadProcessTime = 0;
+	//MemProcess* m_MemPro = new MemProcess;
+	//ret = m_MemPro->EnumProcess(&process_list, LoadProcessTime);
 
-		if (ret)
-		{
-			//printf("ret true\n");
-			char* TempStr = new char[DATASTRINGMESSAGELEN];
-			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-			//printf("memset success\n");
-			int DataCount = 0;
-			map<DWORD, process_info>::iterator it;
-			map<DWORD, process_info>::iterator st;
-			//printf("entering for loop\n");
-			for (it = process_list.begin(); it != process_list.end(); it++)
-			{
-				//printf("enter for loop\n");
-				TCHAR* m_Path = new TCHAR[512];
-				TCHAR* m_ComStr = new TCHAR[512];
-				//TCHAR * m_Time = new TCHAR[20];
-				TCHAR* ParentName = new TCHAR[MAX_PATH];
-				TCHAR* m_UserName = new TCHAR[_MAX_FNAME];
-				BOOL IsPacked = FALSE;
-				time_t ParentTime = 0;
-				_tcscpy_s(m_Path, 512, _T("null"));
-				_tcscpy_s(m_ComStr, 512, _T("null"));
-				//_tcscpy_s(m_Time,20,_T("null"));
-				_tcscpy_s(ParentName, MAX_PATH, _T("null"));
-				_tcscpy_s(m_UserName, _MAX_FNAME, _T("null"));
-				//printf("CheckIsPackedPE start\n");
-				m_MemPro->GetProcessInfo(it->first, m_Path, NULL, m_UserName, m_ComStr);
-				if (_tcscmp(m_Path, _T("null")))
-				{
-					IsPacked = CheckIsPackedPE(m_Path);
-				}
-				st = process_list.find(it->second.parent_pid);
-				//printf("process create time start\n");
-				if (st != process_list.end())
-				{
-					if (st->second.ProcessCreateTime <= it->second.ProcessCreateTime)
-					{
-						_tcscpy_s(ParentName, MAX_PATH, st->second.process_name);
-						ParentTime = st->second.ProcessCreateTime;
-					}
-					//GetProcessOnlyTime(it->second.parent_pid,ParentTime);
-					//if(ParentTime < 0)
-					//	ParentTime = 0;
-				}
-				wchar_t* wstr = new wchar_t[2048];
-				// swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.process_name, m_ComStr, m_Path, it->second.parent_pid, ParentName);
-				swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.parent_pid, it->second.process_name, it->second.ProcessCreateTime, ParentName, ParentTime, m_Path, m_UserName, IsPacked, m_ComStr, it->second.IsHide);
-				DataCount++;
-				//wprintf(L"%s\n",wstr);
-				char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
-				strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+	//if (ret) {
+	//	char* TempStr = new char[DATASTRINGMESSAGELEN];
+	//	memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//	int DataCount = 0;
+	//	map<DWORD, process_info>::iterator it;
+	//	map<DWORD, process_info>::iterator st;
+	//	for (it = process_list.begin(); it != process_list.end(); it++)
+	//	{
+	//		//printf("enter for loop\n");
+	//		TCHAR* m_Path = new TCHAR[512];
+	//		TCHAR* m_ComStr = new TCHAR[512];
+	//		//TCHAR * m_Time = new TCHAR[20];
+	//		TCHAR* ParentName = new TCHAR[MAX_PATH];
+	//		TCHAR* m_UserName = new TCHAR[_MAX_FNAME];
+	//		BOOL IsPacked = FALSE;
+	//		time_t ParentTime = 0;
+	//		_tcscpy_s(m_Path, 512, _T("null"));
+	//		_tcscpy_s(m_ComStr, 512, _T("null"));
+	//		//_tcscpy_s(m_Time,20,_T("null"));
+	//		_tcscpy_s(ParentName, MAX_PATH, _T("null"));
+	//		_tcscpy_s(m_UserName, _MAX_FNAME, _T("null"));
+	//		//printf("CheckIsPackedPE start\n");
+	//		m_MemPro->GetProcessInfo(it->first, m_Path, NULL, m_UserName, m_ComStr);
+	//		if (_tcscmp(m_Path, _T("null")))
+	//		{
+	//			IsPacked = CheckIsPackedPE(m_Path);
+	//		}
+	//		st = process_list.find(it->second.parent_pid);
+	//		//printf("process create time start\n");
+	//		if (st != process_list.end())
+	//		{
+	//			if (st->second.ProcessCreateTime <= it->second.ProcessCreateTime)
+	//			{
+	//				_tcscpy_s(ParentName, MAX_PATH, st->second.process_name);
+	//				ParentTime = st->second.ProcessCreateTime;
+	//			}
+	//			//GetProcessOnlyTime(it->second.parent_pid,ParentTime);
+	//			//if(ParentTime < 0)
+	//			//	ParentTime = 0;
+	//		}
+	//		wchar_t* wstr = new wchar_t[2048];
+	//		// swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.process_name, m_ComStr, m_Path, it->second.parent_pid, ParentName);
+	//		swprintf_s(wstr, 2048, L"%lu|%d|%s|%lld|%s|%lld|%s|%s|%d|%s|%d\n", it->first, it->second.parent_pid, it->second.process_name, it->second.ProcessCreateTime, ParentName, ParentTime, m_Path, m_UserName, IsPacked, m_ComStr, it->second.IsHide);
+	//		DataCount++;
+	//		//wprintf(L"%s\n",wstr);
+	//		char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
+	//		strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
 
-				//delete[] wstr;
-				delete[] m_UserName;
-				delete[] ParentName;
-				delete[] m_ComStr;
-				delete[] m_Path;
+	//		//delete[] wstr;
+	//		delete[] m_UserName;
+	//		delete[] ParentName;
+	//		delete[] m_ComStr;
+	//		delete[] m_Path;
 
-				//printf("send start %d\n", DataCount);
-				if ((DataCount % 30) == 0 && DataCount >= 30)
-				{
-					//printf("%s\n", TempStr);
-					int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
-					if (ret == 0 || ret == -1)
-					{
-						delete[] m_DataStr;
-						delete[] TempStr;
-						process_list.clear();
-						return ret;
-					}
-					memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				}
-				delete[] m_DataStr;
-			}
-			//printf("send start second\n");
-			if (TempStr[0] != '\0')
-			{
-				//printf("send start second in\n");
-				//MessageBoxA(0,TempStr,0,0);
-				int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
-				if (ret == 0 || ret == -1)
-				{
-					delete[] TempStr;
-					process_list.clear();
-					return ret;
-				}
-			}
-			delete[] TempStr;
-		}
-		Checkprocess_list.clear();
-		process_list.clear();
-		return 1;
+	//		//printf("send start %d\n", DataCount);
+	//		if ((DataCount % 30) == 0 && DataCount >= 30)
+	//		{
+	//			//printf("%s\n", TempStr);
+	//			int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
+	//			if (ret == 0 || ret == -1)
+	//			{
+	//				delete[] m_DataStr;
+	//				delete[] TempStr;
+	//				process_list.clear();
+	//				return ret;
+	//			}
+	//			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	//		}
+	//		delete[] m_DataStr;
+	//	}
+	//	//printf("send start second\n");
+	//	if (TempStr[0] != '\0')
+	//	{
+	//		//printf("send start second in\n");
+	//		//MessageBoxA(0,TempStr,0,0);
+	//		int ret = socketsend->SendDataToServer(functionName_GiveProcessData, TempStr);
+	//		if (ret == 0 || ret == -1)
+	//		{
+	//			delete[] TempStr;
+	//			process_list.clear();
+	//			return ret;
+	//		}
+	//	}
+	//	delete[] TempStr;
+	//}
+	//process_list.clear();
+	//return 1;
     
 }
 
@@ -296,31 +293,59 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			{
 				printf("data info send success\n");
 				wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
-				swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%lu|ProcessScan|%s|%s|%s|%s|%s|%lu|%s|%s|%d,%s|%d|%d|%d|%s|%d,%d"
-					, vit->first, vit->second.ProcessCTime, vit->second.ProcessTime, vit->second.ProcessName, vit->second.ProcessPath, vit->second.ProcessHash,
-					vit->second.ParentID, vit->second.ParentCTime, vit->second.ParentPath, vit->second.Injected, vit->second.UnKnownHash, vit->second.StartRun, vit->second.HideAttribute, vit->second.HideProcess
-					, vit->second.SignerSubjectName, vit->second.InjectionPE, vit->second.InjectionOther);
+
+				HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
+				MemProcess* m_MemPro = new MemProcess;
+				TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
+				DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
+				if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
+				CloseHandle(processHandle);
+
+				TCHAR* ParentName = new TCHAR[MAX_PATH];
+				TCHAR* ParentPath = new TCHAR[MAX_PATH];
+				_tcscpy_s(ParentName, 512, _T("null"));
+				_tcscpy_s(ParentPath, 512, _T("null"));
+				auto it = pFileInfo->find(vit->second.ParentID);
+				if (it != pFileInfo->end()) {
+					_tcscpy_s(ParentName, MAX_PATH, it->second.ProcessName);
+					_tcscpy_s(ParentPath, MAX_PATH, it->second.ProcessPath);
+				}
+
+
+				//swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%lu|ProcessScan|%s|%s|%s|%s|%s|%lu|%s|%s|%d,%s|%d|%d|%d|%s|%d,%d"
+				//	, vit->first, vit->second.ProcessCTime, vit->second.ProcessTime, vit->second.ProcessName, vit->second.ProcessPath, vit->second.ProcessHash,
+				//	vit->second.ParentID, vit->second.ParentCTime, vit->second.ParentPath, vit->second.Injected, vit->second.UnKnownHash, vit->second.StartRun, vit->second.HideAttribute, vit->second.HideProcess
+				//	, vit->second.SignerSubjectName, vit->second.InjectionPE, vit->second.InjectionOther);
+				
+				
+
+				swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d|%d,%d"
+					, vit->second.ProcessName, vit->second.ProcessCTime, Comstr, vit->second.ProcessHash, vit->second.ProcessPath,
+					vit->second.ParentID, ParentName, ParentPath, vit->second.SignerSubjectName, vit->first, vit->second.InjectionPE, vit->second.InjectionOther
+					, vit->second.Injected, vit->second.StartRun, vit->second.HideProcess, vit->second.HideAttribute
+					);
+
+
+				delete[] Comstr;
+
 				char* cTempStr = CStringToCharArray(wTempStr, CP_UTF8);
 				strcpy_s(TempStr, DATASTRINGMESSAGELEN, cTempStr);
 				delete[] cTempStr;
 				//delete[] wTempStr;
 				printf("entering abnormal dll\n");
 
+
+
 				if (!vit->second.Abnormal_dll.empty())
 				{
-					printf("abnormal dll not empty\n");
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
 					set<string>::iterator dllit;
-					printf("loop start\n");
 					for (dllit = vit->second.Abnormal_dll.begin(); dllit != vit->second.Abnormal_dll.end(); dllit++)
 					{
-						printf("sending GiveScanData\n");
 						char* dllstr = new char[4096];
 						sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
-						printf("sprintf_s success\n");
 						if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 						{
-							printf("length bigger than DATASTRINGMESSAGELEN\n");
 							ret = socketsend->SendMessageToServer(functionName_GiveScanData, TempStr);
 							memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 							if (ret <= 0)
@@ -328,9 +353,6 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 								delete[] dllstr;
 								break;
 							}
-						}
-						else {
-							printf("length smaller than DATASTRINGMESSAGELEN\n");
 						}
 						strcat_s(TempStr, DATASTRINGMESSAGELEN, dllstr);
 						delete[] dllstr;
@@ -340,6 +362,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				}
 				else
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
+
+
+
 				if (!vit->second.InlineHookInfo.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
@@ -366,7 +391,10 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				}
 				else
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
-				if (!vit->second.NetString.empty())
+
+
+
+				/*if (!vit->second.NetString.empty())
 				{
 					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
 					set<string>::iterator netit;
@@ -391,10 +419,14 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 						break;
 				}
 				else
-					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
+					strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");*/
+
+
 			}
 			delete[] str1;
 			delete[] wtr1;
+
+
 			//if(ret <= 0)
 			//	break;
 			//else
@@ -722,7 +754,10 @@ int Task::GiveExplorerEnd() { return 0; }
 int Task::CollectInfo() { return 0; }
 int Task::GiveCollectProgress() { return 0; }
 int Task::GiveCollectDataInfo() { return 0; }
-int Task::GiveCollectData() { return 0; }
+int Task::GiveCollectData() { 
+	
+	return 0;
+}
 int Task::GiveCollectDataEnd() { return 0; }
 
 

@@ -68,17 +68,6 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
     return true;
 }
 
-// bool SocketManager::sendTCP(char* data, long len) {
-//     int ret = send(tcpSocket, data, strlen(data), 0);
-//     if (ret == SOCKET_ERROR) {
-//         std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
-//     } else {
-//         std::cout << "Data sent successfully." << std::endl;
-//     }
-
-//     return ret;
-// }
-
 void SocketManager::receiveTCP() {
     printf("receive thread open\n");
     while (true) {
@@ -98,36 +87,6 @@ void SocketManager::receiveTCP() {
 
 
 }
-
-// int SocketManager::SendMessageToServer(char* Work,char* Mgs) {
-//     StrPacket GetServerMessage;
-// 	strcpy(GetServerMessage.MAC,MAC);
-// 	strcpy(GetServerMessage.IP,IP);
-//     strcpy(GetServerMessage.UUID,UUID);
-// 	strcpy(GetServerMessage.DoWorking,Work);
-// 	strcpy(GetServerMessage.csMsg,Mgs);
-
-// 	char *buff=(char*)&GetServerMessage;
-// 	SetKeys(BIT128,AESKey);
-// 	EncryptBuffer((BYTE*)buff,STRPACKETSIZE);
-// 	int ret= sendTCP(buff,STRPACKETSIZE);
-// 	return ret;
-// }
-
-// int SocketManager::SendDataToServer(char* Work,char* Mgs) {
-//     StrDataPacket GetServerMessage;
-// 	strcpy(GetServerMessage.MAC,MAC);
-// 	strcpy(GetServerMessage.IP,IP);
-//     strcpy(GetServerMessage.UUID,UUID);
-// 	strcpy(GetServerMessage.DoWorking,Work);
-// 	strcpy(GetServerMessage.csMsg,Mgs);
-
-// 	char *buff=(char*)&GetServerMessage;
-// 	SetKeys(BIT128,AESKey);
-// 	EncryptBuffer((BYTE*)buff,STRDATAPACKETSIZE);
-// 	int ret= sendTCP(buff,STRDATAPACKETSIZE);
-// 	return ret;
-// }
 
 void SocketManager::closeTCP() {
     if (tcpSocket != -1) closesocket(tcpSocket);
@@ -159,35 +118,6 @@ int SocketManager::HandleTaskFromServer(StrPacket* udata) {
 //         });
 // }
 
-
-// void SocketManager::CheckConnect() {printf("haha\n");}
-// int SocketManager::GiveDetectInfoFirst() {printf("haha\n");}
-// int SocketManager::GiveDetectInfo() {printf("haha\n");}
-// // int SocketManager::Process() {printf("haha\n");}
-// int SocketManager::GetScanInfoData() {printf("haha\n");}
-// int SocketManager::GiveProcessData() {printf("haha\n");}
-// int SocketManager::GiveProcessDataEnd() {printf("haha\n");}
-// void SocketManager::GiveScanProgress(){printf("hehe\n");}
-// void SocketManager::GiveDriveInfo(){printf("hehe\n");}
-// int SocketManager::Explorer(){printf("hehe\n");}
-// int SocketManager::GiveExplorerData() {printf("haha\n");}
-// void SocketManager::GiveExplorerEnd(){printf("hehe\n");}
-// void SocketManager::CollectInfo(){printf("hehe\n");}
-// void SocketManager::GiveCollectProgress(){printf("hehe\n");}
-// void SocketManager::GiveCollectDataInfo(){printf("hehe\n");}
-// void SocketManager::GiveCollectData(){printf("hehe\n");}
-// void SocketManager::GiveCollectDataEnd(){printf("hehe\n");}
-
-// void SocketManager::OpenCheckthread(StrPacket* udata) {printf("haha\n");}
-// void SocketManager::UpdateDetectMode(StrPacket* udata) {printf("haha\n");}
-// void SocketManager::GetProcessInfo(StrPacket* udata) {printf("haha\n");}
-// void SocketManager::GetDrive(StrPacket* udata) {printf("haha\n");}
-// void SocketManager::GetScanInfoData_(StrPacket* udata) {printf("haha\n");}
-// void SocketManager::ExplorerInfo(StrPacket* udata){printf("hehe\n");}
-// void SocketManager::TransportExplorer(StrPacket* udata){printf("hehe\n");}
-// void SocketManager::GetCollectInfo(StrPacket* udata){printf("hehe\n");}
-// void SocketManager::GetCollectInfoData(StrPacket* udata){printf("hehe\n");}
-// void SocketManager::DataRight(StrPacket* udata){return;}
 
 
 

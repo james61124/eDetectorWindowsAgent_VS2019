@@ -11,8 +11,6 @@
 #define DATASTRINGMESSAGELEN 65436
 #define STRDATAPACKETSIZE 65536
 
-
-
 struct StrPacket
 {
 	char MAC[MACLEN];
