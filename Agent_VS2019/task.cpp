@@ -283,7 +283,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			swprintf_s(wtr1, 4096, _T("%lu|%s|%s|%s|%d"), vit->first, vit->second.ProcessName, vit->second.ProcessPath, vit->second.ProcessHash, vit->second.Injected);
 			char* str1 = CStringToCharArray(wtr1, CP_UTF8);
 			sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s|%s|%d|%d|0", str1, pMode, m_Count, AllCount);
-			int ret = socketsend->SendMessageToServer(functionName_GiveScanDataInfo, TempStr);
+			int ret = socketsend->SendDataToServer(functionName_GiveScanDataInfo, TempStr);
 			if (ret <= 0)
 			{
 				printf("data info send failed\n");

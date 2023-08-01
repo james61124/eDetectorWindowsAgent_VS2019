@@ -137,6 +137,6 @@ C:\james\Agent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4313: 'snprintf': �
   正在產生程式碼
   1 of 2170 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    15 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   已完成程式碼產生
   Agent_VS2019.vcxproj -> C:\james\Agent_VS2019\x64\Release\Agent_VS2019.exe
