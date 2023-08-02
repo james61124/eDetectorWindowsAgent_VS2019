@@ -1167,8 +1167,8 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 {
 	char* functionName_GiveDetectProcessData = new char[24];
 	strcpy_s(functionName_GiveDetectProcessData, 24, "GiveDetectProcessData");
-	char* functionName_GiveDetectProcessDataOver = new char[24];
-	strcpy_s(functionName_GiveDetectProcessDataOver, 24, "GiveDetectProcessDataOver");
+	char* functionName_GiveDetectProcessOver = new char[24];
+	strcpy_s(functionName_GiveDetectProcessOver, 24, "GiveDetectProcessOver");
 
 	char* TempStr = new char[DATASTRINGMESSAGELEN];
 	vector<ProcessInfoData>::iterator it;
@@ -1270,7 +1270,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 		else
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 		
-		ret = socketsend->SendDataToServer(functionName_GiveDetectProcessDataOver, TempStr);
+		ret = socketsend->SendDataToServer(functionName_GiveDetectProcessOver, TempStr);
 
 		if (ret <= 0)
 			break;
