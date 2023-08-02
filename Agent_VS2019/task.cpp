@@ -1076,7 +1076,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 		}
 		end = clock();
 
-		if ((end - start) > 30000)
+		if ((end - start) > 3000)
 		{
 			if (!m_MemPro->pRiskArray->empty())
 			{
