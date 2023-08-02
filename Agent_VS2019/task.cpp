@@ -1041,7 +1041,9 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 	map<DWORD, process_info_Ex>::iterator st;
 	map<DWORD, process_info_Ex>::iterator nt;
 	//map<DWORD,process_info_Ex>::iterator ft;
+	printf("load now process info start\n");
 	m_MemPro->LoadNowProcessInfoDetect(&StartProcessID);
+	printf("load now process info end\n");
 	if (IsFirst)
 	{
 		for (st = StartProcessID.begin(); st != StartProcessID.end(); st++)
@@ -1055,16 +1057,21 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 	start = clock();
 	m_BootStart = clock();
 	m_BootEnd = clock();
+	printf("for loop start\n");
 	for (;;)
 	{
 		NewProcessID.clear();
+		printf("load now process info start\n");
 		m_MemPro->LoadNowProcessInfoDetect(&NewProcessID);
+		printf("load now process info end\n");
 		for (nt = NewProcessID.begin(); nt != NewProcessID.end(); nt++)
 		{
 			st = StartProcessID.find(nt->first);
 			if (st == StartProcessID.end())
 			{
+				printf("parse new process ID start\n");
 				m_MemPro->ParserProcessRisk(&nt->second, pApiName, MyPath, m_MemPro->pUnKnownData);
+				printf("parse new process ID end\n");
 			}
 		}
 		end = clock();
@@ -1075,6 +1082,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 			{
 				if (m_MemPro->RiskArrayNum == 1)
 				{
+					printf("RiskArrayNum 1\n");
 					m_MemPro->ChangeRiskArrayNum(1);
 					vector<ProcessInfoData>* pRiskArray = m_MemPro->GetRiskArray1();
 					if (!pRiskArray->empty())
@@ -1096,6 +1104,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 				}
 				else if (m_MemPro->RiskArrayNum == 2)
 				{
+					printf("RiskArrayNum 2\n");
 					m_MemPro->ChangeRiskArrayNum(2);
 					vector<ProcessInfoData>* pRiskArray = m_MemPro->GetRiskArray2();
 					if (!pRiskArray->empty())
