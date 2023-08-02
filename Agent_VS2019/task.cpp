@@ -133,7 +133,7 @@ int Task::DetectProcess() {
 
 	try
 	{
-		DetectProcessRisk(pMainProcessid, true, &m_ApiName);
+		DetectProcessRisk(pMainProcessid, false, &m_ApiName);
 		//m_MemPro->DetectProcessRisk(this, pMainProcessid, pBootTime, true, &m_ApiName);
 	}
 	catch (...) {}
