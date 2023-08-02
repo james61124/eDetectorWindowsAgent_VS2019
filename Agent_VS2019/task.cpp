@@ -118,6 +118,7 @@ int Task::GiveDetectInfo() {
 
 	// test
 	// GiveProcessData();
+	DetectProcess();
 
     return ret;
 }
