@@ -1087,6 +1087,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 					vector<ProcessInfoData>* pRiskArray = m_MemPro->GetRiskArray1();
 					if (!pRiskArray->empty())
 					{
+						printf("pRiskArray not empty\n");
 						SendProcessDataToServer(pRiskArray);
 					}
 					//if (m_MemPro->UnKnownDataNum == 1)
@@ -1171,6 +1172,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 
 	char* TempStr = new char[DATASTRINGMESSAGELEN];
 	vector<ProcessInfoData>::iterator it;
+	printf("for loop start\n");
 	for (it = pInfo->begin(); it != pInfo->end(); it++)
 	{
 		wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
@@ -1184,6 +1186,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 		delete[] wTempStr;
 		int ret = 1;
 
+		printf("abnormal dll\n");
 		if (!(*it).Abnormal_dll.empty())
 		{
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
@@ -1210,6 +1213,8 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 		}
 		else
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
+
+		printf("inline hook\n");
 		if (!(*it).InlineHookInfo.empty())
 		{
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
@@ -1236,6 +1241,8 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo)
 		}
 		else
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
+
+		printf("net string\n");
 		if (!(*it).NetString.empty())
 		{
 			strcat_s(TempStr, DATASTRINGMESSAGELEN, "|");
