@@ -5,6 +5,8 @@
 ////////////////////////////////
 // List to hold parsed DataRuns
 ////////////////////////////////
+
+
 typedef struct tagDataRun_Entry
 {
 	LONGLONG			LCN;		// -1 to indicate sparse data

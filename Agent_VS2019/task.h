@@ -34,6 +34,10 @@ public:
     int CheckConnect();
     int GiveDetectInfoFirst();
     int GiveDetectInfo();
+
+    int DetectProcess();
+    
+
     int GetScanInfoData();
     int GiveProcessData();
     int GiveProcessDataEnd();
@@ -63,5 +67,8 @@ public:
 private:
     Tool tool;
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
-    int NTFSSearch(void* argv, wchar_t vol_name, char* pMAC, char* pIP);
+    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP);
+
+    int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName);
+    void SendProcessDataToServer(vector<ProcessInfoData>* pInfo);
 };

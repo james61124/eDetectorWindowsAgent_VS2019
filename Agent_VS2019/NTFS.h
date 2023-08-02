@@ -6,7 +6,8 @@
 
 #include "NTFS_Common.h"
 #include "NTFS_FileRecord.h"
-#include "NTFS_Attribute.h"
+//#include "NTFS_Attribute.h"
+
 //#include "CFileSystem.h"
 
 #pragma pack()

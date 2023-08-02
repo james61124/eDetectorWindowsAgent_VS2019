@@ -34,6 +34,7 @@
     <ClCompile Include="info.cpp" />
     <ClCompile Include="MemProcess.cpp" />
     <ClCompile Include="NTFSSearchCore.cpp" />
+    <ClCompile Include="NTFS_Attribute.cpp" />
     <ClCompile Include="PeFunction.cpp" />
     <ClCompile Include="socket_manager.cpp" />
     <ClCompile Include="socket_send.cpp" />

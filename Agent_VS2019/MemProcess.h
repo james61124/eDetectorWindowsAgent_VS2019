@@ -123,6 +123,13 @@ public:
 	void GetProcessInfo(DWORD pid, TCHAR* pPath, TCHAR* pTimeStr, TCHAR* pUserName, TCHAR* pComStr);
 	DWORD GetRemoteCommandLineW(HANDLE hProcess, LPWSTR pszBuffer, UINT bufferLength);
 
+	BOOL IsWindowsProcessNormal(map<DWORD, process_info_Ex>* pInfo, DWORD pid);
+
+	vector<ProcessInfoData> m_RiskArray1;
+	vector<ProcessInfoData> m_RiskArray2;
+	vector<UnKnownDataInfo> m_UnKnownData1;
+	vector<UnKnownDataInfo> m_UnKnownData2;
+
 private:
 	vector<string> m_ProcessHistory1;
 	vector<string> m_ProcessHistory2;
@@ -132,10 +139,7 @@ private:
 	vector<string> m_NetworkHistory2;
 	set<string> m_AccessFilesHistory1;
 	set<string> m_AccessFilesHistory2;
-	vector<ProcessInfoData> m_RiskArray1;
-	vector<ProcessInfoData> m_RiskArray2;
-	vector<UnKnownDataInfo> m_UnKnownData1;
-	vector<UnKnownDataInfo> m_UnKnownData2;
+	
 	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
 	void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr = NULL, TCHAR* pCTimeStr = NULL);
 	
@@ -146,7 +150,7 @@ private:
 	//void GiveDetectProcessSendServer(map<DWORD,ProcessInfoData> * pInfo,void *argv);
 	int CheckIsInjection(DWORD pid, vector<UnKnownDataInfo>* pMembuf, TCHAR* pProcessName, TCHAR* pUnKnownHash);
 	bool PeUnmapper(BYTE* buffer, size_t pSize, ULONGLONG loadBase, UnKnownDataInfo* pInfo);
-	BOOL IsWindowsProcessNormal(map<DWORD, process_info_Ex>* pInfo, DWORD pid);
+	
 	BOOL CheckParentProcessNormal(map<DWORD, process_info_Ex>* pInfo, DWORD parentid, wchar_t* process_name, time_t pCreateTime);
 	BOOL CheckPathMatch(process_info_Ex* pInfo);
 	BOOL CheckSIDMatch(process_info_Ex* pInfo);

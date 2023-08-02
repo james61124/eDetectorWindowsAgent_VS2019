@@ -2,7 +2,12 @@
 #include <map>
 
 #include "File.h"
-#include "NTFS.h"
+//#include "NTFS.h"
+#include "NTFS_Common.h"
+//#include "NTFS_Attribute.h"
+#include "NTFS_FileRecord.h"
+
+
 
 #include "GlobalFunction.h"
 #include "StrPacket.h"
