@@ -3207,44 +3207,44 @@ int VirtualMachine(char* pMAC)
 	}
 	return ret;
 }
-BOOL MySystemShutdown()
-{
-	HANDLE hToken;
-	TOKEN_PRIVILEGES tkp;
-
-	// Get a token for this process. 
-
-	if (!OpenProcessToken(GetCurrentProcess(),
-		TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
-		return(FALSE);
-
-	// Get the LUID for the shutdown privilege. 
-
-	LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
-		&tkp.Privileges[0].Luid);
-
-	tkp.PrivilegeCount = 1;  // one privilege to set    
-	tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-
-	// Get the shutdown privilege for this process. 
-
-	AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
-		(PTOKEN_PRIVILEGES)NULL, 0);
-
-	if (GetLastError() != ERROR_SUCCESS)
-		return FALSE;
-
-	// Shut down the system and force all applications to close. 
-
-	if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE,
-		SHTDN_REASON_MAJOR_OPERATINGSYSTEM |
-		SHTDN_REASON_MINOR_UPGRADE |
-		SHTDN_REASON_FLAG_PLANNED))
-		return FALSE;
-
-	//shutdown was successful
-	return TRUE;
-}
+//BOOL MySystemShutdown()
+//{
+//	HANDLE hToken;
+//	TOKEN_PRIVILEGES tkp;
+//
+//	// Get a token for this process. 
+//
+//	if (!OpenProcessToken(GetCurrentProcess(),
+//		TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+//		return(FALSE);
+//
+//	// Get the LUID for the shutdown privilege. 
+//
+//	LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME,
+//		&tkp.Privileges[0].Luid);
+//
+//	tkp.PrivilegeCount = 1;  // one privilege to set    
+//	tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+//
+//	// Get the shutdown privilege for this process. 
+//
+//	AdjustTokenPrivileges(hToken, FALSE, &tkp, 0,
+//		(PTOKEN_PRIVILEGES)NULL, 0);
+//
+//	if (GetLastError() != ERROR_SUCCESS)
+//		return FALSE;
+//
+//	// Shut down the system and force all applications to close. 
+//
+//	if (!ExitWindowsEx(EWX_SHUTDOWN | EWX_FORCE,
+//		SHTDN_REASON_MAJOR_OPERATINGSYSTEM |
+//		SHTDN_REASON_MINOR_UPGRADE |
+//		SHTDN_REASON_FLAG_PLANNED))
+//		return FALSE;
+//
+//	//shutdown was successful
+//	return TRUE;
+//}
 //void WriteLogFile(TCHAR* m_Path, char* Str)
 //{
 //	if (!_waccess(m_Path, 00))
@@ -3262,195 +3262,195 @@ BOOL MySystemShutdown()
 //		file.close();
 //	}
 //}
-BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath)
-{
-	char szDriverImagePath[256];
-	//得到完整的驅動路徑
-	GetFullPathNameA(lpszDriverPath, 256, szDriverImagePath, NULL);
-	BOOL bRet = FALSE;
-
-	SC_HANDLE hServiceMgr = NULL;//SCM管理器的控制碼
-	SC_HANDLE hServiceDDK = NULL;//NT驅動程式的服務控制碼
-
-	//打開服務控制管理器
-	hServiceMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-
-	if (hServiceMgr == NULL)
-	{
-		//OpenSCManager失敗
-		printf("OpenSCManager() Faild %d ! \n", GetLastError());
-		bRet = FALSE;
-		goto BeforeLeave;
-	}
-	else
-	{
-		////OpenSCManager成功
-		printf("OpenSCManager() ok ! \n");
-	}
-
-	//新建驅動所對應的服務
-	hServiceDDK = CreateServiceA(hServiceMgr,
-		lpszDriverName, //驅動程式的在登錄表中的名字 
-		lpszDriverName, // 登錄表驅動程式的 DisplayName 值 
-		SERVICE_ALL_ACCESS, // 載入驅動程式的存取權限
-		SERVICE_KERNEL_DRIVER,// 表示載入的服務是驅動程式
-		SERVICE_DEMAND_START, // 登錄表驅動程式的 Start 值
-		SERVICE_ERROR_IGNORE, // 登錄表驅動程式的 ErrorControl 值
-		szDriverImagePath, // 登錄表驅動程式的 ImagePath 值
-		NULL,
-		NULL,
-		NULL,
-		NULL,
-		NULL);
-
-	DWORD dwRtn;
-	//判斷服務是否失敗
-	if (hServiceDDK == NULL)
-	{
-		dwRtn = GetLastError();
-		if (dwRtn != ERROR_IO_PENDING && dwRtn != ERROR_SERVICE_EXISTS)
-		{
-			//由於其他原因新建服務失敗
-			printf("CrateService() Faild %d ! \n", dwRtn);
-			bRet = FALSE;
-			goto BeforeLeave;
-		}
-		else
-		{
-			//服務新建失敗，是由於服務已經創立過
-			printf("CrateService() Faild Service is ERROR_IO_PENDING or ERROR_SERVICE_EXISTS! \n");
-		}
-
-		// 驅動程式已經載入，只需要打開
-		hServiceDDK = OpenServiceA(hServiceMgr, lpszDriverName, SERVICE_ALL_ACCESS);
-		if (hServiceDDK == NULL)
-		{
-			//如果打開服務也失敗，則意味錯誤
-			dwRtn = GetLastError();
-			printf("OpenService() Faild %d ! \n", dwRtn);
-			bRet = FALSE;
-			goto BeforeLeave;
-		}
-		else
-		{
-			printf("OpenService() ok ! \n");
-		}
-	}
-	else
-	{
-		printf("CrateService() ok ! \n");
-	}
-
-	//開啟此項服務
-	bRet = StartService(hServiceDDK, NULL, NULL);
-	if (!bRet)
-	{
-		DWORD dwRtn = GetLastError();
-		if (dwRtn != ERROR_IO_PENDING && dwRtn != ERROR_SERVICE_ALREADY_RUNNING)
-		{
-			printf("StartService() Faild %d ! \n", dwRtn);
-			bRet = FALSE;
-			goto BeforeLeave;
-		}
-		else
-		{
-			if (dwRtn == ERROR_IO_PENDING)
-			{
-				//裝置被掛住
-				printf("StartService() Faild ERROR_IO_PENDING ! \n");
-				bRet = FALSE;
-				goto BeforeLeave;
-			}
-			else
-			{
-				//服務已經開啟
-				printf("StartService() Faild ERROR_SERVICE_ALREADY_RUNNING ! \n");
-				bRet = TRUE;
-				goto BeforeLeave;
-			}
-		}
-	}
-	bRet = TRUE;
-	//離開前關閉控制碼
-BeforeLeave:
-	if (hServiceDDK)
-	{
-		CloseServiceHandle(hServiceDDK);
-	}
-	if (hServiceMgr)
-	{
-		CloseServiceHandle(hServiceMgr);
-	}
-	return bRet;
-}
-BOOL UnloadNTDriver(char* szSvrName)
-{
-	BOOL bRet = FALSE;
-	SC_HANDLE hServiceMgr = NULL;//SCM管理器的控制碼
-	SC_HANDLE hServiceDDK = NULL;//NT驅動程式的服務控制碼
-	SERVICE_STATUS SvrSta;
-	//打開SCM管理器
-	hServiceMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
-	if (hServiceMgr == NULL)
-	{
-		//帶開SCM管理器失敗
-		//printf( "OpenSCManager() Faild %d ! \n", GetLastError() );  
-		bRet = FALSE;
-		goto BeforeLeave;
-	}
-	//else  
-	//{
-	//	//帶開SCM管理器失敗成功
-	//	printf( "OpenSCManager() ok ! \n" );  
-	//}
-	//打開驅動所對應的服務
-	hServiceDDK = OpenServiceA(hServiceMgr, szSvrName, SERVICE_ALL_ACCESS);
-
-	if (hServiceDDK == NULL)
-	{
-		//打開驅動所對應的服務失敗
-		//printf( "OpenService() Faild %d ! \n", GetLastError() );  
-		bRet = FALSE;
-		goto BeforeLeave;
-	}
-	//else  
-	//{  
-	//	printf( "OpenService() ok ! \n" );  
-	//}  
-	//停止驅動程式，如果停止失敗，只有重新開機才能，再動態載入。  
-	if (!ControlService(hServiceDDK, SERVICE_CONTROL_STOP, &SvrSta))
-	{
-		//printf( "ControlService() Faild %d !\n", GetLastError() );  
-	}
-	else
-	{
-		//打開驅動所對應的失敗
-		//printf( "ControlService() ok !\n" );  
-	}
-	//動態卸載驅動程式。  
-	if (!DeleteService(hServiceDDK))
-	{
-		//卸載失敗
-		//printf( "DeleteSrevice() Faild %d !\n", GetLastError() );  
-	}
-	else
-	{
-		//卸載成功
-		//printf( "DelServer:eleteSrevice() ok !\n" );  
-	}
-	bRet = TRUE;
-BeforeLeave:
-	//離開前關閉打開的控制碼
-	if (hServiceDDK)
-	{
-		CloseServiceHandle(hServiceDDK);
-	}
-	if (hServiceMgr)
-	{
-		CloseServiceHandle(hServiceMgr);
-	}
-	return bRet;
-}
+//BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath)
+//{
+//	char szDriverImagePath[256];
+//	//得到完整的驅動路徑
+//	GetFullPathNameA(lpszDriverPath, 256, szDriverImagePath, NULL);
+//	BOOL bRet = FALSE;
+//
+//	SC_HANDLE hServiceMgr = NULL;//SCM管理器的控制碼
+//	SC_HANDLE hServiceDDK = NULL;//NT驅動程式的服務控制碼
+//
+//	//打開服務控制管理器
+//	hServiceMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+//
+//	if (hServiceMgr == NULL)
+//	{
+//		//OpenSCManager失敗
+//		printf("OpenSCManager() Faild %d ! \n", GetLastError());
+//		bRet = FALSE;
+//		goto BeforeLeave;
+//	}
+//	else
+//	{
+//		////OpenSCManager成功
+//		printf("OpenSCManager() ok ! \n");
+//	}
+//
+//	//新建驅動所對應的服務
+//	hServiceDDK = CreateServiceA(hServiceMgr,
+//		lpszDriverName, //驅動程式的在登錄表中的名字 
+//		lpszDriverName, // 登錄表驅動程式的 DisplayName 值 
+//		SERVICE_ALL_ACCESS, // 載入驅動程式的存取權限
+//		SERVICE_KERNEL_DRIVER,// 表示載入的服務是驅動程式
+//		SERVICE_DEMAND_START, // 登錄表驅動程式的 Start 值
+//		SERVICE_ERROR_IGNORE, // 登錄表驅動程式的 ErrorControl 值
+//		szDriverImagePath, // 登錄表驅動程式的 ImagePath 值
+//		NULL,
+//		NULL,
+//		NULL,
+//		NULL,
+//		NULL);
+//
+//	DWORD dwRtn;
+//	//判斷服務是否失敗
+//	if (hServiceDDK == NULL)
+//	{
+//		dwRtn = GetLastError();
+//		if (dwRtn != ERROR_IO_PENDING && dwRtn != ERROR_SERVICE_EXISTS)
+//		{
+//			//由於其他原因新建服務失敗
+//			printf("CrateService() Faild %d ! \n", dwRtn);
+//			bRet = FALSE;
+//			goto BeforeLeave;
+//		}
+//		else
+//		{
+//			//服務新建失敗，是由於服務已經創立過
+//			printf("CrateService() Faild Service is ERROR_IO_PENDING or ERROR_SERVICE_EXISTS! \n");
+//		}
+//
+//		// 驅動程式已經載入，只需要打開
+//		hServiceDDK = OpenServiceA(hServiceMgr, lpszDriverName, SERVICE_ALL_ACCESS);
+//		if (hServiceDDK == NULL)
+//		{
+//			//如果打開服務也失敗，則意味錯誤
+//			dwRtn = GetLastError();
+//			printf("OpenService() Faild %d ! \n", dwRtn);
+//			bRet = FALSE;
+//			goto BeforeLeave;
+//		}
+//		else
+//		{
+//			printf("OpenService() ok ! \n");
+//		}
+//	}
+//	else
+//	{
+//		printf("CrateService() ok ! \n");
+//	}
+//
+//	//開啟此項服務
+//	bRet = StartService(hServiceDDK, NULL, NULL);
+//	if (!bRet)
+//	{
+//		DWORD dwRtn = GetLastError();
+//		if (dwRtn != ERROR_IO_PENDING && dwRtn != ERROR_SERVICE_ALREADY_RUNNING)
+//		{
+//			printf("StartService() Faild %d ! \n", dwRtn);
+//			bRet = FALSE;
+//			goto BeforeLeave;
+//		}
+//		else
+//		{
+//			if (dwRtn == ERROR_IO_PENDING)
+//			{
+//				//裝置被掛住
+//				printf("StartService() Faild ERROR_IO_PENDING ! \n");
+//				bRet = FALSE;
+//				goto BeforeLeave;
+//			}
+//			else
+//			{
+//				//服務已經開啟
+//				printf("StartService() Faild ERROR_SERVICE_ALREADY_RUNNING ! \n");
+//				bRet = TRUE;
+//				goto BeforeLeave;
+//			}
+//		}
+//	}
+//	bRet = TRUE;
+//	//離開前關閉控制碼
+//BeforeLeave:
+//	if (hServiceDDK)
+//	{
+//		CloseServiceHandle(hServiceDDK);
+//	}
+//	if (hServiceMgr)
+//	{
+//		CloseServiceHandle(hServiceMgr);
+//	}
+//	return bRet;
+//}
+//BOOL UnloadNTDriver(char* szSvrName)
+//{
+//	BOOL bRet = FALSE;
+//	SC_HANDLE hServiceMgr = NULL;//SCM管理器的控制碼
+//	SC_HANDLE hServiceDDK = NULL;//NT驅動程式的服務控制碼
+//	SERVICE_STATUS SvrSta;
+//	//打開SCM管理器
+//	hServiceMgr = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+//	if (hServiceMgr == NULL)
+//	{
+//		//帶開SCM管理器失敗
+//		//printf( "OpenSCManager() Faild %d ! \n", GetLastError() );  
+//		bRet = FALSE;
+//		goto BeforeLeave;
+//	}
+//	//else  
+//	//{
+//	//	//帶開SCM管理器失敗成功
+//	//	printf( "OpenSCManager() ok ! \n" );  
+//	//}
+//	//打開驅動所對應的服務
+//	hServiceDDK = OpenServiceA(hServiceMgr, szSvrName, SERVICE_ALL_ACCESS);
+//
+//	if (hServiceDDK == NULL)
+//	{
+//		//打開驅動所對應的服務失敗
+//		//printf( "OpenService() Faild %d ! \n", GetLastError() );  
+//		bRet = FALSE;
+//		goto BeforeLeave;
+//	}
+//	//else  
+//	//{  
+//	//	printf( "OpenService() ok ! \n" );  
+//	//}  
+//	//停止驅動程式，如果停止失敗，只有重新開機才能，再動態載入。  
+//	if (!ControlService(hServiceDDK, SERVICE_CONTROL_STOP, &SvrSta))
+//	{
+//		//printf( "ControlService() Faild %d !\n", GetLastError() );  
+//	}
+//	else
+//	{
+//		//打開驅動所對應的失敗
+//		//printf( "ControlService() ok !\n" );  
+//	}
+//	//動態卸載驅動程式。  
+//	if (!DeleteService(hServiceDDK))
+//	{
+//		//卸載失敗
+//		//printf( "DeleteSrevice() Faild %d !\n", GetLastError() );  
+//	}
+//	else
+//	{
+//		//卸載成功
+//		//printf( "DelServer:eleteSrevice() ok !\n" );  
+//	}
+//	bRet = TRUE;
+//BeforeLeave:
+//	//離開前關閉打開的控制碼
+//	if (hServiceDDK)
+//	{
+//		CloseServiceHandle(hServiceDDK);
+//	}
+//	if (hServiceMgr)
+//	{
+//		CloseServiceHandle(hServiceMgr);
+//	}
+//	return bRet;
+//}
 void GetThisClientKey(char* pKeyStr)
 {
 	HKEY hKey = NULL;

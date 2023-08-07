@@ -64,12 +64,12 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 
 bool SocketSend::sendTCP(char* data, long len) {
 	int ret = send(*(info->tcpSocket), data, len, 0);
-	if (ret) {
+	if (!ret) {
 
 		std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
 	}
 	else {
-		std::cout << "Data sent successfully." << std::endl;
+		// std::cout << "Data sent successfully." << std::endl;
 	}
 
 	return ret;

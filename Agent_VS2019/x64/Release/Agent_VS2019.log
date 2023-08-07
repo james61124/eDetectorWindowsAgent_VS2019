@@ -1,4 +1,267 @@
 ﻿cl : 命令列 warning D9002: 忽略未知的選項 '/utf-16'
+  NTFSSearchCore.cpp
+  agent.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(222,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2511): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(245,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2512): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(281,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2513): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(290,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2514): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(737,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2515): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(746,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2516): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(821,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2517): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(984,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2518): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1304,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2519): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1322,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2520): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1331,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2521): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1340,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2522): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1349,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2523): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1358,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2524): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1367,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2525): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1376,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2526): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1385,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2527): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1417,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2528): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1428,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2529): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1439,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2530): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1450,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2531): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1753,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2532): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1780,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2533): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1884,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2534): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2030,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2535): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2039,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2536): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2057,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2537): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2102,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2538): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2202,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2539): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2259,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2540): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2340,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2541): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2349,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2542): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3282,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2543): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3292,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2544): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3302,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2545): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2546): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2547): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2548): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2549): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2550): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2551): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2552): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2553): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4328,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2554): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4845,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2555): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4874,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2556): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4884,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2557): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4894,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2558): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4972,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2559): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(5969,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2560): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7527,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2561): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7537,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2562): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7669,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2563): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(8652,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2564): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(8880,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2565): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9007,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2566): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9070,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2567): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9988,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2568): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10415,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2569): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10424,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2570): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10718,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2571): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14352,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+  caes.cpp
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(390,57): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(451,57): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+  socket_manager.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(222,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2511): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(245,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2512): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(281,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2513): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(290,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2514): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(737,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2515): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(746,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2516): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(821,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2517): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(984,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2518): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1304,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2519): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1322,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2520): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1331,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2521): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1340,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2522): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1349,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2523): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1358,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2524): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1367,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2525): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1376,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2526): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1385,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2527): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1417,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2528): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1428,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2529): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1439,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2530): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1450,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2531): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1753,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2532): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1780,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2533): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(1884,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2534): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2030,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2535): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2039,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2536): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2057,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2537): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2102,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2538): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2202,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2539): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2259,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2540): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2340,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2541): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(2349,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2542): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3282,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2543): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3292,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2544): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3302,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2545): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2546): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2547): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2548): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2549): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2550): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2551): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2552): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2553): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4328,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2554): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4845,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2555): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4874,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2556): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4884,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2557): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4894,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2558): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(4972,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2559): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(5969,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2560): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7527,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2561): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7537,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2562): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(7669,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2563): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(8652,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2564): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(8880,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2565): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9007,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2566): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9070,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2567): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(9988,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2568): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10415,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2569): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10424,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2570): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(10718,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2571): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14352,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+  socket_send.cpp
   task.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
@@ -128,15 +391,226 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%lld'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%Id'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
-C:\james\Agent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
-  正在產生程式碼
-  1 of 2181 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
-  已完成程式碼產生
-  Agent_VS2019.vcxproj -> C:\james\Agent_VS2019\x64\Release\Agent_VS2019.exe
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(81,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CNTFSVolume::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CNTFSVolume@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CNTFSVolume::OpenVolume(wchar_t)" (?OpenVolume@CNTFSVolume@@AEAAH_W@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CNTFSVolume::~CNTFSVolume(void)" (??1CNTFSVolume@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CNTFSVolume::CNTFSVolume(wchar_t)" (??0CNTFSVolume@@QEAA@_W@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindRecoveryStream(wchar_t *)" (?FindRecoveryStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindStream(wchar_t *)" (?FindStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseSubEntries(void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubEntries@CFileRecord@@QEBAXP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: void __cdecl CFileRecord::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileRecord@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileRecord@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindNextAttr(unsigned long)const " (?FindNextAttr@CFileRecord@@QEBAPEBVCAttrBase@@K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseAttrs(void (__cdecl*)(class CAttrBase const *,void *,int *),void *)" (?TraverseAttrs@CFileRecord@@QEAAXP6AXPEBVCAttrBase@@PEAXPEAH@Z1@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CFileRecord@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::FindAttrTypeCount(unsigned long)" (?FindAttrTypeCount@CFileRecord@@QEAAHK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileAttrs(void)" (?ParseFileAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseAttrs(void)" (?ParseAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: void __cdecl CFileRecord::TraverseSubNode(unsigned __int64 const &,void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubNode@CFileRecord@@AEBAXAEB_KP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CFileRecord::VisitIndexBlock(unsigned __int64 const &,wchar_t const *,class CIndexEntry &)const " (?VisitIndexBlock@CFileRecord@@AEBAHAEB_KPEB_WAEAVCIndexEntry@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileRecord(unsigned __int64)" (?ParseFileRecord@CFileRecord@@QEAAH_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: struct tagFILE_RECORD_HEADER * __cdecl CFileRecord::ReadFileRecord(unsigned __int64 &)" (?ReadFileRecord@CFileRecord@@AEAAPEAUtagFILE_RECORD_HEADER@@AEA_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CFileRecord::ParseAttr(struct tagATTR_HEADER_COMMON *)" (?ParseAttr@CFileRecord@@AEAAHPEAUtagATTR_HEADER_COMMON@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: class CAttrBase * __cdecl CFileRecord::AllocAttr(struct tagATTR_HEADER_COMMON *,int *)" (?AllocAttr@CFileRecord@@AEAAPEAVCAttrBase@@PEAUtagATTR_HEADER_COMMON@@PEAH@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CFileRecord::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CFileRecord@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: void __cdecl CFileRecord::ClearAttrs(void)" (?ClearAttrs@CFileRecord@@AEAAXXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CFileRecord::~CFileRecord(void)" (??1CFileRecord@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CFileRecord::CFileRecord(class CNTFSVolume const *)" (??0CFileRecord@@QEAA@PEBVCNTFSVolume@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CAttr_IndexAlloc::ParseIndexBlock(unsigned __int64 const &,class CIndexBlock &)" (?ParseIndexBlock@CAttr_IndexAlloc@@QEAAHAEB_KAEAVCIndexBlock@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttr_IndexAlloc::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CAttr_IndexAlloc@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexAlloc::~CAttr_IndexAlloc(void)" (??1CAttr_IndexAlloc@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttr_IndexAlloc::CAttr_IndexAlloc(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexAlloc@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: void __cdecl CAttr_IndexRoot::ParseIndexEntries(void)" (?ParseIndexEntries@CAttr_IndexRoot@@AEAAXXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexRoot::~CAttr_IndexRoot(void)" (??1CAttr_IndexRoot@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttr_IndexRoot::CAttr_IndexRoot(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexRoot@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: void __cdecl CFileName::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileName@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(char *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileName::Compare(char const *)const " (?Compare@CFileName@@QEBAHPEBD@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CFileName::Compare(wchar_t const *)const " (?Compare@CFileName@@QEBAHPEB_W@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: void __cdecl CFileName::GetFileNameWUC(void)" (?GetFileNameWUC@CFileName@@AEAAXXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "protected: void __cdecl CFileName::CopyFileName(class CFileName const *,struct tagATTR_FILE_NAME const *)" (?CopyFileName@CFileName@@IEAAXPEBV1@PEBUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CFileName::~CFileName(void)" (??1CFileName@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CFileName::CFileName(struct tagATTR_FILE_NAME *)" (??0CFileName@@QEAA@PEAUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: static void __cdecl CAttr_StdInfo::UTC2Local(unsigned __int64 const &,struct _FILETIME *)" (?UTC2Local@CAttr_StdInfo@@SAXAEB_KPEAU_FILETIME@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: void __cdecl CAttr_StdInfo::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CAttr_StdInfo@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttr_StdInfo::~CAttr_StdInfo(void)" (??1CAttr_StdInfo@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttr_StdInfo::CAttr_StdInfo(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_StdInfo@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrNonResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CheckCompressed(void)const " (?CheckCompressed@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::GetVCNSize(void)const " (?GetVCNSize@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadRecoveryVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadRecoveryVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadClusters(void *,unsigned long,__int64)" (?ReadClusters@CAttrNonResident@@AEAAHPEAXK_J@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ParseDataRun(void)" (?ParseDataRun@CAttrNonResident@@AEAAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "private: int __cdecl CAttrNonResident::PickData(unsigned char const * *,__int64 *,__int64 *)" (?PickData@CAttrNonResident@@AEAAHPEAPEBEPEA_J1@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttrNonResident::~CAttrNonResident(void)" (??1CAttrNonResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttrNonResident::CAttrNonResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrNonResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CheckCompressed(void)const " (?CheckCompressed@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::GetVCNSize(void)const " (?GetVCNSize@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttrResident::~CAttrResident(void)" (??1CAttrResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttrResident::CAttrResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(wchar_t *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(char *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: virtual __cdecl CAttrBase::~CAttrBase(void)" (??1CAttrBase@@UEAA@XZ) 已在 agent.obj 中定義過了
+NTFSSearchCore.obj : error LNK2005: "public: __cdecl CAttrBase::CAttrBase(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrBase@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CNTFSVolume::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CNTFSVolume@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CNTFSVolume::OpenVolume(wchar_t)" (?OpenVolume@CNTFSVolume@@AEAAH_W@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CNTFSVolume::~CNTFSVolume(void)" (??1CNTFSVolume@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CNTFSVolume::CNTFSVolume(wchar_t)" (??0CNTFSVolume@@QEAA@_W@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindRecoveryStream(wchar_t *)" (?FindRecoveryStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindStream(wchar_t *)" (?FindStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseSubEntries(void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubEntries@CFileRecord@@QEBAXP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: void __cdecl CFileRecord::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileRecord@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileRecord@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindNextAttr(unsigned long)const " (?FindNextAttr@CFileRecord@@QEBAPEBVCAttrBase@@K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseAttrs(void (__cdecl*)(class CAttrBase const *,void *,int *),void *)" (?TraverseAttrs@CFileRecord@@QEAAXP6AXPEBVCAttrBase@@PEAXPEAH@Z1@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CFileRecord@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::FindAttrTypeCount(unsigned long)" (?FindAttrTypeCount@CFileRecord@@QEAAHK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileAttrs(void)" (?ParseFileAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseAttrs(void)" (?ParseAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: void __cdecl CFileRecord::TraverseSubNode(unsigned __int64 const &,void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubNode@CFileRecord@@AEBAXAEB_KP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CFileRecord::VisitIndexBlock(unsigned __int64 const &,wchar_t const *,class CIndexEntry &)const " (?VisitIndexBlock@CFileRecord@@AEBAHAEB_KPEB_WAEAVCIndexEntry@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileRecord(unsigned __int64)" (?ParseFileRecord@CFileRecord@@QEAAH_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: struct tagFILE_RECORD_HEADER * __cdecl CFileRecord::ReadFileRecord(unsigned __int64 &)" (?ReadFileRecord@CFileRecord@@AEAAPEAUtagFILE_RECORD_HEADER@@AEA_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CFileRecord::ParseAttr(struct tagATTR_HEADER_COMMON *)" (?ParseAttr@CFileRecord@@AEAAHPEAUtagATTR_HEADER_COMMON@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: class CAttrBase * __cdecl CFileRecord::AllocAttr(struct tagATTR_HEADER_COMMON *,int *)" (?AllocAttr@CFileRecord@@AEAAPEAVCAttrBase@@PEAUtagATTR_HEADER_COMMON@@PEAH@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CFileRecord::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CFileRecord@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: void __cdecl CFileRecord::ClearAttrs(void)" (?ClearAttrs@CFileRecord@@AEAAXXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CFileRecord::~CFileRecord(void)" (??1CFileRecord@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CFileRecord::CFileRecord(class CNTFSVolume const *)" (??0CFileRecord@@QEAA@PEBVCNTFSVolume@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CAttr_IndexAlloc::ParseIndexBlock(unsigned __int64 const &,class CIndexBlock &)" (?ParseIndexBlock@CAttr_IndexAlloc@@QEAAHAEB_KAEAVCIndexBlock@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttr_IndexAlloc::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CAttr_IndexAlloc@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexAlloc::~CAttr_IndexAlloc(void)" (??1CAttr_IndexAlloc@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttr_IndexAlloc::CAttr_IndexAlloc(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexAlloc@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: void __cdecl CAttr_IndexRoot::ParseIndexEntries(void)" (?ParseIndexEntries@CAttr_IndexRoot@@AEAAXXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexRoot::~CAttr_IndexRoot(void)" (??1CAttr_IndexRoot@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttr_IndexRoot::CAttr_IndexRoot(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexRoot@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: void __cdecl CFileName::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileName@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(char *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileName::Compare(char const *)const " (?Compare@CFileName@@QEBAHPEBD@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CFileName::Compare(wchar_t const *)const " (?Compare@CFileName@@QEBAHPEB_W@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: void __cdecl CFileName::GetFileNameWUC(void)" (?GetFileNameWUC@CFileName@@AEAAXXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "protected: void __cdecl CFileName::CopyFileName(class CFileName const *,struct tagATTR_FILE_NAME const *)" (?CopyFileName@CFileName@@IEAAXPEBV1@PEBUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CFileName::~CFileName(void)" (??1CFileName@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CFileName::CFileName(struct tagATTR_FILE_NAME *)" (??0CFileName@@QEAA@PEAUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: static void __cdecl CAttr_StdInfo::UTC2Local(unsigned __int64 const &,struct _FILETIME *)" (?UTC2Local@CAttr_StdInfo@@SAXAEB_KPEAU_FILETIME@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: void __cdecl CAttr_StdInfo::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CAttr_StdInfo@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttr_StdInfo::~CAttr_StdInfo(void)" (??1CAttr_StdInfo@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttr_StdInfo::CAttr_StdInfo(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_StdInfo@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrNonResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CheckCompressed(void)const " (?CheckCompressed@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::GetVCNSize(void)const " (?GetVCNSize@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadRecoveryVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadRecoveryVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadClusters(void *,unsigned long,__int64)" (?ReadClusters@CAttrNonResident@@AEAAHPEAXK_J@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ParseDataRun(void)" (?ParseDataRun@CAttrNonResident@@AEAAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "private: int __cdecl CAttrNonResident::PickData(unsigned char const * *,__int64 *,__int64 *)" (?PickData@CAttrNonResident@@AEAAHPEAPEBEPEA_J1@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttrNonResident::~CAttrNonResident(void)" (??1CAttrNonResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttrNonResident::CAttrNonResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrNonResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CheckCompressed(void)const " (?CheckCompressed@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::GetVCNSize(void)const " (?GetVCNSize@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttrResident::~CAttrResident(void)" (??1CAttrResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttrResident::CAttrResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(wchar_t *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(char *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: virtual __cdecl CAttrBase::~CAttrBase(void)" (??1CAttrBase@@UEAA@XZ) 已在 agent.obj 中定義過了
+socket_manager.obj : error LNK2005: "public: __cdecl CAttrBase::CAttrBase(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrBase@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CNTFSVolume::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CNTFSVolume@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CNTFSVolume::OpenVolume(wchar_t)" (?OpenVolume@CNTFSVolume@@AEAAH_W@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CNTFSVolume::~CNTFSVolume(void)" (??1CNTFSVolume@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CNTFSVolume::CNTFSVolume(wchar_t)" (??0CNTFSVolume@@QEAA@_W@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindRecoveryStream(wchar_t *)" (?FindRecoveryStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindStream(wchar_t *)" (?FindStream@CFileRecord@@QEAAPEBVCAttrBase@@PEA_W@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseSubEntries(void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubEntries@CFileRecord@@QEBAXP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: void __cdecl CFileRecord::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileRecord@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileRecord@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: class CAttrBase const * __cdecl CFileRecord::FindNextAttr(unsigned long)const " (?FindNextAttr@CFileRecord@@QEBAPEBVCAttrBase@@K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: void __cdecl CFileRecord::TraverseAttrs(void (__cdecl*)(class CAttrBase const *,void *,int *),void *)" (?TraverseAttrs@CFileRecord@@QEAAXP6AXPEBVCAttrBase@@PEAXPEAH@Z1@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::InstallAttrRawCB(unsigned long,void (__cdecl*)(struct tagATTR_HEADER_COMMON const *,int *))" (?InstallAttrRawCB@CFileRecord@@QEAAHKP6AXPEBUtagATTR_HEADER_COMMON@@PEAH@Z@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::FindAttrTypeCount(unsigned long)" (?FindAttrTypeCount@CFileRecord@@QEAAHK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileAttrs(void)" (?ParseFileAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseAttrs(void)" (?ParseAttrs@CFileRecord@@QEAAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: void __cdecl CFileRecord::TraverseSubNode(unsigned __int64 const &,void (__cdecl*)(class CIndexEntry const *))const " (?TraverseSubNode@CFileRecord@@AEBAXAEB_KP6AXPEBVCIndexEntry@@@Z@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CFileRecord::VisitIndexBlock(unsigned __int64 const &,wchar_t const *,class CIndexEntry &)const " (?VisitIndexBlock@CFileRecord@@AEBAHAEB_KPEB_WAEAVCIndexEntry@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileRecord::ParseFileRecord(unsigned __int64)" (?ParseFileRecord@CFileRecord@@QEAAH_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: struct tagFILE_RECORD_HEADER * __cdecl CFileRecord::ReadFileRecord(unsigned __int64 &)" (?ReadFileRecord@CFileRecord@@AEAAPEAUtagFILE_RECORD_HEADER@@AEA_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CFileRecord::ParseAttr(struct tagATTR_HEADER_COMMON *)" (?ParseAttr@CFileRecord@@AEAAHPEAUtagATTR_HEADER_COMMON@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: class CAttrBase * __cdecl CFileRecord::AllocAttr(struct tagATTR_HEADER_COMMON *,int *)" (?AllocAttr@CFileRecord@@AEAAPEAVCAttrBase@@PEAUtagATTR_HEADER_COMMON@@PEAH@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CFileRecord::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CFileRecord@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: void __cdecl CFileRecord::ClearAttrs(void)" (?ClearAttrs@CFileRecord@@AEAAXXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CFileRecord::~CFileRecord(void)" (??1CFileRecord@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CFileRecord::CFileRecord(class CNTFSVolume const *)" (??0CFileRecord@@QEAA@PEBVCNTFSVolume@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CAttr_IndexAlloc::ParseIndexBlock(unsigned __int64 const &,class CIndexBlock &)" (?ParseIndexBlock@CAttr_IndexAlloc@@QEAAHAEB_KAEAVCIndexBlock@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttr_IndexAlloc::PatchUS(unsigned short *,int,unsigned short,unsigned short *)" (?PatchUS@CAttr_IndexAlloc@@AEAAHPEAGHG0@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexAlloc::~CAttr_IndexAlloc(void)" (??1CAttr_IndexAlloc@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttr_IndexAlloc::CAttr_IndexAlloc(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexAlloc@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: void __cdecl CAttr_IndexRoot::ParseIndexEntries(void)" (?ParseIndexEntries@CAttr_IndexRoot@@AEAAXXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttr_IndexRoot::~CAttr_IndexRoot(void)" (??1CAttr_IndexRoot@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttr_IndexRoot::CAttr_IndexRoot(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_IndexRoot@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: void __cdecl CFileName::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CFileName@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(wchar_t *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileName::GetFileName(char *,unsigned long)const " (?GetFileName@CFileName@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileName::Compare(char const *)const " (?Compare@CFileName@@QEBAHPEBD@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CFileName::Compare(wchar_t const *)const " (?Compare@CFileName@@QEBAHPEB_W@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: void __cdecl CFileName::GetFileNameWUC(void)" (?GetFileNameWUC@CFileName@@AEAAXXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "protected: void __cdecl CFileName::CopyFileName(class CFileName const *,struct tagATTR_FILE_NAME const *)" (?CopyFileName@CFileName@@IEAAXPEBV1@PEBUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CFileName::~CFileName(void)" (??1CFileName@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CFileName::CFileName(struct tagATTR_FILE_NAME *)" (??0CFileName@@QEAA@PEAUtagATTR_FILE_NAME@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: static void __cdecl CAttr_StdInfo::UTC2Local(unsigned __int64 const &,struct _FILETIME *)" (?UTC2Local@CAttr_StdInfo@@SAXAEB_KPEAU_FILETIME@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: void __cdecl CAttr_StdInfo::GetFileTime(struct _FILETIME *,struct _FILETIME *,struct _FILETIME *)const " (?GetFileTime@CAttr_StdInfo@@QEBAXPEAU_FILETIME@@00@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttr_StdInfo::~CAttr_StdInfo(void)" (??1CAttr_StdInfo@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttr_StdInfo::CAttr_StdInfo(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttr_StdInfo@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrNonResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::CheckCompressed(void)const " (?CheckCompressed@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::GetVCNSize(void)const " (?GetVCNSize@CAttrNonResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadRecoveryVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadRecoveryVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrNonResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrNonResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadVirtualClusters(unsigned __int64,unsigned long,void *,unsigned long,unsigned long *)" (?ReadVirtualClusters@CAttrNonResident@@AEAAH_KKPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ReadClusters(void *,unsigned long,__int64)" (?ReadClusters@CAttrNonResident@@AEAAHPEAXK_J@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttrNonResident::ParseDataRun(void)" (?ParseDataRun@CAttrNonResident@@AEAAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "private: int __cdecl CAttrNonResident::PickData(unsigned char const * *,__int64 *,__int64 *)" (?PickData@CAttrNonResident@@AEAAHPEAPEBEPEA_J1@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttrNonResident::~CAttrNonResident(void)" (??1CAttrNonResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttrNonResident::CAttrNonResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrNonResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CompressedLessReal(unsigned __int64)const " (?CompressedLessReal@CAttrResident@@UEBAH_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::CheckCompressed(void)const " (?CheckCompressed@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::GetVCNSize(void)const " (?GetVCNSize@CAttrResident@@UEBAHXZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadRecoveryData(unsigned __int64 const &,void *,unsigned long,unsigned long *,unsigned __int64)const " (?ReadRecoveryData@CAttrResident@@UEBAHAEB_KPEAXKPEAK_K@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadIniSizeData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadIniSizeData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadCompressedData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadCompressedData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual int __cdecl CAttrResident::ReadData(unsigned __int64 const &,void *,unsigned long,unsigned long *)const " (?ReadData@CAttrResident@@UEBAHAEB_KPEAXKPEAK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttrResident::~CAttrResident(void)" (??1CAttrResident@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttrResident::CAttrResident(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrResident@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(wchar_t *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEA_WK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: int __cdecl CAttrBase::GetAttrName(char *,unsigned long)const " (?GetAttrName@CAttrBase@@QEBAHPEADK@Z) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: virtual __cdecl CAttrBase::~CAttrBase(void)" (??1CAttrBase@@UEAA@XZ) 已在 agent.obj 中定義過了
+task.obj : error LNK2005: "public: __cdecl CAttrBase::CAttrBase(struct tagATTR_HEADER_COMMON const *,class CFileRecord const *)" (??0CAttrBase@@QEAA@PEBUtagATTR_HEADER_COMMON@@PEBVCFileRecord@@@Z) 已在 agent.obj 中定義過了
+C:\james\eDetectorWindowsAgent_VS2019\x64\Release\Agent_VS2019.exe : fatal error LNK1169: 找到有一或多個已定義的符號

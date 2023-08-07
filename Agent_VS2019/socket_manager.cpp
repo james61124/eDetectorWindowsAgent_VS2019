@@ -10,19 +10,24 @@
 
 
 
-SocketManager::SocketManager(int port, int detect_port, Info* infoInstance, SocketSend* socketSendInstance) {
+SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend* socketSendInstance) {
 
     Port = port;
-    DetectPort = detect_port;
     InfoInstance = infoInstance;
     task = new Task(infoInstance, socketSendInstance);
     InfoInstance->tcpSocket = &tcpSocket;
 
     // strcpy(UUID,key);
-
-    if (!connectTCP("192.168.200.153", 1988)) perror("connection failed\n");
+    
+    // 192.168.200.153
+    if (!connectTCP(serverIP, port)) perror("connection failed\n");
     else printf("connect success\n");
     getSystemInfo();
+
+
+    std::thread receiveThread([&]() { receiveTCP(); });
+    HandleTaskToServer("GiveInfo");
+    receiveThread.join();
 
     // until the end
     // closesocket(tcpSocket);

@@ -1,9 +1,15 @@
+#ifndef SOCKETMANAGER_H
+#define SOCKETMANAGER_H
 #pragma comment(lib, "ws2_32.lib")
+
+
 #include <string>
 #include <map>
 #include <unordered_map>
 #include <functional>
 #include <any>
+
+
 #include <vector>
 #include <thread>
 #include <winsock2.h>
@@ -17,7 +23,7 @@
 
 class SocketManager {
 public:
-    SocketManager(int port, int detect_port, Info* infoInstance, SocketSend* socketSendInstance);
+    SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend* socketSendInstance);
     Info* InfoInstance;
     SOCKET tcpSocket;
 
@@ -48,3 +54,5 @@ private:
     Task* task;
 
 };
+
+#endif

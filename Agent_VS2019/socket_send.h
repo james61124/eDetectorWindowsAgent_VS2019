@@ -1,3 +1,6 @@
+#ifndef SOCKETSEND_H
+#define SOCKETSEND_H
+
 #include "info.h"
 #include "caes.h"
 
@@ -12,3 +15,5 @@ public:
     int SendDataToServer(char* Work, char* Mgs);
     int SendMessageToServer(char* Work, char* Mgs);
 };
+
+#endif

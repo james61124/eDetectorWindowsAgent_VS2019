@@ -1,4 +1,7 @@
 #pragma once
+#ifndef INFO_H
+#define INFO_H
+
 #include "StrPacket.h"
 #include <winsock2.h>
 
@@ -16,3 +19,5 @@ public:
     SOCKET* tcpSocket;
 
 };
+
+#endif

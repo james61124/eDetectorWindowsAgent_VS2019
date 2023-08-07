@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef STRPACKET_H
+#define STRPACKET_H
+
 #include <set>
 #include <string>
 #include <cstring>
@@ -30,4 +33,6 @@ struct StrDataPacket//64K
 	char DoWorking[WORKLEN];
 	char csMsg[DATASTRINGMESSAGELEN];
 };
+
+#endif
 

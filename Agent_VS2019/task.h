@@ -1,3 +1,7 @@
+#ifndef TASK_H
+#define TASK_H
+
+
 #include <unordered_map>
 #include <functional>
 #include <any>
@@ -9,7 +13,7 @@
 #include "MemProcess.h"
 
 //#include "File.h"
-//#include "NTFSSearchCore.h"
+#include "NTFSSearchCore.h"
 
 
 //#include "NTFS.h"
@@ -36,7 +40,8 @@ public:
     int GiveDetectInfo();
 
     int DetectProcess();
-    
+
+
 
     int GetScanInfoData();
     int GiveProcessData();
@@ -71,4 +76,8 @@ private:
 
     int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName);
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo);
+    char* GetMyPCDrive();
+
 };
+
+#endif

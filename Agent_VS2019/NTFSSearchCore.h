@@ -1,16 +1,19 @@
-#pragma once
+//#pragma once
 #include <map>
 
 #include "File.h"
-//#include "NTFS.h"
-#include "NTFS_Common.h"
-//#include "NTFS_Attribute.h"
-#include "NTFS_FileRecord.h"
-
-
-
 #include "GlobalFunction.h"
 #include "StrPacket.h"
+
+//#include "NTFS.h"
+#include "NTFS_Common.h"
+#include "NTFS_FileRecord.h"
+//#include "NTFS_Attribute.h"
+
+
+
+
+
 
 
 using namespace std;
@@ -33,7 +36,7 @@ public:
 	int HashAndSignature(void* argv, wchar_t vol_name, char* pMAC, char* pIP, BOOL IsHASDeleteFile, DWORD pMAXSize);
 	int FileRecover(void* argv, char* WorkStr, DownloadMessageInfo* pInfo);
 	int LoadEventLogInfo(void* argv, wchar_t pDrive, wchar_t* pSystemFolderpath, char* pMAC, char* pIP);
-private:
+//private:
 	BOOL FileHashAndSignature(ULONGLONG FID, void* pcurSelectedVol, void* pfr, TCHAR* m_FileName, TCHAR* Md5Str, TCHAR* SignatureStr);
 	void GetMyFilePath(map<unsigned int, MFTFileInfo>* pMap, TCHAR* str, unsigned int FatherID, wchar_t m_Vol);
 	BOOL ComputeHashMD5(wchar_t m_Vol, unsigned Fid, TCHAR* Md5Str);
@@ -42,5 +45,6 @@ private:
 	BOOL ProcessDecompress(BYTE* pBuf, DWORD pBuflen, BYTE* pOutBuf, DWORD plen, DWORD* _out_len);
 	DWORD GetDeCompressedSize(DWORD pClusterSize);
 	//int GetCopyIndex(CString OutPutFile);
+
 };
 

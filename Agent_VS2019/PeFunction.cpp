@@ -584,7 +584,7 @@ bool dump_to_file(const TCHAR* out_path, PBYTE dump_data, size_t dump_size)
     }
 #ifdef _DEBUG
     else {
-        std::cerr << "Failed to write to the file : " << out_path << std::endl;
+        //std::cerr << "Failed to write to the file : " << out_path << std::endl;
     }
 #endif
     CloseHandle(file);

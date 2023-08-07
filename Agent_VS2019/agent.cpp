@@ -4,13 +4,19 @@
 
 
 int main(int argc, char* argv[]) {
+
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <serverIP> <port>" << std::endl;
+        return 1;
+    }
+    std::string serverIP = argv[1];
+    int port = std::stoi(argv[2]);
+
     Info* info = new Info();
     SocketSend* socketsend = new SocketSend(info);
-    SocketManager socketManager(1988, 1989, info, socketsend);
-    printf("thread is going to open\n");
-    std::thread RecieveFunction([&socketManager]() { socketManager.receiveTCP(); });
-    socketManager.HandleTaskToServer("GiveInfo");
-    RecieveFunction.join();
+    SocketManager socketManager(serverIP, port, info, socketsend);
+
+    
 
     while (true) {};
 }

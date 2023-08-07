@@ -1,6 +1,8 @@
 // MyAES.h: 目標的標頭檔。
+#ifndef CAES_H
+#define CAES_H
 
-#pragma once
+//#pragma once
 #include <stdbool.h>
 
 // using namespace std;
@@ -54,3 +56,5 @@ void DecryptString(BYTE* input);
 // extern "C" EXPORTED_SYMBOL void DecryptPacket(const char *aesKey,
 //                                               const BYTE *data,
 //                                               StrPacket *packet);
+
+#endif

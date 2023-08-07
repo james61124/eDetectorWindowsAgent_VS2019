@@ -96,6 +96,9 @@
     <ClCompile Include="NTFS_Attribute.cpp">
       <Filter>File\NTFS</Filter>
     </ClCompile>
+    <ClCompile Include="NTFS_FileRecord.cpp">
+      <Filter>File\NTFS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StrPacket.h">

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef GLOBALFUNCTION_H
+#define GLOBALFUNCTION_H
 #include <Windows.h>
 #include <Wintrust.h>
 #include <Shellapi.h>
@@ -111,10 +113,10 @@ void GetlocalExePath(const wchar_t* ExeName, LPWSTR str);
 void GetFileVersion(TCHAR* FilePath, char* pVersion);
 int CheckVirtualMachineDrive();
 int VirtualMachine(char* pMAC);
-BOOL MySystemShutdown();
-void WriteLogFile(TCHAR* m_Path, char* Str);
-BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath);
-BOOL UnloadNTDriver(char* szSvrName);
+//BOOL MySystemShutdown();
+//void WriteLogFile(TCHAR* m_Path, char* Str);
+//BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath);
+//BOOL UnloadNTDriver(char* szSvrName);
 void GetThisClientKey(char* pKeyStr);
 bool CheckRightKey(char* pKeyStr);
 bool OtherHashch(char ch);
@@ -130,3 +132,5 @@ wstring GetMyTempPath(TCHAR* pdnPathName);
 // Modify 2021/03/03 For Change Collection Library
 void CollectionProcess(HMODULE plib, TCHAR* pdbName, TCHAR* pWorkNum);
 void CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath, wstring pWorkNum);
+
+#endif

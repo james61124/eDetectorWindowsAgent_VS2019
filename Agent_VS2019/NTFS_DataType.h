@@ -5,7 +5,7 @@
 
 #define	NTFS_SIGNATURE		"NTFS    "
 
-#pragma pack(1)
+//#pragma pack(1)
 typedef struct tagNTFS_BPB
 {
 	// jump instruction
@@ -41,7 +41,7 @@ typedef struct tagNTFS_BPB
 	BYTE		_AA;
 	BYTE		_55;
 } NTFS_BPB;
-#pragma pack()
+//#pragma pack()
 
 
 // MFT Indexes
