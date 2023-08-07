@@ -165,21 +165,25 @@ FILE_RECORD_HEADER* CFileRecord::ReadFileRecord(ULONGLONG& fileRef)
 	if (fileRef < MFT_IDX_USER || Volume->MFTData == NULL)
 	{
 		// Take as continuous disk allocation
+		//printf("Take as continuous disk allocation\n");
 		LARGE_INTEGER frAddr;
 		frAddr.QuadPart = Volume->MFTAddr + (Volume->FileRecordSize) * fileRef;
 		frAddr.LowPart = SetFilePointer(Volume->hVolume, frAddr.LowPart, &frAddr.HighPart, FILE_BEGIN);
 
-		if (frAddr.LowPart == DWORD(-1) && GetLastError() != NO_ERROR)
+		if (frAddr.LowPart == DWORD(-1) && GetLastError() != NO_ERROR) {
+			//printf("error\n");
 			return FALSE;
+		}
 		else
 		{
 			fr = (FILE_RECORD_HEADER*)new BYTE[Volume->FileRecordSize];
-
+			//printf("start read file\n");
 			if (ReadFile(Volume->hVolume, fr, Volume->FileRecordSize, &len, NULL)
 				&& len == Volume->FileRecordSize)
 				return fr;
 			else
 			{
+				//printf("read file failed\n");
 				delete fr;
 				return NULL;
 			}
@@ -188,6 +192,7 @@ FILE_RECORD_HEADER* CFileRecord::ReadFileRecord(ULONGLONG& fileRef)
 	else
 	{
 		// May be fragmented $MFT
+		//printf("May be fragmented $MFT\n");
 		ULONGLONG frAddr;
 		frAddr = (Volume->FileRecordSize) * fileRef;
 
@@ -218,14 +223,12 @@ BOOL CFileRecord::ParseFileRecord(ULONGLONG fileRef)
 	FILE_RECORD_HEADER* fr = ReadFileRecord(fileRef);
 	if (fr == NULL)
 	{
-		NTFS_TRACE1("Cannot read file record %I64u\n", fileRef);
-
+		printf("Cannot read file record %I64u\n", fileRef);
 		FileReference = (ULONGLONG)-1;
 	}
 	else
 	{
 		FileReference = fileRef;
-
 		if (fr->Magic == FILE_RECORD_MAGIC)
 		{
 			// Patch US
@@ -234,19 +237,19 @@ BOOL CFileRecord::ParseFileRecord(ULONGLONG fileRef)
 			WORD* usarray = usnaddr + 1;
 			if (PatchUS((WORD*)fr, Volume->FileRecordSize / Volume->SectorSize, usn, usarray))
 			{
-				NTFS_TRACE1("File Record %I64u Found\n", fileRef);
+				printf("File Record %I64u Found\n", fileRef);
 				FileRecord = fr;
 
 				return TRUE;
 			}
 			else
 			{
-				NTFS_TRACE("Update Sequence Number error\n");
+				printf("Update Sequence Number error\n");
 			}
 		}
 		else
 		{
-			NTFS_TRACE("Invalid file record\n");
+			printf("Invalid file record\n");
 		}
 
 		delete fr;
@@ -822,13 +825,19 @@ CNTFSVolume::CNTFSVolume(_TCHAR volume)
 
 	CFileRecord vol(this);
 	vol.SetAttrMask(MASK_VOLUME_NAME | MASK_VOLUME_INFORMATION);
-	if (!vol.ParseFileRecord(MFT_IDX_VOLUME))
+	if (!vol.ParseFileRecord(MFT_IDX_VOLUME)) {
+		printf("ParseFileRecord failed\n");
 		return;
+	}
+		
 
 	vol.ParseAttrs();
 	CAttr_VolInfo* vi = (CAttr_VolInfo*)vol.FindFirstAttr(ATTR_TYPE_VOLUME_INFORMATION);
-	if (!vi)
+	if (!vi) {
+		printf("FindFirstAttr failed\n");
 		return;
+	}
+		
 
 	Version = vi->GetVersion();
 	printf("NTFS volume version: %u.%u\n", HIBYTE(Version), LOBYTE(Version));
@@ -891,9 +900,6 @@ BOOL CNTFSVolume::OpenVolume(_TCHAR volume)
 
 	hVolume = CreateFile(volumePath, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
 		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL);
-
-	DWORD error = GetLastError();
-	printf("%d\n", error);
 
 	if (hVolume != INVALID_HANDLE_VALUE)
 	{

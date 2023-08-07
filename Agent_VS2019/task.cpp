@@ -781,12 +781,12 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP) {
 		return 1;
 	}
 
-	//if (!m_curSelectedVol->IsVolumeOK())
-	//{
-	//	printf("Not a valid NTFS volume or NTFS version < 3.0\n");
-	//	delete m_curSelectedVol;
-	//	return 1;
-	//}
+	if (!m_curSelectedVol->IsVolumeOK())
+	{
+		printf("Not a valid NTFS volume or NTFS version < 3.0\n");
+		delete m_curSelectedVol;
+		return 1;
+	}
 
 	unsigned int m_progressIdx;
 	unsigned int m_Count = 0;
@@ -795,8 +795,12 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP) {
 	printf("GetRecordsCount\n");
 	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++)
 	{
+		printf("for loop start\n");
 		CFileRecord* fr = new CFileRecord(m_curSelectedVol);
-		if (fr == NULL) continue;	// skip to next
+		if (fr == NULL) {
+			printf("CFileRecord is null\n");
+			continue;	// skip to next
+		}
 
 		// Only parse Standard Information and File Name attributes
 		printf("SetAttrMask\n");
