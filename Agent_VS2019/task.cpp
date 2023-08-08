@@ -113,9 +113,9 @@ int Task::GiveDetectInfo() {
 
 	// test
 	//GiveProcessData();
-	DetectProcess();
+	//DetectProcess();
 	//GiveDriveInfo();
-	//GiveExplorerData();
+	GiveExplorerData();
 
 	//StrPacket* tmp = new StrPacket;
 	//GetScan(tmp);
@@ -490,7 +490,7 @@ int Task::GiveExplorerData() {
 				try
 				{
 					printf("NTFS start\n");
-					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP);
+					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, info->tcpSocket);
 				}
 				catch (...)
 				{
@@ -762,175 +762,175 @@ SOCKET* Task::CreateNewSocket() {
 	return &tcpSocket;
 }
 
-int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP) {
+int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket) {
 
-	//char* functionName_GiveExplorerData = new char[24];
-	//strcpy_s(functionName_GiveExplorerData, 24, "GiveExplorerData");
+	char* functionName_GiveExplorerData = new char[24];
+	strcpy_s(functionName_GiveExplorerData, 24, "GiveExplorerData");
 
-	//CNTFSVolume* m_curSelectedVol = new CNTFSVolume(vol_name);
-	//if (m_curSelectedVol == NULL)
-	//{
-	//	printf("Error when getVolumeByName\n");
-	//	delete m_curSelectedVol;
-	//	return 1;
-	//}
+	CNTFSVolume* m_curSelectedVol = new CNTFSVolume(vol_name);
+	if (m_curSelectedVol == NULL)
+	{
+		printf("Error when getVolumeByName\n");
+		delete m_curSelectedVol;
+		return 1;
+	}
 
-	//if (!m_curSelectedVol->IsVolumeOK())
-	//{
-	//	printf("Not a valid NTFS volume or NTFS version < 3.0\n");
-	//	delete m_curSelectedVol;
-	//	return 1;
-	//}
+	if (!m_curSelectedVol->IsVolumeOK())
+	{
+		printf("Not a valid NTFS volume or NTFS version < 3.0\n");
+		delete m_curSelectedVol;
+		return 1;
+	}
 
-	//unsigned int m_progressIdx;
-	//unsigned int m_Count = 0;
-	//char* TempStr = new char[DATASTRINGMESSAGELEN];
-	//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-	//printf("GetRecordsCount\n");
-	//for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++)
-	//{
-	//	printf("for loop start\n");
-	//	CFileRecord* fr = new CFileRecord(m_curSelectedVol);
-	//	if (fr == NULL) {
-	//		printf("CFileRecord is null\n");
-	//		continue;	// skip to next
-	//	}
+	unsigned int m_progressIdx;
+	unsigned int m_Count = 0;
+	char* TempStr = new char[DATASTRINGMESSAGELEN];
+	memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+	printf("GetRecordsCount\n");
+	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++)
+	{
+		printf("for loop start\n");
+		CFileRecord* fr = new CFileRecord(m_curSelectedVol);
+		if (fr == NULL) {
+			printf("CFileRecord is null\n");
+			continue;	// skip to next
+		}
 
-	//	// Only parse Standard Information and File Name attributes
-	//	printf("SetAttrMask\n");
-	//	fr->SetAttrMask(MASK_FILE_NAME | MASK_DATA);	// StdInfo will always be parsed
-	//	printf("ParseFileRecord\n");
-	//	if (!fr->ParseFileRecord(m_progressIdx))
-	//	{
-	//		delete fr;
-	//		continue;	// skip to next
-	//	}
+		// Only parse Standard Information and File Name attributes
+		printf("SetAttrMask\n");
+		fr->SetAttrMask(MASK_FILE_NAME | MASK_DATA);	// StdInfo will always be parsed
+		printf("ParseFileRecord\n");
+		if (!fr->ParseFileRecord(m_progressIdx))
+		{
+			delete fr;
+			continue;	// skip to next
+		}
 
-	//	printf("ParseFileAttrs\n");
-	//	if (!fr->ParseFileAttrs())
-	//	{
-	//		delete fr;
-	//		continue;	// skip to next
-	//	}
+		printf("ParseFileAttrs\n");
+		if (!fr->ParseFileAttrs())
+		{
+			delete fr;
+			continue;	// skip to next
+		}
 
-	//	printf("GetFileName\n");
-	//	TCHAR fn[MAX_PATH];
-	//	if (fr->GetFileName(fn, MAX_PATH) <= 0)
-	//	{
-	//		delete fr;
-	//		continue;	// skip to next
-	//	}
+		printf("GetFileName\n");
+		TCHAR fn[MAX_PATH];
+		if (fr->GetFileName(fn, MAX_PATH) <= 0)
+		{
+			delete fr;
+			continue;	// skip to next
+		}
 
-	//	ULONGLONG datalen = 0;
+		ULONGLONG datalen = 0;
 
-	//	printf("IsDirectory\n");
-	//	if (!fr->IsDirectory())
-	//	{
-	//		const CAttrBase* data = fr->FindStream();
+		printf("IsDirectory\n");
+		if (!fr->IsDirectory())
+		{
+			const CAttrBase* data = fr->FindStream();
 
-	//		//if(data)
-	//		//{
-	//		//	datalen = data->GetDataSize();
-	//		//		//delete data;
-	//		//}
-	//		if (data)
-	//		{
-	//			datalen = data->GetDataSize();
-	//			if (fr->IsCompressed() && datalen == 0)
-	//				datalen = fr->GetFileSize();
-	//		}
-	//		else
-	//		{
-	//			if (fr->IsCompressed() && datalen == 0)
-	//				datalen = fr->GetFileSize();
-	//		}
-	//	}
-	//	ULONGLONG ParentId = 0;
-	//	ParentId = fr->GetParentRef();
-	//	if (ParentId == 0)
-	//		ParentId = 5;
-	//	else
-	//		ParentId = ParentId & 0x0000FFFFFFFFFFFF;
-	//	FILETIME	FileCreateTime;		// File creation time
-	//	FILETIME	FileWriteTime;		// File altered time
-	//	FILETIME	FileAccessTime;		// File read time
-	//	FILETIME	EntryModifiedTime;
-	//	fr->GetFileCreateTime(&FileCreateTime);
-	//	fr->GetFileWriteTime(&FileWriteTime);
-	//	fr->GetFileAccessTime(&FileAccessTime);
-	//	fr->GetEntryModifiedTime(&EntryModifiedTime);
-	//	SYSTEMTIME systemCreateTime;
-	//	SYSTEMTIME systemWriteTime;
-	//	SYSTEMTIME systemAccessTime;
-	//	SYSTEMTIME systemModifiedTime;
-	//	FileTimeToSystemTime(&FileCreateTime, &systemCreateTime);
-	//	FileTimeToSystemTime(&FileWriteTime, &systemWriteTime);
-	//	FileTimeToSystemTime(&FileAccessTime, &systemAccessTime);
-	//	FileTimeToSystemTime(&EntryModifiedTime, &systemModifiedTime);
-	//	wchar_t CreateTimeWstr[50];
-	//	wchar_t WriteTimeWstr[50];
-	//	wchar_t AccessTimeWstr[50];
-	//	wchar_t EntryModifiedTimeWstr[50];
-	//	swprintf_s(CreateTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemCreateTime.wYear, systemCreateTime.wMonth, systemCreateTime.wDay, systemCreateTime.wHour, systemCreateTime.wMinute, systemCreateTime.wSecond);
-	//	swprintf_s(WriteTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemWriteTime.wYear, systemWriteTime.wMonth, systemWriteTime.wDay, systemWriteTime.wHour, systemWriteTime.wMinute, systemWriteTime.wSecond);
-	//	swprintf_s(AccessTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemAccessTime.wYear, systemAccessTime.wMonth, systemAccessTime.wDay, systemAccessTime.wHour, systemAccessTime.wMinute, systemAccessTime.wSecond);
-	//	if (EntryModifiedTime.dwLowDateTime != 0)
-	//		swprintf_s(EntryModifiedTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemModifiedTime.wYear, systemModifiedTime.wMonth, systemModifiedTime.wDay, systemModifiedTime.wHour, systemModifiedTime.wMinute, systemModifiedTime.wSecond);
-	//	else
-	//		swprintf_s(EntryModifiedTimeWstr, 50, L"1");
-	//	wchar_t* wstr = new wchar_t[1024];
-	//	swprintf_s(wstr, 1024, L"%u|%s|%llu|%d|%d|%s|%s|%s|%s|%llu|0\n", m_progressIdx, fn, ParentId, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen);
-	//	//wprintf(L"%s\n",wstr);
-	//	char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
-	//	strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-	//	//int ret = m_Client->SendDataMsgToServer(pMAC,pIP,"GiveExplorerData",m_DataStr);
-	//	delete[] wstr;
-	//	if ((m_Count % 60) == 0 && m_Count >= 60)
-	//	{
-	//		char* ProgressStr = new char[10];
-	//		sprintf_s(ProgressStr, 10, "%u", m_progressIdx);
-	//		strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-	//		int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
-	//		if (ret == 0 || ret == -1)
-	//		{
-	//			delete[] ProgressStr;
-	//			delete[] m_DataStr;
-	//			delete[] TempStr;
-	//			delete fr;
-	//			delete m_curSelectedVol;
-	//			return 1;
-	//		}
-	//		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-	//		delete[] ProgressStr;
-	//	}
-	//	//if(ret == 0 || ret == -1)
-	//	//{
-	//	//	delete [] m_DataStr;
-	//	//	delete fr;
-	//	//	delete m_curSelectedVol;
-	//	//	return 1;
-	//	//}
-	//	m_Count++;
-	//	delete[] m_DataStr;
-	//	delete fr;
-	//}
-	//if (TempStr[0] != '\0')
-	//{
-	//	char* ProgressStr = new char[10];
-	//	sprintf_s(ProgressStr, 10, "%u", m_progressIdx);
-	//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-	//	int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
-	//	if (ret == 0 || ret == -1)
-	//	{
-	//		delete[] ProgressStr;
-	//		delete[] TempStr;
-	//		delete m_curSelectedVol;
-	//		return 1;
-	//	}
-	//	delete[] ProgressStr;
-	//}
-	//delete[] TempStr;
-	//delete m_curSelectedVol;
+			//if(data)
+			//{
+			//	datalen = data->GetDataSize();
+			//		//delete data;
+			//}
+			if (data)
+			{
+				datalen = data->GetDataSize();
+				if (fr->IsCompressed() && datalen == 0)
+					datalen = fr->GetFileSize();
+			}
+			else
+			{
+				if (fr->IsCompressed() && datalen == 0)
+					datalen = fr->GetFileSize();
+			}
+		}
+		ULONGLONG ParentId = 0;
+		ParentId = fr->GetParentRef();
+		if (ParentId == 0)
+			ParentId = 5;
+		else
+			ParentId = ParentId & 0x0000FFFFFFFFFFFF;
+		FILETIME	FileCreateTime;		// File creation time
+		FILETIME	FileWriteTime;		// File altered time
+		FILETIME	FileAccessTime;		// File read time
+		FILETIME	EntryModifiedTime;
+		fr->GetFileCreateTime(&FileCreateTime);
+		fr->GetFileWriteTime(&FileWriteTime);
+		fr->GetFileAccessTime(&FileAccessTime);
+		fr->GetEntryModifiedTime(&EntryModifiedTime);
+		SYSTEMTIME systemCreateTime;
+		SYSTEMTIME systemWriteTime;
+		SYSTEMTIME systemAccessTime;
+		SYSTEMTIME systemModifiedTime;
+		FileTimeToSystemTime(&FileCreateTime, &systemCreateTime);
+		FileTimeToSystemTime(&FileWriteTime, &systemWriteTime);
+		FileTimeToSystemTime(&FileAccessTime, &systemAccessTime);
+		FileTimeToSystemTime(&EntryModifiedTime, &systemModifiedTime);
+		wchar_t CreateTimeWstr[50];
+		wchar_t WriteTimeWstr[50];
+		wchar_t AccessTimeWstr[50];
+		wchar_t EntryModifiedTimeWstr[50];
+		swprintf_s(CreateTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemCreateTime.wYear, systemCreateTime.wMonth, systemCreateTime.wDay, systemCreateTime.wHour, systemCreateTime.wMinute, systemCreateTime.wSecond);
+		swprintf_s(WriteTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemWriteTime.wYear, systemWriteTime.wMonth, systemWriteTime.wDay, systemWriteTime.wHour, systemWriteTime.wMinute, systemWriteTime.wSecond);
+		swprintf_s(AccessTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemAccessTime.wYear, systemAccessTime.wMonth, systemAccessTime.wDay, systemAccessTime.wHour, systemAccessTime.wMinute, systemAccessTime.wSecond);
+		if (EntryModifiedTime.dwLowDateTime != 0)
+			swprintf_s(EntryModifiedTimeWstr, 50, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", systemModifiedTime.wYear, systemModifiedTime.wMonth, systemModifiedTime.wDay, systemModifiedTime.wHour, systemModifiedTime.wMinute, systemModifiedTime.wSecond);
+		else
+			swprintf_s(EntryModifiedTimeWstr, 50, L"1");
+		wchar_t* wstr = new wchar_t[1024];
+		swprintf_s(wstr, 1024, L"%u|%s|%llu|%d|%d|%s|%s|%s|%s|%llu|0\n", m_progressIdx, fn, ParentId, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen);
+		//wprintf(L"%s\n",wstr);
+		char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
+		strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+		//int ret = m_Client->SendDataMsgToServer(pMAC,pIP,"GiveExplorerData",m_DataStr);
+		delete[] wstr;
+		if ((m_Count % 60) == 0 && m_Count >= 60)
+		{
+			char* ProgressStr = new char[10];
+			sprintf_s(ProgressStr, 10, "%u", m_progressIdx);
+			strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+			int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, tcpSocket);
+			if (ret == 0 || ret == -1)
+			{
+				delete[] ProgressStr;
+				delete[] m_DataStr;
+				delete[] TempStr;
+				delete fr;
+				delete m_curSelectedVol;
+				return 1;
+			}
+			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+			delete[] ProgressStr;
+		}
+		//if(ret == 0 || ret == -1)
+		//{
+		//	delete [] m_DataStr;
+		//	delete fr;
+		//	delete m_curSelectedVol;
+		//	return 1;
+		//}
+		m_Count++;
+		delete[] m_DataStr;
+		delete fr;
+	}
+	if (TempStr[0] != '\0')
+	{
+		char* ProgressStr = new char[10];
+		sprintf_s(ProgressStr, 10, "%u", m_progressIdx);
+		strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+		int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, tcpSocket);
+		if (ret == 0 || ret == -1)
+		{
+			delete[] ProgressStr;
+			delete[] TempStr;
+			delete m_curSelectedVol;
+			return 1;
+		}
+		delete[] ProgressStr;
+	}
+	delete[] TempStr;
+	delete m_curSelectedVol;
 
 	return 0;
 }
@@ -982,21 +982,17 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 	start = clock();
 	m_BootStart = clock();
 	m_BootEnd = clock();
-	printf("for loop start\n");
+
 	for (;;)
 	{
 		NewProcessID.clear();
-		printf("load now process info start\n");
 		m_MemPro->LoadNowProcessInfoDetect(&NewProcessID);
-		printf("load now process info end\n");
 		for (nt = NewProcessID.begin(); nt != NewProcessID.end(); nt++)
 		{
 			st = StartProcessID.find(nt->first);
 			if (st == StartProcessID.end())
 			{
-				printf("parse new process ID start\n");
 				m_MemPro->ParserProcessRisk(&nt->second, pApiName, MyPath, m_MemPro->pUnKnownData);
-				printf("parse new process ID end\n");
 			}
 		}
 		end = clock();

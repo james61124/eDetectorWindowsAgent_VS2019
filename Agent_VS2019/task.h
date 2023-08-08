@@ -87,7 +87,7 @@ private:
     int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
-    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP);
+    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket);
 
     
     
