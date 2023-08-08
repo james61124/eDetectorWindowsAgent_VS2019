@@ -4028,40 +4028,39 @@ void MemProcess::ParserProcessRisk(/*ThreadProcessInfo * pInfo*/process_info_Ex*
 	TCHAR* m_ProcessCTime = new TCHAR[20];
 	_tcscpy_s(m_ProcessTime, 20, _T("null"));
 	_tcscpy_s(m_ProcessCTime, 20, _T("null"));
-	if (pInfo->ProcessCreateTime > 0)
-		swprintf_s(m_ProcessCTime, 20, _T("%llu"), pInfo->ProcessCreateTime);
-	//GetProcessPath(pInfo->pid,m_ProcessPath,true,NULL,m_ProcessCTime);
-	if (!_tcscmp(pInfo->process_Path, _T("null")))
-	{
-		SearchExecutePath(pInfo->pid, pInfo->process_Path, pInfo->process_name);
-	}
+
+	if (pInfo->ProcessCreateTime > 0) swprintf_s(m_ProcessCTime, 20, _T("%llu"), pInfo->ProcessCreateTime);
+	if (!_tcscmp(pInfo->process_Path, _T("null"))) SearchExecutePath(pInfo->pid, pInfo->process_Path, pInfo->process_name);
+
 	SYSTEMTIME sys;
 	GetLocalTime(&sys);
 	swprintf_s(m_ProcessTime, 20, _T("%4d/%02d/%02d %02d:%02d:%02d"), sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-	if (_tcsicmp(pInfo->process_Path, pMyPath))
-	{
+	if (_tcsicmp(pInfo->process_Path, pMyPath)) {
 		vector<TCPInformation> NetInfo;
 		char* OSstr = GetOSVersion();
-		if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0))
-		{
-			GetTcpInformationXPEx(&NetInfo);
-		}
+
+		//printf("GetTcpInformationEx\n");
+		if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0)) GetTcpInformationXPEx(&NetInfo);
 		else if (strstr(OSstr, "Windows 2000") != 0) {}
-		else
-		{
-			GetTcpInformationEx(&NetInfo);
-		}
+		else GetTcpInformationEx(&NetInfo);
+
 		time_t NetworkClock;
 		time(&NetworkClock);
 		map<wstring, BOOL> m_ServiceRun;
 		set<wstring> m_StartRun;
+
+		//printf("AutoRun\n");
 		AutoRun* m_AutoRun = new AutoRun;
+		//printf("LoadServiceStartCommand\n");
 		m_AutoRun->LoadServiceStartCommand(&m_ServiceRun);
+		//printf("LoadAutoRunStartCommand start\n");
 		m_AutoRun->LoadAutoRunStartCommand(&m_StartRun);
+		//printf("LoadAutoRunStartCommand end\n");
 		ProcessInfoData m_Info = { 0 };
 		m_Info.ProcessID = pInfo->pid;
 		m_Info.HideAttribute = FALSE;
 		m_Info.HideProcess = pInfo->IsHide;
+		//printf("copy\n");
 		lstrcpy(m_Info.ProcessName, pInfo->process_name);
 		//memset(m_Info.ProcessTime,'\0',20);
 		_tcscpy_s(m_Info.ProcessPath, MAX_PATH_EX, pInfo->process_Path);
@@ -4070,18 +4069,18 @@ void MemProcess::ParserProcessRisk(/*ThreadProcessInfo * pInfo*/process_info_Ex*
 		_tcscpy_s(m_Info.ParentCTime, 20, _T("null"));
 		_tcscpy_s(m_Info.ParentPath, MAX_PATH_EX, _T("null"));
 		m_Info.ParentID = pInfo->parent_pid;
-		//if(pInfo->parentCreateTime > 0)
-		//{
-			//swprintf_s(m_Info.ParentCTime,20,_T("%llu"),pInfo->parentCreateTime);
+		//printf("GetProcessPath\n");
 		GetProcessPath(pInfo->parent_pid, m_Info.ParentPath, true, NULL, m_Info.ParentCTime);
-		//}
+		//printf("CheckIsInjection\n");
 		m_Info.Injected = CheckIsInjection(pInfo->pid, pMembuf, m_Info.ProcessName, m_Info.UnKnownHash);
+		//printf("CheckIsStartRun\n");
 		m_Info.StartRun = CheckIsStartRun(&m_ServiceRun, &m_StartRun, pInfo->pid/*,m_Info.HideService*/);
+		//printf("CheckIsInlineHook\n");
 		CheckIsInlineHook(pInfo->pid, &m_Info.InlineHookInfo);
 
+		//printf("ProcessHash\n");
 		lstrcpy(m_Info.ProcessHash, _T("null"));
-		if (_tcscmp(m_Info.ProcessPath, _T("null")))
-		{
+		if (_tcscmp(m_Info.ProcessPath, _T("null"))) {
 			TCHAR Md5Hashstr[50];
 			memset(Md5Hashstr, '\0', 50);
 			DWORD MD5ret = Md5Hash(m_Info.ProcessPath, Md5Hashstr);
@@ -4103,10 +4102,10 @@ void MemProcess::ParserProcessRisk(/*ThreadProcessInfo * pInfo*/process_info_Ex*
 			}
 			delete DSinfo;
 		}
-		else
-		{
+		else {
 			lstrcpy(m_Info.SignerSubjectName, _T("null"));
 		}
+
 		set<DWORD> ApiStringHash;
 		DumpExecute(pInfo->pid, pInfo->process_name, pApiName, &ApiStringHash, m_Info.ProcessPath, &m_Info.Abnormal_dll);
 		m_Info.InjectionOther = FALSE;

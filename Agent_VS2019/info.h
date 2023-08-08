@@ -8,6 +8,7 @@
 class Info {
 public:
     Info();
+
     int Port;
     int DetectPort;
     char MAC[MACLEN];
@@ -15,6 +16,8 @@ public:
     char UUID[UUIDLEN];
     int DetectProcess = 0;
     int DetectNetwork = 0;
+
+    char ServerIP[IPLEN];
 
     SOCKET* tcpSocket;
 

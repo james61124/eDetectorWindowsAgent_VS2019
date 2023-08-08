@@ -34,19 +34,24 @@ public:
     std::unordered_map<std::string, std::thread> threadMap;
     void startThread(const std::string& key, std::string functionName);
 
+    // handshake
     int GiveInfo();
-    int CheckConnect();
     int GiveDetectInfoFirst();
     int GiveDetectInfo();
+    int OpenCheckthread(StrPacket* udata);
+    int CheckConnect();
 
+    // detect
     int DetectProcess();
+    
+
+    // scan
+    int GiveScanInfo(char* buff, SOCKET* tcpSocket);
+    int GiveProcessData(SOCKET* tcpSocket);
+    int GiveScan(char* buff, SOCKET* tcpSocket);
+    int GiveScanDataEnd(char* buff, SOCKET* tcpSocket);
 
 
-
-    int GetScanInfoData();
-    int GiveProcessData();
-    int GiveProcessDataEnd();
-    int GiveScanProgress();
     int GiveDriveInfo();
     int Explorer();
     int GiveExplorerData();
@@ -57,7 +62,7 @@ public:
     int GiveCollectData();
     int GiveCollectDataEnd();
 
-    int OpenCheckthread(StrPacket* udata);
+    
     int UpdateDetectMode(StrPacket* udata);
     int GetScanInfoData_(StrPacket* udata);
     int GetScan(StrPacket* udata);
@@ -69,13 +74,23 @@ public:
     int GetCollectInfoData(StrPacket* udata);
     int DataRight(StrPacket* udata);
 
+    SOCKET* CreateNewSocket();
+
 private:
+    
     Tool tool;
-    void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
+
+    // scan
+    void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket);
+
+    // detect
+    int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
+    void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
+
     int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP);
 
-    int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName);
-    void SendProcessDataToServer(vector<ProcessInfoData>* pInfo);
+    
+    
     char* GetMyPCDrive();
 
 };

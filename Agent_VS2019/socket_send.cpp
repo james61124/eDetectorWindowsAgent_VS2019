@@ -4,7 +4,7 @@ SocketSend::SocketSend(Info* infoInstance) {
 	info = infoInstance;
 }
 
-int SocketSend::SendDataToServer(char* Work, char* Mgs) {
+int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -26,10 +26,13 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
 	printf("send data %s\n", Work);
 
+	return receiveTCP(tcpSocket);
+	
+
 	//delete[] Work;
 	//delete[] Mgs;
 
-	return ret;
+	//return ret;
 }
 
 int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
@@ -73,4 +76,31 @@ bool SocketSend::sendTCP(char* data, long len) {
 	}
 
 	return ret;
+}
+
+int SocketSend::receiveTCP(SOCKET* tcpSocket) {
+	while (true) {
+		char buff[STRPACKETSIZE];
+		int ret = recv(*tcpSocket, buff, sizeof(buff), 0);
+
+		if (ret == SOCKET_ERROR) {
+			std::cerr << "Error receiving ACK: " << WSAGetLastError() << std::endl;
+			return 0;
+		}
+
+		SetKeys(BIT128, AESKey);
+		DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
+		StrPacket* udata;
+		udata = (StrPacket*)buff;
+
+		printf("task receive %s\n", udata->DoWorking);
+		if (!strcmp(udata->DoWorking, "DataRight")) {
+			break;
+		}
+	}
+	
+
+	return 1;
+
+
 }

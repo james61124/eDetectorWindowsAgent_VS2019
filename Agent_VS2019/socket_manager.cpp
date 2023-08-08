@@ -16,6 +16,9 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
     InfoInstance = infoInstance;
     task = new Task(infoInstance, socketSendInstance);
     InfoInstance->tcpSocket = &tcpSocket;
+    InfoInstance->Port = port;
+    strcpy_s(InfoInstance->ServerIP, sizeof(InfoInstance->ServerIP), serverIP.c_str());
+
 
     // strcpy(UUID,key);
     
@@ -89,6 +92,7 @@ void SocketManager::receiveTCP() {
         udata = (StrPacket*)buff;
         if (!HandleTaskFromServer(udata)) break;
     }
+    printf("receive thread close\n");
 
 
 }
