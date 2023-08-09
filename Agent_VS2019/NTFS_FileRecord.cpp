@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "NTFS_FileRecord.h"
 //#include "NTFS_Attribute.h"
 //#include "NTFS_Attribute.cpp"
@@ -179,8 +180,10 @@ FILE_RECORD_HEADER* CFileRecord::ReadFileRecord(ULONGLONG& fileRef)
 			fr = (FILE_RECORD_HEADER*)new BYTE[Volume->FileRecordSize];
 			//printf("start read file\n");
 			if (ReadFile(Volume->hVolume, fr, Volume->FileRecordSize, &len, NULL)
-				&& len == Volume->FileRecordSize)
+				&& len == Volume->FileRecordSize) {
+				//std::cout << len << " " << Volume->FileRecordSize << std::endl;
 				return fr;
+			}
 			else
 			{
 				//printf("read file failed\n");
@@ -229,7 +232,24 @@ BOOL CFileRecord::ParseFileRecord(ULONGLONG fileRef)
 	else
 	{
 		FileReference = fileRef;
-		if (fr->Magic == FILE_RECORD_MAGIC)
+
+
+		printf("Magic: %x\n", fr->Magic);
+		printf("OffsetOfUS: %04X\n", fr->OffsetOfUS);
+		printf("SizeOfUS: %04X\n", fr->SizeOfUS);
+		printf("LSN: %llu\n", fr->LSN);
+		printf("SeqNo: %04X\n", fr->SeqNo);
+		printf("Hardlinks: %04X\n", fr->Hardlinks);
+		printf("OffsetOfAttr: %04X\n", fr->OffsetOfAttr);
+		printf("Flags: %04X\n", fr->Flags);
+		printf("RealSize: %08X\n", fr->RealSize);
+		printf("AllocSize: %08X\n", fr->AllocSize);
+		printf("RefToBase: %llu\n", fr->RefToBase);
+		printf("NextAttrId: %04X\n", fr->NextAttrId);
+		printf("Align: %04X\n", fr->Align);
+		printf("RecordNo: %08X\n", fr->RecordNo);
+
+		if ( fr->Magic == FILE_RECORD_MAGIC )
 		{
 			// Patch US
 			WORD* usnaddr = (WORD*)((BYTE*)fr + fr->OffsetOfUS);
@@ -250,6 +270,7 @@ BOOL CFileRecord::ParseFileRecord(ULONGLONG fileRef)
 		else
 		{
 			printf("Invalid file record\n");
+			return FALSE;
 		}
 
 		delete fr;
@@ -830,7 +851,6 @@ CNTFSVolume::CNTFSVolume(_TCHAR volume)
 		return;
 	}
 		
-
 	vol.ParseAttrs();
 	CAttr_VolInfo* vi = (CAttr_VolInfo*)vol.FindFirstAttr(ATTR_TYPE_VOLUME_INFORMATION);
 	if (!vi) {
@@ -914,7 +934,7 @@ BOOL CNTFSVolume::OpenVolume(_TCHAR volume)
 				// Log important volume parameters
 
 				SectorSize = bpb.BytesPerSector;
-				//NTFS_TRACE1("Sector Size = %u bytes\n", SectorSize);
+				NTFS_TRACE1("Sector Size = %u bytes\n", SectorSize);
 				printf("Sector Size = %u bytes\n", SectorSize);
 
 				ClusterSize = SectorSize * bpb.SectorsPerCluster;
@@ -925,33 +945,37 @@ BOOL CNTFSVolume::OpenVolume(_TCHAR volume)
 					FileRecordSize = ClusterSize * sz;
 				else
 					FileRecordSize = 1 << (-sz);
-				NTFS_TRACE1("FileRecord Size = %u bytes\n", FileRecordSize);
+				//NTFS_TRACE1("FileRecord Size = %u bytes\n", FileRecordSize);
+				printf("FileRecord Size = %u bytes\n", FileRecordSize);
 
 				sz = (char)bpb.ClustersPerIndexBlock;
 				if (sz > 0)
 					IndexBlockSize = ClusterSize * sz;
 				else
 					IndexBlockSize = 1 << (-sz);
-				NTFS_TRACE1("IndexBlock Size = %u bytes\n", IndexBlockSize);
+				//NTFS_TRACE1("IndexBlock Size = %u bytes\n", IndexBlockSize);
+				printf("IndexBlock Size = %u bytes\n", IndexBlockSize);
 
 				MFTAddr = bpb.LCN_MFT * ClusterSize;
 				NTFS_TRACE1("MFT address = 0x%016I64X\n", MFTAddr);
 			}
 			else
 			{
-				NTFS_TRACE("Volume file system is not NTFS\n");
+				//NTFS_TRACE("Volume file system is not NTFS\n");
+				printf("Volume file system is not NTFS\n");
 				goto IOError;
 			}
 		}
 		else
 		{
-			NTFS_TRACE("Read boot sector error\n");
+			//NTFS_TRACE("Read boot sector error\n");
+			printf("Read boot sector error\n");
 			goto IOError;
 		}
 	}
 	else
 	{
-		NTFS_TRACE1("Cannnot open volume %c\n", (char)volume);
+		//NTFS_TRACE1("Cannnot open volume %c\n", (char)volume);
 		printf("Cannnot open volume %c\n", (char)volume);
 	IOError:
 		if (hVolume != INVALID_HANDLE_VALUE)
@@ -961,6 +985,67 @@ BOOL CNTFSVolume::OpenVolume(_TCHAR volume)
 		}
 		return FALSE;
 	}
+
+	//if (hVolume != INVALID_HANDLE_VALUE)
+	//{
+	//	DWORD num;
+	//	NTFS_BPB bpb;
+
+	//	// Read the first sector (boot sector)
+	//	if (ReadFile(hVolume, &bpb, 512, &num, NULL) && num == 512)
+	//	{
+	//		if (strncmp((const char*)bpb.Signature, NTFS_SIGNATURE, 8) == 0)
+	//		{
+	//			// Log important volume parameters
+
+	//			SectorSize = bpb.BytesPerSector;
+	//			//NTFS_TRACE1("Sector Size = %u bytes\n", SectorSize);
+	//			printf("Sector Size = %u bytes\n", SectorSize);
+
+	//			ClusterSize = SectorSize * bpb.SectorsPerCluster;
+	//			NTFS_TRACE1("Cluster Size = %u bytes\n", ClusterSize);
+
+	//			int sz = (char)bpb.ClustersPerFileRecord;
+	//			if (sz > 0)
+	//				FileRecordSize = ClusterSize * sz;
+	//			else
+	//				FileRecordSize = 1 << (-sz);
+	//			NTFS_TRACE1("FileRecord Size = %u bytes\n", FileRecordSize);
+
+	//			sz = (char)bpb.ClustersPerIndexBlock;
+	//			if (sz > 0)
+	//				IndexBlockSize = ClusterSize * sz;
+	//			else
+	//				IndexBlockSize = 1 << (-sz);
+	//			NTFS_TRACE1("IndexBlock Size = %u bytes\n", IndexBlockSize);
+
+	//			MFTAddr = bpb.LCN_MFT * ClusterSize;
+	//			NTFS_TRACE1("MFT address = 0x%016I64X\n", MFTAddr);
+	//		}
+	//		else
+	//		{
+	//			NTFS_TRACE("Volume file system is not NTFS\n");
+	//			goto IOError;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		NTFS_TRACE("Read boot sector error\n");
+	//		goto IOError;
+	//	}
+	//}
+	//else
+	//{
+	//	NTFS_TRACE1("Cannnot open volume %c\n", (char)volume);
+	//	printf("Cannnot open volume %c\n", (char)volume);
+	//IOError:
+	//	if (hVolume != INVALID_HANDLE_VALUE)
+	//	{
+	//		CloseHandle(hVolume);
+	//		hVolume = INVALID_HANDLE_VALUE;
+	//	}
+	//	return FALSE;
+	//}
 
 	return TRUE;
 }

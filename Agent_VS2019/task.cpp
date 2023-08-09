@@ -114,7 +114,7 @@ int Task::GiveDetectInfo() {
 	// test
 	//GiveProcessData();
 	//DetectProcess();
-	//GiveDriveInfo();
+	GiveDriveInfo();
 	GiveExplorerData();
 
 	//StrPacket* tmp = new StrPacket;
@@ -195,12 +195,12 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	int m_Count = 0;
 
 	sprintf_s(buff, DATASTRINGMESSAGELEN, "%d", AllCount);
-	if (!GiveScanInfo(buff, tcpSocket)) {
+	int ret = GiveScanInfo(buff, tcpSocket);
+	if (!ret) {
 		printf("data info send failed\n");
 		return;
 	}
 
-	int ret = 0;
 	for (vit = pFileInfo->begin(); vit != pFileInfo->end(); vit++)
 	{
 		if (_tcscmp(vit->second.ProcessHash, _T("null")))
@@ -280,6 +280,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					sprintf_s(Inlinestr, 4096, "%s;", (*Inlineit).c_str());
 					if ((strlen(Inlinestr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
 					{
+
 						ret = GiveScan(buff, tcpSocket);
 						memset(buff, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
@@ -296,6 +297,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			}
 			else
 				strcat_s(buff, DATASTRINGMESSAGELEN, "|null");
+
 
 			delete[] ParentName;
 			delete[] ParentPath;
@@ -331,9 +333,11 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			else
 				strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");*/
 
-
 			ret = GiveScan(buff, tcpSocket);
-			if (ret <= 0) break;
+			if (ret <= 0) {
+				printf("Give Scan Send Failed\n");
+				break;
+			}
 			else memset(buff, '\0', DATASTRINGMESSAGELEN);
 
 			//break;
@@ -436,6 +440,7 @@ int Task::GiveDriveInfo() {
 	char* m_DriveInfo = GetMyPCDrive();
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveDriveInfo");
+	std::cout << m_DriveInfo << std::endl;
 	int ret = socketsend->SendMessageToServer(functionName, m_DriveInfo);
 	return ret;
 }
@@ -460,18 +465,44 @@ int Task::GiveExplorerData() {
 	char* null = new char[5];
 	strcpy_s(null, 5, "null");
 
-	
-	
-	//
-
-
-
 	//wchar_t* wMgs = CharArrayToWString(Mgs->csMsg, CP_UTF8);
 	ExplorerInfo* m_Info = new ExplorerInfo;
 	/*CFileSystem* pfat;
 	LoadExplorerInfo(wMgs, m_Info);*/
 	m_Info->Drive = L'C';
 	wcscpy_s(m_Info->DriveInfo, L"NTFS");
+
+	
+	//char* InfoStr = NULL;
+	//NTFSSearchCore* searchCore = new NTFSSearchCore;
+	//ULONGLONG DataCount = 0;
+	//try
+	//{
+	//	DataCount = searchCore->GetRecordsCount(m_Info->Drive);
+	//}
+	//catch (...)
+	//{
+	//	std::cout << "DataCount failed: " << DataCount << std::endl;
+	//	DataCount = 0;
+	//}
+	//std::cout << "DataCount: " << DataCount << std::endl;
+	//delete searchCore;
+	//if (DataCount == 0)
+	//{
+	//	char* ExplorerInfo = new char[STRINGMESSAGELEN];
+	//	sprintf_s(ExplorerInfo, STRINGMESSAGELEN, "*Error Explorer Open Error");
+	//	InfoStr = ExplorerInfo;
+	//}
+	//else
+	//{
+	//	char* ExplorerInfo = new char[STRINGMESSAGELEN];
+	//	sprintf_s(ExplorerInfo, STRINGMESSAGELEN, "%llu", DataCount);
+	//	InfoStr = ExplorerInfo;
+	//}
+
+
+
+	
 
 	wchar_t* drive = new wchar_t[5];
 	swprintf_s(drive, 5, L"%c:\\", m_Info->Drive);
@@ -802,7 +833,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket)
 		printf("ParseFileRecord\n");
 		if (!fr->ParseFileRecord(m_progressIdx))
 		{
-			delete fr;
+			//delete fr;
 			continue;	// skip to next
 		}
 
