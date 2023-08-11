@@ -129,8 +129,5 @@ void SetProcessPriority(TCHAR* m_Path);
 //void ErrorLog(char * Str);
 wstring GetMyTempPath(TCHAR* pdnPathName);
 
-// Modify 2021/03/03 For Change Collection Library
-void CollectionProcess(HMODULE plib, TCHAR* pdbName, TCHAR* pWorkNum);
-void CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath, wstring pWorkNum);
 
 #endif

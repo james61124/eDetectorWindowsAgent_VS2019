@@ -1,0 +1,8 @@
+ï»¿"resourcesname","resourcestype","comment","localpath","provider","scope","displaytype","usage","ipaddress"
+ï»¿"ADMIN$","Disk Drive Admin","»·ºÝºÞ²z","C:\Windows"," "," ","SQL server"," "," "
+ï»¿"C$","Disk Drive Admin","¹w³]¦@¥Î","C:\"," "," ","SQL server"," "," "
+ï»¿"IPC$","IPC Admin","»·ºÝ IPC"," "," "," ","SQL server"," "," "
+ï»¿"Microsoft Terminal Services","any"," "," ","Microsoft Terminal Services","all resources","network","container"," "
+ï»¿"tsclient","disk"," "," ","Microsoft Terminal Services","all resources","server","container"," "
+ï»¿"Microsoft Windows Network","any"," "," ","Microsoft Windows Network","all resources","network","container"," "
+ï»¿"Web Client Network","any"," "," ","Web Client Network","all resources","network","container"," "

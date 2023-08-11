@@ -1,4 +1,5 @@
-﻿  agent.cpp
+﻿  Collect.cpp
+  agent.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(222,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
@@ -132,7 +133,6 @@ C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\agent.cpp(81,11): message : �
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\agent.cpp(81,11): message : 請考慮在格式字串中使用 '%lls'
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\agent.cpp(81,11): message : 請考慮在格式字串中使用 '%Ls'
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\agent.cpp(81,11): message : 請考慮在格式字串中使用 '%ws'
-  NTFSSearchCore.cpp
   socket_manager.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
@@ -391,12 +391,18 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(76,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
   正在產生程式碼...
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(793): warning C4172: 傳回區域變數或暫存的位址: tcpSocket
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1097): warning C4172: 傳回區域變數或暫存的位址: tcpSocket
+  SQLite3_x64.lib(sqlite3.obj) : 找到 MSIL .netmodule 或以 /GL 編譯的模組。請以 /LTCG 重新啟動連結，將 /LTCG 加入連結命令列以提升連結器效能
+LINK : warning LNK4075: 忽略 '/INCREMENTAL'，由於 '/LTCG' 規格
+LINK : warning LNK4098: 預設的程式庫 'LIBCMT' 與其他使用的程式庫衝突，請使用 /NODEFAULTLIB:library
+  正在產生程式碼
+  已完成程式碼產生
+SQLite3_x64.lib(sqlite3.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SQLite3_x64.lib(sqlite3.obj)' 或位於 'C:\james\eDetectorWindowsAgent_VS2019\x64\Debug\vc110.pdb')，當做沒有偵錯資訊，連結物件
   Agent_VS2019.vcxproj -> C:\james\eDetectorWindowsAgent_VS2019\x64\Debug\Agent_VS2019.exe

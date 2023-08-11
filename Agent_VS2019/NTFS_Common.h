@@ -1,4 +1,19 @@
-#pragma once
+/*
+ * NTFS Class common definitions
+ * 
+ * Copyright(C) 2010 cyb70289 <cyb70289@gmail.com>
+ *
+ * This program/include file is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published
+ * by the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program/include file is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ */
+
 #ifndef	__NTFS_COMMON_H_CYB70289
 #define	__NTFS_COMMON_H_CYB70289
 
@@ -41,7 +56,7 @@
 // User defined Callback routines to process raw attribute data
 // Set bDiscard to TRUE if this Attribute is to be discarded
 // Set bDiscard to FALSE to let CFileRecord process it
-typedef void (*ATTR_RAW_CALLBACK)(const ATTR_HEADER_COMMON* attrHead, BOOL* bDiscard);
+typedef void (*ATTR_RAW_CALLBACK)(const ATTR_HEADER_COMMON *attrHead, BOOL *bDiscard);
 
 // User defined Callback routine to handle CFileRecord parsed attributes
 // Will be called by CFileRecord::TraverseAttrs() for each attribute
@@ -49,20 +64,20 @@ typedef void (*ATTR_RAW_CALLBACK)(const ATTR_HEADER_COMMON* attrHead, BOOL* bDis
 // Set bStop to TRUE if don't want to continue
 // Set bStop to FALSE to continue processing
 class CAttrBase;
-typedef void (*ATTRS_CALLBACK)(const CAttrBase* attr, void* context, BOOL* bStop);
+typedef void (*ATTRS_CALLBACK)(const CAttrBase *attr, void *context, BOOL *bStop);
 
 // User defined Callback routine to handle Directory traversing
 // Will be called by CFileRecord::TraverseSubEntries for each sub entry
 class CIndexEntry;
-typedef void (*SUBENTRY_CALLBACK)(const CIndexEntry* ie);
+typedef void (*SUBENTRY_CALLBACK)(const CIndexEntry *ie);
 
 
 // List Entry
 template <class ENTRY_TYPE>
 struct NTSLIST_ENTRY
 {
-	NTSLIST_ENTRY* Next;
-	ENTRY_TYPE* Entry;
+	NTSLIST_ENTRY	*Next;
+	ENTRY_TYPE		*Entry;
 };
 
 // List Entry Smart Pointer
@@ -70,7 +85,7 @@ template <class ENTRY_TYPE>
 class CEntrySmartPtr
 {
 public:
-	CEntrySmartPtr(ENTRY_TYPE* ptr = NULL)
+	CEntrySmartPtr(ENTRY_TYPE *ptr = NULL)
 	{
 		EntryPtr = ptr;
 	}
@@ -82,7 +97,7 @@ public:
 	}
 
 private:
-	const ENTRY_TYPE* EntryPtr;
+	const ENTRY_TYPE *EntryPtr;
 
 public:
 	__inline CEntrySmartPtr<ENTRY_TYPE> operator = (const ENTRY_TYPE* ptr)
@@ -129,9 +144,9 @@ public:
 
 private:
 	int EntryCount;
-	NTSLIST_ENTRY<ENTRY_TYPE>* ListHead;
-	NTSLIST_ENTRY<ENTRY_TYPE>* ListTail;
-	NTSLIST_ENTRY<ENTRY_TYPE>* ListCurrent;
+	NTSLIST_ENTRY<ENTRY_TYPE> *ListHead;
+	NTSLIST_ENTRY<ENTRY_TYPE> *ListTail;
+	NTSLIST_ENTRY<ENTRY_TYPE> *ListCurrent;
 
 public:
 	// Get entry count
@@ -141,9 +156,9 @@ public:
 	}
 
 	// Insert to tail
-	BOOL InsertEntry(ENTRY_TYPE* entry)
+	BOOL InsertEntry(ENTRY_TYPE *entry)
 	{
-		NTSLIST_ENTRY<ENTRY_TYPE>* le = new NTSLIST_ENTRY<ENTRY_TYPE>;
+		NTSLIST_ENTRY<ENTRY_TYPE> *le = new NTSLIST_ENTRY<ENTRY_TYPE>;
 		if (!le)
 			return FALSE;
 
@@ -179,7 +194,7 @@ public:
 	}
 
 	// Find first entry
-	__inline ENTRY_TYPE* FindFirstEntry() const
+	__inline ENTRY_TYPE *FindFirstEntry() const
 	{
 		((CSList<ENTRY_TYPE>*)this)->ListCurrent = ListHead;
 
@@ -190,7 +205,7 @@ public:
 	}
 
 	// Find next entry
-	__inline ENTRY_TYPE* FindNextEntry() const
+	__inline ENTRY_TYPE *FindNextEntry() const
 	{
 		if (ListCurrent)
 			((CSList<ENTRY_TYPE>*)this)->ListCurrent = ListCurrent->Next;
@@ -232,8 +247,8 @@ public:
 
 private:
 	int EntryCount;
-	NTSLIST_ENTRY<ENTRY_TYPE>* ListHead;
-	NTSLIST_ENTRY<ENTRY_TYPE>* ListTail;
+	NTSLIST_ENTRY<ENTRY_TYPE> *ListHead;
+	NTSLIST_ENTRY<ENTRY_TYPE> *ListTail;
 
 public:
 	// Get entry count
@@ -243,9 +258,9 @@ public:
 	}
 
 	// Insert to head
-	BOOL Push(ENTRY_TYPE* entry)
+	BOOL Push(ENTRY_TYPE *entry)
 	{
-		NTSLIST_ENTRY<ENTRY_TYPE>* le = new NTSLIST_ENTRY<ENTRY_TYPE>;
+		NTSLIST_ENTRY<ENTRY_TYPE> *le = new NTSLIST_ENTRY<ENTRY_TYPE>;
 		if (!le)
 			return FALSE;
 
@@ -257,7 +272,7 @@ public:
 		if (ListTail == NULL)
 			ListTail = le;		// Empty list
 
-		EntryCount++;
+		EntryCount ++;
 		return TRUE;
 	}
 
@@ -267,15 +282,15 @@ public:
 		if (ListHead == NULL)
 			return NULL;
 
-		NTSLIST_ENTRY<ENTRY_TYPE>* le = ListHead;
-		ENTRY_TYPE* e = le->Entry;
+		NTSLIST_ENTRY<ENTRY_TYPE> *le = ListHead;
+		ENTRY_TYPE *e = le->Entry;
 
 		if (ListTail == ListHead)
 			ListTail = ListHead->Next;
 		ListHead = ListHead->Next;
 
 		delete le;
-		EntryCount--;
+		EntryCount --;
 
 		return e;
 	}
@@ -283,7 +298,7 @@ public:
 	// Remove all entries
 	void RemoveAll()
 	{
-		NTSLIST_ENTRY<ENTRY_TYPE>* le;
+		NTSLIST_ENTRY<ENTRY_TYPE> *le;
 
 		while (ListHead)
 		{

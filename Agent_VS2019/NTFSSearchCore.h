@@ -6,9 +6,10 @@
 #include "StrPacket.h"
 
 #include "NTFS.h"
-//#include "NTFS_Common.h"
-//#include "NTFS_FileRecord.h"
-//#include "NTFS_Attribute.h"
+#include "NTFS_DataType.h"
+
+#include "CFileSystem.h"
+
 
 
 

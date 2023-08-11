@@ -7,6 +7,7 @@
 #include <any>
 #include <set>
 #include <map>
+#include <fstream>
 
 #include "tools.h"
 #include "socket_send.h"
@@ -15,8 +16,15 @@
 //#include "File.h"
 #include "NTFSSearchCore.h"
 
+#include "sqlite3.h"
+
+#include "Collect.h"
+
 
 //#include "NTFS.h"
+
+
+
 
 class Task {
 public:
@@ -90,8 +98,24 @@ private:
     int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket);
 
     
-    
     char* GetMyPCDrive();
+
+    int DetectNewNetwork(int pMainProcessid);
+    void SendNetworkDetectToServer(vector<string>* pInfo);
+
+
+    void CollectionComputerInfo();  //Yen
+    bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); //Yen
+    void SendDbFileToServer(TCHAR* DBName); //Yen
+    void CollectionComputeInfo(DWORD UserModePid); //Yen
+    bool GetQueryByTable(string* query, string TableName, string QueryFilter);
+    void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
+    void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
+    void CreateProcessForCollection(TCHAR* DBName); //Yen
+    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);//Yen
+    //bool GetDataByQuery(const string& query, sqlite3* m_db, vector<CombineObj>* vecCombineObj); //Yen
+    //bool WriteDataSetToDB(sqlite3* m_db, const vector<CombineObj> vecCombineObj, const string DefineName, const string MAC, const string IP, const string TableName, int id); //Yen;;
+    //bool WriteSQLiteDB(sqlite3* pdb, char* pQuery); //Yen
 
 };
 

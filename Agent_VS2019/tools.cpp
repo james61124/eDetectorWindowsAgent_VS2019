@@ -18,11 +18,40 @@ std::vector<std::string> Tool::SplitMsg(char* msg) {
     return MsgAfterSplit;
 }
 
+time_t Tool::FileTimeToUnixTime(const FILETIME& ft) {
+    ULARGE_INTEGER ull;
+    ull.LowPart = ft.dwLowDateTime;
+    ull.HighPart = ft.dwHighDateTime;
+    return static_cast<time_t>((ull.QuadPart - 116444736000000000ULL) / 10000000ULL);
+}
+
 char* Tool::StringToCharPointer(std::string msg) {
     char* CharPtrMsg = new char[msg.size() + 1];
     strcpy_s(CharPtrMsg, sizeof(CharPtrMsg), msg.c_str());
     return CharPtrMsg;
 
+}
+
+void Tool::DeleteAllCsvFiles(wchar_t* directoryPath) {
+    WIN32_FIND_DATA findFileData;
+    HANDLE hFind = FindFirstFile((std::wstring(directoryPath) + L"\\*.csv").c_str(), &findFileData);
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            std::wstring filePath = std::wstring(directoryPath) + L"\\" + findFileData.cFileName;
+            if (DeleteFile(filePath.c_str())) {
+                std::wcout << L"Deleted: " << filePath << std::endl;
+            }
+            else {
+                std::wcerr << L"Failed to delete: " << filePath << ", Error code: " << GetLastError() << std::endl;
+            }
+        } while (FindNextFile(hFind, &findFileData) != 0);
+
+        FindClose(hFind);
+    }
+    else {
+        std::wcerr << L"No CSV files found in the directory: " << directoryPath << std::endl;
+    }
 }
 
 // char* Tool::CStringToCharArray(wchar_t* str,UINT m_CodePage) {

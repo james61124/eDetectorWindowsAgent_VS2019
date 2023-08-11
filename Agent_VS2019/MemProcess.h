@@ -130,7 +130,7 @@ public:
 	vector<UnKnownDataInfo> m_UnKnownData1;
 	vector<UnKnownDataInfo> m_UnKnownData2;
 
-private:
+
 	vector<string> m_ProcessHistory1;
 	vector<string> m_ProcessHistory2;
 	vector<string> m_ProcessHistoryInfo1;
@@ -139,6 +139,12 @@ private:
 	vector<string> m_NetworkHistory2;
 	set<string> m_AccessFilesHistory1;
 	set<string> m_AccessFilesHistory2;
+
+	DWORD GetInfoPid(const wchar_t* wtr);
+	void GetProcessOnlyPathAndTime(DWORD pid, TCHAR* pPath, time_t& pTime);
+
+private:
+	
 	
 	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
 	void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr = NULL, TCHAR* pCTimeStr = NULL);
@@ -164,7 +170,7 @@ private:
 	//int Rva2Offset(unsigned int rva/*,sectionHeader * psections,unsigned int & NumberOfSections*/);
 	//void mycallback (wchar_t* Filename,char* szName,DWORD psys,DWORD pid,set<string> * pInlineHook);
 	void GetUserSID(HANDLE hProcess, TCHAR* szUserSID);
-	DWORD GetInfoPid(const wchar_t* wtr);
+	
 	//void LoadProcessOpenHandle(set<wstring> * pStrInfo,set<DWORD> * pSystemPID);
 	//void ParserProcessOpenHandle(set<wstring> * pStrInfo,map<wstring,wstring> * pDriverVolume,DWORD pid);
 	//void LoadThisPCDriveVolume(map<wstring,wstring> * pDriveVolume);
@@ -172,7 +178,7 @@ private:
 	void LoadSystemPID(map<DWORD, wstring>* pSystemPID);
 	void GetProcessOnlyPath(DWORD pid, TCHAR* pPath);
 	void GetProcessOnlyTime(DWORD pid, time_t& pTime);
-	void GetProcessOnlyPathAndTime(DWORD pid, TCHAR* pPath, time_t& pTime);
+	
 	void InjectionProcess(DWORD pid, TCHAR* pPath);
 	bool WindowsMainProcess(map<DWORD, wstring>* pSystemPID, DWORD pParentId);
 	void SearchExecutePath(DWORD pid, TCHAR* pPath, TCHAR* pName);

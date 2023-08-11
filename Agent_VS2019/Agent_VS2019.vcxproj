@@ -34,7 +34,6 @@
     <ClCompile Include="info.cpp" />
     <ClCompile Include="MemProcess.cpp" />
     <ClCompile Include="NTFSSearchCore.cpp" />
-    <ClCompile Include="NTFS_Attribute.cpp" />
     <ClCompile Include="NTFS_FileRecord.cpp" />
     <ClCompile Include="PeFunction.cpp" />
     <ClCompile Include="socket_manager.cpp" />
@@ -69,6 +68,7 @@
     <ClInclude Include="Process.h" />
     <ClInclude Include="socket_manager.h" />
     <ClInclude Include="socket_send.h" />
+    <ClInclude Include="sqlite3.h" />
     <ClInclude Include="StrPacket.h" />
     <ClInclude Include="task.h" />
     <ClInclude Include="tools.h" />

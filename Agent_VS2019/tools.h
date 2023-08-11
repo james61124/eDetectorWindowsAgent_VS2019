@@ -38,9 +38,12 @@ class Tool {
 public:
 
     std::vector<std::string> SplitMsg(char* msg);
+    time_t FileTimeToUnixTime(const FILETIME& ft);
+
     char* StringToCharPointer(std::string msg);
     char* CStringToCharArray(wchar_t* str, UINT m_CodePage);
     char* WideStringToUTF8(const std::wstring& wideString);
+    void DeleteAllCsvFiles(wchar_t* directoryPath);
 
     // Get System Info
     char* GetSysInfo();

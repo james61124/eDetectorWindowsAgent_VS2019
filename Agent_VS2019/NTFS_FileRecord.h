@@ -105,7 +105,7 @@ public:
 	BOOL VisitIndexBlock(const ULONGLONG& vcn, const _TCHAR* fileName, CIndexEntry& ieFound) const;
 	void TraverseSubNode(const ULONGLONG& vcn, SUBENTRY_CALLBACK seCallBack) const;
 
-//public:
+	//public:
 	BOOL ParseFileRecord(ULONGLONG fileRef);
 	BOOL ParseAttrs();
 	BOOL ParseFileAttrs();
