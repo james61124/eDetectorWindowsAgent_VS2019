@@ -4,7 +4,7 @@ SocketSend::SocketSend(Info* infoInstance) {
 	info = infoInstance;
 }
 
-int SocketSend::SendDataToServer(char* Work, char* Mgs) {
+int SocketSend::SendDataToServer(char* Work, char* Mgs) {  //65536
 	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -32,7 +32,7 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs) {
 	return ret;
 }
 
-int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
+int SocketSend::SendMessageToServer(char* Work, char* Mgs) {  //1024s
 	StrPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);

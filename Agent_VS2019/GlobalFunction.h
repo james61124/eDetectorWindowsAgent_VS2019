@@ -113,8 +113,8 @@ int CheckVirtualMachineDrive();
 int VirtualMachine(char* pMAC);
 BOOL MySystemShutdown();
 void WriteLogFile(TCHAR* m_Path, char* Str);
-BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath);
-BOOL UnloadNTDriver(char* szSvrName);
+//BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath);
+//BOOL UnloadNTDriver(char* szSvrName);
 void GetThisClientKey(char* pKeyStr);
 bool CheckRightKey(char* pKeyStr);
 bool OtherHashch(char ch);
@@ -128,5 +128,4 @@ void SetProcessPriority(TCHAR* m_Path);
 wstring GetMyTempPath(TCHAR* pdnPathName);
 
 // Modify 2021/03/03 For Change Collection Library
-void CollectionProcess(HMODULE plib, TCHAR* pdbName, TCHAR* pWorkNum);
 void CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath, wstring pWorkNum);

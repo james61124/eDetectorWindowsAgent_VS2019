@@ -8,6 +8,8 @@
 #include <future>
 
 
+using ofstream = basic_ofstream<char, char_traits<char>>;
+
 
 
 SocketManager::SocketManager(int port, int detect_port, Info* infoInstance, SocketSend* socketSendInstance) {

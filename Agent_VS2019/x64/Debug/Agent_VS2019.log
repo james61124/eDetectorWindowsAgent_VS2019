@@ -1,132 +1,132 @@
 ﻿  agent.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549,1): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(223,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550,1): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(246,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551,1): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551): message : 請參閱 'STATUS_USER_APC' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(282,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552,1): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(291,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553,1): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553): message : 請參閱 'STATUS_PENDING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(738,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554,1): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(747,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555,1): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555): message : 請參閱 'DBG_CONTINUE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(822,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556,1): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(985,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557,1): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1323,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558,1): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1341,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559,1): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1350,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560,1): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1359,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561,1): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561): message : 請參閱 'DBG_CONTROL_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1368,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562,1): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1377,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563,1): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1386,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564,1): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1395,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565,1): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1404,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566,1): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1436,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567,1): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1447,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568,1): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1458,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569,1): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1469,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570,1): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1772,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571,1): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1799,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572,1): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1914,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573,1): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2060,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574,1): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2069,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575,1): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2087,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576,1): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2132,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577,1): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2232,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578,1): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2289,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579,1): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2370,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580,1): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2379,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581,1): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582,1): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583,1): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584,1): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585,1): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586,1): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587,1): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588,1): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589,1): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3392,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590,1): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3402,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591,1): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3412,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592,1): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4358,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593,1): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4875,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594,1): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4904,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595,1): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4914,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596,1): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4924,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597,1): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5002,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598,1): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5999,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599,1): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7593,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7603,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7735,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602,1): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8718,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603,1): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8946,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604,1): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9073,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605,1): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9136,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606,1): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10045,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607,1): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10697,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608,1): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10706,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609,1): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(11018,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610,1): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14865,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612,1): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14874,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613,1): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
   AutoRun.cpp
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\AutoRun.cpp(64,34): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'LPBYTE'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\AutoRun.cpp(64,34): message : 請考慮在格式字串中使用 '%hs'
@@ -153,8 +153,8 @@ C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\AutoRun.cpp(1131,38): message : 請
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\AutoRun.cpp(1131,38): message : 請考慮在格式字串中使用 '%Ts'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\AutoRun.cpp(1131,38): message : 此警告採用 Visual C++ 使用的非標準語意
   caes.cpp
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(390,51): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(451,51): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(390,57): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(451,57): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
   CEntry.cpp
   CFileEntry.cpp
   CFileSystem.cpp
@@ -164,60 +164,60 @@ C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\caes.cpp(451,51): warning C4267: '�
   FAT32General.cpp
   GlobalFunction.cpp
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(1,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2656,30): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'LPBYTE'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2656,30): message : 請考慮在格式字串中使用 '%hs'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2656,30): message : 請考慮在格式字串中使用 '%Ts'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2656,30): message : 此警告採用 Visual C++ 使用的非標準語意
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3143,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3296,7): error C2059: 語法錯誤: ')'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3300,6): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3316,7): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3334,22): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3364,6): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3366,22): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3392,6): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3403,22): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3412,21): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3426,22): error C2065: 'hServiceDDK': 未宣告的識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3472,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'LPBYTE'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3472,37): message : 請考慮在格式字串中使用 '%hs'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3472,37): message : 請考慮在格式字串中使用 '%Ts'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3472,37): message : 此警告採用 Visual C++ 使用的非標準語意
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2660,30): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'LPBYTE'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2660,30): message : 請考慮在格式字串中使用 '%hs'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2660,30): message : 請考慮在格式字串中使用 '%Ts'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(2660,30): message : 此警告採用 Visual C++ 使用的非標準語意
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3147,1): warning C4819: 檔案含有無法在目前字碼頁 (950) 中表示的字元。請以 Unicode 格式儲存檔案以防止資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3300,7): error C2059: 語法錯誤: ')'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3304,6): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3320,7): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3338,22): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3368,6): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3370,22): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3396,6): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3407,22): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3416,21): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3430,22): error C2065: 'hServiceDDK': 未宣告的識別項
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3476,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'LPBYTE'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3476,37): message : 請考慮在格式字串中使用 '%hs'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3476,37): message : 請考慮在格式字串中使用 '%Ts'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\GlobalFunction.cpp(3476,37): message : 此警告採用 Visual C++ 使用的非標準語意
   info.cpp
   MemProcess.cpp
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2911,14): warning C4311: '類型轉換': 指標值由 'PBYTE' 指派至 'DWORD' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2911,14): warning C4302: '類型轉換': 從 'PBYTE' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,68): warning C4311: '類型轉換': 指標值由 'PIMAGE_DOS_HEADER' 指派至 'DWORD' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,68): warning C4302: '類型轉換': 從 'PIMAGE_DOS_HEADER' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,19): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_NT_HEADERS32'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2935,25): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_EXPORT_DIRECTORY'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2938,14): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PWORD'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2939,11): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2955,30): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2956,23): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PCHAR'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4553,7): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4553,7): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4556,17): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4556,17): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4557,24): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4557,24): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4567,12): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4567,12): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4570,17): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4570,17): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4623,7): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4623,7): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4626,17): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4626,17): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4627,24): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4627,24): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4637,12): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4637,12): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,17): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,17): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2911,26): warning C4311: '類型轉換': 指標值由 'PBYTE' 指派至 'DWORD' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2911,26): warning C4302: '類型轉換': 從 'PBYTE' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,89): warning C4311: '類型轉換': 指標值由 'PIMAGE_DOS_HEADER' 指派至 'DWORD' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,89): warning C4302: '類型轉換': 從 'PIMAGE_DOS_HEADER' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2920,90): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_NT_HEADERS32'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2935,78): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_EXPORT_DIRECTORY'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2938,78): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PWORD'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2939,73): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2955,88): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(2956,69): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PCHAR'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4553,6): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4553,6): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4556,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4556,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4557,56): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4557,56): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4567,11): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4567,11): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4570,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4570,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4623,6): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4623,6): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4626,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4626,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4627,56): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4627,56): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4637,11): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4637,11): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\MemProcess.cpp(4640,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
   NTFSSearchCore.cpp
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\NTFS_Attribute.h(1746,3): error C3861: 'IsNonResident': 找不到識別項
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\NTFS_Attribute.h(1753,2): message : 請參考正在進行編譯的 類別 樣板 具現化 'CAttr_Data<TYPE_RESIDENT>'
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\NTFS_Attribute.h(1753): message : 請參考正在進行編譯的 類別 樣板 具現化 'CAttr_Data<TYPE_RESIDENT>'
   PeFunction.cpp
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(353,16): warning C4477: 'printf' : 格式字串 '%x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'ULONGLONG'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(353,16): message : 請考慮在格式字串中使用 '%llx'
@@ -253,396 +253,396 @@ C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(564,20): message : �
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\PeFunction.cpp(564,20): message : 請考慮在格式字串中使用 '%I64x'
   socket_manager.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549,1): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(223,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550,1): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(246,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551,1): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551): message : 請參閱 'STATUS_USER_APC' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(282,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552,1): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(291,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553,1): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553): message : 請參閱 'STATUS_PENDING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(738,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554,1): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(747,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555,1): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555): message : 請參閱 'DBG_CONTINUE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(822,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556,1): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(985,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557,1): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1323,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558,1): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1341,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559,1): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1350,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560,1): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1359,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561,1): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561): message : 請參閱 'DBG_CONTROL_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1368,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562,1): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1377,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563,1): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1386,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564,1): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1395,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565,1): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1404,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566,1): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1436,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567,1): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1447,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568,1): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1458,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569,1): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1469,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570,1): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1772,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571,1): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1799,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572,1): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1914,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573,1): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2060,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574,1): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2069,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575,1): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2087,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576,1): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2132,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577,1): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2232,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578,1): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2289,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579,1): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2370,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580,1): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2379,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581,1): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582,1): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583,1): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584,1): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585,1): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586,1): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587,1): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588,1): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589,1): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3392,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590,1): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3402,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591,1): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3412,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592,1): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4358,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593,1): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4875,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594,1): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4904,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595,1): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4914,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596,1): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4924,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597,1): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5002,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598,1): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5999,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599,1): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7593,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7603,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7735,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602,1): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8718,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603,1): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8946,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604,1): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9073,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605,1): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9136,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606,1): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10045,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607,1): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10697,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608,1): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10706,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609,1): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(11018,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610,1): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14865,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612,1): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14874,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613,1): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
   socket_send.cpp
   task.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549,1): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(223,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550,1): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(246,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551,1): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551): message : 請參閱 'STATUS_USER_APC' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(282,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552,1): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(291,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553,1): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553): message : 請參閱 'STATUS_PENDING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(738,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554,1): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(747,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555,1): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555): message : 請參閱 'DBG_CONTINUE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(822,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556,1): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(985,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557,1): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1323,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558,1): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1341,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559,1): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1350,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560,1): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1359,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561,1): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561): message : 請參閱 'DBG_CONTROL_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1368,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562,1): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1377,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563,1): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1386,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564,1): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1395,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565,1): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1404,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566,1): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1436,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567,1): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1447,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568,1): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1458,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569,1): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1469,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570,1): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1772,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571,1): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1799,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572,1): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1914,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573,1): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2060,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574,1): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2069,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575,1): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2087,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576,1): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2132,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577,1): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2232,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578,1): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2289,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579,1): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2370,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580,1): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2379,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581,1): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582,1): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583,1): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584,1): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585,1): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586,1): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587,1): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588,1): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589,1): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3392,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590,1): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3402,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591,1): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3412,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592,1): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4358,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593,1): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4875,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594,1): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4904,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595,1): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4914,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596,1): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4924,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597,1): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5002,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598,1): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5999,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599,1): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7593,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7603,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7735,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602,1): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8718,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603,1): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8946,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604,1): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9073,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605,1): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9136,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606,1): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10045,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607,1): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10697,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608,1): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10706,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609,1): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(11018,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610,1): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14865,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612,1): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14874,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613,1): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): message : 請考慮在格式字串中使用 '%lld'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): message : 請考慮在格式字串中使用 '%Id'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): message : 請考慮在格式字串中使用 '%I64d'
 C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
-C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與型別 'char *' 的引數 10 衝突
+C:\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(80,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
   tools.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549,1): message : 請參閱 'STATUS_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2549): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(223,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550,1): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2550): message : 請參閱 'STATUS_ABANDONED_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(246,1): warning C4005: 'STATUS_USER_APC': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551,1): message : 請參閱 'STATUS_USER_APC' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2551): message : 請參閱 'STATUS_USER_APC' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(282,1): warning C4005: 'STATUS_TIMEOUT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552,1): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2552): message : 請參閱 'STATUS_TIMEOUT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(291,1): warning C4005: 'STATUS_PENDING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553,1): message : 請參閱 'STATUS_PENDING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2553): message : 請參閱 'STATUS_PENDING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(738,1): warning C4005: 'DBG_EXCEPTION_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554,1): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2554): message : 請參閱 'DBG_EXCEPTION_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(747,1): warning C4005: 'DBG_CONTINUE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555,1): message : 請參閱 'DBG_CONTINUE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2555): message : 請參閱 'DBG_CONTINUE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(822,1): warning C4005: 'STATUS_SEGMENT_NOTIFICATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556,1): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2556): message : 請參閱 'STATUS_SEGMENT_NOTIFICATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(985,1): warning C4005: 'STATUS_FATAL_APP_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557,1): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2557): message : 請參閱 'STATUS_FATAL_APP_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1323,1): warning C4005: 'DBG_REPLY_LATER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558,1): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2558): message : 請參閱 'DBG_REPLY_LATER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1341,1): warning C4005: 'DBG_TERMINATE_THREAD': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559,1): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2559): message : 請參閱 'DBG_TERMINATE_THREAD' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1350,1): warning C4005: 'DBG_TERMINATE_PROCESS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560,1): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2560): message : 請參閱 'DBG_TERMINATE_PROCESS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1359,1): warning C4005: 'DBG_CONTROL_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561,1): message : 請參閱 'DBG_CONTROL_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2561): message : 請參閱 'DBG_CONTROL_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1368,1): warning C4005: 'DBG_PRINTEXCEPTION_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562,1): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2562): message : 請參閱 'DBG_PRINTEXCEPTION_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1377,1): warning C4005: 'DBG_RIPEXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563,1): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2563): message : 請參閱 'DBG_RIPEXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1386,1): warning C4005: 'DBG_CONTROL_BREAK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564,1): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2564): message : 請參閱 'DBG_CONTROL_BREAK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1395,1): warning C4005: 'DBG_COMMAND_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565,1): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2565): message : 請參閱 'DBG_COMMAND_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1404,1): warning C4005: 'DBG_PRINTEXCEPTION_WIDE_C': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566,1): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2566): message : 請參閱 'DBG_PRINTEXCEPTION_WIDE_C' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1436,1): warning C4005: 'STATUS_GUARD_PAGE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567,1): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2567): message : 請參閱 'STATUS_GUARD_PAGE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1447,1): warning C4005: 'STATUS_DATATYPE_MISALIGNMENT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568,1): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2568): message : 請參閱 'STATUS_DATATYPE_MISALIGNMENT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1458,1): warning C4005: 'STATUS_BREAKPOINT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569,1): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2569): message : 請參閱 'STATUS_BREAKPOINT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1469,1): warning C4005: 'STATUS_SINGLE_STEP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570,1): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2570): message : 請參閱 'STATUS_SINGLE_STEP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1772,1): warning C4005: 'STATUS_LONGJUMP': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571,1): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2571): message : 請參閱 'STATUS_LONGJUMP' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1799,1): warning C4005: 'STATUS_UNWIND_CONSOLIDATE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572,1): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2572): message : 請參閱 'STATUS_UNWIND_CONSOLIDATE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(1914,1): warning C4005: 'DBG_EXCEPTION_NOT_HANDLED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573,1): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2573): message : 請參閱 'DBG_EXCEPTION_NOT_HANDLED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2060,1): warning C4005: 'STATUS_ACCESS_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574,1): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2574): message : 請參閱 'STATUS_ACCESS_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2069,1): warning C4005: 'STATUS_IN_PAGE_ERROR': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575,1): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2575): message : 請參閱 'STATUS_IN_PAGE_ERROR' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2087,1): warning C4005: 'STATUS_INVALID_HANDLE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576,1): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2576): message : 請參閱 'STATUS_INVALID_HANDLE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2132,1): warning C4005: 'STATUS_INVALID_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577,1): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2577): message : 請參閱 'STATUS_INVALID_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2232,1): warning C4005: 'STATUS_NO_MEMORY': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578,1): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2578): message : 請參閱 'STATUS_NO_MEMORY' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2289,1): warning C4005: 'STATUS_ILLEGAL_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579,1): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2579): message : 請參閱 'STATUS_ILLEGAL_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2370,1): warning C4005: 'STATUS_NONCONTINUABLE_EXCEPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580,1): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2580): message : 請參閱 'STATUS_NONCONTINUABLE_EXCEPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(2379,1): warning C4005: 'STATUS_INVALID_DISPOSITION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581,1): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2581): message : 請參閱 'STATUS_INVALID_DISPOSITION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3312,1): warning C4005: 'STATUS_ARRAY_BOUNDS_EXCEEDED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582,1): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2582): message : 請參閱 'STATUS_ARRAY_BOUNDS_EXCEEDED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3322,1): warning C4005: 'STATUS_FLOAT_DENORMAL_OPERAND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583,1): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2583): message : 請參閱 'STATUS_FLOAT_DENORMAL_OPERAND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3332,1): warning C4005: 'STATUS_FLOAT_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584,1): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2584): message : 請參閱 'STATUS_FLOAT_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3342,1): warning C4005: 'STATUS_FLOAT_INEXACT_RESULT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585,1): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2585): message : 請參閱 'STATUS_FLOAT_INEXACT_RESULT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3352,1): warning C4005: 'STATUS_FLOAT_INVALID_OPERATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586,1): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2586): message : 請參閱 'STATUS_FLOAT_INVALID_OPERATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3362,1): warning C4005: 'STATUS_FLOAT_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587,1): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2587): message : 請參閱 'STATUS_FLOAT_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3372,1): warning C4005: 'STATUS_FLOAT_STACK_CHECK': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588,1): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2588): message : 請參閱 'STATUS_FLOAT_STACK_CHECK' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3382,1): warning C4005: 'STATUS_FLOAT_UNDERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589,1): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2589): message : 請參閱 'STATUS_FLOAT_UNDERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3392,1): warning C4005: 'STATUS_INTEGER_DIVIDE_BY_ZERO': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590,1): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2590): message : 請參閱 'STATUS_INTEGER_DIVIDE_BY_ZERO' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3402,1): warning C4005: 'STATUS_INTEGER_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591,1): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2591): message : 請參閱 'STATUS_INTEGER_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(3412,1): warning C4005: 'STATUS_PRIVILEGED_INSTRUCTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592,1): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2592): message : 請參閱 'STATUS_PRIVILEGED_INSTRUCTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4358,1): warning C4005: 'STATUS_STACK_OVERFLOW': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593,1): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2593): message : 請參閱 'STATUS_STACK_OVERFLOW' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4875,1): warning C4005: 'STATUS_DLL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594,1): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2594): message : 請參閱 'STATUS_DLL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4904,1): warning C4005: 'STATUS_ORDINAL_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595,1): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2595): message : 請參閱 'STATUS_ORDINAL_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4914,1): warning C4005: 'STATUS_ENTRYPOINT_NOT_FOUND': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596,1): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2596): message : 請參閱 'STATUS_ENTRYPOINT_NOT_FOUND' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(4924,1): warning C4005: 'STATUS_CONTROL_C_EXIT': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597,1): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2597): message : 請參閱 'STATUS_CONTROL_C_EXIT' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5002,1): warning C4005: 'STATUS_DLL_INIT_FAILED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598,1): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2598): message : 請參閱 'STATUS_DLL_INIT_FAILED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(5999,1): warning C4005: 'STATUS_CONTROL_STACK_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599,1): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2599): message : 請參閱 'STATUS_CONTROL_STACK_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7593,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_FAULTS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2600): message : 請參閱 'STATUS_FLOAT_MULTIPLE_FAULTS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7603,1): warning C4005: 'STATUS_FLOAT_MULTIPLE_TRAPS': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601,1): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2601): message : 請參閱 'STATUS_FLOAT_MULTIPLE_TRAPS' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(7735,1): warning C4005: 'STATUS_REG_NAT_CONSUMPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602,1): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2602): message : 請參閱 'STATUS_REG_NAT_CONSUMPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8718,1): warning C4005: 'STATUS_HEAP_CORRUPTION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603,1): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2603): message : 請參閱 'STATUS_HEAP_CORRUPTION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(8946,1): warning C4005: 'STATUS_STACK_BUFFER_OVERRUN': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604,1): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2604): message : 請參閱 'STATUS_STACK_BUFFER_OVERRUN' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9073,1): warning C4005: 'STATUS_INVALID_CRUNTIME_PARAMETER': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605,1): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2605): message : 請參閱 'STATUS_INVALID_CRUNTIME_PARAMETER' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(9136,1): warning C4005: 'STATUS_ASSERTION_FAILURE': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606,1): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2606): message : 請參閱 'STATUS_ASSERTION_FAILURE' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10045,1): warning C4005: 'STATUS_ENCLAVE_VIOLATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607,1): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2607): message : 請參閱 'STATUS_ENCLAVE_VIOLATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10697,1): warning C4005: 'STATUS_INTERRUPTED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608,1): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2608): message : 請參閱 'STATUS_INTERRUPTED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(10706,1): warning C4005: 'STATUS_THREAD_NOT_RUNNING': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609,1): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2609): message : 請參閱 'STATUS_THREAD_NOT_RUNNING' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(11018,1): warning C4005: 'STATUS_ALREADY_REGISTERED': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610,1): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2610): message : 請參閱 'STATUS_ALREADY_REGISTERED' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14865,1): warning C4005: 'STATUS_SXS_EARLY_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612,1): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2612): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\Ntstatus.h(14874,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613,1): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(2613): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
   正在產生程式碼...

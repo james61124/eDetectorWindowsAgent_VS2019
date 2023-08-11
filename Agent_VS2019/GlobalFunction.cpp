@@ -3266,6 +3266,8 @@ BOOL MySystemShutdown()
 //		file.close();
 //	}
 //}
+
+/*
 BOOL LoadNTDriver(char* lpszDriverName, char* lpszDriverPath)
 {
 	char szDriverImagePath[256];
@@ -3455,6 +3457,9 @@ BeforeLeave:
 	}
 	return bRet;
 }
+*/
+
+
 void GetThisClientKey(char* pKeyStr)
 {
 	HKEY hKey = NULL;
