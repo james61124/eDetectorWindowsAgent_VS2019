@@ -1,5 +1,0 @@
-﻿"username","profilepath","usersid","registryloaded","foldercreatedtime","foldermodifiedtime","lastlogontime","privileglevel"
-﻿"NT AUTHORITY\SYSTEM","C:\Windows\system32\config\systemprofile","S-1-5-18","Yes","1575710092","1575710092","NULL","Other(including deleted users)"
-﻿"NT AUTHORITY\LOCAL SERVICE","C:\Windows\ServiceProfiles\LocalService","S-1-5-19","Yes","1688073651","1691580681","NULL","Other(including deleted users)"
-﻿"NT AUTHORITY\NETWORK SERVICE","C:\Windows\ServiceProfiles\NetworkService","S-1-5-20","Yes","1688073645","1691580681","NULL","Other(including deleted users)"
-﻿"DESKTOP-TC5H5CS\test","C:\Users\test","S-1-5-21-2081973557-1603719640-2355346784-1001","Yes","1688103361","1691403618","1691646343","Administrator"
