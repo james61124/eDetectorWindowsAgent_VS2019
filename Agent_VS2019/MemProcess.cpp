@@ -180,6 +180,7 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 {
 	//TransportData* m_Client = (TransportData*)argv;
 	map<DWORD, process_info_Ex> process_list;
+	printf("LoadNowProcessInfo\n");
 	LoadNowProcessInfo(&process_list);
 	vector<TCPInformation> NetInfo;
 	char* OSstr = GetOSVersion();
@@ -187,6 +188,7 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 	//start = clock();
 	//for(end = clock();(end-start) < 30000;end = clock())
 	//{
+	printf("GetTcpInformationEx\n");
 	if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0))
 	{
 		GetTcpInformationXPEx(&NetInfo);
@@ -204,111 +206,116 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 	map<wstring, BOOL> m_ServiceRun;
 	set<wstring> m_StartRun;
 	AutoRun* m_AutoRun = new AutoRun;
+	printf("LoadServiceStartCommand\n");
 	m_AutoRun->LoadServiceStartCommand(&m_ServiceRun);
+	printf("LoadAutoRunStartCommand\n");
 	m_AutoRun->LoadAutoRunStartCommand(&m_StartRun);
 	//MessageBox(0,L"168",0,0);
 	//if (ret > 0)
 	//{
-		int InfoSize = (int)process_list.size();
-		int InfoCount = 0;
-		map<DWORD, process_info_Ex>::iterator pt;
-		for (pt = process_list.begin(); pt != process_list.end(); pt++, InfoCount++)
+
+	int InfoSize = (int)process_list.size();
+	int InfoCount = 0;
+	map<DWORD, process_info_Ex>::iterator pt;
+	for (pt = process_list.begin(); pt != process_list.end(); pt++, InfoCount++)
+	{
+		printf("%d\n", InfoCount);
+		if (!IsWindowsProcessNormal(&process_list, pt->first))
 		{
-			if (!IsWindowsProcessNormal(&process_list, pt->first))
+			ProcessInfoData m_Info;
+			m_Info.HideAttribute = FALSE;
+			m_Info.HideProcess = pt->second.IsHide;
+			lstrcpy(m_Info.ProcessName, pt->second.process_name);
+			_tcscpy_s(m_Info.ProcessPath, MAX_PATH_EX, pt->second.process_Path);
+			//memset(m_Info.ProcessTime,'\0',20);
+			_tcscpy_s(m_Info.ProcessTime, 20, _T("null"));
+			_tcscpy_s(m_Info.ProcessCTime, 20, _T("null"));
+			_tcscpy_s(m_Info.ParentCTime, 20, _T("null"));
+			if (pt->second.ProcessCreateTime > 0)
+				swprintf_s(m_Info.ProcessCTime, 20, _T("%llu"), pt->second.ProcessCreateTime);
+			if (pt->second.parentCreateTime > 0)
+				swprintf_s(m_Info.ParentCTime, 20, _T("%llu"), pt->second.parentCreateTime);
+			//GetProcessPath(pt->first,m_Info.ProcessPath,true,NULL,m_Info.ProcessCTime);
+			if (!_tcscmp(m_Info.ProcessPath, _T("null")))
 			{
-				ProcessInfoData m_Info;
-				m_Info.HideAttribute = FALSE;
-				m_Info.HideProcess = pt->second.IsHide;
-				lstrcpy(m_Info.ProcessName, pt->second.process_name);
-				_tcscpy_s(m_Info.ProcessPath, MAX_PATH_EX, pt->second.process_Path);
-				//memset(m_Info.ProcessTime,'\0',20);
-				_tcscpy_s(m_Info.ProcessTime, 20, _T("null"));
-				_tcscpy_s(m_Info.ProcessCTime, 20, _T("null"));
-				_tcscpy_s(m_Info.ParentCTime, 20, _T("null"));
-				if (pt->second.ProcessCreateTime > 0)
-					swprintf_s(m_Info.ProcessCTime, 20, _T("%llu"), pt->second.ProcessCreateTime);
-				if (pt->second.parentCreateTime > 0)
-					swprintf_s(m_Info.ParentCTime, 20, _T("%llu"), pt->second.parentCreateTime);
-				//GetProcessPath(pt->first,m_Info.ProcessPath,true,NULL,m_Info.ProcessCTime);
-				if (!_tcscmp(m_Info.ProcessPath, _T("null")))
+				//Sleep(100);
+				//GetProcessOnlyPath(pInfo->pid,m_Info.ProcessPath);
+				SearchExecutePath(pt->first, m_Info.ProcessPath, pt->second.process_name);
+			}
+			SYSTEMTIME sys;
+			GetLocalTime(&sys);
+			swprintf_s(m_Info.ProcessTime, 20, _T("%4d/%02d/%02d %02d:%02d:%02d"), sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
+			m_Info.ParentID = pt->second.parent_pid;
+			if (pt->second.parentCreateTime > 0)
+				GetProcessPath(pt->second.parent_pid, m_Info.ParentPath, true, NULL, NULL);
+			else
+				_tcscpy_s(m_Info.ParentPath, MAX_PATH_EX, _T("null"));
+			_tcscpy_s(m_Info.UnKnownHash, 50, _T("null"));
+			m_Info.Injected = CheckIsInjection(pt->first, pMembuf, m_Info.ProcessName, m_Info.UnKnownHash);
+			//m_Info.Injected = FALSE;
+			m_Info.StartRun = CheckIsStartRun(&m_ServiceRun, &m_StartRun, pt->first/*,m_Info.HideService*/);
+
+			CheckIsInlineHook(pt->first, &m_Info.InlineHookInfo);
+
+			TCHAR Md5Hashstr[50];
+			memset(Md5Hashstr, '\0', 50);
+			DWORD MD5ret = Md5Hash(m_Info.ProcessPath, Md5Hashstr);
+			if (MD5ret == 0)
+				lstrcpy(m_Info.ProcessHash, Md5Hashstr);
+			else
+				lstrcpy(m_Info.ProcessHash, _T("null"));
+
+			if (_tcscmp(m_Info.ProcessPath, _T("null")))
+			{
+				DWORD AttRet = GetFileAttributes(m_Info.ProcessPath);
+				if ((AttRet & FILE_ATTRIBUTE_HIDDEN) == FILE_ATTRIBUTE_HIDDEN)
+					m_Info.HideAttribute = TRUE;
+				DigitalSignatureInfo* DSinfo = new DigitalSignatureInfo;
+				_tcscpy_s(DSinfo->SignerSubjectName, 256, _T("null"));
+				bool DSret = GetDigitalSignature(m_Info.ProcessPath, DSinfo);
+				if (DSret)
 				{
-					//Sleep(100);
-					//GetProcessOnlyPath(pInfo->pid,m_Info.ProcessPath);
-					SearchExecutePath(pt->first, m_Info.ProcessPath, pt->second.process_name);
-				}
-				SYSTEMTIME sys;
-				GetLocalTime(&sys);
-				swprintf_s(m_Info.ProcessTime, 20, _T("%4d/%02d/%02d %02d:%02d:%02d"), sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-				m_Info.ParentID = pt->second.parent_pid;
-				if (pt->second.parentCreateTime > 0)
-					GetProcessPath(pt->second.parent_pid, m_Info.ParentPath, true, NULL, NULL);
-				else
-					_tcscpy_s(m_Info.ParentPath, MAX_PATH_EX, _T("null"));
-				_tcscpy_s(m_Info.UnKnownHash, 50, _T("null"));
-				m_Info.Injected = CheckIsInjection(pt->first, pMembuf, m_Info.ProcessName, m_Info.UnKnownHash);
-				//m_Info.Injected = FALSE;
-				m_Info.StartRun = CheckIsStartRun(&m_ServiceRun, &m_StartRun, pt->first/*,m_Info.HideService*/);
-
-				CheckIsInlineHook(pt->first, &m_Info.InlineHookInfo);
-
-				TCHAR Md5Hashstr[50];
-				memset(Md5Hashstr, '\0', 50);
-				DWORD MD5ret = Md5Hash(m_Info.ProcessPath, Md5Hashstr);
-				if (MD5ret == 0)
-					lstrcpy(m_Info.ProcessHash, Md5Hashstr);
-				else
-					lstrcpy(m_Info.ProcessHash, _T("null"));
-
-				if (_tcscmp(m_Info.ProcessPath, _T("null")))
-				{
-					DWORD AttRet = GetFileAttributes(m_Info.ProcessPath);
-					if ((AttRet & FILE_ATTRIBUTE_HIDDEN) == FILE_ATTRIBUTE_HIDDEN)
-						m_Info.HideAttribute = TRUE;
-					DigitalSignatureInfo* DSinfo = new DigitalSignatureInfo;
-					_tcscpy_s(DSinfo->SignerSubjectName, 256, _T("null"));
-					bool DSret = GetDigitalSignature(m_Info.ProcessPath, DSinfo);
-					if (DSret)
-					{
-						swprintf_s(m_Info.SignerSubjectName, 256, _T("%s"), DSinfo->SignerSubjectName);
-					}
-					else
-					{
-						lstrcpy(m_Info.SignerSubjectName, _T("null"));
-					}
-					delete DSinfo;
+					swprintf_s(m_Info.SignerSubjectName, 256, _T("%s"), DSinfo->SignerSubjectName);
 				}
 				else
 				{
 					lstrcpy(m_Info.SignerSubjectName, _T("null"));
 				}
-				set<DWORD> ApiStringHash;
-				DumpExecute(pt->first, pt->second.process_name, pApiName, &ApiStringHash, m_Info.ProcessPath, &m_Info.Abnormal_dll);
-				m_Info.InjectionOther = FALSE;
-				m_Info.InjectionPE = FALSE;
-				CheckInjectionPtn(&ApiStringHash, m_Info.InjectionOther, m_Info.InjectionPE);
-				ApiStringHash.clear();
-				vector<TCPInformation>::iterator Tcpit;
-				for (Tcpit = NetInfo.begin(); Tcpit != NetInfo.end(); Tcpit++)
-				{
-					if ((*Tcpit).ProcessID == pt->first)
-					{
-						WORD add1, add2, add3, add4;
-						add1 = (WORD)((*Tcpit).LocalAddr & 255);
-						add2 = (WORD)(((*Tcpit).LocalAddr >> 8) & 255);
-						add3 = (WORD)(((*Tcpit).LocalAddr >> 16) & 255);
-						add4 = (WORD)(((*Tcpit).LocalAddr >> 24) & 255);
-						WORD add5, add6, add7, add8;
-						add5 = (WORD)((*Tcpit).RemoteAddr & 255);
-						add6 = (WORD)(((*Tcpit).RemoteAddr >> 8) & 255);
-						add7 = (WORD)(((*Tcpit).RemoteAddr >> 16) & 255);
-						add8 = (WORD)(((*Tcpit).RemoteAddr >> 24) & 255);
-						char str[65536];
-						sprintf_s(str, 65536, "%d.%d.%d.%d,%u,%d.%d.%d.%d,%u,%s>%lld", add1, add2, add3, add4, ntohs((u_short)(*Tcpit).LocalPort), add5, add6, add7, add8, ntohs((u_short)(*Tcpit).RemotePort), Convert2State((*Tcpit).State), NetworkClock);
-						m_Info.NetString.insert(str);
-					}
-				}
-				pInfo->insert(pair<DWORD, ProcessInfoData>(pt->first, m_Info));
+				delete DSinfo;
 			}
+			else
+			{
+				lstrcpy(m_Info.SignerSubjectName, _T("null"));
+			}
+			set<DWORD> ApiStringHash;
+			DumpExecute(pt->first, pt->second.process_name, pApiName, &ApiStringHash, m_Info.ProcessPath, &m_Info.Abnormal_dll);
+			m_Info.InjectionOther = FALSE;
+			m_Info.InjectionPE = FALSE;
+			CheckInjectionPtn(&ApiStringHash, m_Info.InjectionOther, m_Info.InjectionPE);
+			ApiStringHash.clear();
+			vector<TCPInformation>::iterator Tcpit;
+			for (Tcpit = NetInfo.begin(); Tcpit != NetInfo.end(); Tcpit++)
+			{
+				if ((*Tcpit).ProcessID == pt->first)
+				{
+					WORD add1, add2, add3, add4;
+					add1 = (WORD)((*Tcpit).LocalAddr & 255);
+					add2 = (WORD)(((*Tcpit).LocalAddr >> 8) & 255);
+					add3 = (WORD)(((*Tcpit).LocalAddr >> 16) & 255);
+					add4 = (WORD)(((*Tcpit).LocalAddr >> 24) & 255);
+					WORD add5, add6, add7, add8;
+					add5 = (WORD)((*Tcpit).RemoteAddr & 255);
+					add6 = (WORD)(((*Tcpit).RemoteAddr >> 8) & 255);
+					add7 = (WORD)(((*Tcpit).RemoteAddr >> 16) & 255);
+					add8 = (WORD)(((*Tcpit).RemoteAddr >> 24) & 255);
+					char str[65536];
+					sprintf_s(str, 65536, "%d.%d.%d.%d,%u,%d.%d.%d.%d,%u,%s>%lld", add1, add2, add3, add4, ntohs((u_short)(*Tcpit).LocalPort), add5, add6, add7, add8, ntohs((u_short)(*Tcpit).RemotePort), Convert2State((*Tcpit).State), NetworkClock);
+					m_Info.NetString.insert(str);
+				}
+			}
+			pInfo->insert(pair<DWORD, ProcessInfoData>(pt->first, m_Info));
+		}
+
 			/*end = clock();
 			if ((end - start) > 30000)
 			{
@@ -325,6 +332,8 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 			}*/
 		//}
 	}
+
+
 	delete m_AutoRun;
 	m_StartRun.clear();
 	m_ServiceRun.clear();

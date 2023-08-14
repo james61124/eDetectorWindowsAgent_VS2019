@@ -57,12 +57,15 @@ public:
     int GiveScanInfo(char* buff, SOCKET* tcpSocket);
     int GiveProcessData(SOCKET* tcpSocket);
     int GiveScan(char* buff, SOCKET* tcpSocket);
-    int GiveScanDataEnd(char* buff, SOCKET* tcpSocket);
+    int GiveScanFragment(char* buff, SOCKET* tcpSocket);
+    int GiveScanEnd(char* buff, SOCKET* tcpSocket);
+
+    int ExplorerInfo_(StrPacket* udata);
 
 
     int GiveDriveInfo();
     int Explorer();
-    int GiveExplorerData();
+    int GiveExplorerData(char* Drive, char* FileSystem);
     int GiveExplorerEnd();
     int CollectInfo();
     int GiveCollectProgress();
@@ -103,19 +106,17 @@ private:
     int DetectNewNetwork(int pMainProcessid);
     void SendNetworkDetectToServer(vector<string>* pInfo);
 
-
-    void CollectionComputerInfo();  //Yen
-    bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); //Yen
-    void SendDbFileToServer(TCHAR* DBName); //Yen
-    void CollectionComputeInfo(DWORD UserModePid); //Yen
+    // collect
+    void CollectionComputerInfo(); 
+    bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
+    void SendDbFileToServer(TCHAR* DBName); 
+    void CollectionComputeInfo(DWORD UserModePid); 
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
-    void CreateProcessForCollection(TCHAR* DBName); //Yen
-    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);//Yen
-    //bool GetDataByQuery(const string& query, sqlite3* m_db, vector<CombineObj>* vecCombineObj); //Yen
-    //bool WriteDataSetToDB(sqlite3* m_db, const vector<CombineObj> vecCombineObj, const string DefineName, const string MAC, const string IP, const string TableName, int id); //Yen;;
-    //bool WriteSQLiteDB(sqlite3* pdb, char* pQuery); //Yen
+    void CreateProcessForCollection(TCHAR* DBName); 
+    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);
+
 
 };
 

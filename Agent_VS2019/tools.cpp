@@ -54,6 +54,22 @@ void Tool::DeleteAllCsvFiles(wchar_t* directoryPath) {
     }
 }
 
+bool Tool::CompressFileToZip(const TCHAR* zipFileName, const TCHAR* fileToAdd, const TCHAR* sourceFilePath) {
+    HZIP hz = CreateZip(zipFileName, 0);
+    if (hz == 0) {
+        return false; // Failed to create ZIP file
+    }
+
+    if (ZipAdd(hz, fileToAdd, sourceFilePath) != 0) {
+        CloseZip(hz);
+        return false; // Failed to add file to ZIP
+    }
+
+    CloseZip(hz);
+    return true; // Successfully compressed and added file to ZIP
+}
+
+
 // char* Tool::CStringToCharArray(wchar_t* str,UINT m_CodePage) {
 // 	char *ptr;
 // 	#ifdef _UNICODE

@@ -41,7 +41,7 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
 void SocketManager::getSystemInfo() {
     strcpy_s(InfoInstance->MAC, sizeof(InfoInstance->MAC), "08:00:27:4e:66:ef");
     strcpy_s(InfoInstance->IP, sizeof(InfoInstance->IP), "127.0.0.1");
-    strcpy_s(InfoInstance->UUID, sizeof(InfoInstance->UUID), "fe369d13f9f44565bad2ef70d8a328a0");
+    strcpy_s(InfoInstance->UUID, sizeof(InfoInstance->UUID), "dc804c0a365e46439678a4423fd1641c");
 }
 
 bool SocketManager::connectTCP(const std::string& serverIP, int port) {

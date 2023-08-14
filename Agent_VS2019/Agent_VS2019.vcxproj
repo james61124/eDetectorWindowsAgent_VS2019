@@ -40,6 +40,8 @@
     <ClCompile Include="socket_send.cpp" />
     <ClCompile Include="task.cpp" />
     <ClCompile Include="tools.cpp" />
+    <ClCompile Include="unzip.cpp" />
+    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AutoRun.h" />
@@ -72,6 +74,8 @@
     <ClInclude Include="StrPacket.h" />
     <ClInclude Include="task.h" />
     <ClInclude Include="tools.h" />
+    <ClInclude Include="unzip.h" />
+    <ClInclude Include="zip.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

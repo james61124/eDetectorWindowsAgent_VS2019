@@ -95,7 +95,10 @@ int SocketSend::receiveTCP(SOCKET* tcpSocket) {
 
 		printf("task receive %s\n", udata->DoWorking);
 		if (!strcmp(udata->DoWorking, "DataRight")) {
-			break;
+			return 1;
+		}
+		else {
+			return 0;
 		}
 	}
 	

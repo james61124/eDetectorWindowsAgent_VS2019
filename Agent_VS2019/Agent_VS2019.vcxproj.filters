@@ -31,6 +31,9 @@
     <Filter Include="Collect">
       <UniqueIdentifier>{2c0a37e6-49f1-4b1b-b765-8cbcfd58fd2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Zip">
+      <UniqueIdentifier>{f09abe10-deab-4780-a9f3-f2190b0ce085}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp">
@@ -95,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="NTFS_FileRecord.cpp">
       <Filter>File\NTFS</Filter>
+    </ClCompile>
+    <ClCompile Include="unzip.cpp">
+      <Filter>Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip.cpp">
+      <Filter>Zip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="sqlite3.h">
       <Filter>Collect</Filter>
+    </ClInclude>
+    <ClInclude Include="unzip.h">
+      <Filter>Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip.h">
+      <Filter>Zip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

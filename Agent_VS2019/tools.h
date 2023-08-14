@@ -24,6 +24,10 @@
 #include <ctime>   // For std::time
 #include <cwchar>  // For std::wcsftime
 
+#include <fstream>
+
+#include "zip.h"
+
 // #include "StrPacket.h"
 //#include "Process.h"
 // #include "PeFunction.h"
@@ -51,6 +55,7 @@ public:
     char* GetUserNameUTF8();
     char* GetOSVersion();
     unsigned long long GetBootTime();
+    bool CompressFileToZip(const TCHAR* zipFileName, const TCHAR* fileToAdd, const TCHAR* sourceFilePath);
 
     // Process
 
