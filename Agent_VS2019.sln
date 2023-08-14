@@ -29,3 +29,6 @@ Global
 		SolutionGuid = {3A10D9CD-80F0-4064-94B2-7E6CC9FCD89F}
 	EndGlobalSection
 EndGlobal
+
+*.db
+*.csv
