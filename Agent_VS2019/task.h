@@ -59,20 +59,25 @@ public:
     int GiveScan(char* buff, SOCKET* tcpSocket);
     int GiveScanFragment(char* buff, SOCKET* tcpSocket);
     int GiveScanEnd(char* buff, SOCKET* tcpSocket);
+    int GiveScanProgress(char* buff, SOCKET* tcpSocket);
 
+    // explorer
     int ExplorerInfo_(StrPacket* udata);
-
-
     int GiveDriveInfo();
-    int Explorer();
+    int Explorer(char* buff, SOCKET* tcpSocket);
+    int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
     int GiveExplorerData(char* Drive, char* FileSystem);
-    int GiveExplorerEnd();
-    int CollectInfo();
-    int GiveCollectProgress();
-    int GiveCollectDataInfo();
-    int GiveCollectData();
-    int GiveCollectDataEnd();
+    int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
+    int GiveExplorerData(char* buff, SOCKET* tcpSocket);
 
+    //collect
+    int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
+    int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
+    int GiveCollectData(char* buff, SOCKET* tcpSocket);
+    int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
+
+
+   
     
     int UpdateDetectMode(StrPacket* udata);
     int GetScanInfoData_(StrPacket* udata);
@@ -80,7 +85,6 @@ public:
     int GetProcessInfo(StrPacket* udata);
     int GetDrive(StrPacket* udata);
     //int ExplorerInfo(StrPacket* udata);
-    int TransportExplorer(StrPacket* udata);
     int GetCollectInfo(StrPacket* udata);
     int GetCollectInfoData(StrPacket* udata);
     int DataRight(StrPacket* udata);
@@ -99,7 +103,7 @@ private:
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
     int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
-    void SendZipFileToServer(TCHAR* DBName);
+    void SendZipFileToServer(const TCHAR* DBName);
 
     
     char* GetMyPCDrive();
@@ -113,7 +117,6 @@ private:
     void SendDbFileToServer(const TCHAR* DBName);
     void CollectionComputeInfo(DWORD UserModePid); 
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);
-    void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
     void CreateProcessForCollection(TCHAR* DBName); 
     bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);

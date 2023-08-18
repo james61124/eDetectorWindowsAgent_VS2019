@@ -54,26 +54,17 @@ void Tool::DeleteAllCsvFiles(wchar_t* directoryPath) {
     }
 }
 
-bool Tool::CompressFileToZip(const TCHAR* zipFileName, const TCHAR* fileToAdd, const TCHAR* sourceFilePath) {
+bool Tool::CompressFileToZip(const TCHAR* zipFileName, const TCHAR* sourceFilePath) {
     HZIP hz = CreateZip(zipFileName, 0);
     if (hz == 0) {
         printf("Failed to create ZIP file\n");
         return false; // Failed to create ZIP file
     }
 
-    //WIN32_FIND_DATAW fd;
-    //const WCHAR* newFileName = L"explorer.txt";
-    //size_t destSize = sizeof(fd.cFileName) / sizeof(WCHAR);
-    //wcsncpy_s(fd.cFileName, destSize, sourceFilePath, _TRUNCATE);
-
     TCHAR* ZipDir = new TCHAR[MAX_PATH];
     GetMyPath(ZipDir);
     TCHAR* szPath = new TCHAR[_MAX_PATH];
     swprintf_s(szPath, _MAX_PATH, L"%s\\%s", ZipDir, sourceFilePath);
-
-    //wprintf(L"File: %s\n", fd.cFileName);
-    //wprintf(L"Zip Directory: %s\n", ZipDir);
-    //wprintf(L"Full Path: %s\n", szPath);
 
     if (ZipAdd(hz, sourceFilePath, szPath) != 0) {
         printf("Failed to add file to ZIP\n");
