@@ -128,14 +128,14 @@ int Task::GiveDetectInfo() {
 	//CollectionComputerInfo();
 	//GiveDriveInfo();
 
-	//char Drive[2];
-	//char FileSystem[20];
-	//strcpy_s(Drive, 2, "C");
-	//strcpy_s(FileSystem, 20, "NTFS");
-	//GiveExplorerData(Drive, FileSystem);
+	char Drive[2];
+	char FileSystem[20];
+	strcpy_s(Drive, 2, "C");
+	strcpy_s(FileSystem, 20, "NTFS");
+	GiveExplorerData(Drive, FileSystem);
 
-	StrPacket* tmp = new StrPacket;
-	GetScan(tmp);
+	//StrPacket* tmp = new StrPacket;
+	//GetScan(tmp);
 
 	return 1;
 }
