@@ -134,8 +134,8 @@ int Task::GiveDetectInfo() {
 	//strcpy_s(FileSystem, 20, "NTFS");
 	//GiveExplorerData(Drive, FileSystem);
 
-	//StrPacket* tmp = new StrPacket;
-	//GetScan(tmp);
+	StrPacket* tmp = new StrPacket;
+	GetScan(tmp);
 
 	return 1;
 }
@@ -990,6 +990,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	delete[] buff;
 	ret = GiveScanEnd(pMode, tcpSocket);
 }
+
 int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanInfo");
@@ -1017,7 +1018,6 @@ int Task::GiveScanProgress(char* buff, SOCKET* tcpSocket) {
 	strcpy_s(functionName, 24, "GiveScanProgress");
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
-// GiveScanProgress
 
 
 // Explorer
@@ -1507,26 +1507,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 
 	return 0;
 }
-int Task::Explorer(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "Explorer");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerInfo");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerProgress");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerData");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
 void Task::SendZipFileToServer(const TCHAR* zipFileName)
 {
 
@@ -1596,6 +1576,28 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName)
 		delete[] TmpBuffer;
 	}
 }
+
+int Task::Explorer(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "Explorer");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveExplorerInfo");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveExplorerProgress");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveExplorerData");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+
 
 // collect 
 int Task::GetCollectInfo(StrPacket* udata) { return CollectionComputerInfo(); }
@@ -1927,9 +1929,6 @@ void Task::CollectionComputeInfo(DWORD UserModePid)
 }
 void Task::SendDbFileToServer(const TCHAR* DBName)
 {
-	char* functionName_GiveCollectDataEnd = new char[24];
-	strcpy_s(functionName_GiveCollectDataEnd, 24, "GiveCollectDataEnd");
-
 	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (m_File != INVALID_HANDLE_VALUE) {
 		DWORD m_Filesize = GetFileSize(m_File, NULL);
@@ -1992,6 +1991,7 @@ void Task::SendDbFileToServer(const TCHAR* DBName)
 		//delete[] TmpBuffer;
 	}
 }
+
 int Task::GiveCollectProgress(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveCollectProgress");
