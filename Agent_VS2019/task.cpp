@@ -710,11 +710,10 @@ int Task::GetScan(StrPacket* udata) {
 	SOCKET* tcpSocket = CreateNewSocket();
 	if (tcpSocket == nullptr) return 0;
 
-	//std::thread GiveProcessDataThread([&]() { GiveProcessData(tcpSocket); });
-	//GiveProcessDataThread.join();
+	int ret = GiveProcessData(tcpSocket);
+	closesocket(*tcpSocket);
 
-	return GiveProcessData(info->tcpSocket);
-	//return 1;
+	return ret;
 
 }
 int Task::GiveProcessData(SOCKET* tcpSocket) {
@@ -1080,6 +1079,7 @@ char* Task::GetMyPCDrive()
 	}
 	return driveStr;
 }
+
 int Task::ExplorerInfo_(StrPacket* udata) {
 
 	char delimiter = '|';
@@ -1104,23 +1104,10 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 }
 int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 
-	char* functionName_GiveExplorerData = new char[24];
-	strcpy_s(functionName_GiveExplorerData, 24, "GiveExplorerData");
-	char* functionName_GiveExplorerEnd = new char[24];
-	strcpy_s(functionName_GiveExplorerEnd, 24, "GiveExplorerEnd");
-	char* functionName_GiveExplorerError = new char[24];
-	strcpy_s(functionName_GiveExplorerError, 24, "GiveExplorerError");
-	char* ErrorLoadingMFTTable = new char[22];
-	strcpy_s(ErrorLoadingMFTTable, 22, "ErrorLoadingMFTTable");
-	char* ErrorLoadingFATTable = new char[22];
-	strcpy_s(ErrorLoadingFATTable, 22, "ErrorLoadingFATTable");
-	char* ErrorNotFormat = new char[22];
-	strcpy_s(ErrorNotFormat, 22, "ErrorNotFormat");
-	char* ErrorNoDrive = new char[22];
-	strcpy_s(ErrorNoDrive, 22, "ErrorNoDrive");
-	char* null = new char[5];
-	strcpy_s(null, 5, "null");
 
+	SOCKET* tcpSocket = CreateNewSocket();
+	if (tcpSocket == nullptr) return 0;
+	int ret = 0;
 
 	ExplorerInfo* m_Info = new ExplorerInfo;
 	wchar_t DriveName[20];
@@ -1143,154 +1130,156 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 			if (!wcscmp(filesys, L"NTFS"))
 			{
 				NTFSSearchCore* searchCore = new NTFSSearchCore;
-				int ret = 0;
-				try
-				{
+				try {
 					printf("NTFS start...\n");
-					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, info->tcpSocket, Drive, FileSystem);
+					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, tcpSocket, Drive, FileSystem);
 				}
-				catch (...)
-				{
+				catch (...) {
 					ret = 1;
 				}
-				if (ret == 0)
-				{
-					int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				if (ret == 0) {
+					char* null = new char[5];
+					strcpy_s(null, 5, "null");
+					ret = GiveExplorerEnd(null, tcpSocket);
+					delete[] null;
 				}
-				else
-				{
-					ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingMFTTable);
+				else {
+					char* msg = new char[22];
+					strcpy_s(msg, 22, "ErrorLoadingMFTTable");
+					ret = GiveExplorerError(msg, tcpSocket);
+					delete[] msg;
 				}
+
 				delete searchCore;
 			}
 			else if (!wcscmp(filesys, L"FAT32"))
 			{
-				int ret1 = 1;
-				char* TempStr = new char[DATASTRINGMESSAGELEN];
-				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				char* m_DataStr = new char[1000];
-				sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null,null,null|0|1\n");
-				strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				vector<DeleteFATFileInfo> FATDeleteFile;
-				DWORD LastCluster = 0;
-				unsigned int Count = 1;
-				unsigned int ProgressCount = 1;
-				clock_t start;
-				start = clock();
-				bool ret = pfat->initFDT(this, info->MAC, info->IP, TempStr, ProgressCount, Count, LastCluster, &FATDeleteFile, start);
-				if (ret)
-				{
-					if (!FATDeleteFile.empty())
-					{
-						vector<DeleteFATFileInfo>::iterator it;
-						for (it = FATDeleteFile.begin(); it != FATDeleteFile.end(); it++)
-						{
-							LastCluster++;
-							if (LastCluster == 5)
-								LastCluster++;
-							wchar_t* wstr = new wchar_t[1024];
-							DWORD FirstClister = (*it).FirstDataCluster + 5;
-							if ((*it).isDirectory == 0)
-							{
-								TCHAR* m_MD5Str = new TCHAR[50];
-								memset(m_MD5Str, '\0', 50);
-								TCHAR* Signaturestr = new TCHAR[20];
-								memset(Signaturestr, '\0', 20);
-								//DWORD FirstCluster = newEntry->GetTheFirstDataCluster()+5;
-								if (pfat->FileHashAndSignature((*it).FirstDataCluster, (*it).FileSize, (*it).FileName, m_MD5Str, Signaturestr))
-								{
-									swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,%lu|%lu|1\n",
-										LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-										, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-										(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-										(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, m_MD5Str, Signaturestr, FirstClister, (*it).FileSize);
-								}
-								else
-								{
-									swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
-										LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-										, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-										(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-										(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
-								}
-								delete[] Signaturestr;
-								delete[] m_MD5Str;
-							}
-							else
-							{
-								swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
-									LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-									, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-									(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-									(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
-							}
-							char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
-							strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-							ProgressCount++;
-							Count++;
-							clock_t endTime = clock();
-							if ((endTime - start) > 300000)
-							{
-								char* ProgressStr = new char[10];
-								sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-								strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-								ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-								if (ret1 <= 0)
-								{
-									delete[] ProgressStr;
-									delete[] m_DataStr;
-									delete[] wstr;
-									break;
-								}
-								start = clock();
-								Count = 0;
-								memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-								delete[] ProgressStr;
-							}
-							else
-							{
-								if ((Count % 60) == 0 && Count >= 60)
-								{
-									char* ProgressStr = new char[10];
-									sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-									strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-									ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-									if (ret1 <= 0)
-									{
-										delete[] ProgressStr;
-										delete[] m_DataStr;
-										delete[] wstr;
-										break;
-									}
-									start = clock();
-									Count = 0;
-									memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-									delete[] ProgressStr;
-								}
-							}
-							delete[] m_DataStr;
-							delete[] wstr;
-						}
-					}
-					if (ret1 > 0)
-					{
-						if (TempStr[0] != '\0')
-						{
-							char* ProgressStr = new char[10];
-							sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-							strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-							ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-							delete[] ProgressStr;
-						}
-					}
-					if (ret1 > 0)
-						int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
-				}
-				else
-					ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingFATTable);
-				FATDeleteFile.clear();
-				delete[] m_DataStr;
-				delete[] TempStr;
+				//int ret1 = 1;
+				//char* TempStr = new char[DATASTRINGMESSAGELEN];
+				//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+				//char* m_DataStr = new char[1000];
+				//sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null,null,null|0|1\n");
+				//strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+				//vector<DeleteFATFileInfo> FATDeleteFile;
+				//DWORD LastCluster = 0;
+				//unsigned int Count = 1;
+				//unsigned int ProgressCount = 1;
+				//clock_t start;
+				//start = clock();
+				//bool ret = pfat->initFDT(this, info->MAC, info->IP, TempStr, ProgressCount, Count, LastCluster, &FATDeleteFile, start);
+				//if (ret)
+				//{
+				//	if (!FATDeleteFile.empty())
+				//	{
+				//		vector<DeleteFATFileInfo>::iterator it;
+				//		for (it = FATDeleteFile.begin(); it != FATDeleteFile.end(); it++)
+				//		{
+				//			LastCluster++;
+				//			if (LastCluster == 5)
+				//				LastCluster++;
+				//			wchar_t* wstr = new wchar_t[1024];
+				//			DWORD FirstClister = (*it).FirstDataCluster + 5;
+				//			if ((*it).isDirectory == 0)
+				//			{
+				//				TCHAR* m_MD5Str = new TCHAR[50];
+				//				memset(m_MD5Str, '\0', 50);
+				//				TCHAR* Signaturestr = new TCHAR[20];
+				//				memset(Signaturestr, '\0', 20);
+				//				//DWORD FirstCluster = newEntry->GetTheFirstDataCluster()+5;
+				//				if (pfat->FileHashAndSignature((*it).FirstDataCluster, (*it).FileSize, (*it).FileName, m_MD5Str, Signaturestr))
+				//				{
+				//					swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,%lu|%lu|1\n",
+				//						LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+				//						, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+				//						(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+				//						(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, m_MD5Str, Signaturestr, FirstClister, (*it).FileSize);
+				//				}
+				//				else
+				//				{
+				//					swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
+				//						LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+				//						, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+				//						(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+				//						(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
+				//				}
+				//				delete[] Signaturestr;
+				//				delete[] m_MD5Str;
+				//			}
+				//			else
+				//			{
+				//				swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
+				//					LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
+				//					, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
+				//					(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
+				//					(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
+				//			}
+				//			char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
+				//			strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+				//			ProgressCount++;
+				//			Count++;
+				//			clock_t endTime = clock();
+				//			if ((endTime - start) > 300000)
+				//			{
+				//				char* ProgressStr = new char[10];
+				//				sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+				//				strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+				//				ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//				if (ret1 <= 0)
+				//				{
+				//					delete[] ProgressStr;
+				//					delete[] m_DataStr;
+				//					delete[] wstr;
+				//					break;
+				//				}
+				//				start = clock();
+				//				Count = 0;
+				//				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+				//				delete[] ProgressStr;
+				//			}
+				//			else
+				//			{
+				//				if ((Count % 60) == 0 && Count >= 60)
+				//				{
+				//					char* ProgressStr = new char[10];
+				//					sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+				//					strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+				//					ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//					if (ret1 <= 0)
+				//					{
+				//						delete[] ProgressStr;
+				//						delete[] m_DataStr;
+				//						delete[] wstr;
+				//						break;
+				//					}
+				//					start = clock();
+				//					Count = 0;
+				//					memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+				//					delete[] ProgressStr;
+				//				}
+				//			}
+				//			delete[] m_DataStr;
+				//			delete[] wstr;
+				//		}
+				//	}
+				//	if (ret1 > 0)
+				//	{
+				//		if (TempStr[0] != '\0')
+				//		{
+				//			char* ProgressStr = new char[10];
+				//			sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+				//			strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+				//			ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//			delete[] ProgressStr;
+				//		}
+				//	}
+				//	if (ret1 > 0)
+				//		int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				//}
+				//else
+				//	ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingFATTable);
+				//FATDeleteFile.clear();
+				//delete[] m_DataStr;
+				//delete[] TempStr;
 			}
 			else
 			{
@@ -1322,22 +1311,28 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 		}
 		else
 		{
-			int ret;
-			ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorNotFormat);
+			char* msg = new char[22];
+			strcpy_s(msg, 22, "ErrorNotFormat");
+			ret = GiveExplorerError(msg, tcpSocket);
+			delete[] msg;
 
 		}
 	}
 	else
 	{
-		int ret;
-		ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorNoDrive);
+		char* msg = new char[22];
+		strcpy_s(msg, 22, "ErrorNoDrive");
+		ret = GiveExplorerError(msg, tcpSocket);
+		delete[] msg;
 	}
 	delete[] filesys;
 	delete[] volname;
 	delete[] drive;
 	delete m_Info;
+
 	//delete[] wMgs;
-	return 0;
+	closesocket(*tcpSocket);
+	return ret;
 
 }
 int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem) {
@@ -1472,7 +1467,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	}
 
 	outFile.close();
-	if (std::remove("Explorer.txt") != 0) perror("Error deleting file");
+	
 
 	const TCHAR* zipFileName = _T("Explorer.zip");
 	const TCHAR* sourceFilePath = _T("Explorer.txt");
@@ -1499,7 +1494,10 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	delete[] FileSize;
 	
 	// send zip file
-	SendZipFileToServer(zipFileName);
+	SendZipFileToServer(zipFileName, tcpSocket);
+
+	if (std::remove("Explorer.txt") != 0) perror("Error delete Explorer.txt\n");
+	if (std::remove("Explorer.zip") != 0) perror("Error delete Explorer.zip\n");
 
 
 	delete[] TempStr;
@@ -1507,7 +1505,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 
 	return 0;
 }
-void Task::SendZipFileToServer(const TCHAR* zipFileName)
+void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
 {
 
 	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1539,7 +1537,7 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName)
 						tmplen -= DATASTRINGMESSAGELEN;
 					}
 
-					Sendret = GiveExplorerData(TmpBuffer, info->tcpSocket);
+					Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
 					if (Sendret == 0 || Sendret == -1) break;
 				}
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -1551,7 +1549,7 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName)
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 				memcpy(TmpBuffer, buffer, m_Filesize);
 
-				Sendret = GiveExplorerData(TmpBuffer, info->tcpSocket);
+				Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 
 			}
@@ -1562,7 +1560,7 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName)
 		{
 			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 
-			Sendret = GiveExplorerData(TmpBuffer, info->tcpSocket);
+			Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
 			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
 			GetMyPath(m_Path);
 			CloseHandle(m_File);
@@ -1596,6 +1594,16 @@ int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerData");
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+} 
+int Task::GiveExplorerEnd(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveExplorerEnd");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveExplorerError");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
 
 
@@ -1603,6 +1611,9 @@ int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
 int Task::GetCollectInfo(StrPacket* udata) { return CollectionComputerInfo(); }
 int Task::CollectionComputerInfo()
 {
+	SOCKET* tcpSocket = CreateNewSocket();
+	if (tcpSocket == nullptr) return 0;
+
 	printf("start collect...\n");
 	Collect* collect = new Collect;
 	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
@@ -1610,7 +1621,7 @@ int Task::CollectionComputerInfo()
 	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
 
 	if (_waccess(m_FullDbPath, 00)) {
-		CreateProcessForCollection(m_FullDbPath);
+		CreateProcessForCollection(m_FullDbPath, tcpSocket);
 		wchar_t* ConfigPath = new wchar_t[MAX_PATH_EX];
 		GetMyPath(ConfigPath);
 		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
@@ -1618,7 +1629,7 @@ int Task::CollectionComputerInfo()
 		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
 		{
 			char* InfoStr = new char[MAX_PATH_EX];
-			InsertFromToInCombination(m_FullDbPath, &mapPredefine);
+			InsertFromToInCombination(m_FullDbPath, &mapPredefine, tcpSocket);
 		}
 
 		if (!_waccess(m_FullDbPath, 00))
@@ -1628,8 +1639,9 @@ int Task::CollectionComputerInfo()
 			if (tool.CompressFileToZip(zipFileName, sourceFilePath)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
 			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
 
-			SendDbFileToServer(zipFileName);
+			SendDbFileToServer(zipFileName, tcpSocket);
 			DeleteFile(m_FullDbPath);
+			if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
 		}
 		else {
 			printf("m_FullDbPath failed\n");
@@ -1637,6 +1649,8 @@ int Task::CollectionComputerInfo()
 		delete[] ConfigPath;
 	}
 	delete[] m_FullDbPath;
+
+	closesocket(*tcpSocket);
 	return 1;
 }
 bool Task::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
@@ -1720,7 +1734,7 @@ void Task::ParsePredefineConfig(char* str, string* defineName, vector<PredefineO
 		psc = strtok_s(NULL, ";", &next_token);
 	}
 }
-bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine)
+bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket)
 {
 	Collect* collect = new Collect;
 	char* functionName = new char[24];
@@ -1779,7 +1793,7 @@ bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<Pre
 		memset(TmpBuffer, '\x0', STRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		int Sendret = socketsend->SendMessageToServer(functionName, TmpBuffer);
+		int Sendret = GiveCollectProgress(TmpBuffer, tcpSocket);
 		//auto Sendret = SendDataBufToServer(MyMAC, MyIP, "GiveCollectProgress", TmpBuffer);
 	}
 	sqlite3_close(m_db);
@@ -1839,7 +1853,7 @@ bool Task::GetQueryByTable(string* query, string TableName, string QueryFilter)
 
 	return bResult;
 }
-void Task::CreateProcessForCollection(TCHAR* DBName)
+void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 {
 	Collect* collect = new Collect;
 
@@ -1884,50 +1898,14 @@ void Task::CreateProcessForCollection(TCHAR* DBName)
 		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		GiveCollectProgress(TmpBuffer, info->tcpSocket);
+		GiveCollectProgress(TmpBuffer, tcpSocket);
 
 	}
 	//delete[] InfoStr;
 	delete[] RunComStr;
 	delete[] RunExeStr;
 }
-void Task::CollectionComputeInfo(DWORD UserModePid)
-{
-	TCHAR* m_FullDbPath = new TCHAR[MAX_PATH_EX];
-	GetMyPath(m_FullDbPath);
-	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-
-	if (_waccess(m_FullDbPath, 00))
-	{
-		CreateProcessForCollection(m_FullDbPath);
-		TCHAR* ConfigPath = new TCHAR[MAX_PATH_EX];
-		GetMyPath(ConfigPath);
-		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
-		map<string, vector<PredefineObj>> mapPredefine;
-		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
-		{
-			char* InfoStr = new char[MAX_PATH_EX];
-			InsertFromToInCombination(m_FullDbPath, &mapPredefine);
-		}
-		if (!_waccess(m_FullDbPath, 00))
-		{
-			const TCHAR* zipFileName = _T("collect.zip");
-			const TCHAR* sourceFilePath = m_FullDbPath;
-			if (tool.CompressFileToZip(zipFileName, sourceFilePath)) {
-				_tprintf(_T("File compressed and added to ZIP successfully.\n"));
-			}
-			else {
-				_tprintf(_T("Failed to compress and add file to ZIP.\n"));
-			}
-
-			SendDbFileToServer(zipFileName);
-			DeleteFile(m_FullDbPath);
-		}
-		delete[] ConfigPath;
-	}
-	delete[] m_FullDbPath;
-}
-void Task::SendDbFileToServer(const TCHAR* DBName)
+void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
 {
 	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (m_File != INVALID_HANDLE_VALUE) {
@@ -1939,7 +1917,7 @@ void Task::SendDbFileToServer(const TCHAR* DBName)
 		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		Sendret = GiveCollectDataInfo(TmpBuffer, info->tcpSocket);
+		Sendret = GiveCollectDataInfo(TmpBuffer, tcpSocket);
 
 		if (Sendret > 0)
 		{
@@ -1956,7 +1934,7 @@ void Task::SendDbFileToServer(const TCHAR* DBName)
 						tmplen -= DATASTRINGMESSAGELEN;
 					}
 
-					Sendret = GiveCollectData(TmpBuffer, info->tcpSocket);
+					Sendret = GiveCollectData(TmpBuffer, tcpSocket);
 					if (Sendret == 0 || Sendret == -1) break;
 				}
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -1965,7 +1943,7 @@ void Task::SendDbFileToServer(const TCHAR* DBName)
 			{
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 				memcpy(TmpBuffer, buffer, m_Filesize);
-				Sendret = GiveCollectData(TmpBuffer, info->tcpSocket);
+				Sendret = GiveCollectData(TmpBuffer, tcpSocket);
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 			}
 			delete[] buffer;
@@ -1973,7 +1951,7 @@ void Task::SendDbFileToServer(const TCHAR* DBName)
 		if (Sendret > 0)
 		{
 			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			Sendret = GiveCollectDataEnd(TmpBuffer, info->tcpSocket);
+			Sendret = GiveCollectDataEnd(TmpBuffer, tcpSocket);
 
 			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
 			GetMyPath(m_Path);

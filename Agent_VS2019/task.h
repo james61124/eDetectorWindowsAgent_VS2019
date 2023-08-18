@@ -69,6 +69,8 @@ public:
     int GiveExplorerData(char* Drive, char* FileSystem);
     int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
     int GiveExplorerData(char* buff, SOCKET* tcpSocket);
+    int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
+    int GiveExplorerError(char* buff, SOCKET* tcpSocket);
 
     //collect
     int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
@@ -103,7 +105,7 @@ private:
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
     int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
-    void SendZipFileToServer(const TCHAR* DBName);
+    void SendZipFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
 
     
     char* GetMyPCDrive();
@@ -114,12 +116,11 @@ private:
     // collect
     int CollectionComputerInfo(); 
     bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
-    void SendDbFileToServer(const TCHAR* DBName);
-    void CollectionComputeInfo(DWORD UserModePid); 
+    void SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
-    void CreateProcessForCollection(TCHAR* DBName); 
-    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);
+    void CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket);
+    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket);
     
 
 

@@ -96,15 +96,15 @@ void SocketManager::receiveTCP() {
         StrPacket* udata;
         udata = (StrPacket*)buff;
 
-        //if (!CheckTaskStatus(udata->DoWorking)) {
-        //    std::thread workerThread([&]() { HandleTaskFromServer(udata); });
-        //    workerThread.detach();
-        //}
-        //else {
-        //    printf("Task in progress\n");
-        //}
+        if (!CheckTaskStatus(udata->DoWorking)) {
+            std::thread workerThread([&]() { HandleTaskFromServer(udata); });
+            workerThread.detach();
+        }
+        else {
+            printf("Task in progress\n");
+        }
         
-        if (!HandleTaskFromServer(udata)) break;
+        //if (!HandleTaskFromServer(udata)) break;
     }
     //LogMessage = "receive thread close";
     //tool.log(LogMessage);
