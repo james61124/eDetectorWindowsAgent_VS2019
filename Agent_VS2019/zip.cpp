@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
+#include <stdlib.h>
+
 #include "zip.h"
 
 
@@ -2350,7 +2352,7 @@ ZRESULT TZip::open_file(const TCHAR *fn)
 { hfin=0; bufin=0; selfclosehf=false; crc=CRCVAL_INITIAL; isize=0; csize=0; ired=0;
   if (fn==0) return ZR_ARGS;
   HANDLE hf = CreateFile(fn,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,0,NULL);
-  if (hf==INVALID_HANDLE_VALUE) return ZR_NOFILE;
+  if (hf == INVALID_HANDLE_VALUE) { printf("can't create or open the file\n");return ZR_NOFILE; }
   ZRESULT res = open_handle(hf,0);
   if (res!=ZR_OK) {CloseHandle(hf); return res;}
   selfclosehf=true;
@@ -2507,12 +2509,12 @@ ZRESULT TZip::Add(const TCHAR *odstzn, void *src,unsigned int len, DWORD flags)
 
   // now open whatever was our input source:
   ZRESULT openres;
-  if (flags==ZIP_FILENAME) openres=open_file((const TCHAR*)src);
+  if (flags == ZIP_FILENAME) { openres = open_file((const TCHAR*)src); }
   else if (flags==ZIP_HANDLE) openres=open_handle((HANDLE)src,len);
   else if (flags==ZIP_MEMORY) openres=open_mem(src,len);
   else if (flags==ZIP_FOLDER) openres=open_dir();
   else return ZR_ARGS;
-  if (openres!=ZR_OK) return openres;
+  if (openres != ZR_OK) { printf("ZR_OK is not OK : %d\n", openres); return openres; }
 
   // A zip "entry" consists of a local header (which includes the file name),
   // then the compressed data, and possibly an extended local header.
@@ -2727,11 +2729,13 @@ HZIP CreateZip(void *z,unsigned int len, const char *password) {return CreateZip
 
 
 ZRESULT ZipAddInternal(HZIP hz,const TCHAR *dstzn, void *src,unsigned int len, DWORD flags)
-{ if (hz==0) {lasterrorZ=ZR_ARGS;return ZR_ARGS;}
+{
+  if (hz == 0) { lasterrorZ = ZR_ARGS;return ZR_ARGS; }
   TZipHandleData *han = (TZipHandleData*)hz;
   if (han->flag!=2) {lasterrorZ=ZR_ZMODE;return ZR_ZMODE;}
   TZip *zip = han->zip;
   lasterrorZ = zip->Add(dstzn,src,len,flags);
+  
   return lasterrorZ;
 }
 ZRESULT ZipAdd(HZIP hz,const TCHAR *dstzn, const TCHAR *fn) {return ZipAddInternal(hz,dstzn,(void*)fn,0,ZIP_FILENAME);}

@@ -98,7 +98,8 @@ private:
     int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
-    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket);
+    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
+    void SendZipFileToServer(TCHAR* DBName);
 
     
     char* GetMyPCDrive();
@@ -107,15 +108,16 @@ private:
     void SendNetworkDetectToServer(vector<string>* pInfo);
 
     // collect
-    void CollectionComputerInfo(); 
+    int CollectionComputerInfo(); 
     bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
-    void SendDbFileToServer(TCHAR* DBName); 
+    void SendDbFileToServer(const TCHAR* DBName);
     void CollectionComputeInfo(DWORD UserModePid); 
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData);
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
     void CreateProcessForCollection(TCHAR* DBName); 
     bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine);
+    
 
 
 };

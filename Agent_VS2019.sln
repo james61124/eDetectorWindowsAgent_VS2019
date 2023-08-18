@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.33801.447
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Agent_VS2019", "Agent_VS2019\Agent_VS2019.vcxproj", "{D617270F-B1EC-4572-A88C-B7E3C4F732BD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AgentGenerator", "AgentGenerator\AgentGenerator.vcxproj", "{876BC079-1A02-4D00-84D6-D9034F4B2576}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{D617270F-B1EC-4572-A88C-B7E3C4F732BD}.Release|x64.Build.0 = Debug|x64
 		{D617270F-B1EC-4572-A88C-B7E3C4F732BD}.Release|x86.ActiveCfg = Release|Win32
 		{D617270F-B1EC-4572-A88C-B7E3C4F732BD}.Release|x86.Build.0 = Release|Win32
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Debug|x64.ActiveCfg = Debug|x64
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Debug|x64.Build.0 = Debug|x64
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Debug|x86.ActiveCfg = Debug|Win32
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Debug|x86.Build.0 = Debug|Win32
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x64.ActiveCfg = Release|x64
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x64.Build.0 = Release|x64
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x86.ActiveCfg = Release|Win32
+		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -29,6 +39,3 @@ Global
 		SolutionGuid = {3A10D9CD-80F0-4064-94B2-7E6CC9FCD89F}
 	EndGlobalSection
 EndGlobal
-
-*.db
-*.csv

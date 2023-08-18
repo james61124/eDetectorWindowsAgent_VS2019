@@ -328,27 +328,30 @@ void AutoRun::ParsingStartupFile(vector<AutoRunInfo>* pInfo, TCHAR* m_Path, TCHA
 void AutoRun::LoadRegisterAutoRun(vector<AutoRunInfo>* pInfo)
 {
 #ifndef _M_IX86
-	printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
-	printf("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\n");
+	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
+	//printf("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
+	//printf("SYSTEM\\CurrentControlSet\\Control\\SafeBoot\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, false);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 
-	printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("StubPath"), true, true);
-	printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
+	//printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, true);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, true);
+	//printf("\n");
 #else
 
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
@@ -934,19 +937,25 @@ void AutoRun::LoadAutoRunStartCommand(set<wstring>* pImagePath)
 {
 	vector<AutoRunInfo> m_StartRunInfo;
 	TCHAR* Pathstr = new TCHAR[MAX_PATH_EX];
-	printf("GetAllUserStartUp\n");
+	//printf("GetAllUserStartUp\n");
 	if (GetAllUserStartUp(Pathstr))
 	{
 		SearchAutoRunFile(&m_StartRunInfo, Pathstr);
 	}
 
-	printf("LoadRegisterAutoRun\n");
-	LoadRegisterAutoRun(&m_StartRunInfo);
+	//printf("LoadRegisterAutoRun\n");
+	try {
+		LoadRegisterAutoRun(&m_StartRunInfo);
+	}
+	catch (...) {
+		printf("LoadRegisterAutoRun failed\n");
+	}
+	
 
-	printf("delete Pathstr\n");
+	//printf("delete Pathstr\n");
 	delete[] Pathstr;
 	vector<wstring> ThisPCAllUser;
-	printf("GetThisPCAllUser\n");
+	//printf("GetThisPCAllUser\n");
 	GetThisPCAllUser(&ThisPCAllUser);
 	if (!ThisPCAllUser.empty())
 	{
@@ -956,13 +965,13 @@ void AutoRun::LoadAutoRunStartCommand(set<wstring>* pImagePath)
 		{
 			swprintf_s(UserName, 256, L"%s", (*ut).c_str());
 			TCHAR* m_Path = new TCHAR[MAX_PATH];
-			printf("GetUserStartUp\n");
+			//printf("GetUserStartUp\n");
 			if (GetUserStartUp(UserName, L"Startup", m_Path))
 			{
 				SearchAutoRunFile(&m_StartRunInfo, m_Path);
 			}
 			delete[] m_Path;
-			printf("LoadRegisterAutoRunFromUser\n");
+			//printf("LoadRegisterAutoRunFromUser\n");
 			LoadRegisterAutoRunFromUser(&m_StartRunInfo, UserName);
 		}
 		delete[] UserName;

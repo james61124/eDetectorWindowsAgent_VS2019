@@ -101,10 +101,20 @@ int main(int argc, char* argv[]) {
     SocketSend* socketsend = new SocketSend(info);
     SocketManager socketManager(serverIP, port, info, socketsend);
 
+	//std::ofstream outFile("myfile.txt");
 
+	//if (!outFile.is_open()) {
+	//	std::cerr << "Failed to open file." << std::endl;
+	//	return 1;
+	//}
 
+	//// 寫入內容
+	//outFile << "Hello, World!" << std::endl;
+	//outFile << "This is a sample file." << std::endl;
 
-    
+	//// 關閉檔案
+	//outFile.close();
 
+	printf("process finish\n");
     while (true) {};
 }

@@ -27,6 +27,7 @@
 #include <fstream>
 
 #include "zip.h"
+#include "GlobalFunction.h"
 
 // #include "StrPacket.h"
 //#include "Process.h"
@@ -48,6 +49,7 @@ public:
     char* CStringToCharArray(wchar_t* str, UINT m_CodePage);
     char* WideStringToUTF8(const std::wstring& wideString);
     void DeleteAllCsvFiles(wchar_t* directoryPath);
+    void log(const std::string& message);
 
     // Get System Info
     char* GetSysInfo();

@@ -3,6 +3,7 @@
 
 #include "info.h"
 #include "caes.h"
+#include "tools.h"
 
 #include <iostream>
 
@@ -16,6 +17,9 @@ public:
     int SendMessageToServer(char* Work, char* Mgs);
 
     int receiveTCP(SOCKET* tcpSocket);
+
+private:
+    Tool tool;
 };
 
 #endif

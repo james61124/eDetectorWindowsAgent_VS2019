@@ -14,6 +14,7 @@
 #include <thread>
 #include <winsock2.h>
 #include <WS2tcpip.h>
+#include <mutex>
 
 #include "task.h"
 
@@ -27,6 +28,8 @@ public:
     Info* InfoInstance;
     SOCKET tcpSocket;
 
+    std::mutex mapMutex;
+
     int Port;
     int DetectPort;
     char MAC[MACLEN];
@@ -38,6 +41,8 @@ public:
 
     // std::unordered_map<std::string, std::thread> threadMap;
     // void startThread(const std::string& key, std::string functionName);
+    std::unordered_map<std::string, std::thread::id> threadMap;
+    
 
     void getSystemInfo();
     bool connectTCP(const std::string& serverIP, int port);
@@ -46,6 +51,10 @@ public:
 
     void HandleTaskToServer(std::string functionName);
     int HandleTaskFromServer(StrPacket* udata);
+
+    bool CheckTaskStatus(std::string task);
+    void UpdateTaskStatus(std::string task, std::thread::id thread_id);
+    void FinishTask(std::string task);
 
 
 

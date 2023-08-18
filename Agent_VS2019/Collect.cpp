@@ -44,8 +44,9 @@ Collect::Collect() {
 	CollectionNums[40] = 236;
 	CollectionNums[41] = 237;
 	CollectionNums[42] = 238;
-	CollectionNums[43] = 239;
-	CollectionNums[44] = 240;
+	//CollectionNums[2] = 239;
+	CollectionNums[43] = 240;
+	CollectionNums[44] = 241;
 	CollectionNums[45] = 242;
 	CollectionNums[46] = 243;
 
@@ -583,6 +584,7 @@ void Collect::CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath
 		Collection_EdgeCookies  pCollection_EdgeCookies = (Collection_EdgeCookies)GetProcAddress(plib, "Collection_EdgeCookies");
 		if (pCollection_EdgeCookies != NULL)
 		{
+			printf("pCollection_EdgeCookies\n");
 			pCollection_EdgeCookies((TCHAR*)pdbName.c_str(), (TCHAR*)pSavePath.c_str(), m_Num);
 			wprintf(L"STATUS_CODE:0");
 		}
@@ -637,6 +639,7 @@ void Collect::CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath
 		else
 			wprintf(L"STATUS_CODE:R00034");//dll function error
 	}
+	printf("\n\n");
 }
 bool Collect::WriteSQLiteDB(sqlite3* pdb, char* pQuery)
 {

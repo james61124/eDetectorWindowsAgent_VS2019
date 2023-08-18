@@ -5,6 +5,14 @@ SocketSend::SocketSend(Info* infoInstance) {
 }
 
 int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
+	//printf("Mgs\n");
+	//for (int i = 0; i < 50; ++i) {
+	//	printf("%02X ", Mgs[i]);
+	//	if ((i + 1) % 16 == 0)
+	//		printf("\n");
+	//}
+	//printf("\n");
+
 	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -16,13 +24,23 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 	WorkNew[strlen(Work)] = '\0';
 	//printf("sizeof newwork %d %s", sizeof(WorkNew), WorkNew);
 
-
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
-	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
+	//strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
+	memcpy(GetServerMessage.csMsg, Mgs, sizeof(GetServerMessage.csMsg));
 
 	char* buff = (char*)&GetServerMessage;
+
+	//printf("buff\n");
+	//for (int i = 100; i < 200; ++i) {
+	//	printf("%02X ", buff[i]);
+	//	if ((i + 1) % 16 == 0)
+	//		printf("\n");
+	//}
+	//printf("\n");
+
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
+
 	int ret = sendTCP(buff, STRDATAPACKETSIZE);
 	printf("send data %s\n", Work);
 
@@ -52,10 +70,14 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 
 	char* buff = (char*)&GetServerMessage;
+
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
+
 	int ret = sendTCP(buff, STRPACKETSIZE);
 
+	//std::string LogMessage = "send -> " + std::string(Work) + " : " + std::string(Mgs) + "\n";
+	//tool.log(LogMessage);
 	printf("send %s\n", Work);
 
 	delete[] Work;
@@ -66,6 +88,14 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 }
 
 bool SocketSend::sendTCP(char* data, long len) {
+	//printf("data\n");
+	//for (int i = 100; i < 200; ++i) {
+	//	printf("%02X ", data[i]);
+	//	if ((i + 1) % 16 == 0)
+	//		printf("\n");
+	//}
+	//printf("\n");
+
 	int ret = send(*(info->tcpSocket), data, len, 0);
 	if (!ret) {
 
@@ -90,6 +120,7 @@ int SocketSend::receiveTCP(SOCKET* tcpSocket) {
 
 		SetKeys(BIT128, AESKey);
 		DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
+
 		StrPacket* udata;
 		udata = (StrPacket*)buff;
 
