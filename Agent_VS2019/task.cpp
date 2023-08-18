@@ -1371,6 +1371,12 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	strcpy_s(functionName_GiveExplorerData, 24, "GiveExplorerData");
 	char* functionName_Explorer = new char[24];
 	strcpy_s(functionName_Explorer, 24, "Explorer");
+	char* functionName_GiveExplorerProgress = new char[24];
+	strcpy_s(functionName_GiveExplorerProgress, 24, "GiveExplorerProgress");
+	char* functionName_GiveExplorerInfo = new char[24];
+	strcpy_s(functionName_GiveExplorerInfo, 24, "GiveExplorerInfo");
+	
+	
 
 	CNTFSVolume* m_curSelectedVol = new CNTFSVolume(vol_name);
 	if (m_curSelectedVol == NULL)
@@ -1401,11 +1407,21 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		printf("explorer open failed\n");
 	}
 
+	sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%s|%s", Drive, FileSystem);
+	int	ret = socketsend->SendDataToServer(functionName_Explorer, RecordCount, tcpSocket);
+
 	printf("Collecting Explorer...\n");
 	//for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < 100; m_progressIdx++)
 	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++)
 	{
-		if (m_progressIdx % 100 == 0) printf("%d\n", m_progressIdx);
+		if (m_progressIdx % 10000 == 0) {
+			printf("%d\n", m_progressIdx);
+			char* Progress = new char[DATASTRINGMESSAGELEN];
+			sprintf_s(Progress, DATASTRINGMESSAGELEN, "%d/%d", m_progressIdx, m_curSelectedVol->GetRecordsCount());
+			int	ret = socketsend->SendDataToServer(functionName_GiveExplorerProgress, Progress, tcpSocket);
+			delete[] Progress;
+		}
+
 		CFileRecord* fr = new CFileRecord(m_curSelectedVol);
 		if (fr == NULL) {
 			printf("CFileRecord is null\n");
@@ -1552,14 +1568,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	const TCHAR* zipFileName = _T("explorer.zip");
 	const TCHAR* fileToAdd = _T("file_to_compress.txt");
 	const TCHAR* sourceFilePath = _T("explorer.txt");
-
-	//wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
-	//GetMyPath(m_FullDbPath);
-	//_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-	//if (!_waccess(m_FullDbPath, 00)) {
-	//	SendDbFileToServer(m_FullDbPath);
-	//}
-	
 	
 
 	if (tool.CompressFileToZip(zipFileName, fileToAdd, sourceFilePath)) {
@@ -1580,10 +1588,13 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 
 	long long fileSizeLL = static_cast<long long>(fileSize);
 
-	sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%d|%lld|%s|%s", m_curSelectedVol->GetRecordsCount(), fileSizeLL, Drive, FileSystem);
-	int	ret = socketsend->SendDataToServer(functionName_Explorer, RecordCount, tcpSocket);
-	
 
+	char* FileSize = new char[DATASTRINGMESSAGELEN];
+	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
+	ret = socketsend->SendDataToServer(functionName_GiveExplorerInfo, FileSize, tcpSocket);
+	delete[] FileSize;
+	
+	
 	// send zip file
 	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (m_File != INVALID_HANDLE_VALUE)
@@ -1666,32 +1677,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		//SendDataBufToServer(MyMAC, MyIP, "GiveCollectDataError", TmpBuffer);
 		delete[] TmpBuffer;
 	}
-
-	//std::ifstream zipFile("explorer.txt", std::ios::binary);
-	//while (!zipFile.eof()) {
-	//	char* buff = new char[65400];
-	//	zipFile.read(buff, sizeof(buff));
-	//	printf("%s", buff);
-	//	//int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, buff, tcpSocket);
-	//}
-	//zipFile.close();
-
-
-	//if (TempStr[0] != '\0')
-	//{
-	//	char* ProgressStr = new char[10];
-	//	sprintf_s(ProgressStr, 10, "%u", m_progressIdx);
-	//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-	//	int	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, tcpSocket);
-	//	if (ret == 0 || ret == -1)
-	//	{
-	//		delete[] ProgressStr;
-	//		delete[] TempStr;
-	//		delete m_curSelectedVol;
-	//		return 1;
-	//	}
-	//	delete[] ProgressStr;
-	//}
 
 
 
