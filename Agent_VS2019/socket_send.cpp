@@ -41,7 +41,7 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRDATAPACKETSIZE);
 
-	int ret = sendTCP(buff, STRDATAPACKETSIZE);
+	int ret = sendTCP(buff, STRDATAPACKETSIZE, tcpSocket);
 	printf("send data %s\n", Work);
 
 	return receiveTCP(tcpSocket);
@@ -74,7 +74,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	SetKeys(BIT128, AESKey);
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
 
-	int ret = sendTCP(buff, STRPACKETSIZE);
+	int ret = sendTCP(buff, STRPACKETSIZE, info->tcpSocket);
 
 	//std::string LogMessage = "send -> " + std::string(Work) + " : " + std::string(Mgs) + "\n";
 	//tool.log(LogMessage);
@@ -87,7 +87,7 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	return ret;
 }
 
-bool SocketSend::sendTCP(char* data, long len) {
+bool SocketSend::sendTCP(char* data, long len, SOCKET* tcpSocket) {
 	//printf("data\n");
 	//for (int i = 100; i < 200; ++i) {
 	//	printf("%02X ", data[i]);
@@ -96,7 +96,7 @@ bool SocketSend::sendTCP(char* data, long len) {
 	//}
 	//printf("\n");
 
-	int ret = send(*(info->tcpSocket), data, len, 0);
+	int ret = send(*tcpSocket, data, len, 0);
 	if (!ret) {
 
 		std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;

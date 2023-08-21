@@ -22,10 +22,12 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
     // strcpy(UUID,key);
     
     // 192.168.200.153
+    
+
     if (!connectTCP(serverIP, port)) perror("connection failed\n");
     else printf("connect success\n");
-    getSystemInfo();
 
+    getSystemInfo();
 
     std::thread receiveThread([&]() { receiveTCP(); });
     HandleTaskToServer("GiveInfo");
@@ -63,12 +65,15 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
     serverAddr.sin_addr.s_addr = inet_addr(serverIP.c_str());
     //serverAddr.sin_addr.s_addr = inet_pton(AF_INET, serverIP.c_str(), &serverAddr.sin_addr);
 
-    if (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-        std::cerr << "Error connecting to server: " << WSAGetLastError() << std::endl;
-        closesocket(tcpSocket);
-        WSACleanup();
-        return 1;
+    while (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+    //if (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+    //    std::cerr << "Error connecting to server: " << WSAGetLastError() << std::endl;
+    //    closesocket(tcpSocket);
+    //    WSACleanup();
+    //    return 1;
+    //}
 
     InfoInstance->tcpSocket = &tcpSocket;
 
@@ -96,6 +101,7 @@ void SocketManager::receiveTCP() {
         StrPacket* udata;
         udata = (StrPacket*)buff;
 
+        //cout << "receive: " << udata->DoWorking << endl;
         if (!CheckTaskStatus(udata->DoWorking)) {
             std::thread workerThread([&]() { HandleTaskFromServer(udata); });
             workerThread.detach();

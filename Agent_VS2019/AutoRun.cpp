@@ -328,30 +328,30 @@ void AutoRun::ParsingStartupFile(vector<AutoRunInfo>* pInfo, TCHAR* m_Path, TCHA
 void AutoRun::LoadRegisterAutoRun(vector<AutoRunInfo>* pInfo)
 {
 #ifndef _M_IX86
-	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+	printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
-	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\n");
+	printf("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
-	//printf("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+	printf("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
-	//printf("SYSTEM\\CurrentControlSet\\Control\\SafeBoot\n");
+	printf("SYSTEM\\CurrentControlSet\\Control\\SafeBoot\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, false);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 
-	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+	printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));
 	LoadRegisterInfox32(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("StubPath"), true, true);
-	//printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
+	printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, true);
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, true);
-	//printf("\n");
+	printf("\n");
 #else
 
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));

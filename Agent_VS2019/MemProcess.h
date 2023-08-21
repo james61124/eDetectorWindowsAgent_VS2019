@@ -142,19 +142,26 @@ public:
 
 	DWORD GetInfoPid(const wchar_t* wtr);
 	void GetProcessOnlyPathAndTime(DWORD pid, TCHAR* pPath, time_t& pTime);
+	void SearchExecutePath(DWORD pid, TCHAR* pPath, TCHAR* pName);
+	void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr = NULL, TCHAR* pCTimeStr = NULL);
+	int CheckIsInjection(DWORD pid, vector<UnKnownDataInfo>* pMembuf, TCHAR* pProcessName, TCHAR* pUnKnownHash);
+	int CheckIsStartRun(map<wstring, BOOL>* pService, set<wstring>* pStartRun, DWORD pid/*,BOOL & isServiceHide*/);
+	void CheckIsInlineHook(DWORD pid, set<string>* pInlineHook);
+	BOOL DumpExecute(DWORD pid, wchar_t* pName, set<DWORD>* pApiBace, set<DWORD>* pStr, TCHAR* pProcessPath, set<string>* pIsAbnormal_dll);
+	void CheckInjectionPtn(set<DWORD>* pStringsHash, BOOL& pIsOther, BOOL& pIsPE);
 
 private:
 	
 	
 	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
-	void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr = NULL, TCHAR* pCTimeStr = NULL);
+	
 	
 	void GetProcessDetectInfo(DWORD pid, TCHAR* pPath, TCHAR* pComStr);
-	BOOL DumpExecute(DWORD pid, wchar_t* pName, set<DWORD>* pApiBace, set<DWORD>* pStr, TCHAR* pProcessPath, set<string>* pIsAbnormal_dll);
+	
 	void ParserProcessApi(set<string>* pApiBace, vector<BYTE>* pExecuteData, int pExecuteDataSize, vector<string>* pStr);
 	//void ParserProcessidInfo(map<DWORD,ProcessInfoData> * pInfo,vector<TCPInformation> *pNetInfo,process_info pid,set<string>* pApiBace);
 	//void GiveDetectProcessSendServer(map<DWORD,ProcessInfoData> * pInfo,void *argv);
-	int CheckIsInjection(DWORD pid, vector<UnKnownDataInfo>* pMembuf, TCHAR* pProcessName, TCHAR* pUnKnownHash);
+	
 	bool PeUnmapper(BYTE* buffer, size_t pSize, ULONGLONG loadBase, UnKnownDataInfo* pInfo);
 	
 	BOOL CheckParentProcessNormal(map<DWORD, process_info_Ex>* pInfo, DWORD parentid, wchar_t* process_name, time_t pCreateTime);
@@ -162,10 +169,10 @@ private:
 	BOOL CheckSIDMatch(process_info_Ex* pInfo);
 	BOOL CheckCreateTimeRight(map<DWORD, process_info_Ex>* pData, __int64 pCreateTime);
 	BOOL CheckCreateTimeMatch(map<DWORD, process_info_Ex>* pData, process_info_Ex* pInfo);
-	int CheckIsStartRun(map<wstring, BOOL>* pService, set<wstring>* pStartRun, DWORD pid/*,BOOL & isServiceHide*/);
+	
 	
 	void CheckModulePath(TCHAR* pProcessPath, TCHAR* pModulePath, set<string>* pIsAbnormal_dll);
-	void CheckIsInlineHook(DWORD pid, set<string>* pInlineHook);
+	
 	//void EnumExportedFunctions(wchar_t *szFilename,wchar_t * Filename,DWORD psys,DWORD pid,set<string> * pInlineHook);
 	//int Rva2Offset(unsigned int rva/*,sectionHeader * psections,unsigned int & NumberOfSections*/);
 	//void mycallback (wchar_t* Filename,char* szName,DWORD psys,DWORD pid,set<string> * pInlineHook);
@@ -181,10 +188,10 @@ private:
 	
 	void InjectionProcess(DWORD pid, TCHAR* pPath);
 	bool WindowsMainProcess(map<DWORD, wstring>* pSystemPID, DWORD pParentId);
-	void SearchExecutePath(DWORD pid, TCHAR* pPath, TCHAR* pName);
+	
 	
 	bool EnumProcessEx(map<DWORD, process_info_Ex>* pInfo/*,time_t & LoadProcessTime*/);
-	void CheckInjectionPtn(set<DWORD>* pStringsHash, BOOL& pIsOther, BOOL& pIsPE);
+	
 	void GetUnKnownHash(BYTE* pBuffer, SIZE_T pBufferSize, TCHAR* pUnKnownHash, SIZE_T ptype);
 	void ParserUnknownIAT(BYTE* pBuffer, TCHAR* pUnKnownHash);
 	void ParserUnknownIAT32(BYTE* pBuffer, TCHAR* pUnKnownHash);

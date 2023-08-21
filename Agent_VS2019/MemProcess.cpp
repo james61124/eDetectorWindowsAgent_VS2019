@@ -178,26 +178,16 @@ void MemProcess::LoadNowProcessInfoDetect(map<DWORD, process_info_Ex>* pInfo)
 }
 void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf)
 {
-	//TransportData* m_Client = (TransportData*)argv;
 	map<DWORD, process_info_Ex> process_list;
 	printf("LoadNowProcessInfo\n");
 	LoadNowProcessInfo(&process_list);
 	vector<TCPInformation> NetInfo;
 	char* OSstr = GetOSVersion();
-	//clock_t start, end;
-	//start = clock();
-	//for(end = clock();(end-start) < 30000;end = clock())
-	//{
+
 	printf("GetTcpInformationEx\n");
-	if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0))
-	{
-		GetTcpInformationXPEx(&NetInfo);
-	}
+	if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0)) GetTcpInformationXPEx(&NetInfo);
 	else if (strstr(OSstr, "Windows 2000") != 0) {}
-	else
-	{
-		GetTcpInformationEx(&NetInfo);
-	}
+	else GetTcpInformationEx(&NetInfo);
 	delete[] OSstr;
 	time_t NetworkClock;
 	time(&NetworkClock);
@@ -219,7 +209,6 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 	map<DWORD, process_info_Ex>::iterator pt;
 	for (pt = process_list.begin(); pt != process_list.end(); pt++, InfoCount++)
 	{
-		printf("%d\n", InfoCount);
 		if (!IsWindowsProcessNormal(&process_list, pt->first))
 		{
 			ProcessInfoData m_Info;
@@ -315,22 +304,6 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 			}
 			pInfo->insert(pair<DWORD, ProcessInfoData>(pt->first, m_Info));
 		}
-
-			/*end = clock();
-			if ((end - start) > 30000)
-			{
-				double precentage = (double)40 * InfoCount / InfoSize;
-				int ScanProgressNum = (int)precentage;
-				ScanProgressNum += 10;
-				char* Numstr = new char[10];
-				sprintf_s(Numstr, 10, "%d", ScanProgressNum);
-				ret = m_Client->SendDataMsgToServer(m_Client->MyMAC, m_Client->MyIP, "GiveScanProgress", Numstr);
-				delete[] Numstr;
-				if (ret <= 0)
-					break;
-				start = end;
-			}*/
-		//}
 	}
 
 
@@ -340,6 +313,8 @@ void MemProcess::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInf
 	NetInfo.clear();
 	process_list.clear();
 }
+
+
 //void MemProcess::enumallprocess(void* argv, char* pMAC, char* pIP)
 //{
 //	TransportData* m_Client = (TransportData*)argv;

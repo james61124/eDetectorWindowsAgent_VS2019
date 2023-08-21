@@ -12,7 +12,7 @@ public:
     SocketSend(Info* infoInstance);
     const char* AESKey = "AES Encrypt Decrypt";
     Info* info;
-    bool sendTCP(char* data, long len);
+    bool sendTCP(char* data, long len, SOCKET* tcpSocket);
     int SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket);
     int SendMessageToServer(char* Work, char* Mgs);
 
