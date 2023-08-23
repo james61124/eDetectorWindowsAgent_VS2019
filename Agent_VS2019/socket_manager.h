@@ -41,7 +41,7 @@ public:
 
     // std::unordered_map<std::string, std::thread> threadMap;
     // void startThread(const std::string& key, std::string functionName);
-    std::unordered_map<std::string, std::thread::id> threadMap;
+    std::unordered_map<std::string, DWORD> processMap;
     
 
     void getSystemInfo();
@@ -56,11 +56,13 @@ public:
     void UpdateTaskStatus(std::string task, std::thread::id thread_id);
     void FinishTask(std::string task);
 
+    Task* task;
+
 
 
 private:
     Tool tool;
-    Task* task;
+    
 
 };
 

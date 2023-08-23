@@ -127,18 +127,27 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4477: 'snprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 10 的類型為 'char *'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(78,40): warning C4313: 'snprintf': 格式字串中的 '%u' 與類型 'char *' 的引數 10 衝突
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1495,46): warning C4477: 'sprintf_s' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 2 的類型為 'ULONGLONG'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1495,46): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1495,46): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1495,46): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1986,6): warning C4101: 'Sendret': 未參考的區域變數
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2148): warning C4172: 傳回區域變數或暫存的位址: tcpSocket
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(71,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(71,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(71,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(71,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(73,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(73,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(73,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(73,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(75,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(75,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(75,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(75,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(77,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(77,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(77,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(77,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1595,46): warning C4477: 'sprintf_s' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 2 的類型為 'ULONGLONG'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1595,46): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1595,46): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1595,46): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2106,6): warning C4101: 'Sendret': 未參考的區域變數
   SQLite3_x64.lib(sqlite3.obj) : 找到 MSIL .netmodule 或以 /GL 編譯的模組。請以 /LTCG 重新啟動連結，將 /LTCG 加入連結命令列以提升連結器效能
 LINK : warning LNK4075: 忽略 '/INCREMENTAL'，由於 '/LTCG' 規格
 LINK : warning LNK4098: 預設的程式庫 'LIBCMT' 與其他使用的程式庫衝突，請使用 /NODEFAULTLIB:library

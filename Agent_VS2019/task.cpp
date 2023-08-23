@@ -9,13 +9,10 @@
 
 
 
-
 Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// handshake
     functionMap["GiveInfo"] = std::bind(&Task::GiveInfo, this);
-    functionMap["GiveDetectInfoFirst"] = std::bind(&Task::GiveDetectInfoFirst, this);
-    functionMap["GiveDetectInfo"] = std::bind(&Task::GiveDetectInfo, this);
     functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
 
     // packet from server
@@ -24,15 +21,16 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// Scan
 	functionFromServerMap["GetScan"] = &Task::GetScan;
+	functionMap["GiveProcessData"] = std::bind(&Task::GiveProcessData, this);
+	
 
 	// Explorer
     functionFromServerMap["GetDrive"] = &Task::GetDrive; // ExplorerInfo_
 	functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo_;
 
 	// Collect
+	functionMap["CollectionComputerInfo"] = std::bind(&Task::CollectionComputerInfo, this);
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
-
-
     functionFromServerMap["DataRight"] = &Task::DataRight;
 
     info = infoInstance;
@@ -50,36 +48,47 @@ void Task::startThread(const std::string& key, std::string functionName) {
 // handshake
 int Task::GiveInfo() {
     // getSystemInfo();
-    char* buffer = new char[STRINGMESSAGELEN];
-    char* SysInfo = tool.GetSysInfo();
-    char* OsStr = tool.GetOSVersion();
-    char* cComputerName = tool.GetComputerNameUTF8();
-    char* cUserName = tool.GetUserNameUTF8();
-    char* FileVersion = new char[10];
-    unsigned long long BootTime = tool.GetBootTime();
-    char* Key = new char[34];
-    char* DigitalSignatureHash = new char[10];
-    char* functionName = new char[24];
+	char* buffer = new char[STRINGMESSAGELEN];
+	char* SysInfo = tool.GetSysInfo();
+	char* OsStr = tool.GetOSVersion();
+	char* cComputerName = tool.GetComputerNameUTF8();
+	char* cUserName = tool.GetUserNameUTF8();
+	char* FileVersion = new char[10];
+	unsigned long long BootTime = tool.GetBootTime();
+	DWORD m_DigitalSignatureHash = GetDigitalSignatureHash();
+	char* functionName = new char[24];
 
-    strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
-	strcpy_s(Key, 34, "dc804c0a365e46439678a4423fd1641c");
-	strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456");
+	char* KeyNum = new char[36];
+	strcpy_s(KeyNum, 36, "NoKey");
+	GetThisClientKey(KeyNum);
+	strcpy_s(info->UUID, 36, KeyNum);
+
+	strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
 	strcpy_s(functionName, 24, "GiveInfo");
 
-    //if (strcpy_s(Key, sizeof(Key), "") == 0) printf("copy key success\n");
-    //else printf("copy key failed\n");
-    //if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
-    //else printf("copy sign failed\n");
-    //if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
-    //else printf("copy function failed\n");
-
-
-
-    snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, 1988, 1989, BootTime, Key, DigitalSignatureHash);
+	int VMret = VirtualMachine(info->MAC);
+	if (VMret == 1)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (VM)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else if (VMret == 2)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (Oracle)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else if (VMret == 3)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (Virtualbox)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
     
     return socketsend->SendMessageToServer(functionName, buffer);
 }
 int Task::OpenCheckthread(StrPacket* udata) {
+
+	printf("store key into registry\n");
+	if (strcmp(udata->csMsg, "null")) {
+		strcpy_s(info->UUID, 36, udata->csMsg);
+		WriteRegisterValue(udata->csMsg);
+	}
+
+	std::thread CheckConnectThread([&]() { CheckConnect(); });
+	CheckConnectThread.detach();
+
 	// strcpy(UUID,udata->csMsg);
 	// GiveDetectInfoFirst();
 
@@ -97,7 +106,7 @@ int Task::OpenCheckthread(StrPacket* udata) {
 int Task::GiveDetectInfoFirst() {
 	char* buff = new char[STRINGMESSAGELEN];
 	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveDetectInfoFirst\0");
+	strcpy_s(functionName, 24, "GiveDetectInfoFirst");
 	snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
 	return socketsend->SendMessageToServer(functionName, buff);
 }
@@ -109,6 +118,63 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		else if (i == 1) info->DetectNetwork = DetectMode[i][0] - '0';
 		else printf("UpdateDetectMode parse failed\n");
 	}
+
+	if (info->DetectProcess) {
+		DWORD DetectProcessPid = 0;
+		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+		TCHAR* RunComStr = new TCHAR[512];
+		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+		TCHAR MyName[MAX_PATH];
+		swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		TCHAR ServerIP[MAX_PATH];
+		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+		swprintf_s(RunComStr, 512, L"\"%s\" %s %d DetectProcess", MyName, ServerIP, info->Port);
+		wprintf(L"Run Process: %ls\n", RunComStr);
+		RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, DetectProcessPid);
+
+		info->processMap["DetectProcess"] = DetectProcessPid;
+	}
+	else {
+		auto it = info->processMap.find("DetectProcess");
+		if (it != info->processMap.end() && it->second != 0 ) {
+			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, info->processMap["DetectProcess"]);
+			if (hProcess) {
+				TerminateProcess(hProcess, 0);
+				CloseHandle(hProcess);
+			}
+		}
+	}
+
+	if (info->DetectNetwork) {
+		DWORD DetectNetworkPid = 0;
+		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+		TCHAR* RunComStr = new TCHAR[512];
+		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+		TCHAR MyName[MAX_PATH];
+		swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		TCHAR ServerIP[MAX_PATH];
+		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+		swprintf_s(RunComStr, 512, L"\"%s\" %s %d DetectNetwork", MyName, ServerIP, info->Port);
+		wprintf(L"Run Process: %ls\n", RunComStr);
+		RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, DetectNetworkPid);
+
+		info->processMap["DetectNetwork"] = DetectNetworkPid;
+	}
+	else {
+		auto it = info->processMap.find("DetectNetwork");
+		if (it != info->processMap.end() && it->second != 0) {
+			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, info->processMap["DetectNetwork"]);
+			if (hProcess) {
+				TerminateProcess(hProcess, 0);
+				CloseHandle(hProcess);
+			}
+		}
+	}
+
 	return GiveDetectInfo();
 
 }
@@ -141,27 +207,24 @@ int Task::GiveDetectInfo() {
 	//StrPacket* tmp = new StrPacket;
 	//GetScan(tmp);
 
-	return 1;
+	return ret;
 }
 int Task::CheckConnect() {
 
 	SOCKET* tcpSocket = CreateNewSocket();
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "CheckConnect");
-	char* null = new char[1];
-	strcpy_s(null, 1, "");
-
      while(true){
-         std::this_thread::sleep_for(std::chrono::seconds(10));
-         if (!socketsend->SendDataToServer(functionName, null, tcpSocket)) {
+		 char* functionName = new char[24];
+		 strcpy_s(functionName, 24, "CheckConnect");
+		 char* null = new char[1];
+		 strcpy_s(null, 1, "");
+         if (!socketsend->SendMessageToServer(functionName, null)) {
              printf("CheckConnect sent failed\n");
          } else {
-             printf("CheckConnect sent\n");
          }
+		 std::this_thread::sleep_for(std::chrono::seconds(30));
      }
 
     // to do
-    // open a thread to send it forever
     // check kill time
 
     return 0;
@@ -682,16 +745,32 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 // scan
 int Task::GetScan(StrPacket* udata) {
 
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
+	//SOCKET* tcpSocket = CreateNewSocket();
+	//if (tcpSocket == nullptr) return 0;
 
-	int ret = GiveProcessData(tcpSocket);
-	closesocket(*tcpSocket);
+	//int ret = GiveProcessData(tcpSocket);
+	//closesocket(*tcpSocket);
 
-	return ret;
+	DWORD m_ScanProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	TCHAR MyName[MAX_PATH];
+	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Scan", MyName, ServerIP, info->Port);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ScanProcessPid);
+
+	info->processMap["Scan"] = m_ScanProcessPid;
+
+	return 1;
 
 }
-int Task::GiveProcessData(SOCKET* tcpSocket) {
+int Task::GiveProcessData() {
 	char* Scan = new char[5];
 	strcpy_s(Scan, 5, "Scan");
 
@@ -701,12 +780,12 @@ int Task::GiveProcessData(SOCKET* tcpSocket) {
     std::vector<UnKnownDataInfo> m_UnKnownData;
 
 	printf("start scan...\n");
-    ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData, tcpSocket);
+    ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData, info->tcpSocket);
 	printf("finish scan...\n");
 
 	if (!m_ProcessInfo.empty()) {
 		try {
-			GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData, tcpSocket);
+			GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData, info->tcpSocket);
 		}
 		catch (...) {
 			printf("GiveScanDataSendServer has failed.\n");
@@ -1220,13 +1299,33 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 		}
 	}
 
-	return GiveExplorerData(Drive, FileSystem);
+	DWORD ExplorerProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	TCHAR MyName[MAX_PATH];
+	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+	TCHAR Drive_[MAX_PATH];
+	swprintf_s(Drive_, MAX_PATH, L"%hs", Drive);
+	TCHAR FileSystem_[MAX_PATH];
+	swprintf_s(FileSystem_, MAX_PATH, L"%hs", FileSystem);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Explorer %s %s", MyName, ServerIP, info->Port, Drive_, FileSystem_);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, ExplorerProcessPid);
+
+	info->processMap["Explorer"] = ExplorerProcessPid;
+
+	return 1;
 }
 int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 
 
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
+	//SOCKET* tcpSocket = CreateNewSocket();
+	//if (tcpSocket == nullptr) return 0;
 	int ret = 0;
 
 	ExplorerInfo* m_Info = new ExplorerInfo;
@@ -1433,7 +1532,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 		{
 			char* msg = new char[22];
 			strcpy_s(msg, 22, "ErrorNotFormat");
-			ret = GiveExplorerError(msg, tcpSocket);
+			ret = GiveExplorerError(msg, info->tcpSocket);
 			delete[] msg;
 
 		}
@@ -1442,16 +1541,17 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 	{
 		char* msg = new char[22];
 		strcpy_s(msg, 22, "ErrorNoDrive");
-		ret = GiveExplorerError(msg, tcpSocket);
+		ret = GiveExplorerError(msg, info->tcpSocket);
 		delete[] msg;
 	}
+
 	delete[] filesys;
 	delete[] volname;
 	delete[] drive;
 	delete m_Info;
 
 	//delete[] wMgs;
-	closesocket(*tcpSocket);
+	//closesocket(*tcpSocket);
 	return ret;
 
 }
@@ -1573,7 +1673,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		else swprintf_s(EntryModifiedTimeWstr, 50, L"1");
 
 		wchar_t* wstr = new wchar_t[1024];
-		swprintf_s(wstr, 1024, L"%u|%s|%llu|%d|%d|%s|%s|%s|%s|%llu|0\n", m_progressIdx, fn, ParentId, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen);
+		swprintf_s(wstr, 1024, L"%s|%d|%d|%s|%s|%s|%s|%llu|%u|%llu\n", fn, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen, m_progressIdx, ParentId);
 		
 		// write to Explorer.txt
 		char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
@@ -1730,20 +1830,40 @@ int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
 
 
 // collect 
-int Task::GetCollectInfo(StrPacket* udata) { return CollectionComputerInfo(); }
+int Task::GetCollectInfo(StrPacket* udata) { 
+	DWORD CollectProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	TCHAR MyName[MAX_PATH];
+	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Collect", MyName, ServerIP, info->Port);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, CollectProcessPid);
+
+	info->processMap["Collect"] = CollectProcessPid;
+	
+	return 1; 
+}
 int Task::CollectionComputerInfo()
 {
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
+	//SOCKET* tcpSocket = CreateNewSocket();
+	//if (tcpSocket == nullptr) return 0;
 
 	printf("start collect...\n");
+	std::remove("collectcomputerinfo.db");
+
 	Collect* collect = new Collect;
 	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
 	GetMyPath(m_FullDbPath);
 	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
 
 	if (_waccess(m_FullDbPath, 00)) {
-		CreateProcessForCollection(m_FullDbPath, tcpSocket);
+		CreateProcessForCollection(m_FullDbPath, info->tcpSocket);
 		wchar_t* ConfigPath = new wchar_t[MAX_PATH_EX];
 		GetMyPath(ConfigPath);
 		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
@@ -1751,7 +1871,7 @@ int Task::CollectionComputerInfo()
 		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
 		{
 			char* InfoStr = new char[MAX_PATH_EX];
-			InsertFromToInCombination(m_FullDbPath, &mapPredefine, tcpSocket);
+			InsertFromToInCombination(m_FullDbPath, &mapPredefine, info->tcpSocket);
 		}
 
 		if (!_waccess(m_FullDbPath, 00))
@@ -1761,7 +1881,7 @@ int Task::CollectionComputerInfo()
 			if (tool.CompressFileToZip(zipFileName, sourceFilePath)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
 			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
 
-			SendDbFileToServer(zipFileName, tcpSocket);
+			SendDbFileToServer(zipFileName, info->tcpSocket);
 			DeleteFile(m_FullDbPath);
 			if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
 		}
@@ -1772,7 +1892,7 @@ int Task::CollectionComputerInfo()
 	}
 	delete[] m_FullDbPath;
 
-	closesocket(*tcpSocket);
+	//closesocket(*tcpSocket);
 	return 1;
 }
 bool Task::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
@@ -2125,8 +2245,9 @@ SOCKET* Task::CreateNewSocket() {
 		return nullptr;
 	}
 
-	SOCKET tcpSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (tcpSocket == INVALID_SOCKET) {
+	SOCKET* tcpSocket = new SOCKET;
+	*tcpSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (*tcpSocket == INVALID_SOCKET) {
 		std::cerr << "Error creating TCP socket: " << WSAGetLastError() << std::endl;
 		WSACleanup();
 		return nullptr;
@@ -2138,13 +2259,13 @@ SOCKET* Task::CreateNewSocket() {
 	serverAddr.sin_addr.s_addr = inet_addr(info->ServerIP);
 	//serverAddr.sin_addr.s_addr = inet_pton(AF_INET, serverIP.c_str(), &serverAddr.sin_addr);
 
-	if (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+	if (connect(*tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
 		std::cerr << "Error connecting to server: " << WSAGetLastError() << std::endl;
-		closesocket(tcpSocket);
+		closesocket(*tcpSocket);
 		WSACleanup();
 		return nullptr;
 	}
 
-	return &tcpSocket;
+	return tcpSocket;
 }
 int Task::DataRight(StrPacket* udata) { return 1; }

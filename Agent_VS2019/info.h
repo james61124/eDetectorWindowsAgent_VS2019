@@ -4,6 +4,7 @@
 
 #include "StrPacket.h"
 #include <winsock2.h>
+#include <unordered_map>
 
 class Info {
 public:
@@ -20,6 +21,8 @@ public:
     char ServerIP[IPLEN];
 
     SOCKET* tcpSocket;
+
+    std::unordered_map<std::string, DWORD> processMap;
 
 };
 

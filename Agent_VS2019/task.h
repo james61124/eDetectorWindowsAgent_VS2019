@@ -55,7 +55,7 @@ public:
 
     // scan
     int GiveScanInfo(char* buff, SOCKET* tcpSocket);
-    int GiveProcessData(SOCKET* tcpSocket);
+    int GiveProcessData();
     void ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket);
     int GiveScan(char* buff, SOCKET* tcpSocket);
     int GiveScanFragment(char* buff, SOCKET* tcpSocket);

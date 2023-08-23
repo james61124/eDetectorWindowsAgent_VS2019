@@ -22,16 +22,11 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
     // strcpy(UUID,key);
     
     // 192.168.200.153
-    
 
     if (!connectTCP(serverIP, port)) perror("connection failed\n");
     else printf("connect success\n");
 
     getSystemInfo();
-
-    std::thread receiveThread([&]() { receiveTCP(); });
-    HandleTaskToServer("GiveInfo");
-    receiveThread.join();
 
     // until the end
     // closesocket(tcpSocket);
@@ -40,9 +35,7 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
 }
 
 void SocketManager::getSystemInfo() {
-    strcpy_s(InfoInstance->MAC, sizeof(InfoInstance->MAC), "08:00:27:4e:66:ef");
-    strcpy_s(InfoInstance->IP, sizeof(InfoInstance->IP), "127.0.0.1");
-    strcpy_s(InfoInstance->UUID, sizeof(InfoInstance->UUID), "dc804c0a365e46439678a4423fd1641c");
+    GetIPAndMAC(InfoInstance->MAC, InfoInstance->IP, InfoInstance->ServerIP);
 }
 
 bool SocketManager::connectTCP(const std::string& serverIP, int port) {
@@ -68,53 +61,49 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
     while (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    //if (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-    //    std::cerr << "Error connecting to server: " << WSAGetLastError() << std::endl;
-    //    closesocket(tcpSocket);
-    //    WSACleanup();
-    //    return 1;
-    //}
 
     InfoInstance->tcpSocket = &tcpSocket;
-
     return true;
 }
 void SocketManager::receiveTCP() {
-    printf("receive thread open\n");
-    //std::string LogMessage = "receive thread open";
-    //tool.log(LogMessage);
-    
+
+    printf("Receive Thread Enabled\n");
+    int FirstTime = 0;
     while (true) {
-        char buff[STRPACKETSIZE];
-        int ret = recv(tcpSocket, buff, sizeof(buff), 0);
-        if (ret == SOCKET_ERROR) {
-            std::cerr << "Error receiving data: " << WSAGetLastError() << std::endl;
-
-            //LogMessage = "Error receiving data\n";
-            //tool.log(LogMessage);
-
-            return;
+        if (FirstTime) {
+            printf("wait for server to reconnect...\n");
+            if (!connectTCP(InfoInstance->ServerIP, InfoInstance->Port)) perror("connection failed\n");
+            else printf("Connect Success\n");
         }
 
-        SetKeys(BIT128, AESKey);
-        DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
-        StrPacket* udata;
-        udata = (StrPacket*)buff;
+        FirstTime = 1;
+        while (true) {
+            char buff[STRPACKETSIZE];
+            int ret = recv(tcpSocket, buff, sizeof(buff), 0);
+            if (ret == SOCKET_ERROR) {
+                std::cerr << "Error receiving data: " << WSAGetLastError() << std::endl;
+                break;
+            }
 
-        //cout << "receive: " << udata->DoWorking << endl;
-        if (!CheckTaskStatus(udata->DoWorking)) {
-            std::thread workerThread([&]() { HandleTaskFromServer(udata); });
-            workerThread.detach();
+            SetKeys(BIT128, AESKey);
+            DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
+            StrPacket* udata;
+            udata = (StrPacket*)buff;
+
+            cout << "Receive: " << udata->DoWorking << endl;
+            //if (!CheckTaskStatus(udata->DoWorking)) {
+            //    std::thread workerThread([&]() { HandleTaskFromServer(udata); });
+            //    workerThread.detach();
+            //}
+            //else {
+            //    printf("Task in progress\n");
+            //}
+
+            if (!HandleTaskFromServer(udata)) break;
         }
-        else {
-            printf("Task in progress\n");
-        }
-        
-        //if (!HandleTaskFromServer(udata)) break;
     }
-    //LogMessage = "receive thread close";
-    //tool.log(LogMessage);
-    printf("receive thread close\n");
+    
+    printf("Receive Thread Close\n");
 
 
 }
@@ -137,7 +126,7 @@ int SocketManager::HandleTaskFromServer(StrPacket* udata) {
     //tool.log(LogMessage);
     //std::cout << "Thread ID: " << std::this_thread::get_id() << std::endl;
 
-    UpdateTaskStatus(udata->DoWorking, std::this_thread::get_id());
+    //UpdateTaskStatus(udata->DoWorking, std::this_thread::get_id());
 
     int ret = 0;
     if (task->functionFromServerMap.count(udata->DoWorking) > 0) {
@@ -145,35 +134,35 @@ int SocketManager::HandleTaskFromServer(StrPacket* udata) {
     }
     else std::cout << "Function not found" << std::endl;
 
-    FinishTask(udata->DoWorking);
+    //FinishTask(udata->DoWorking);
 
 
     return ret;
 }
-bool SocketManager::CheckTaskStatus(std::string task) {
-    std::lock_guard<std::mutex> lock(mapMutex);
-    auto it = threadMap.find(task);
-    if (it != threadMap.end()) {
-        return true; // task is doing
-    }
-    else {
-        return false; // task isn't doing
-    }
-}
-void SocketManager::UpdateTaskStatus(std::string task, std::thread::id thread_id) {
-    std::lock_guard<std::mutex> lock(mapMutex);
-    auto it = threadMap.find(task);
-    if (it != threadMap.end()) {
-        it->second = thread_id;
-    }
-}
-void SocketManager::FinishTask(std::string task) {
-    std::lock_guard<std::mutex> lock(mapMutex);
-    auto it = threadMap.find(task);
-    if (it != threadMap.end()) {
-        threadMap.erase(task);
-    }
-}
+//bool SocketManager::CheckTaskStatus(std::string task) {
+//    std::lock_guard<std::mutex> lock(mapMutex);
+//    auto it = threadMap.find(task);
+//    if (it != threadMap.end()) {
+//        return true; // task is doing
+//    }
+//    else {
+//        return false; // task isn't doing
+//    }
+//}
+//void SocketManager::UpdateTaskStatus(std::string task, std::thread::id thread_id) {
+//    std::lock_guard<std::mutex> lock(mapMutex);
+//    auto it = threadMap.find(task);
+//    if (it != threadMap.end()) {
+//        it->second = thread_id;
+//    }
+//}
+//void SocketManager::FinishTask(std::string task) {
+//    std::lock_guard<std::mutex> lock(mapMutex);
+//    auto it = threadMap.find(task);
+//    if (it != threadMap.end()) {
+//        threadMap.erase(task);
+//    }
+//}
 
 
 
