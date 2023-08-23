@@ -339,7 +339,9 @@ void AutoRun::LoadRegisterAutoRun(vector<AutoRunInfo>* pInfo)
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	printf("SYSTEM\\CurrentControlSet\\Control\\SafeBoot\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, false);
+	printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
+	printf("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 
 	printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");

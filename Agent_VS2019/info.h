@@ -14,6 +14,7 @@ public:
     char MAC[MACLEN];
     char IP[IPLEN];
     char UUID[UUIDLEN];
+
     int DetectProcess = 0;
     int DetectNetwork = 0;
 

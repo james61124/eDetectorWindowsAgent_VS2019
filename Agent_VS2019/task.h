@@ -29,12 +29,12 @@
 class Task {
 public:
 
-    Task(Info* infoInstance, SocketSend* socketSendInstance);
+    Task(Info* infoInstance, SocketSend socketSendInstance);
     Info* info;
-    SocketSend* socketsend;
+    SocketSend socketsend;
 
     using FunctionPtr = std::function<int(Task*, std::any)>;
-    using FunctionPtrFromServer = std::function<int(Task*, StrPacket*)>;
+    using FunctionPtrFromServer = std::function<int(Task*, StrPacket*, SOCKET*)>;
 
     std::unordered_map<std::string, FunctionPtr> functionMap;
     std::unordered_map<std::string, FunctionPtrFromServer> functionFromServerMap;
@@ -44,9 +44,10 @@ public:
 
     // handshake
     int GiveInfo();
-    int GiveDetectInfoFirst();
-    int GiveDetectInfo();
-    int OpenCheckthread(StrPacket* udata);
+    int GiveDetectInfoFirst(SOCKET* tcpSocket);
+    int GiveDetectInfo(SOCKET* tcpSocket);
+    int OpenCheckthread(StrPacket* udata, SOCKET* tcpSocket);
+    int UpdateDetectMode(StrPacket* udata, SOCKET* tcpSocket);
     int CheckConnect();
 
     // detect
@@ -63,11 +64,11 @@ public:
     int GiveScanProgress(char* buff, SOCKET* tcpSocket);
 
     // explorer
-    int ExplorerInfo_(StrPacket* udata);
-    int GiveDriveInfo();
+    int ExplorerInfo_(StrPacket* udata, SOCKET* tcpSocket);
+    int GiveDriveInfo(SOCKET* tcpSocket);
     int Explorer(char* buff, SOCKET* tcpSocket);
     int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerData(char* Drive, char* FileSystem);
+    int GiveExplorerData(char* Drive, char* FileSystem, SOCKET* tcpSocket);
     int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
     int GiveExplorerData(char* buff, SOCKET* tcpSocket);
     int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
@@ -82,15 +83,15 @@ public:
 
    
     
-    int UpdateDetectMode(StrPacket* udata);
+    
     int GetScanInfoData_(StrPacket* udata);
-    int GetScan(StrPacket* udata);
+    int GetScan(StrPacket* udata, SOCKET* tcpSocket);
     int GetProcessInfo(StrPacket* udata);
-    int GetDrive(StrPacket* udata);
+    int GetDrive(StrPacket* udata, SOCKET* tcpSocket);
     //int ExplorerInfo(StrPacket* udata);
-    int GetCollectInfo(StrPacket* udata);
+    int GetCollectInfo(StrPacket* udata, SOCKET* tcpSocket);
     int GetCollectInfoData(StrPacket* udata);
-    int DataRight(StrPacket* udata);
+    int DataRight(StrPacket* udata, SOCKET* tcpSocket);
 
     SOCKET* CreateNewSocket();
 
@@ -115,7 +116,7 @@ private:
     void SendNetworkDetectToServer(vector<string>* pInfo);
 
     // collect
-    int CollectionComputerInfo(); 
+    int CollectionComputerInfo(SOCKET* tcpSocket);
     bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
     void SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);

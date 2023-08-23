@@ -9,7 +9,7 @@
 
 
 
-SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend* socketSendInstance) {
+SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend socketSendInstance) {
 
     Port = port;
     InfoInstance = infoInstance;
@@ -28,7 +28,6 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
     else printf("connect success\n");
 
     getSystemInfo();
-
     std::thread receiveThread([&]() { receiveTCP(); });
     HandleTaskToServer("GiveInfo");
     receiveThread.join();
@@ -40,9 +39,7 @@ SocketManager::SocketManager(std::string& serverIP, int port, Info* infoInstance
 }
 
 void SocketManager::getSystemInfo() {
-    strcpy_s(InfoInstance->MAC, sizeof(InfoInstance->MAC), "08:00:27:4e:66:ef");
-    strcpy_s(InfoInstance->IP, sizeof(InfoInstance->IP), "127.0.0.1");
-    strcpy_s(InfoInstance->UUID, sizeof(InfoInstance->UUID), "dc804c0a365e46439678a4423fd1641c");
+    GetIPAndMAC(InfoInstance->MAC, InfoInstance->IP, InfoInstance->ServerIP);
 }
 
 bool SocketManager::connectTCP(const std::string& serverIP, int port) {
@@ -80,7 +77,7 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
     return true;
 }
 void SocketManager::receiveTCP() {
-    printf("receive thread open\n");
+    printf("Receive Thread Enabled\n");
     //std::string LogMessage = "receive thread open";
     //tool.log(LogMessage);
     
@@ -101,20 +98,29 @@ void SocketManager::receiveTCP() {
         StrPacket* udata;
         udata = (StrPacket*)buff;
 
-        //cout << "receive: " << udata->DoWorking << endl;
-        if (!CheckTaskStatus(udata->DoWorking)) {
-            std::thread workerThread([&]() { HandleTaskFromServer(udata); });
-            workerThread.detach();
+        SOCKET* new_tcpSocket = task->CreateNewSocket();
+        if (new_tcpSocket == nullptr) {
+            printf("Create Socket failed\n");
+            continue;
         }
-        else {
-            printf("Task in progress\n");
-        }
+
+        cout << "Receive: " << udata->DoWorking << endl;
+        //if (!CheckTaskStatus(udata->DoWorking)) {
+        //    std::thread workerThread([&]() { HandleTaskFromServer(udata, new_tcpSocket); });
+        //    workerThread.detach();
+        //}
+        //else {
+        //    printf("Task in progress\n");
+        //}
+
         
-        //if (!HandleTaskFromServer(udata)) break;
+        //delete udata;
+        
+        if (!HandleTaskFromServer(udata, new_tcpSocket)) continue;
     }
     //LogMessage = "receive thread close";
     //tool.log(LogMessage);
-    printf("receive thread close\n");
+    printf("Receive Thread Close\n");
 
 
 }
@@ -131,7 +137,7 @@ void SocketManager::HandleTaskToServer(std::string functionName) {
     }
     else std::cout << functionName << " Function not found" << std::endl;
 }
-int SocketManager::HandleTaskFromServer(StrPacket* udata) {
+int SocketManager::HandleTaskFromServer(StrPacket* udata, SOCKET* tcpSocket) {
     //printf("receive: %s, %s\n", udata->DoWorking, udata->csMsg);
     //std::string LogMessage = "receive -> " + std::string(udata->DoWorking) + " : " + std::string(udata->csMsg) + "";
     //tool.log(LogMessage);
@@ -141,7 +147,7 @@ int SocketManager::HandleTaskFromServer(StrPacket* udata) {
 
     int ret = 0;
     if (task->functionFromServerMap.count(udata->DoWorking) > 0) {
-        ret = task->functionFromServerMap[udata->DoWorking](task, udata);
+        ret = task->functionFromServerMap[udata->DoWorking](task, udata, tcpSocket);
     }
     else std::cout << "Function not found" << std::endl;
 

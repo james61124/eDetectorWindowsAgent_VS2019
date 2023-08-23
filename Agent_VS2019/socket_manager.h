@@ -17,6 +17,7 @@
 #include <mutex>
 
 #include "task.h"
+#include "socket_send.h"
 
 #define MACLEN 20
 #define IPLEN 20
@@ -24,7 +25,7 @@
 
 class SocketManager {
 public:
-    SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend* socketSendInstance);
+    SocketManager(std::string& serverIP, int port, Info* infoInstance, SocketSend socketSendInstance);
     Info* InfoInstance;
     SOCKET tcpSocket;
 
@@ -35,9 +36,10 @@ public:
     char MAC[MACLEN];
     char IP[IPLEN];
     char UUID[UUIDLEN];
-    const char* AESKey = "AES Encrypt Decrypt";
     int DetectProcess = 0;
     int DetectNetwork = 0;
+
+    const char* AESKey = "AES Encrypt Decrypt";
 
     // std::unordered_map<std::string, std::thread> threadMap;
     // void startThread(const std::string& key, std::string functionName);
@@ -50,7 +52,7 @@ public:
     void closeTCP();
 
     void HandleTaskToServer(std::string functionName);
-    int HandleTaskFromServer(StrPacket* udata);
+    int HandleTaskFromServer(StrPacket* udata, SOCKET* tcpSocket);
 
     bool CheckTaskStatus(std::string task);
     void UpdateTaskStatus(std::string task, std::thread::id thread_id);

@@ -10,13 +10,10 @@
 
 
 
-Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
+Task::Task(Info* infoInstance, SocketSend socketSendInstance) {
 
 	// handshake
     functionMap["GiveInfo"] = std::bind(&Task::GiveInfo, this);
-    functionMap["GiveDetectInfoFirst"] = std::bind(&Task::GiveDetectInfoFirst, this);
-    functionMap["GiveDetectInfo"] = std::bind(&Task::GiveDetectInfo, this);
-    functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
 
     // packet from server
     functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
@@ -29,7 +26,7 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
     functionFromServerMap["GetDrive"] = &Task::GetDrive; // ExplorerInfo_
 	functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo_;
 
-	// Collect
+	//// Collect
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
 
 
@@ -57,31 +54,38 @@ int Task::GiveInfo() {
     char* cUserName = tool.GetUserNameUTF8();
     char* FileVersion = new char[10];
     unsigned long long BootTime = tool.GetBootTime();
-    char* Key = new char[34];
-    char* DigitalSignatureHash = new char[10];
+	DWORD m_DigitalSignatureHash = GetDigitalSignatureHash();
     char* functionName = new char[24];
 
+	char* KeyNum = new char[36];
+	strcpy_s(KeyNum, 36, "NoKey");
+	GetThisClientKey(KeyNum);
+	strcpy_s(info->UUID, 36, KeyNum);
+
     strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
-	strcpy_s(Key, 34, "dc804c0a365e46439678a4423fd1641c");
-	strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456");
 	strcpy_s(functionName, 24, "GiveInfo");
 
-    //if (strcpy_s(Key, sizeof(Key), "") == 0) printf("copy key success\n");
-    //else printf("copy key failed\n");
-    //if (strcpy_s(DigitalSignatureHash, sizeof(DigitalSignatureHash), "123456") == 0) printf("copy sign success\n");
-    //else printf("copy sign failed\n");
-    //if (strcpy_s(functionName, 24, "GiveInfo") == 0) printf("copy function success\n");
-    //else printf("copy function failed\n");
+	int VMret = VirtualMachine(info->MAC);
+	if (VMret == 1)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (VM)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else if (VMret == 2)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (Oracle)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else if (VMret == 3)
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s (Virtualbox)|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
+	else
+		snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, info->Port, info->DetectPort, BootTime, KeyNum, m_DigitalSignatureHash);
 
-
-
-    snprintf(buffer, STRINGMESSAGELEN, "%s|%s|%s|%s|%s,%d,%d|%d|%s|%lu", SysInfo, OsStr, cComputerName, cUserName, FileVersion, 1988, 1989, BootTime, Key, DigitalSignatureHash);
-    
-    return socketsend->SendMessageToServer(functionName, buffer);
+    return socketsend.SendMessageToServer(functionName, buffer, info->tcpSocket);
 }
-int Task::OpenCheckthread(StrPacket* udata) {
-	// strcpy(UUID,udata->csMsg);
-	// GiveDetectInfoFirst();
+int Task::OpenCheckthread(StrPacket* udata, SOCKET* tcpSocket) {
+
+	// store key into registry
+	printf("store key into registry\n");
+	if (strcmp(udata->csMsg, "null")) { 
+		strcpy_s(info->UUID, 36, udata->csMsg);
+		WriteRegisterValue(udata->csMsg); 
+	}
+	closesocket(*tcpSocket);
 
 	//std::future<int> CheckConnectThread = std::async(&Task::CheckConnect, this);
 	//CheckConnectThread.get();
@@ -89,19 +93,20 @@ int Task::OpenCheckthread(StrPacket* udata) {
 	 //std::thread CheckConnectThread(&Task::CheckConnect, this);
 	 //CheckConnectThread.join();
 
-	// store key into registry
+	
 
-	return GiveDetectInfoFirst();
+	return GiveDetectInfoFirst(info->tcpSocket);
 
 }
-int Task::GiveDetectInfoFirst() {
+int Task::GiveDetectInfoFirst(SOCKET* tcpSocket) {
+	printf("GiveDetectInfoFirst\n");
 	char* buff = new char[STRINGMESSAGELEN];
 	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveDetectInfoFirst\0");
+	strcpy_s(functionName, 24, "GiveDetectInfoFirst");
 	snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
-	return socketsend->SendMessageToServer(functionName, buff);
+	return socketsend.SendMessageToServer(functionName, buff, tcpSocket);
 }
-int Task::UpdateDetectMode(StrPacket* udata) {
+int Task::UpdateDetectMode(StrPacket* udata, SOCKET* tcpSocket) {
 
 	std::vector<std::string>DetectMode = tool.SplitMsg(udata->csMsg);
 	for (int i = 0; i < DetectMode.size(); i++) {
@@ -109,15 +114,16 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		else if (i == 1) info->DetectNetwork = DetectMode[i][0] - '0';
 		else printf("UpdateDetectMode parse failed\n");
 	}
-	return GiveDetectInfo();
+	closesocket(*tcpSocket);
+	return GiveDetectInfo(info->tcpSocket);
 
 }
-int Task::GiveDetectInfo() {
+int Task::GiveDetectInfo(SOCKET* tcpSocket) {
 	char* buff = new char[STRINGMESSAGELEN];
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveDetectInfo");
 	snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
-	int ret = socketsend->SendMessageToServer(functionName, buff);
+	int ret = socketsend.SendMessageToServer(functionName, buff, tcpSocket);
 
 	// network
 	//DWORD MyPid = GetCurrentProcessId();
@@ -153,7 +159,7 @@ int Task::CheckConnect() {
 
      while(true){
          std::this_thread::sleep_for(std::chrono::seconds(10));
-         if (!socketsend->SendDataToServer(functionName, null, tcpSocket)) {
+         if (!socketsend.SendDataToServer(functionName, null, tcpSocket)) {
              printf("CheckConnect sent failed\n");
          } else {
              printf("CheckConnect sent\n");
@@ -260,7 +266,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 					//		pUnKnownData->clear();
 					//	}
 					//}
-					//int ret = socketsend->SendMessageToServer(functionName_GiveDetectProcess, End);
+					//int ret = socketsend.SendMessageToServer(functionName_GiveDetectProcess, End);
 					pRiskArray->clear();
 				}
 				else if (m_MemPro->RiskArrayNum == 2)
@@ -281,7 +287,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 					//		pUnKnownData->clear();
 					//	}
 					//}
-					//int ret = socketsend->SendMessageToServer(functionName_GiveDetectProcess, End);
+					//int ret = socketsend.SendMessageToServer(functionName_GiveDetectProcess, End);
 					pRiskArray->clear();
 				}
 			}
@@ -392,7 +398,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 					sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
 					if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = socketsend->SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
+						ret = socketsend.SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
 						memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -420,7 +426,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 					sprintf_s(Inlinestr, 4096, "%s;", (*Inlineit).c_str());
 					if ((strlen(Inlinestr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = socketsend->SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
+						ret = socketsend.SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
 						memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -437,7 +443,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 			else
 				strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 
-			ret = socketsend->SendDataToServer(functionName_GiveDetectProcess, TempStr, tcpSocket);
+			ret = socketsend.SendDataToServer(functionName_GiveDetectProcess, TempStr, tcpSocket);
 
 			if (ret <= 0) break;
 			else memset(TempStr, '\0', DATASTRINGMESSAGELEN);
@@ -662,7 +668,7 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 		int TmpSize = (int)strlen(TmpSend);
 		if ((TmpSize + (int)(*it).size()) >= DATASTRINGMESSAGELEN)
 		{
-			ret = socketsend->SendDataToServer(functionName, TmpSend, info->tcpSocket);
+			ret = socketsend.SendDataToServer(functionName, TmpSend, info->tcpSocket);
 			if (ret <= 0)
 				break;
 			else
@@ -673,20 +679,20 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 
 	if (ret > 0)
 	{
-		ret = socketsend->SendDataToServer(functionName, TmpSend, info->tcpSocket);
+		ret = socketsend.SendDataToServer(functionName, TmpSend, info->tcpSocket);
 		pInfo->clear();
 	}
 	delete[] TmpSend;
 }
 
 // scan
-int Task::GetScan(StrPacket* udata) {
+int Task::GetScan(StrPacket* udata, SOCKET* tcpSocket) {
 
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
+	//SOCKET* tcpSocket = CreateNewSocket();
+	//if (tcpSocket == nullptr) return 0;
 
 	int ret = GiveProcessData(tcpSocket);
-	closesocket(*tcpSocket);
+	//closesocket(*tcpSocket);
 
 	return ret;
 
@@ -1050,7 +1056,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	//		swprintf_s(wUnKownInfoStr, DATASTRINGMESSAGELEN, L"%lu|%s|%d", (*ut).Pid, (*ut).ProcessName, (*ut).SizeInfo);
 	//		cUnKownInfoStr = CStringToCharArray(wUnKownInfoStr, CP_UTF8);
 	//		sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s", cUnKownInfoStr);
-	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TempStr);
+	//		ret = socketsend.SendMessageToServer(functionName_GiveProcessUnknownInfo, TempStr);
 	//		if (ret <= 0)
 	//			break;
 	//		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
@@ -1068,7 +1074,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	//					memcpy(TmpBuffer, (*ut).Data + i, DATASTRINGMESSAGELEN);
 	//					tmplen -= DATASTRINGMESSAGELEN;
 	//				}
-	//				ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
+	//				ret = socketsend.SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
 	//				//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
 	//				delete[] TmpBuffer;
 	//				if (ret <= 0)
@@ -1084,14 +1090,14 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	//			char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
 	//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 	//			memcpy(TmpBuffer, (*ut).Data, (*ut).SizeInfo);
-	//			ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
+	//			ret = socketsend.SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
 	//			//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
 	//			delete[] TmpBuffer;
 	//			if (ret <= 0)
 	//				break;
 	//		}
 	//		
-	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownEnd, null);
+	//		ret = socketsend.SendMessageToServer(functionName_GiveProcessUnknownEnd, null);
 	//		if (ret <= 0)
 	//			break;
 	//		delete[] cUnKownInfoStr;
@@ -1108,44 +1114,46 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 
 	delete[] buff;
 	ret = GiveScanEnd(pMode, tcpSocket);
+	closesocket(*tcpSocket);
 }
 
 int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanInfo");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveScan(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScan");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveScanFragment(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanFragment");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveScanEnd(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanEnd");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveScanProgress(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanProgress");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 
 
 // Explorer
-int Task::GetDrive(StrPacket* udata) { return GiveDriveInfo(); }
-int Task::GiveDriveInfo() { 
+int Task::GetDrive(StrPacket* udata, SOCKET* tcpSocket) { return GiveDriveInfo(tcpSocket); }
+int Task::GiveDriveInfo(SOCKET* tcpSocket) {
 	char* m_DriveInfo = GetMyPCDrive();
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveDriveInfo");
-	int ret = socketsend->SendMessageToServer(functionName, m_DriveInfo);
+	int ret = socketsend.SendMessageToServer(functionName, m_DriveInfo, tcpSocket);
+	closesocket(*tcpSocket);
 	return ret;
 }
 char* Task::GetMyPCDrive()
@@ -1200,7 +1208,7 @@ char* Task::GetMyPCDrive()
 	return driveStr;
 }
 
-int Task::ExplorerInfo_(StrPacket* udata) {
+int Task::ExplorerInfo_(StrPacket* udata, SOCKET* tcpSocket) {
 
 	char delimiter = '|';
 	char Drive[2]; 
@@ -1220,13 +1228,11 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 		}
 	}
 
-	return GiveExplorerData(Drive, FileSystem);
+	return GiveExplorerData(Drive, FileSystem, tcpSocket);
 }
-int Task::GiveExplorerData(char* Drive, char* FileSystem) {
+int Task::GiveExplorerData(char* Drive, char* FileSystem, SOCKET* tcpSocket) {
 
 
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
 	int ret = 0;
 
 	ExplorerInfo* m_Info = new ExplorerInfo;
@@ -1252,7 +1258,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				NTFSSearchCore* searchCore = new NTFSSearchCore;
 				try {
 					printf("NTFS start...\n");
-					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, info->tcpSocket, Drive, FileSystem);
+					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, tcpSocket, Drive, FileSystem);
 				}
 				catch (...) {
 					ret = 1;
@@ -1260,13 +1266,13 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				if (ret == 0) {
 					char* null = new char[5];
 					strcpy_s(null, 5, "null");
-					ret = GiveExplorerEnd(null, info->tcpSocket);
+					ret = GiveExplorerEnd(null, tcpSocket);
 					delete[] null;
 				}
 				else {
 					char* msg = new char[22];
 					strcpy_s(msg, 22, "ErrorLoadingMFTTable");
-					ret = GiveExplorerError(msg, info->tcpSocket);
+					ret = GiveExplorerError(msg, tcpSocket);
 					delete[] msg;
 				}
 
@@ -1343,7 +1349,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				//				char* ProgressStr = new char[10];
 				//				sprintf_s(ProgressStr, 10, "%u", ProgressCount);
 				//				strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//				ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//				ret1 = socketsend.SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
 				//				if (ret1 <= 0)
 				//				{
 				//					delete[] ProgressStr;
@@ -1363,7 +1369,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				//					char* ProgressStr = new char[10];
 				//					sprintf_s(ProgressStr, 10, "%u", ProgressCount);
 				//					strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//					ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//					ret1 = socketsend.SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
 				//					if (ret1 <= 0)
 				//					{
 				//						delete[] ProgressStr;
@@ -1388,15 +1394,15 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				//			char* ProgressStr = new char[10];
 				//			sprintf_s(ProgressStr, 10, "%u", ProgressCount);
 				//			strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//			ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
+				//			ret1 = socketsend.SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
 				//			delete[] ProgressStr;
 				//		}
 				//	}
 				//	if (ret1 > 0)
-				//		int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				//		int	ret = socketsend.SendMessageToServer(functionName_GiveExplorerEnd, null);
 				//}
 				//else
-				//	ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingFATTable);
+				//	ret = socketsend.SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingFATTable);
 				//FATDeleteFile.clear();
 				//delete[] m_DataStr;
 				//delete[] TempStr;
@@ -1419,12 +1425,12 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				//	char* ProgressStr = new char[10];
 				//	sprintf_s(ProgressStr, 10, "%u", ProgressCount);
 				//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+				//	ret = socketsend.SendDataToServer(functionName_GiveExplorerData, TempStr);
 				//	delete[] ProgressStr;
 				//}
 				////if(Client_Socket->IsOpened())
 				//if (ret > 0)
-				//	int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				//	int	ret = socketsend.SendMessageToServer(functionName_GiveExplorerEnd, null);
 				//delete[] m_DataStr;
 				//delete[] TempStr;
 			}
@@ -1642,7 +1648,7 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
 		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
+		/*Sendret = socketsend.SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
 		Sendret = 1;
 		if (Sendret > 0)
 		{
@@ -1700,46 +1706,44 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
 int Task::Explorer(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "Explorer");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerInfo");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerProgress");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerData");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 } 
 int Task::GiveExplorerEnd(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerEnd");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveExplorerError");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 
 
 // collect 
-int Task::GetCollectInfo(StrPacket* udata) { return CollectionComputerInfo(); }
-int Task::CollectionComputerInfo()
+int Task::GetCollectInfo(StrPacket* udata, SOCKET* tcpSocket) { return CollectionComputerInfo(tcpSocket); }
+int Task::CollectionComputerInfo(SOCKET* tcpSocket)
 {
-	SOCKET* tcpSocket = CreateNewSocket();
-	if (tcpSocket == nullptr) return 0;
-
 	printf("start collect...\n");
 	Collect* collect = new Collect;
 	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
 	GetMyPath(m_FullDbPath);
+	std::wcout << L"m_FullDbPath: " << m_FullDbPath << std::endl;
 	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
 
 	if (_waccess(m_FullDbPath, 00)) {
@@ -1748,6 +1752,7 @@ int Task::CollectionComputerInfo()
 		GetMyPath(ConfigPath);
 		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
 		map<string, vector<PredefineObj>> mapPredefine;
+
 		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
 		{
 			char* InfoStr = new char[MAX_PATH_EX];
@@ -1762,6 +1767,7 @@ int Task::CollectionComputerInfo()
 			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
 
 			SendDbFileToServer(zipFileName, tcpSocket);
+
 			DeleteFile(m_FullDbPath);
 			if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
 		}
@@ -2096,25 +2102,25 @@ int Task::GiveCollectProgress(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveCollectProgress");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveCollectDataInfo(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveCollectDataInfo");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveCollectData(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveCollectData");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveCollectDataEnd(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveCollectDataEnd");
 	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	return socketsend.SendDataToServer(functionName, buff, tcpSocket);
 }
 
 
@@ -2125,8 +2131,9 @@ SOCKET* Task::CreateNewSocket() {
 		return nullptr;
 	}
 
-	SOCKET tcpSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (tcpSocket == INVALID_SOCKET) {
+	SOCKET* tcpSocket = new SOCKET;
+	*tcpSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (*tcpSocket == INVALID_SOCKET) {
 		std::cerr << "Error creating TCP socket: " << WSAGetLastError() << std::endl;
 		WSACleanup();
 		return nullptr;
@@ -2134,17 +2141,17 @@ SOCKET* Task::CreateNewSocket() {
 
 	sockaddr_in serverAddr;
 	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(1989);
+	serverAddr.sin_port = htons(info->Port);
 	serverAddr.sin_addr.s_addr = inet_addr(info->ServerIP);
 	//serverAddr.sin_addr.s_addr = inet_pton(AF_INET, serverIP.c_str(), &serverAddr.sin_addr);
 
-	if (connect(tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+	if (connect(*tcpSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
 		std::cerr << "Error connecting to server: " << WSAGetLastError() << std::endl;
-		closesocket(tcpSocket);
+		closesocket(*tcpSocket);
 		WSACleanup();
 		return nullptr;
 	}
 
-	return &tcpSocket;
+	return tcpSocket;
 }
-int Task::DataRight(StrPacket* udata) { return 1; }
+int Task::DataRight(StrPacket* udata, SOCKET* tcpSocket) { return 1; }
