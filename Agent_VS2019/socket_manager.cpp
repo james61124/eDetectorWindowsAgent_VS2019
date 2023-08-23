@@ -74,6 +74,7 @@ void SocketManager::receiveTCP() {
             printf("wait for server to reconnect...\n");
             if (!connectTCP(InfoInstance->ServerIP, InfoInstance->Port)) perror("connection failed\n");
             else printf("Connect Success\n");
+            HandleTaskToServer("GiveInfo");
         }
 
         FirstTime = 1;

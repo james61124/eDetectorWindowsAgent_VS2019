@@ -50,7 +50,10 @@ public:
     int CheckConnect();
 
     // detect
-    int DetectProcess();
+    int DetectProcess_();
+    int DetectProcess(char* buff, SOCKET* tcpSocket);
+    int GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket);
+    int GiveDetectNetwork(char* buff, SOCKET* tcpSocket);
     
 
     // scan
@@ -93,6 +96,7 @@ public:
     int DataRight(StrPacket* udata);
 
     SOCKET* CreateNewSocket();
+    int DetectNewNetwork(int pMainProcessid);
 
 private:
     
@@ -111,7 +115,7 @@ private:
     
     char* GetMyPCDrive();
 
-    int DetectNewNetwork(int pMainProcessid);
+    
     void SendNetworkDetectToServer(vector<string>* pInfo);
 
     // collect

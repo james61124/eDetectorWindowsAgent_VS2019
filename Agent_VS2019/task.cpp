@@ -15,6 +15,8 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
     functionMap["GiveInfo"] = std::bind(&Task::GiveInfo, this);
     functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
 
+	functionMap["DetectProcess"] = std::bind(&Task::DetectProcess_, this);
+
     // packet from server
     functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
     functionFromServerMap["UpdateDetectMode"] = &Task::UpdateDetectMode;
@@ -189,9 +191,6 @@ int Task::GiveDetectInfo() {
 	//DWORD MyPid = GetCurrentProcessId();
 	//DetectNewNetwork(MyPid);
 
-	/*delete buff;
-	delete functionName;*/
-
 	// test
 	//GiveProcessData();
 	//DetectProcess();
@@ -233,11 +232,6 @@ int Task::CheckConnect() {
 // detect
 int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket)
 {
-	char* functionName_GiveDetectProcess = new char[24];
-	strcpy_s(functionName_GiveDetectProcess, 24, "GiveDetectProcess");
-	char* End = new char[4];
-	strcpy_s(End, 4, "End");
-
 	MemProcess* m_MemPro = new MemProcess;
 	TCHAR* MyPath = new TCHAR[MAX_PATH_EX];
 	GetModuleFileName(GetModuleHandle(NULL), MyPath, MAX_PATH_EX);
@@ -387,10 +381,6 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 }
 void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket)
 {
-	char* functionName_GiveDetectProcessData = new char[24];
-	strcpy_s(functionName_GiveDetectProcessData, 24, "GiveDetectProcessData");
-	char* functionName_GiveDetectProcess = new char[24];
-	strcpy_s(functionName_GiveDetectProcess, 24, "GiveDetectProcess");
 	char* functionName_GiveDetectProcessFrag = new char[24];
 	strcpy_s(functionName_GiveDetectProcessFrag, 24, "GiveDetectProcessFrag");
 
@@ -410,16 +400,21 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 			if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
 			CloseHandle(processHandle);
 
-			//// parent name, parent path
-			//TCHAR* ParentName = new TCHAR[MAX_PATH];
-			//TCHAR* ParentPath = new TCHAR[MAX_PATH];
-			//_tcscpy_s(ParentName, 259, _T("null"));
-			//_tcscpy_s(ParentPath, 259, _T("null"));
-			//auto it = pFileInfo->find(vit->second.ParentID);
-			//if (it != pFileInfo->end()) {
-			//	_tcscpy_s(ParentName, MAX_PATH, it->second.ProcessName);
-			//	_tcscpy_s(ParentPath, MAX_PATH, it->second.ProcessPath);
-			//}
+			TCHAR* ParentName = new TCHAR[MAX_PATH];
+			swprintf_s(ParentName, MAX_PATH, L"%s", "null");
+			NTSTATUS status;
+			PVOID buffer;
+			PSYSTEM_PROCESS_INFO spi;
+			buffer = VirtualAlloc(NULL, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+			if (!buffer) printf("failed to allocate for buffer\n");
+			spi = (PSYSTEM_PROCESS_INFO)buffer;
+			if (!NT_SUCCESS(status = NtQuerySystemInformation(SystemProcessInformation, spi, 1024 * 1024, NULL))) VirtualFree(buffer, 0, MEM_RELEASE);
+			while (spi->NextEntryOffset) {
+				if ((*it).ParentID == (int)spi->ProcessId) {
+					swprintf_s(ParentName, MAX_PATH, L"%s", spi->ImageName.Buffer);
+				}
+			}
+
 
 			int Service = 0, AutoRun = 0;
 			if ((*it).StartRun == 1) {
@@ -433,8 +428,8 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 				AutoRun = 1;
 			}
 
-			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|ParentName|%ld|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
-				, (*it).ProcessName, (*it).ProcessCTime, Comstr, (*it).ProcessHash, (*it).ProcessPath,
+			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%s|%ld|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
+				, (*it).ProcessName, (*it).ProcessCTime, Comstr, (*it).ProcessHash, (*it).ProcessPath, ParentName,
 				(*it).ParentID, (*it).ParentPath, (*it).SignerSubjectName, (*it).ProcessID, (*it).InjectionPE, (*it).InjectionOther
 				, (*it).Injected, Service, AutoRun, (*it).HideProcess, (*it).HideAttribute
 			); // remove ParentName 
@@ -455,7 +450,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 					sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
 					if ((strlen(dllstr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = socketsend->SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
+						ret = GiveDetectProcessFrag(TempStr, tcpSocket);
 						memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -483,7 +478,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 					sprintf_s(Inlinestr, 4096, "%s;", (*Inlineit).c_str());
 					if ((strlen(Inlinestr) + strlen(TempStr)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = socketsend->SendDataToServer(functionName_GiveDetectProcessFrag, TempStr, tcpSocket);
+						ret = GiveDetectProcessFrag(TempStr, tcpSocket);
 						memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -500,8 +495,8 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 			else
 				strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 
-			ret = socketsend->SendDataToServer(functionName_GiveDetectProcess, TempStr, tcpSocket);
 
+			ret = DetectProcess(TempStr, tcpSocket);
 			if (ret <= 0) break;
 			else memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 
@@ -519,7 +514,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 	/*senddatamsgtoserver(mymac,myip,"givedetectprocessend","end");
 	pinfo->clear();*/
 }
-int Task::DetectProcess() {
+int Task::DetectProcess_() {
 
 	printf("sending DetectProcess\n");
 	MemProcess* m_MemPro = new MemProcess;
@@ -531,6 +526,7 @@ int Task::DetectProcess() {
 		DetectProcessRisk(pMainProcessid, false, &m_ApiName, info->tcpSocket);
 	}
 	catch (...) {}
+
 	m_ApiName.clear();
 	delete m_MemPro;
 	return 1;
@@ -707,11 +703,6 @@ int Task::DetectNewNetwork(int pMainProcessid) {
 }
 void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveDetectNetwork");
-	//char* functionName_GiveNetworkHistoryEnd = new char[24];
-	//strcpy_s(functionName_GiveNetworkHistoryEnd, 24, "GiveNetworkHistoryEnd");
-
 	int m_Count = 0;
 	int ret = 1;
 	char* TmpSend = new char[DATASTRINGMESSAGELEN];
@@ -725,7 +716,7 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 		int TmpSize = (int)strlen(TmpSend);
 		if ((TmpSize + (int)(*it).size()) >= DATASTRINGMESSAGELEN)
 		{
-			ret = socketsend->SendDataToServer(functionName, TmpSend, info->tcpSocket);
+			ret = GiveDetectNetwork(TmpSend, info->tcpSocket);
 			if (ret <= 0)
 				break;
 			else
@@ -736,11 +727,28 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 
 	if (ret > 0)
 	{
-		ret = socketsend->SendDataToServer(functionName, TmpSend, info->tcpSocket);
+		ret = GiveDetectNetwork(TmpSend, info->tcpSocket);
 		pInfo->clear();
 	}
 	delete[] TmpSend;
 }
+
+int Task::DetectProcess(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "DetectProcess");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveDetectProcessFrag");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveDetectNetwork(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveDetectNetwork");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+
 
 // scan
 int Task::GetScan(StrPacket* udata) {
