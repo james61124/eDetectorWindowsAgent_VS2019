@@ -17,6 +17,7 @@
 #include <mutex>
 
 #include "task.h"
+#include "Log.h"
 
 #define MACLEN 20
 #define IPLEN 20

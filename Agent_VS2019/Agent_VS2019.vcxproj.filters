@@ -34,6 +34,9 @@
     <Filter Include="Zip">
       <UniqueIdentifier>{f09abe10-deab-4780-a9f3-f2190b0ce085}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{05b2eaf5-4da4-42a0-bc55-bfe51a69f6d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="zip.cpp">
       <Filter>Zip</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Log</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="zip.h">
       <Filter>Zip</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Log</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

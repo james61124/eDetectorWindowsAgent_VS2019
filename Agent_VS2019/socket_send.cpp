@@ -5,6 +5,7 @@ SocketSend::SocketSend(Info* infoInstance) {
 }
 
 int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
+	Log log;
 	StrDataPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -25,6 +26,11 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 	int ret = sendTCP(buff, STRDATAPACKETSIZE, tcpSocket);
 	printf("Send Data Packet: %s\n", Work);
 
+	std::string Task(WorkNew);
+	std::string Msg(Mgs);
+	std::string LogMsg = "Send: " + Task;
+	log.logger("Info", LogMsg);
+
 	return receiveTCP(tcpSocket);
 	
 
@@ -35,6 +41,7 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 }
 
 int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
+	Log log;
 	StrPacket GetServerMessage;
 	strcpy_s(GetServerMessage.MAC, sizeof(GetServerMessage.MAC), info->MAC);
 	strcpy_s(GetServerMessage.IP, sizeof(GetServerMessage.IP), info->IP);
@@ -57,6 +64,10 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 
 
 	printf("Send Message Packet: %s\n", Work);
+	std::string Task(WorkNew);
+	std::string Msg(Mgs);
+	std::string LogMsg = "Send: " + Task + " " + Msg;
+	log.logger("Info", LogMsg);
 
 	delete[] Work;
 	delete[] Mgs;

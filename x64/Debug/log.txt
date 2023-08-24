@@ -1,0 +1,12 @@
+GiveInfo2
+GiveInfo2
+GiveInfo2
+GiveInfo3
+2023-08-24 15:54:34 [Info] Receive: OpenCheckthread
+2023-08-24 15:54:35 [Info] Receive: UpdateDetectMode
+2023-08-24 16:16:50 [Info] Send: GiveInfo x64|(null) (VM)|DESKTOP-TC5H5CS|test|0.0.0.0,1988,1235|53821|5c28d30aedfd4329bf04d895838d59df|0
+2023-08-24 16:16:50 [Info] Send: GiveDetectInfoFirst 0|0
+2023-08-24 16:16:50 [Info] Send: CheckConnect 
+2023-08-24 16:16:51 [Info] Send: GiveDetectInfo 0|0
+2023-08-24 16:17:20 [Info] Send: CheckConnect 
+2023-08-24 16:17:50 [Info] Send: CheckConnect 

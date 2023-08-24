@@ -78,26 +78,23 @@ bool Tool::CompressFileToZip(const TCHAR* zipFileName, const TCHAR* sourceFilePa
 
 }
 
-void Tool::log(const std::string& message) {
-    std::ofstream logFile("log.txt", std::ios::app);
-    if (logFile.is_open()) {
-        //// 獲取當前時間
-        //std::time_t now = std::time(nullptr);
-        //std::tm* timeinfo = std::localtime(&now);
 
-        //// 格式化時間為字串
-        //char timeStr[80];
-        //std::strftime(timeStr, sizeof(timeStr), "[%Y-%m-%d %H:%M:%S] ", timeinfo);
 
-        // 寫入資料到檔案
-        
-        logFile << message << std::endl;
+wstring Tool::GetFileName() {
+    TCHAR moduleName[MAX_PATH];
+    GetModuleFileName(NULL, moduleName, MAX_PATH);
 
-        logFile.close();
+    std::wstring moduleNameStr(moduleName);
+    size_t lastSlash = moduleNameStr.find_last_of(L"\\");
+    std::wstring fileName;
+    if (lastSlash != std::wstring::npos) {
+        fileName = moduleNameStr.substr(lastSlash + 1);
+        std::wcout << "Current executable filename: " << fileName << std::endl;
     }
     else {
-        std::cerr << "cannot open log file" << std::endl;
+        std::wcerr << "Unable to extract filename." << std::endl;
     }
+    return fileName;
 }
 
 

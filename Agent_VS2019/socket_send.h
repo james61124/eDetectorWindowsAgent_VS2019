@@ -4,6 +4,7 @@
 #include "info.h"
 #include "caes.h"
 #include "tools.h"
+#include "log.h"
 
 #include <iostream>
 

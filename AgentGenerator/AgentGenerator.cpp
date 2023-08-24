@@ -113,6 +113,14 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
+	const wchar_t* oldFileName = L"Agent_VS2019.exe";
+	const wchar_t* newFileName = L"ClientSearch_x64.exe";
+	if (MoveFile(oldFileName, newFileName)) {
+		std::wcout << "File renamed successfully." << std::endl;
+	}
+	else {
+		std::wcerr << "Error renaming file. Error code: " << GetLastError() << std::endl;
+	}
 
 	CString basePath = _T("C:\\james\\eDetectorWindowsAgent_VS2019");
 	CString cstr_m_x64Str = basePath + _T("\\ClientSearch_x64.exe");

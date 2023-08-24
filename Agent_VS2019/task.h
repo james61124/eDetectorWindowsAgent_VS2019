@@ -51,7 +51,7 @@ public:
 
     // detect
     int DetectProcess_();
-    int DetectProcess(char* buff, SOCKET* tcpSocket);
+    int GiveDetectProcess(char* buff, SOCKET* tcpSocket);
     int GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket);
     int GiveDetectNetwork(char* buff, SOCKET* tcpSocket);
     

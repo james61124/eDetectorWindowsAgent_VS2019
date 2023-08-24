@@ -66,14 +66,15 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
     return true;
 }
 void SocketManager::receiveTCP() {
-
+    Log log;
     printf("Receive Thread Enabled\n");
     int FirstTime = 0;
     while (true) {
         if (FirstTime) {
-            printf("wait for server to reconnect...\n");
+            printf("wait for server to reconnect...");
+            log.logger("Info", "wait for server to reconnect...\n");
             if (!connectTCP(InfoInstance->ServerIP, InfoInstance->Port)) perror("connection failed\n");
-            else printf("Connect Success\n");
+            else log.logger("Info", "server reconnect success");
             HandleTaskToServer("GiveInfo");
         }
 
@@ -92,13 +93,10 @@ void SocketManager::receiveTCP() {
             udata = (StrPacket*)buff;
 
             cout << "Receive: " << udata->DoWorking << endl;
-            //if (!CheckTaskStatus(udata->DoWorking)) {
-            //    std::thread workerThread([&]() { HandleTaskFromServer(udata); });
-            //    workerThread.detach();
-            //}
-            //else {
-            //    printf("Task in progress\n");
-            //}
+
+            std::string Task(udata->DoWorking);
+            std::string LogMsg = "Receive: " + Task;
+            log.logger("Info", LogMsg);
 
             if (!HandleTaskFromServer(udata)) break;
         }

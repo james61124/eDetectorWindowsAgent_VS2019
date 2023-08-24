@@ -127,8 +127,11 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		TCHAR* RunComStr = new TCHAR[512];
 		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
+		//TCHAR MyName[MAX_PATH];
+		//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		wstring filename = tool.GetFileName();
 		TCHAR MyName[MAX_PATH];
-		swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		wcscpy_s(MyName, filename.c_str());
 		TCHAR ServerIP[MAX_PATH];
 		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
@@ -155,8 +158,11 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		TCHAR* RunComStr = new TCHAR[512];
 		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
+		//TCHAR MyName[MAX_PATH];
+		//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		wstring filename = tool.GetFileName();
 		TCHAR MyName[MAX_PATH];
-		swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+		wcscpy_s(MyName, filename.c_str());
 		TCHAR ServerIP[MAX_PATH];
 		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
@@ -193,7 +199,7 @@ int Task::GiveDetectInfo() {
 
 	// test
 	//GiveProcessData();
-	//DetectProcess();
+	//DetectProcess_();
 	//CollectionComputerInfo();
 	//GiveDriveInfo();
 
@@ -232,6 +238,7 @@ int Task::CheckConnect() {
 // detect
 int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket)
 {
+	Log log;
 	MemProcess* m_MemPro = new MemProcess;
 	TCHAR* MyPath = new TCHAR[MAX_PATH_EX];
 	GetModuleFileName(GetModuleHandle(NULL), MyPath, MAX_PATH_EX);
@@ -263,6 +270,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 	//if (IsFirst)
 	//{
 	printf("detecting current process...\n");
+	log.logger("Info", "detecting current process...");
 	for (st = StartProcessID.begin(); st != StartProcessID.end(); st++)
 	{
 		if (!m_MemPro->IsWindowsProcessNormal(&StartProcessID, st->first))
@@ -271,6 +279,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 		}
 	}
 	printf("detect current process finished\n");
+	log.logger("Info", "detecting current finished");
 
 	start = clock();
 	m_BootStart = clock();
@@ -287,9 +296,7 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 			st = StartProcessID.find(nt->first);
 			if (st == StartProcessID.end())
 			{
-				printf("parse start\n");
 				m_MemPro->ParserProcessRisk(&nt->second, pApiName, MyPath, m_MemPro->pUnKnownData); // LoadAutoRunStartCommand
-				printf("parse end\n");
 			}
 		}
 		end = clock();
@@ -400,6 +407,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 			if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
 			CloseHandle(processHandle);
 
+			printf("find parent name\n");
 			TCHAR* ParentName = new TCHAR[MAX_PATH];
 			swprintf_s(ParentName, MAX_PATH, L"%s", "null");
 			NTSTATUS status;
@@ -413,6 +421,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 				if ((*it).ParentID == (int)spi->ProcessId) {
 					swprintf_s(ParentName, MAX_PATH, L"%s", spi->ImageName.Buffer);
 				}
+				spi = (PSYSTEM_PROCESS_INFO)((LPBYTE)spi + spi->NextEntryOffset);
 			}
 
 
@@ -496,7 +505,7 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 				strcat_s(TempStr, DATASTRINGMESSAGELEN, "|null");
 
 
-			ret = DetectProcess(TempStr, tcpSocket);
+			ret = GiveDetectProcess(TempStr, tcpSocket);
 			if (ret <= 0) break;
 			else memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 
@@ -733,9 +742,9 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 	delete[] TmpSend;
 }
 
-int Task::DetectProcess(char* buff, SOCKET* tcpSocket) {
+int Task::GiveDetectProcess(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "DetectProcess");
+	strcpy_s(functionName, 24, "GiveDetectProcess");
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
 int Task::GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket) {
@@ -764,8 +773,12 @@ int Task::GetScan(StrPacket* udata) {
 	TCHAR* RunComStr = new TCHAR[512];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
+	//TCHAR MyName[MAX_PATH];
+	//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wstring filename = tool.GetFileName();
 	TCHAR MyName[MAX_PATH];
-	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wcscpy_s(MyName, filename.c_str());
+
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
@@ -1312,8 +1325,11 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	TCHAR* RunComStr = new TCHAR[512];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
+	//TCHAR MyName[MAX_PATH];
+	//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wstring filename = tool.GetFileName();
 	TCHAR MyName[MAX_PATH];
-	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wcscpy_s(MyName, filename.c_str());
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 	TCHAR Drive_[MAX_PATH];
@@ -1844,8 +1860,11 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	TCHAR* RunComStr = new TCHAR[512];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
+	//TCHAR MyName[MAX_PATH];
+	//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wstring filename = tool.GetFileName();
 	TCHAR MyName[MAX_PATH];
-	swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
+	wcscpy_s(MyName, filename.c_str());
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
@@ -1858,6 +1877,7 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	return 1; 
 }
 int Task::CollectionComputerInfo()
+
 {
 	//SOCKET* tcpSocket = CreateNewSocket();
 	//if (tcpSocket == nullptr) return 0;

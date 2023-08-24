@@ -6,6 +6,8 @@
 #include <winsock2.h>
 #include <unordered_map>
 
+#include "GlobalFunction.h"
+
 class Info {
 public:
     Info();

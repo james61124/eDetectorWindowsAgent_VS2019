@@ -25,6 +25,8 @@
 #include <cwchar>  // For std::wcsftime
 
 #include <fstream>
+#include <thread>
+#include <queue>
 
 #include "zip.h"
 #include "GlobalFunction.h"
@@ -50,6 +52,8 @@ public:
     char* WideStringToUTF8(const std::wstring& wideString);
     void DeleteAllCsvFiles(wchar_t* directoryPath);
     void log(const std::string& message);
+    
+    wstring GetFileName();
 
     // Get System Info
     char* GetSysInfo();
@@ -70,7 +74,6 @@ public:
     bool SetRegistryValue(const wchar_t* valueName, const wchar_t* valueData);
     std::wstring GetRegistryValue(const wchar_t* valueName);
 
-    // void GetFileVersion(const char* FilePath, std::string& pVersion);
 };
 
 

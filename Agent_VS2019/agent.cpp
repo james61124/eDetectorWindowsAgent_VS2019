@@ -1,6 +1,22 @@
 ﻿#include <iostream>
 #include <thread>
+#include <windows.h>
 #include "socket_manager.h"
+#include "tools.h"
+#include "Log.h"
+//
+//void SignalHandler(int signal, Info* info) {
+//	std::cout << "Received Ctrl-C signal. Terminating processes..." << std::endl;
+//
+//	for (const auto& pair : info->processMap) {
+//		std::cout << "Terminating process with ID: " << pair.first << std::endl;
+//		HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pair.first);
+//		TerminateProcess(processHandle, 0);
+//		CloseHandle(processHandle);
+//	}
+//
+//	exit(signal);
+//}
 
 int main(int argc, char* argv[]) {
 
@@ -29,9 +45,12 @@ int main(int argc, char* argv[]) {
 		int port = std::stoi(argv[2]);
 		std::string task = argv[3];
 
+		Log log;
 		Info* info = new Info();
 		SocketSend* socketsend = new SocketSend(info);
 		SocketManager socketManager(serverIP, port, info, socketsend);
+
+		
 
 		if (task == "Scan") {
 			socketManager.HandleTaskToServer("GiveProcessData");
@@ -51,7 +70,30 @@ int main(int argc, char* argv[]) {
 			DWORD MyPid = GetCurrentProcessId();
 			socketManager.task->DetectNewNetwork(MyPid);
 		}
+		else if (task == "Log") {
+			log.LogServer();
+		}
 		else {
+
+			Tool tool;
+			DWORD LogProcessPid = 0;
+			TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+			TCHAR* RunComStr = new TCHAR[512];
+			GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+			wstring filename = tool.GetFileName();
+			TCHAR MyName[MAX_PATH];
+			wcscpy_s(MyName, filename.c_str());
+
+			TCHAR ServerIP[MAX_PATH];
+			swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+			swprintf_s(RunComStr, 512, L"\"%s\" %s %d Log", MyName, ServerIP, info->Port);
+			wprintf(L"Run Process: %ls\n", RunComStr);
+			RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, LogProcessPid);
+
+			info->processMap["Log"] = LogProcessPid;
+
 			std::thread receiveThread([&]() { socketManager.receiveTCP(); });
 			socketManager.HandleTaskToServer("GiveInfo");
 			receiveThread.join();
