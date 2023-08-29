@@ -44,7 +44,7 @@ public:
 
 class Collect {
 public:
-    int CollectionNums[47];
+    int CollectionNums[44];
     //int CollectionNums[2];
 
     Collect();

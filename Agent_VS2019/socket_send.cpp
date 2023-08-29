@@ -26,12 +26,22 @@ int SocketSend::SendDataToServer(char* Work, char* Mgs, SOCKET* tcpSocket) {
 	int ret = sendTCP(buff, STRDATAPACKETSIZE, tcpSocket);
 	printf("Send Data Packet: %s\n", Work);
 
-	std::string Task(WorkNew);
-	std::string Msg(Mgs);
-	std::string LogMsg = "Send: " + Task;
-	log.logger("Info", LogMsg);
+	if (ret > 0) {
+		std::string Task(WorkNew);
+		std::string Msg(Mgs);
+		std::string LogMsg = "Send: " + Task + " " + Msg;
+		log.logger("Info", LogMsg);
+		return receiveTCP(tcpSocket);
+	}
+	else {
+		std::string Task(WorkNew);
+		std::string LogMsg = "Error Send: " + Task;
+		log.logger("Error", LogMsg);
+		return 0;
+	}
+	
 
-	return receiveTCP(tcpSocket);
+	
 	
 
 	//delete[] Work;
@@ -78,7 +88,9 @@ bool SocketSend::sendTCP(char* data, long len, SOCKET* tcpSocket) {
 
 	int ret = send(*tcpSocket, data, len, 0);
 	if (!ret) {
-
+		Log log;
+		std::string LogMsg = "Error Send data: " + WSAGetLastError();
+		log.logger("Error", LogMsg);
 		std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
 	}
 	else {

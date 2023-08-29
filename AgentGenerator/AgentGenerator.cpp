@@ -113,6 +113,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
+	std::remove("ClientSearch_x64.exe");
 	const wchar_t* oldFileName = L"Agent_VS2019.exe";
 	const wchar_t* newFileName = L"ClientSearch_x64.exe";
 	if (MoveFile(oldFileName, newFileName)) {
@@ -161,7 +162,7 @@ int main(int argc, char* argv[]) {
 	m_CommandStr1.Format(_T("/install %s %s %s %s %s"), strIP, strPort, strDetectPort, KillStr, StartClinetNum);
 
 
-	CString m_SavePath = basePath + _T("\\Agent.exe");
+	CString m_SavePath = basePath + _T("\\x64\\Debug\\Agent.exe");
 	CString StubPath;
 	//StubPath = L"\\Shellnd.exe";
 	StubPath = basePath + "\\Shellnd.exe";

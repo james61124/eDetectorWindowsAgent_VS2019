@@ -10,6 +10,8 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <tchar.h>
+#include "GlobalFunction.h"
 
 class Log {
 public:

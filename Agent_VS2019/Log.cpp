@@ -51,24 +51,46 @@ void Log::HandleLogClientConnection(SOCKET clientSocket) {
 }
 
 void Log::WriteToLogFile() {
-    std::ofstream outputFile("log.txt", std::ios::app);
+    TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+    GetMyPath(m_FilePath);
+    _tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\log.txt"));
+    
     while (true) {
         if (!MsgQueue.empty()) {
+            std::ofstream outputFile(m_FilePath, std::ios::app);
             if (outputFile.is_open()) {
                 std::string message;
                 DequeueMessage(message);
+                size_t pos = 0;
+                while ((pos = message.find('\n', pos)) != std::string::npos) {
+                    message.replace(pos, 1, "\\n");
+                    pos += 2; // Move past the inserted "\\n"
+                }
+                //for (char c : message) {
+                //    if (c == '\n') {
+                //        outputFile << "\\n";
+                //    }
+                //    else {
+                //        outputFile << c;
+                //    }
+                //}
                 outputFile << message << std::endl;
             }
             else {
                 std::cerr << "Error opening file for writing." << std::endl;
             }
+            outputFile.close();
         }
     }
-    outputFile.close();
+    
 }
 
 void Log::LogServer() {
-    std::remove("log.txt");
+    TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+    GetMyPath(m_FilePath);
+    _tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\log.txt"));
+    DeleteFile(m_FilePath);
+    //std::remove("log.txt");
 
     WSADATA wsData;
     if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {

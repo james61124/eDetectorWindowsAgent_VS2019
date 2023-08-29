@@ -52,20 +52,27 @@ int Task::GiveInfo() {
     // getSystemInfo();
 	char* buffer = new char[STRINGMESSAGELEN];
 	char* SysInfo = tool.GetSysInfo();
-	char* OsStr = tool.GetOSVersion();
+	char* OsStr = GetOSVersion();
 	char* cComputerName = tool.GetComputerNameUTF8();
 	char* cUserName = tool.GetUserNameUTF8();
-	char* FileVersion = new char[10];
 	unsigned long long BootTime = tool.GetBootTime();
 	DWORD m_DigitalSignatureHash = GetDigitalSignatureHash();
 	char* functionName = new char[24];
 
+	// key
 	char* KeyNum = new char[36];
 	strcpy_s(KeyNum, 36, "NoKey");
 	GetThisClientKey(KeyNum);
 	strcpy_s(info->UUID, 36, KeyNum);
 
-	strcpy_s(FileVersion, sizeof(FileVersion), "0.0.0.0");
+	// file version
+	char* FileVersion = new char[64];
+	TCHAR* m_AgentPath = new TCHAR[MAX_PATH_EX];
+	GetMyPath(m_AgentPath);
+	_tcscat_s(m_AgentPath, MAX_PATH_EX, _T("\\StartSearch.exe"));
+	strcpy_s(FileVersion, 64, "null");
+	GetFileVersion(m_AgentPath, FileVersion);
+
 	strcpy_s(functionName, 24, "GiveInfo");
 
 	int VMret = VirtualMachine(info->MAC);
@@ -140,6 +147,7 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, DetectProcessPid);
 
 		info->processMap["DetectProcess"] = DetectProcessPid;
+		log.logger("Debug", "DetectProcess enabled");
 	}
 	else {
 		auto it = info->processMap.find("DetectProcess");
@@ -171,6 +179,7 @@ int Task::UpdateDetectMode(StrPacket* udata) {
 		RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, DetectNetworkPid);
 
 		info->processMap["DetectNetwork"] = DetectNetworkPid;
+		log.logger("Debug", "DetectNetwork enabled");
 	}
 	else {
 		auto it = info->processMap.find("DetectNetwork");
@@ -270,11 +279,12 @@ int Task::DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiNa
 	//if (IsFirst)
 	//{
 	printf("detecting current process...\n");
-	log.logger("Info", "detecting current process...");
+	log.logger("Info", "detect current process...");
 	for (st = StartProcessID.begin(); st != StartProcessID.end(); st++)
 	{
 		if (!m_MemPro->IsWindowsProcessNormal(&StartProcessID, st->first))
 		{
+			//log.logger("Debug", "detecting current process...");
 			m_MemPro->ParserProcessRisk(&st->second, pApiName, MyPath, m_MemPro->pUnKnownData);
 		}
 	}
@@ -437,9 +447,9 @@ void Task::SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSo
 				AutoRun = 1;
 			}
 
-			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%s|%ld|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
-				, (*it).ProcessName, (*it).ProcessCTime, Comstr, (*it).ProcessHash, (*it).ProcessPath, ParentName,
-				(*it).ParentID, (*it).ParentPath, (*it).SignerSubjectName, (*it).ProcessID, (*it).InjectionPE, (*it).InjectionOther
+			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
+				, (*it).ProcessName, (*it).ProcessCTime, Comstr, (*it).ProcessHash, (*it).ProcessPath,
+				(*it).ParentID, ParentName, (*it).ParentPath, (*it).SignerSubjectName, (*it).ProcessID, (*it).InjectionPE, (*it).InjectionOther
 				, (*it).Injected, Service, AutoRun, (*it).HideProcess, (*it).HideAttribute
 			); // remove ParentName 
 
@@ -739,6 +749,7 @@ void Task::SendNetworkDetectToServer(vector<string>* pInfo)
 		ret = GiveDetectNetwork(TmpSend, info->tcpSocket);
 		pInfo->clear();
 	}
+	
 	delete[] TmpSend;
 }
 
@@ -787,6 +798,7 @@ int Task::GetScan(StrPacket* udata) {
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ScanProcessPid);
 
 	info->processMap["Scan"] = m_ScanProcessPid;
+	log.logger("Debug", "Scan enabled");
 
 	return 1;
 
@@ -1235,7 +1247,14 @@ int Task::GiveScanEnd(char* buff, SOCKET* tcpSocket) {
 int Task::GiveScanProgress(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanProgress");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	int ret = socketsend->SendDataToServer(functionName, buff, tcpSocket);
+	if (ret <= 0) { 
+		log.logger("Error", "GiveScanProgress Error"); 
+		std::exit(0);
+	}
+	else {
+		return ret;
+	}
 }
 
 
@@ -1342,6 +1361,7 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, ExplorerProcessPid);
 
 	info->processMap["Explorer"] = ExplorerProcessPid;
+	log.logger("Debug", "Explorer enabled");
 
 	return 1;
 }
@@ -1604,15 +1624,27 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%s|%s", Drive, FileSystem);
 	int	ret = Explorer(RecordCount ,tcpSocket);
 
-	std::remove("Explorer.txt");
-	std::remove("Explorer.zip");	
+	TCHAR* Explorer_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Explorer_txt);
+	_tcscat_s(Explorer_txt, MAX_PATH_EX, _T("\\Explorer.txt"));
+	DeleteFile(Explorer_txt);
+	TCHAR* Explorer_zip = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Explorer_zip);
+	_tcscat_s(Explorer_zip, MAX_PATH_EX, _T("\\Explorer.zip"));
+	DeleteFile(Explorer_zip);
 
-	std::wofstream outFile("Explorer.txt", std::ios::app);
-	if (!outFile.is_open()) printf("Explorer.txt open failed\n");
+	//std::remove("Explorer.txt");
+	//std::remove("Explorer.zip");	
+
+	std::wofstream outFile(Explorer_txt, std::ios::app);
+	if (!outFile.is_open()) {
+		log.logger("Error", "Explorer.txt open failed");
+	}
 
 	// collect Explorer
 	printf("Collecting Explorer...\n");
 	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++) {
+	//for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < 30000; m_progressIdx++) {
 		if (m_progressIdx % 10000 == 0) {
 			printf("%d\n", m_progressIdx);
 			char* Progress = new char[DATASTRINGMESSAGELEN];
@@ -1705,7 +1737,9 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		delete[] wstr;
 		if ((m_Count % 60) == 0 && m_Count >= 60) {
 			if (outFile.good()) outFile << TempStr;
-			else printf("write to txt failed\n");
+			else {
+				log.logger("Error", "write to txt failed");
+			}
 			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		}
 
@@ -1715,17 +1749,18 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	outFile.close();
 	
 
-	const TCHAR* zipFileName = _T("Explorer.zip");
-	const TCHAR* sourceFilePath = _T("Explorer.txt");
+	//const TCHAR* zipFileName = Explorer_zip;
+	//const TCHAR* sourceFilePath = Explorer_txt; // _T("Explorer.txt")
 	
 	// Compress Explorer.txt
-	if (tool.CompressFileToZip(zipFileName, sourceFilePath)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
-	else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
+	if (tool.CompressFileToZip(Explorer_zip, Explorer_txt)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
+	else log.logger("Error", "failed to add file to Zip");
 
 	// Get Explorer.txt Size
-	std::ifstream file("Explorer.zip", std::ios::binary);
+	std::ifstream file(Explorer_zip, std::ios::binary);
 	if (!file.is_open()) {
 		std::cout << "Failed to open file." << std::endl;
+		log.logger("Error", "failed to open zip file");
 		return 0;
 	}
 	file.seekg(0, std::ios::end);
@@ -1740,10 +1775,13 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	delete[] FileSize;
 	
 	// send zip file
-	SendZipFileToServer(zipFileName, tcpSocket);
+	SendZipFileToServer(Explorer_zip, tcpSocket);
 
-	if (std::remove("Explorer.txt") != 0) perror("Error delete Explorer.txt\n");
-	if (std::remove("Explorer.zip") != 0) perror("Error delete Explorer.zip\n");
+	DeleteFile(Explorer_txt);
+	DeleteFile(Explorer_zip);
+
+	//if (std::remove("Explorer.txt") != 0) perror("Error delete Explorer.txt\n");
+	//if (std::remove("Explorer.zip") != 0) perror("Error delete Explorer.zip\n");
 
 
 	delete[] TempStr;
@@ -1815,6 +1853,7 @@ void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
 	}
 	else
 	{
+		log.logger("Error", "failed to send zip file\n");
 		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
 		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 		delete[] TmpBuffer;
@@ -1873,6 +1912,7 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, CollectProcessPid);
 
 	info->processMap["Collect"] = CollectProcessPid;
+	log.logger("Debug", "Collect enabled");
 	
 	return 1; 
 }
@@ -1904,14 +1944,21 @@ int Task::CollectionComputerInfo()
 
 		if (!_waccess(m_FullDbPath, 00))
 		{
-			const TCHAR* zipFileName = _T("Collect.zip");
-			const TCHAR* sourceFilePath = _T("collectcomputerinfo.db");
-			if (tool.CompressFileToZip(zipFileName, sourceFilePath)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
+			TCHAR* collectcomputerinfo_db = new TCHAR[MAX_PATH_EX];
+			GetMyPath(collectcomputerinfo_db);
+			_tcscat_s(collectcomputerinfo_db, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+
+			TCHAR* Collect_zip = new TCHAR[MAX_PATH_EX];
+			GetMyPath(Collect_zip);
+			_tcscat_s(Collect_zip, MAX_PATH_EX, _T("\\Collect.zip"));
+
+			if (tool.CompressFileToZip(Collect_zip, collectcomputerinfo_db)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
 			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
 
-			SendDbFileToServer(zipFileName, info->tcpSocket);
+			SendDbFileToServer(Collect_zip, info->tcpSocket);
 			DeleteFile(m_FullDbPath);
-			if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
+			DeleteFile(Collect_zip);
+			//if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
 		}
 		else {
 			printf("m_FullDbPath failed\n");
@@ -2142,7 +2189,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 
 		TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
 		GetMyPath(m_FilePath);
-		_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection-x64.dll"));
+		_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
 		HMODULE m_lib = LoadLibrary(m_FilePath);
 		if (m_lib) {
 			printf("load dll success : %d\n", i);
@@ -2161,6 +2208,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 		}
 		else {
 			printf("load dll failed\n");
+			log.logger("Error", "collection load dll failed\n");
 		}
 
 		memset(InfoStr, '\0', MAX_PATH_EX);

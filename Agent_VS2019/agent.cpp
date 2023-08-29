@@ -4,19 +4,69 @@
 #include "socket_manager.h"
 #include "tools.h"
 #include "Log.h"
-//
-//void SignalHandler(int signal, Info* info) {
-//	std::cout << "Received Ctrl-C signal. Terminating processes..." << std::endl;
-//
-//	for (const auto& pair : info->processMap) {
-//		std::cout << "Terminating process with ID: " << pair.first << std::endl;
-//		HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pair.first);
-//		TerminateProcess(processHandle, 0);
-//		CloseHandle(processHandle);
-//	}
-//
-//	exit(signal);
-//}
+
+
+bool IsProcessAlive(DWORD pid) {
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
+	if (hProcess == NULL) {
+		// OpenProcess failed, process is likely not alive
+		return false;
+	}
+
+	// Check if the process is still running
+	DWORD exitCode;
+	if (GetExitCodeProcess(hProcess, &exitCode) && exitCode == STILL_ACTIVE) {
+		// Process is still active
+		CloseHandle(hProcess);
+		return true;
+	}
+
+	CloseHandle(hProcess);
+	return false;
+}
+
+void CheckProcessStatus(Info* info) {
+	Log log;
+	while (true) {
+		for (const auto& pair : info->processMap) {
+			if (!IsProcessAlive(pair.second)) {
+				if (info->processMap[pair.first] != 0) {
+					string LogMsg = pair.first + " disconnected";
+					log.logger("Error", LogMsg);
+					printf("%s\n", LogMsg.c_str());
+					info->processMap[pair.first] = 0;
+				} 
+				if (info->processMap["DetectProcess"] == 0 && info->DetectProcess == 1) {
+					log.logger("Info", "DetectProcess connected");
+
+					Tool tool;
+					DWORD DetectProcessPid = 0;
+					TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+					TCHAR* RunComStr = new TCHAR[512];
+					GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+					wstring filename = tool.GetFileName();
+					TCHAR MyName[MAX_PATH];
+					wcscpy_s(MyName, filename.c_str());
+
+					TCHAR ServerIP[MAX_PATH];
+					swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+					swprintf_s(RunComStr, 512, L"\"%s\" %s %d DetectProcess", MyName, ServerIP, info->Port);
+					wprintf(L"Run Process: %ls\n", RunComStr);
+					RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, DetectProcessPid);
+					info->processMap["DetectProcess"] = DetectProcessPid;
+					log.logger("Debug", "DetectProcess enabled");
+					
+				}
+				
+			}
+			else {
+				string LogMsg = pair.first + " alive";
+			}
+		}
+	}
+}
 
 int main(int argc, char* argv[]) {
 
@@ -75,6 +125,7 @@ int main(int argc, char* argv[]) {
 		}
 		else {
 
+			// enabled log process
 			Tool tool;
 			DWORD LogProcessPid = 0;
 			TCHAR* RunExeStr = new TCHAR[MAX_PATH];
@@ -93,7 +144,13 @@ int main(int argc, char* argv[]) {
 			RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, LogProcessPid);
 
 			info->processMap["Log"] = LogProcessPid;
+			log.logger("Debug", "Log enabled");
 
+			// enabled check process status thread
+			std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
+			CheckStatusThread.detach();
+
+			// handshake
 			std::thread receiveThread([&]() { socketManager.receiveTCP(); });
 			socketManager.HandleTaskToServer("GiveInfo");
 			receiveThread.join();

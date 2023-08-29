@@ -101,6 +101,7 @@ public:
 private:
     
     Tool tool;
+    Log log;
 
     // scan
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket);

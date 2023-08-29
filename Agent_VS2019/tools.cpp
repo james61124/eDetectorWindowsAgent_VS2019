@@ -61,12 +61,12 @@ bool Tool::CompressFileToZip(const TCHAR* zipFileName, const TCHAR* sourceFilePa
         return false; // Failed to create ZIP file
     }
 
-    TCHAR* ZipDir = new TCHAR[MAX_PATH];
-    GetMyPath(ZipDir);
-    TCHAR* szPath = new TCHAR[_MAX_PATH];
-    swprintf_s(szPath, _MAX_PATH, L"%s\\%s", ZipDir, sourceFilePath);
+    //TCHAR* ZipDir = new TCHAR[MAX_PATH];
+    //GetMyPath(ZipDir);
+    //TCHAR* szPath = new TCHAR[_MAX_PATH];
+    //swprintf_s(szPath, _MAX_PATH, L"%s\\%s", ZipDir, sourceFilePath);
 
-    if (ZipAdd(hz, sourceFilePath, szPath) != 0) {
+    if (ZipAdd(hz, sourceFilePath, sourceFilePath) != 0) {
         printf("Failed to add file to ZIP\n");
         CloseZip(hz);
         return false; // Failed to add file to ZIP

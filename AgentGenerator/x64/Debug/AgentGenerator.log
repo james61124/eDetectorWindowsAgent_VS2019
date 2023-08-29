@@ -5,5 +5,4 @@ C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): 
 C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%lls'
 C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%Ls'
 C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%ws'
-LINK : warning LNK4098: 預設的程式庫 'LIBCMT' 與其他使用的程式庫衝突，請使用 /NODEFAULTLIB:library
   AgentGenerator.vcxproj -> C:\james\eDetectorWindowsAgent_VS2019\x64\Debug\AgentGenerator.exe

@@ -73,6 +73,19 @@ void SocketManager::receiveTCP() {
         if (FirstTime) {
             printf("wait for server to reconnect...");
             log.logger("Info", "wait for server to reconnect...\n");
+
+            for (auto& pair : InfoInstance->processMap) {
+                if (pair.first != "Log" && pair.second != 0) {
+                    string LogMsg = "kill " + pair.first + " process";
+                    log.logger("Debug", LogMsg);
+                    HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, pair.second);
+                    if (hProcess) {
+                        TerminateProcess(hProcess, 0);
+                        CloseHandle(hProcess);
+                    }
+                }
+            }
+
             if (!connectTCP(InfoInstance->ServerIP, InfoInstance->Port)) perror("connection failed\n");
             else log.logger("Info", "server reconnect success");
             HandleTaskToServer("GiveInfo");
@@ -138,6 +151,8 @@ int SocketManager::HandleTaskFromServer(StrPacket* udata) {
 
     return ret;
 }
+
+
 //bool SocketManager::CheckTaskStatus(std::string task) {
 //    std::lock_guard<std::mutex> lock(mapMutex);
 //    auto it = threadMap.find(task);

@@ -19,6 +19,7 @@ public:
     char UUID[UUIDLEN];
     int DetectProcess = 0;
     int DetectNetwork = 0;
+    int Scan = 0;
 
     char ServerIP[IPLEN];
 
