@@ -1,5 +1,6 @@
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\vc142.pdb
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\vc142.idb
+c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\socket_send.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\socket_manager.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\pefunction.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\ntfs_filerecord.obj
@@ -8,7 +9,6 @@ c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\ntfssearchcore.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\memprocess.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\info.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\globalfunction.obj
-c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\filerecord.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\fat32general.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\cvolumeaccess.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\crootfolder.obj
@@ -22,9 +22,10 @@ c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\autorun.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\agent.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\tools.obj
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\task.obj
-c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\socket_send.obj
+c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\zip.obj
+c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\unzip.obj
+c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\log.obj
 c:\james\edetectorwindowsagent_vs2019\x64\debug\agent_vs2019.exe
-c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\agent_vs2019.ilk
 c:\james\edetectorwindowsagent_vs2019\x64\debug\agent_vs2019.pdb
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\agent_vs2019.tlog\cl.command.1.tlog
 c:\james\edetectorwindowsagent_vs2019\agent_vs2019\x64\debug\agent_vs2019.tlog\cl.read.1.tlog

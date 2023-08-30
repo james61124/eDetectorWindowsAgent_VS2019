@@ -1,0 +1,4 @@
+﻿  Shell.cpp
+C:\james\eDetectorWindowsAgent_VS2019\Shell\Shell.cpp(121,6): warning C4311: '類型轉換': 指標值由 'LPTSTR' 指派至 'int' 時會遭截斷
+C:\james\eDetectorWindowsAgent_VS2019\Shell\Shell.cpp(121,6): warning C4302: '類型轉換': 從 'LPTSTR' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+  Shell.vcxproj -> C:\james\eDetectorWindowsAgent_VS2019\x64\Debug\Shell.exe

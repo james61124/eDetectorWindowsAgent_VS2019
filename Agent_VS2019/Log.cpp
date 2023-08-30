@@ -1,6 +1,8 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include "Log.h"
 
+#include <sstream>
+
 void Log::logger(const std::string& level, const std::string& message) {
     WSADATA wsData;
     if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {

@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿
+#include <iostream>
 #include <afx.h> 
 #include <shlwapi.h>
 #include <cstring>
@@ -123,7 +124,15 @@ int main(int argc, char* argv[]) {
 		std::wcerr << "Error renaming file. Error code: " << GetLastError() << std::endl;
 	}
 
-	CString basePath = _T("C:\\james\\eDetectorWindowsAgent_VS2019");
+	
+	//CString basePath = _T("C:\\james\\eDetectorWindowsAgent_VS2019");
+	CString basePath = GetMyPath();
+	int lastBackslash = basePath.ReverseFind('\\');
+	basePath = basePath.Left(lastBackslash);
+	lastBackslash = basePath.ReverseFind('\\');
+	basePath = basePath.Left(lastBackslash);
+
+	std::wcout << (LPCTSTR)basePath << std::endl;
 	CString cstr_m_x64Str = basePath + _T("\\ClientSearch_x64.exe");
 	wchar_t* m_x64Str = cstr_m_x64Str.GetBuffer();
 
@@ -155,17 +164,17 @@ int main(int argc, char* argv[]) {
 
 	//m_CommandStr.Format(_T("%s %s %s %s 24680"), strIP, strPort, strDetectPort, KillStr);
 
-	//m_CommandStr.Format(_T("%s %s %s %s 24680"), strIP, strPort, strDetectPort, KillStr);
-	m_CommandStr.Format(_T("%s %s"), strIP, strPort);
+	m_CommandStr.Format(_T("%s %s %s %s 24680"), strIP, strPort, strDetectPort, KillStr);
+	//m_CommandStr.Format(_T("%s %s"), strIP, strPort);
 
 	CString StartClinetNum = _T("24680");
 	m_CommandStr1.Format(_T("/install %s %s %s %s %s"), strIP, strPort, strDetectPort, KillStr, StartClinetNum);
 
 
-	CString m_SavePath = basePath + _T("\\x64\\Debug\\Agent.exe");
+	CString m_SavePath = basePath + _T("\\x64\\Release\\Agent.exe");
 	CString StubPath;
 	//StubPath = L"\\Shellnd.exe";
-	StubPath = basePath + "\\Shellnd.exe";
+	StubPath = basePath + "\\x64\\Release\\Shellnd.exe";
 	if (_waccess(StubPath.GetString(), 00))
 	{
 		printf("no shell.exe\n");
@@ -181,7 +190,7 @@ int main(int argc, char* argv[]) {
 			wchar_t* filename = new wchar_t[MAX_PATH];
 
 			ResourceInfo resources[] = {
-				{ basePath + _T("\\x64\\Debug\\ClientSearch_x64.exe"), L"ClientSearch-x64.exe", m_CommandStr, 1 },
+				{ basePath + _T("\\x64\\Release\\ClientSearch_x64.exe"), L"ClientSearch-x64.exe", m_CommandStr, 1 },
 				//{ basePath + _T("\\Agent_VS2019.exe"), L"Agent_VS2019.exe", m_CommandStr, 1 },
 				{ basePath + _T("\\MemoryPattern\\Detectdriver.sys"), L"Detectdriver.sys", L"null", 3 },
 				{ basePath + _T("\\Detector\\Collection-x64.dll"), L"Collection-x64.dll", L"null", 4 },
@@ -226,7 +235,11 @@ int main(int argc, char* argv[]) {
 				{ basePath + _T("\\dll\\x64\\ucrtbase.dll"), L"ucrtbase.dll", L"null", 42 },
 				{ basePath + _T("\\dll\\x64\\vcruntime140.dll"), L"vcruntime140.dll", L"null", 43 },
 				{ basePath + _T("\\dll\\x64\\wlanapi.dll"), L"wlanapi.dll", L"null", 44 },
-				{ basePath + _T("\\dll\\x64\\api-ms-win-core-heap-l2-1-0.dll"), L"api-ms-win-core-heap-l2-1-0.dll", L"null", 45 }
+				{ basePath + _T("\\dll\\x64\\api-ms-win-core-heap-l2-1-0.dll"), L"api-ms-win-core-heap-l2-1-0.dll", L"null", 45 },
+				{ basePath + _T("\\dll\\x64\\vcruntime140d.dll"), L"vcruntime140d.dll", L"null", 46 },
+				{ basePath + _T("\\dll\\x64\\vcruntime140_1d.dll"), L"vcruntime140_1d.dll", L"null", 47 },
+				{ basePath + _T("\\dll\\x64\\ucrtbased.dll"), L"ucrtbased.dll", L"null", 48 },
+				{ basePath + _T("\\dll\\x64\\msvcp140d.dll"), L"msvcp140d.dll", L"null", 49 }
 
 			};
 
