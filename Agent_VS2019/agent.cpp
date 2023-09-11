@@ -70,43 +70,56 @@ void CheckProcessStatus(Info* info) {
 }
 
 //void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
-void SearchActivitiesCache(std::vector<std::string> parts, int level) {
-	std::string searchPath;
-
-	for (int i = level; i < parts.size(); i++) {
-		if (parts[i].find('*') != std::string::npos) {
-			searchPath += parts[i];
-			level++;
-			break;
-		}
-		searchPath += "//";
-	}
-	std::cout << searchPath << std::endl;
-		
-
-	WIN32_FIND_DATAA findFileData;
-	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
-
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return;
-	}
-
-	do {
-		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
-				//std::string subDirectory = directory + "\\" + findFileData.cFileName;
-				SearchActivitiesCache(parts, level);
-			}
-		}
-		else {
-			if (strcmp(findFileData.cFileName, "spartan.edb") == 0) {
-				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
-			}
-		}
-	} while (FindNextFileA(hFind, &findFileData) != 0);
-
-	FindClose(hFind);
-}
+//void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath) {
+//
+//	for (int i = level; i < parts.size(); i++) {
+//		searchPath += parts[i];
+//		level++;
+//		if (parts[i].find('*') != std::string::npos) {
+//			break;
+//		}
+//		searchPath += "\\";
+//	}
+//	
+//	if (searchPath.find('*') == std::string::npos) {
+//		searchPath += "*";
+//	}
+//
+//	std::cout << searchPath << std::endl;
+//		
+//
+//	WIN32_FIND_DATAA findFileData;
+//	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
+//
+//	if (hFind == INVALID_HANDLE_VALUE) {
+//		return;
+//	}
+//
+//	do {
+//		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+//			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+//				size_t lastBackslashPos = searchPath.find_last_of('\\');
+//				if (lastBackslashPos != std::string::npos) {
+//					searchPath.erase(lastBackslashPos + 1);
+//				}
+//				searchPath = searchPath + findFileData.cFileName + "\\";
+//				SearchActivitiesCache(parts, level, searchPath);
+//			}
+//		}
+//		else {
+//			if (strcmp(findFileData.cFileName, "UsrClass.dat") == 0) {
+//				size_t lastBackslashPos = searchPath.find_last_of('\\');
+//				if (lastBackslashPos != std::string::npos) {
+//					searchPath.erase(lastBackslashPos);
+//				}
+//				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
+//				return;
+//			}
+//		}
+//	} while (FindNextFileA(hFind, &findFileData) != 0);
+//
+//	FindClose(hFind);
+//}
 
 int main(int argc, char* argv[]) {
 
@@ -135,7 +148,7 @@ int main(int argc, char* argv[]) {
 	//}
 
 	//std::string connectedDevicesPlatformPath = searchPath;
-	//connectedDevicesPlatformPath += "\\Packages\\Microsoft.MicrosoftEdge_*\\AC\\MicrosoftEdge\\User\\Default\\DataStore\\Data\\nouser1\\*\\DBStore\\";
+	//connectedDevicesPlatformPath += "\\Microsoft\\windows\\";
 	//std::vector<std::string> parts;
 	//std::istringstream iss(connectedDevicesPlatformPath);
 	//std::string part;
@@ -143,7 +156,8 @@ int main(int argc, char* argv[]) {
 	//	parts.push_back(part);
 	//}
 
-	//SearchActivitiesCache(parts, 0);
+	//string Path = "";
+	//SearchActivitiesCache(parts, 0, Path);
 
 
 

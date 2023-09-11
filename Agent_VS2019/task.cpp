@@ -1264,6 +1264,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	// send zip file
 	SendScanFileToServer(Scan_zip, tcpSocket);
 
+	DeleteFile(Scan_txt);
+	DeleteFile(Scan_zip);
+
 
 	delete[] buff;
 	ret = GiveScanEnd(pMode, tcpSocket);
