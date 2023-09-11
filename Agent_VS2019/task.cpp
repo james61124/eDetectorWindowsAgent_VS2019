@@ -2319,7 +2319,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	int iLen = sizeof(collect->CollectionNums) / sizeof(collect->CollectionNums[0]);
 
 	printf("start collect...\n");
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < iLen; i++) {
 
 		DWORD m_CollectInfoProcessPid = 0;
 		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
