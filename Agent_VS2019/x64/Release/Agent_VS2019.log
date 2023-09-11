@@ -1,5 +1,5 @@
 ﻿cl : 命令列 warning D9002: 忽略未知的選項 '/utf-16'
-  agent.cpp
+  task.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(66,1): warning C4005: 'STATUS_WAIT_0': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2510): message : 請參閱 'STATUS_WAIT_0' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(222,1): warning C4005: 'STATUS_ABANDONED_WAIT_0': 巨集重複定義
@@ -128,11 +128,37 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(84,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(84,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(84,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(84,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(86,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(86,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(86,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(86,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(88,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(88,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(88,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(88,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(90,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(90,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(90,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(90,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(426,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'const char *'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(426,37): message : 請考慮在格式字串中使用 '%hs'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(426,37): message : 請考慮在格式字串中使用 '%Ts'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(426,37): message : 此警告採用 Visual C++ 使用的非標準語意
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(435,46): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(435,46): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1777,46): warning C4477: 'sprintf_s' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 2 的類型為 'ULONGLONG'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1777,46): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1777,46): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1777,46): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2307,6): warning C4101: 'Sendret': 未參考的區域變數
 agent.obj : warning LNK4075: 忽略 '/EDITANDCONTINUE'，由於 '/OPT:ICF' 規格
   正在產生程式碼
-  0 of 1955 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 1955 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成程式碼產生
 SQLite3_x64.lib(sqlite3.obj) : warning LNK4099: 找不到 PDB 'vc110.pdb' (有 'SQLite3_x64.lib(sqlite3.obj)' 或位於 'C:\james\eDetectorWindowsAgent_VS2019\x64\Release\vc110.pdb')，當做沒有偵錯資訊，連結物件
   Agent_VS2019.vcxproj -> C:\james\eDetectorWindowsAgent_VS2019\x64\Release\Agent_VS2019.exe

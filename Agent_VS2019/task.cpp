@@ -1158,7 +1158,7 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			//	break;
 			//}
 			//else memset(buff, '\0', DATASTRINGMESSAGELEN);
-			if (outFile.good()) outFile << buff;
+			if (outFile.good()) outFile << buff << "\n";
 			else log.logger("Error", "write to Scan.txt failed");
 
 
