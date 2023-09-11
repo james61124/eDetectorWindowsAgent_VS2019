@@ -35,6 +35,10 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
     functionFromServerMap["DataRight"] = &Task::DataRight;
 
+	// Image
+	functionFromServerMap["GetImage"] = &Task::GetImage;
+	
+
     info = infoInstance;
     socketsend = socketSendInstance;
 }
@@ -993,12 +997,19 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	int AllCount = (int)pFileInfo->size();
 	int m_Count = 0;
 
-	/*sprintf_s(buff, DATASTRINGMESSAGELEN, "%d", AllCount);
-	int ret = GiveScanInfo(buff, tcpSocket);
-	if (!ret) {
-		printf("GiveScanInfo send failed\n");
-		return;
-	}*/
+	TCHAR* Scan_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Scan_txt);
+	_tcscat_s(Scan_txt, MAX_PATH_EX, _T("\\Scan.txt"));
+	DeleteFile(Scan_txt);
+	TCHAR* Scan_zip = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Scan_zip);
+	_tcscat_s(Scan_zip, MAX_PATH_EX, _T("\\Scan.zip"));
+	DeleteFile(Scan_zip);
+	std::wofstream outFile(Scan_txt, std::ios::app);
+	if (!outFile.is_open()) {
+		log.logger("Error", "Scan.txt open failed");
+	}
+
 	int ret = 1;
 
 	for (vit = pFileInfo->begin(); vit != pFileInfo->end(); vit++)
@@ -1053,7 +1064,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
 					if ((strlen(dllstr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = GiveScanFragment(buff, tcpSocket);
+						//ret = GiveScanFragment(buff, tcpSocket);
+						if (outFile.good()) outFile << buff;
+						else log.logger("Error", "write to Scan.txt failed");
 						memset(buff, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -1083,7 +1096,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					if ((strlen(Inlinestr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
 					{
 
-						ret = GiveScanFragment(buff, tcpSocket);
+						//ret = GiveScanFragment(buff, tcpSocket);
+						if (outFile.good()) outFile << buff;
+						else log.logger("Error", "write to Scan.txt failed");
 						memset(buff, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -1111,7 +1126,9 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 					sprintf_s(netstr, 4096, "%s;", (*netit).c_str());
 					if ((strlen(netstr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
 					{
-						ret = GiveScanFragment(buff, tcpSocket);
+						//ret = GiveScanFragment(buff, tcpSocket);
+						if (outFile.good()) outFile << buff;
+						else log.logger("Error", "write to Scan.txt failed");
 						memset(buff, '\0', DATASTRINGMESSAGELEN);
 						if (ret <= 0)
 						{
@@ -1135,17 +1152,21 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 			delete[] cTempStr;
 
 
-			ret = GiveScan(buff, tcpSocket);
-			if (ret <= 0) {
-				printf("Give Scan Send Failed\n");
-				break;
-			}
-			else memset(buff, '\0', DATASTRINGMESSAGELEN);
+			//ret = GiveScan(buff, tcpSocket);
+			//if (ret <= 0) {
+			//	printf("Give Scan Send Failed\n");
+			//	break;
+			//}
+			//else memset(buff, '\0', DATASTRINGMESSAGELEN);
+			if (outFile.good()) outFile << buff;
+			else log.logger("Error", "write to Scan.txt failed");
+
 
 			//break;
 		}
 		m_Count++;
 	}
+	outFile.close();
 
 	//m_Hash.clear();
 
@@ -1218,8 +1239,104 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	//	}
 	//}
 
+	// Compress Scan.txt
+	if (tool.CompressFileToZip(Scan_zip, Scan_txt)) _tprintf(_T("File compressed and added to Scan ZIP successfully.\n"));
+	else log.logger("Error", "failed to add file to Scan Zip");
+
+	// Get Scan.txt Size
+	std::ifstream file(Scan_zip, std::ios::binary);
+	if (!file.is_open()) {
+		std::cout << "Failed to open file." << std::endl;
+		log.logger("Error", "failed to open zip file");
+		return;
+	}
+	file.seekg(0, std::ios::end);
+	std::streampos fileSize = file.tellg();
+	file.close();
+	long long fileSizeLL = static_cast<long long>(fileSize);
+
+	// send GiveScanInfo
+	char* FileSize = new char[DATASTRINGMESSAGELEN];
+	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
+	ret = GiveScanDataInfo(FileSize, tcpSocket);
+	delete[] FileSize;
+
+	// send zip file
+	SendScanFileToServer(Scan_zip, tcpSocket);
+
+
 	delete[] buff;
 	ret = GiveScanEnd(pMode, tcpSocket);
+}
+void Task::SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
+{
+
+	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (m_File != INVALID_HANDLE_VALUE)
+	{
+		DWORD m_Filesize = GetFileSize(m_File, NULL);
+		int Sendret;
+		char* InfoStr = new char[MAX_PATH_EX];
+		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
+
+		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+
+		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
+		Sendret = 1;
+		if (Sendret > 0)
+		{
+			DWORD readsize;
+			BYTE* buffer = new BYTE[m_Filesize];
+			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+			if (m_Filesize > DATASTRINGMESSAGELEN) {
+				DWORD tmplen = m_Filesize;
+				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
+					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+					if (tmplen < DATASTRINGMESSAGELEN) { memcpy(TmpBuffer, buffer + i, tmplen); }
+					else {
+						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
+						tmplen -= DATASTRINGMESSAGELEN;
+					}
+
+					Sendret = GiveScan(TmpBuffer, tcpSocket);
+					if (Sendret == 0 || Sendret == -1) break;
+				}
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+			}
+			else
+			{
+				//unsigned char* buff = new unsigned char[DATASTRINGMESSAGELEN];
+				printf("DATASTRINGMESSAGELEN else\n");
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+				memcpy(TmpBuffer, buffer, m_Filesize);
+
+				Sendret = GiveScan(TmpBuffer, tcpSocket);
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+
+			}
+			delete[] buffer;
+		}
+
+		if (Sendret > 0)
+		{
+			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+
+			Sendret = GiveScan(TmpBuffer, tcpSocket);
+			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
+			GetMyPath(m_Path);
+			CloseHandle(m_File);
+
+		}
+	}
+	else
+	{
+		log.logger("Error", "failed to send zip file\n");
+		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
+		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+		delete[] TmpBuffer;
+	}
 }
 
 int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
@@ -1230,6 +1347,12 @@ int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
 int Task::GiveScan(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScan");
+	printf("%s\n", buff);
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveScanDataInfo(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveScanDataInfo");
 	printf("%s\n", buff);
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
@@ -2187,42 +2310,100 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	printf("start collect...\n");
 	for (int i = 0; i < iLen; i++) {
 
-		TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
-		GetMyPath(m_FilePath);
-		_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
-		HMODULE m_lib = LoadLibrary(m_FilePath);
-		if (m_lib) {
-			printf("load dll success : %d\n", i);
-			TCHAR buffer[20]; // Adjust the buffer size as needed
-			_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), collect->CollectionNums[i]);
-			TCHAR* tcharString = buffer;
+		DWORD m_CollectInfoProcessPid = 0;
+		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+		TCHAR* RunComStr = new TCHAR[512];
+		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-			try {
-				collect->CollectionProcess(m_lib, DBName, tcharString);
-			}
-			catch (...) {
-				printf("collect failed\n");
-			}
-			
-			FreeLibrary(m_lib);
-		}
-		else {
-			printf("load dll failed\n");
-			log.logger("Error", "collection load dll failed\n");
-		}
+		wstring filename = tool.GetFileName();
+		TCHAR MyName[MAX_PATH];
+		wcscpy_s(MyName, filename.c_str());
 
-		memset(InfoStr, '\0', MAX_PATH_EX);
-		sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
-		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+		TCHAR ServerIP[MAX_PATH];
+		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-		GiveCollectProgress(TmpBuffer, tcpSocket);
+		swprintf_s(RunComStr, 512, L"\"%s\" %s %d CollectInfo %d %d %s", MyName, ServerIP, info->Port, i, iLen, DBName);
+		wprintf(L"Run Process: %ls\n", RunComStr);
+		RunProcessEx(RunExeStr, RunComStr, 1024, TRUE, FALSE, m_CollectInfoProcessPid); // wait for the previous one finish
+
+		info->processMap["CollectInfo"] = m_CollectInfoProcessPid;
+		log.logger("Debug", "CollectInfo enabled");
+
+		//TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+		//GetMyPath(m_FilePath);
+		//_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
+		//HMODULE m_lib = LoadLibrary(m_FilePath);
+		//if (m_lib) {
+		//	printf("load dll success : %d\n", i);
+		//	TCHAR buffer[20]; // Adjust the buffer size as needed
+		//	_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), collect->CollectionNums[i]);
+		//	TCHAR* tcharString = buffer;
+
+		//	try {
+		//		collect->CollectionProcess(m_lib, DBName, tcharString);
+		//	}
+		//	catch (...) {
+		//		printf("collect failed\n");
+		//	}
+		//	
+		//	FreeLibrary(m_lib);
+		//}
+		//else {
+		//	printf("load dll failed\n");
+		//	log.logger("Error", "collection load dll failed\n");
+		//}
+
+		//memset(InfoStr, '\0', MAX_PATH_EX);
+		//sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
+		//memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+		//memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+
+		//GiveCollectProgress(TmpBuffer, tcpSocket);
 
 	}
 	//delete[] InfoStr;
 	delete[] RunComStr;
 	delete[] RunExeStr;
 }
+
+void Task::CollectData(int i, int iLen, TCHAR* DBName) {
+	Collect* collect = new Collect;
+	char* InfoStr = new char[MAX_PATH_EX];
+	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+	GetMyPath(m_FilePath);
+	_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
+	HMODULE m_lib = LoadLibrary(m_FilePath);
+	if (m_lib) {
+		printf("load dll success : %d\n", i);
+		TCHAR buffer[20]; // Adjust the buffer size as needed
+		_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), collect->CollectionNums[i]);
+		TCHAR* tcharString = buffer;
+
+		try {
+			collect->CollectionProcess(m_lib, DBName, tcharString);
+		}
+		catch (...) {
+			printf("collect failed\n");
+		}
+
+		FreeLibrary(m_lib);
+	}
+	else {
+		printf("load dll failed\n");
+		log.logger("Error", "collection load dll failed\n");
+	}
+
+	memset(InfoStr, '\0', MAX_PATH_EX);
+	sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
+	memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+	memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+
+	GiveCollectProgress(TmpBuffer, info->tcpSocket);
+
+}
+
+
 void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
 {
 	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -2311,6 +2492,32 @@ int Task::GiveCollectDataEnd(char* buff, SOCKET* tcpSocket) {
 	strcpy_s(functionName, 24, "GiveCollectDataEnd");
 	printf("%s\n", buff);
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+
+
+int Task::GetImage(StrPacket* udata) {
+
+	DWORD m_ImageProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	wstring filename = tool.GetFileName();
+	TCHAR MyName[MAX_PATH];
+	wcscpy_s(MyName, filename.c_str());
+
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Image", MyName, ServerIP, info->Port);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ImageProcessPid);
+
+	info->processMap["Image"] = m_ImageProcessPid;
+	log.logger("Debug", "Image enabled");
+
+	return 1;
+
 }
 
 

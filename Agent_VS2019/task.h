@@ -60,10 +60,12 @@ public:
     int GiveScanInfo(char* buff, SOCKET* tcpSocket);
     int GiveProcessData();
     void ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket);
+    void SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket);
     int GiveScan(char* buff, SOCKET* tcpSocket);
     int GiveScanFragment(char* buff, SOCKET* tcpSocket);
     int GiveScanEnd(char* buff, SOCKET* tcpSocket);
     int GiveScanProgress(char* buff, SOCKET* tcpSocket);
+    int GiveScanDataInfo(char* buff, SOCKET* tcpSocket);
 
     // explorer
     int ExplorerInfo_(StrPacket* udata);
@@ -81,14 +83,13 @@ public:
     int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
     int GiveCollectData(char* buff, SOCKET* tcpSocket);
     int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
+    void CollectData(int i, int iLen, TCHAR* DBName);
 
 
    
     
     int UpdateDetectMode(StrPacket* udata);
-    int GetScanInfoData_(StrPacket* udata);
     int GetScan(StrPacket* udata);
-    int GetProcessInfo(StrPacket* udata);
     int GetDrive(StrPacket* udata);
     //int ExplorerInfo(StrPacket* udata);
     int GetCollectInfo(StrPacket* udata);
@@ -97,6 +98,9 @@ public:
 
     SOCKET* CreateNewSocket();
     int DetectNewNetwork(int pMainProcessid);
+
+    // image
+    int GetImage(StrPacket* udata);
 
 private:
     

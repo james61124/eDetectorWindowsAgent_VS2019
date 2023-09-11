@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <thread>
 #include <windows.h>
+#include <sstream>
 #include "socket_manager.h"
 #include "tools.h"
 #include "Log.h"
@@ -68,7 +69,83 @@ void CheckProcessStatus(Info* info) {
 	}
 }
 
+//void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
+void SearchActivitiesCache(std::vector<std::string> parts, int level) {
+	std::string searchPath;
+
+	for (int i = level; i < parts.size(); i++) {
+		if (parts[i].find('*') != std::string::npos) {
+			searchPath += parts[i];
+			level++;
+			break;
+		}
+		searchPath += "//";
+	}
+	std::cout << searchPath << std::endl;
+		
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	do {
+		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+				//std::string subDirectory = directory + "\\" + findFileData.cFileName;
+				SearchActivitiesCache(parts, level);
+			}
+		}
+		else {
+			if (strcmp(findFileData.cFileName, "spartan.edb") == 0) {
+				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
+			}
+		}
+	} while (FindNextFileA(hFind, &findFileData) != 0);
+
+	FindClose(hFind);
+}
+
 int main(int argc, char* argv[]) {
+
+	//WCHAR driveStrings[255];
+	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+	//if (driveStringsLength > 0 && driveStringsLength < 255) {
+	//	WCHAR* currentDrive = driveStrings;
+	//	while (*currentDrive) {
+	//		wprintf(L"Drive: %s\n", currentDrive);
+	//		currentDrive += wcslen(currentDrive) + 1;
+	//	}
+	//}
+
+	//char* searchPath;
+	//size_t len;
+	//errno_t err = _dupenv_s(&searchPath, &len, "LOCALAPPDATA");
+
+	//if (err != 0) {
+	//	printf("Error getting LOCALAPPDATA environment variable.\n");
+	//	return 1;
+	//}
+
+	//if (searchPath == NULL) {
+	//	printf("LOCALAPPDATA environment variable is not set.\n");
+	//	return 1;
+	//}
+
+	//std::string connectedDevicesPlatformPath = searchPath;
+	//connectedDevicesPlatformPath += "\\Packages\\Microsoft.MicrosoftEdge_*\\AC\\MicrosoftEdge\\User\\Default\\DataStore\\Data\\nouser1\\*\\DBStore\\";
+	//std::vector<std::string> parts;
+	//std::istringstream iss(connectedDevicesPlatformPath);
+	//std::string part;
+	//while (std::getline(iss, part, '\\')) {
+	//	parts.push_back(part);
+	//}
+
+	//SearchActivitiesCache(parts, 0);
+
+
 
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <serverIP> <port>" << std::endl;
@@ -107,6 +184,15 @@ int main(int argc, char* argv[]) {
 		}
 		else if (task == "Collect") {
 			socketManager.HandleTaskToServer("CollectionComputerInfo");
+		}
+		else if (task == "CollectInfo") {
+			int i = std::stoi(argv[4]);
+			int iLen = std::stoi(argv[5]);
+			int len = MultiByteToWideChar(CP_ACP, 0, argv[6], -1, NULL, 0);
+			TCHAR* DBName = new TCHAR[len];
+			MultiByteToWideChar(CP_ACP, 0, argv[6], -1, DBName, len);
+
+			socketManager.task->CollectData(i, iLen, DBName);
 		}
 		else if (task == "Explorer") {
 			char* Drive = argv[4];
