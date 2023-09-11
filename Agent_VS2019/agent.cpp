@@ -172,10 +172,10 @@ int main(int argc, char* argv[]) {
 		int count = 0;
 		if (password == 12345) {
 			while (true) {
-				if (!IsHavePID(MainPid)) break;
+				/*if (!IsHavePID(MainPid)) break;
 				if (count > 60) break;
 				Sleep(10000);
-				count++;
+				count++;*/
 			}
 		}
 	}

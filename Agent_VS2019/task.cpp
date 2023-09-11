@@ -817,6 +817,9 @@ int Task::GiveProcessData() {
     std::vector<UnKnownDataInfo> m_UnKnownData;
 
 	printf("start scan...\n");
+	char* null = new char[1];
+	strcpy_s(null, 1, "");
+	ReadyScan(null, info->tcpSocket);
     ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData, info->tcpSocket);
 	printf("finish scan...\n");
 
@@ -1342,6 +1345,11 @@ void Task::SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
 	}
 }
 
+int Task::ReadyScan(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "ReadyScan");
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
 int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
 	char* functionName = new char[24];
 	strcpy_s(functionName, 24, "GiveScanInfo");
@@ -2311,7 +2319,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	int iLen = sizeof(collect->CollectionNums) / sizeof(collect->CollectionNums[0]);
 
 	printf("start collect...\n");
-	for (int i = 0; i < iLen; i++) {
+	for (int i = 0; i < 10; i++) {
 
 		DWORD m_CollectInfoProcessPid = 0;
 		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
