@@ -69,6 +69,37 @@ void CheckProcessStatus(Info* info) {
 	}
 }
 
+void CheckIfAdmin() {
+	Log log;
+	DWORD currentProcessId = GetCurrentProcessId();
+	HANDLE currentProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, currentProcessId);
+	if (currentProcessHandle != NULL) {
+		HANDLE tokenHandle;
+		if (OpenProcessToken(currentProcessHandle, TOKEN_QUERY, &tokenHandle)) {
+			DWORD tokenInformationLength;
+			GetTokenInformation(tokenHandle, TokenUser, NULL, 0, &tokenInformationLength);
+			TOKEN_USER* tokenUser = (TOKEN_USER*)malloc(tokenInformationLength);
+			if (GetTokenInformation(tokenHandle, TokenUser, tokenUser, tokenInformationLength, &tokenInformationLength)) {
+				WCHAR* userName;
+				if (ConvertSidToStringSidW(tokenUser->User.Sid, &userName)) {
+					BOOL isAdmin = FALSE;
+					if (!CheckTokenMembership(NULL, tokenUser->User.Sid, &isAdmin) && isAdmin) {
+						log.logger("Debug", "Terminate non-admin Process");
+						TerminateProcess(currentProcessHandle, 0);
+					}
+
+					LocalFree(userName);
+				}
+			}
+
+			CloseHandle(tokenHandle);
+			free(tokenUser);
+		}
+
+		CloseHandle(currentProcessHandle);
+	}
+}
+
 //void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
 //void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath) {
 //
@@ -202,11 +233,8 @@ int main(int argc, char* argv[]) {
 		else if (task == "CollectInfo") {
 			int i = std::stoi(argv[4]);
 			int iLen = std::stoi(argv[5]);
-			int len = MultiByteToWideChar(CP_ACP, 0, argv[6], -1, NULL, 0);
-			TCHAR* DBName = new TCHAR[len];
-			MultiByteToWideChar(CP_ACP, 0, argv[6], -1, DBName, len);
 
-			socketManager.task->CollectData(i, iLen, DBName);
+			socketManager.task->CollectData(i, iLen);
 		}
 		else if (task == "Explorer") {
 			char* Drive = argv[4];
@@ -245,6 +273,9 @@ int main(int argc, char* argv[]) {
 
 			info->processMap["Log"] = LogProcessPid;
 			log.logger("Debug", "Log enabled");
+
+			// If the user is not admin, kill itself
+			CheckIfAdmin();
 
 			// enabled check process status thread
 			std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });

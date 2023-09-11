@@ -84,7 +84,7 @@ public:
     int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
     int GiveCollectData(char* buff, SOCKET* tcpSocket);
     int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
-    void CollectData(int i, int iLen, TCHAR* DBName);
+    void CollectData(int i, int iLen);
 
 
    

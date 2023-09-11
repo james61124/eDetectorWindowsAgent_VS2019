@@ -2333,7 +2333,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 		TCHAR ServerIP[MAX_PATH];
 		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-		swprintf_s(RunComStr, 512, L"\"%s\" %s %d CollectInfo %d %d %s", MyName, ServerIP, info->Port, i, iLen, DBName);
+		swprintf_s(RunComStr, 512, L"\"%s\" %s %d CollectInfo %d %d", MyName, ServerIP, info->Port, i, iLen);
 		wprintf(L"Run Process: %ls\n", RunComStr);
 		RunProcessEx(RunExeStr, RunComStr, 1024, TRUE, FALSE, m_CollectInfoProcessPid); // wait for the previous one finish
 
@@ -2377,7 +2377,7 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	delete[] RunExeStr;
 }
 
-void Task::CollectData(int i, int iLen, TCHAR* DBName) {
+void Task::CollectData(int i, int iLen) {
 	Collect* collect = new Collect;
 	char* InfoStr = new char[MAX_PATH_EX];
 	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
@@ -2392,7 +2392,10 @@ void Task::CollectData(int i, int iLen, TCHAR* DBName) {
 		TCHAR* tcharString = buffer;
 
 		try {
-			collect->CollectionProcess(m_lib, DBName, tcharString);
+			wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
+			GetMyPath(m_FullDbPath);
+			_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+			collect->CollectionProcess(m_lib, m_FullDbPath, tcharString);
 		}
 		catch (...) {
 			printf("collect failed\n");
