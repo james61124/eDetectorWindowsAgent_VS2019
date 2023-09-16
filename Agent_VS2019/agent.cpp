@@ -101,94 +101,130 @@ void CheckIfAdmin() {
 }
 
 //void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
-//void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath) {
-//
-//	for (int i = level; i < parts.size(); i++) {
-//		searchPath += parts[i];
-//		level++;
-//		if (parts[i].find('*') != std::string::npos) {
-//			break;
-//		}
-//		searchPath += "\\";
-//	}
-//	
-//	if (searchPath.find('*') == std::string::npos) {
-//		searchPath += "*";
-//	}
-//
-//	std::cout << searchPath << std::endl;
-//		
-//
-//	WIN32_FIND_DATAA findFileData;
-//	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
-//
-//	if (hFind == INVALID_HANDLE_VALUE) {
-//		return;
-//	}
-//
-//	do {
-//		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-//			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
-//				size_t lastBackslashPos = searchPath.find_last_of('\\');
-//				if (lastBackslashPos != std::string::npos) {
-//					searchPath.erase(lastBackslashPos + 1);
-//				}
-//				searchPath = searchPath + findFileData.cFileName + "\\";
-//				SearchActivitiesCache(parts, level, searchPath);
-//			}
-//		}
-//		else {
-//			if (strcmp(findFileData.cFileName, "UsrClass.dat") == 0) {
-//				size_t lastBackslashPos = searchPath.find_last_of('\\');
-//				if (lastBackslashPos != std::string::npos) {
-//					searchPath.erase(lastBackslashPos);
-//				}
-//				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
-//				return;
-//			}
-//		}
-//	} while (FindNextFileA(hFind, &findFileData) != 0);
-//
-//	FindClose(hFind);
-//}
+void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath, char* FileToSearch) {
+
+	for (int i = level; i < parts.size(); i++) {
+		searchPath += parts[i];
+		level++;
+		if (parts[i].find('*') != std::string::npos) {
+			break;
+		}
+		searchPath += "\\";
+	}
+	
+	if (searchPath.find('*') == std::string::npos) {
+		searchPath += "*";
+	}
+
+	std::cout << "searchPath: " << searchPath << std::endl;
+		
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	do {
+		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+				
+				size_t lastBackslashPos = searchPath.find_last_of('\\');
+				if (lastBackslashPos != std::string::npos) {
+					searchPath.erase(lastBackslashPos + 1);
+				}
+				searchPath = searchPath + findFileData.cFileName + "\\";
+				SearchActivitiesCache(parts, level, searchPath, FileToSearch);
+			}
+		}
+		else {
+			
+			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
+				size_t lastBackslashPos = searchPath.find_last_of('\\');
+				if (lastBackslashPos != std::string::npos) {
+					searchPath.erase(lastBackslashPos);
+				}
+				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
+				return;
+			}
+		}
+	} while (FindNextFileA(hFind, &findFileData) != 0);
+
+	FindClose(hFind);
+}
 
 int main(int argc, char* argv[]) {
 
 	//WCHAR driveStrings[255];
 	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+	//WCHAR* currentDrive;
+	//std::string narrowString_currentDrive;
 	//if (driveStringsLength > 0 && driveStringsLength < 255) {
-	//	WCHAR* currentDrive = driveStrings;
+	//	currentDrive = driveStrings;
 	//	while (*currentDrive) {
-	//		wprintf(L"Drive: %s\n", currentDrive);
+	//		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+	//		narrowString_currentDrive.resize(requiredSize);
+
+	//		if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+	//			std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+	//		}
+
 	//		currentDrive += wcslen(currentDrive) + 1;
+	//		break;
 	//	}
 	//}
 
-	//char* searchPath;
-	//size_t len;
-	//errno_t err = _dupenv_s(&searchPath, &len, "LOCALAPPDATA");
 
-	//if (err != 0) {
-	//	printf("Error getting LOCALAPPDATA environment variable.\n");
-	//	return 1;
+	//char* searchPath = new char[4];
+	//if (strcmp(argv[2], "null")) {
+	//	size_t len;
+	//	errno_t err = _dupenv_s(&searchPath, &len, argv[2]);
+
+	//	if (err != 0) {
+	//		printf("Error getting LOCALAPPDATA environment variable.\n");
+	//		return 1;
+	//	}
+
+	//	if (searchPath == NULL) {
+	//		printf("LOCALAPPDATA environment variable is not set.\n");
+	//		return 1;
+	//	}
+	//}
+	//
+	//std::string connectedDevicesPlatformPath;
+	//if (searchPath != NULL) {
+	//	connectedDevicesPlatformPath = searchPath;
+	//}
+	//std::string argv1(argv[1]);
+	//connectedDevicesPlatformPath += argv1;
+
+	//// if end of path has *, remove it
+	//size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
+	//if (lastBackslashPos != std::string::npos) {
+	//	size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
+	//	if (secondLastBackslashPos != std::string::npos) {
+	//		std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
+	//		if (extractedString == "*") {
+	//			connectedDevicesPlatformPath.erase(secondLastBackslashPos);
+	//		}
+	//	}
 	//}
 
-	//if (searchPath == NULL) {
-	//	printf("LOCALAPPDATA environment variable is not set.\n");
-	//	return 1;
-	//}
-
-	//std::string connectedDevicesPlatformPath = searchPath;
-	//connectedDevicesPlatformPath += "\\Microsoft\\windows\\";
+	//// replace root with root drive
 	//std::vector<std::string> parts;
 	//std::istringstream iss(connectedDevicesPlatformPath);
 	//std::string part;
 	//while (std::getline(iss, part, '\\')) {
+	//	size_t found = part.find("root");
+	//	while (found != std::string::npos) {
+	//		part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
+	//		found = part.find("root", found + 1);
+	//	}
 	//	parts.push_back(part);
 	//}
 
 	//string Path = "";
-	//SearchActivitiesCache(parts, 0, Path);
+	//SearchActivitiesCache(parts, 0, Path, argv[3]);
 
 
 
@@ -240,6 +276,10 @@ int main(int argc, char* argv[]) {
 			char* Drive = argv[4];
 			char* FileSystem = argv[5];
 			socketManager.task->GiveExplorerData(Drive, FileSystem);
+		}
+		else if (task == "Image") {
+			char* cmd = argv[4];
+			socketManager.task->LookingForImage(cmd);
 		}
 		else if (task == "DetectProcess") {
 			socketManager.HandleTaskToServer("DetectProcess");

@@ -8,6 +8,7 @@
 #include <set>
 #include <map>
 #include <fstream>
+#include <sstream>
 
 #include "tools.h"
 #include "socket_send.h"
@@ -102,6 +103,12 @@ public:
 
     // image
     int GetImage(StrPacket* udata);
+    int LookingForImage(char* cmd);
+    void SearchImageFile(std::vector<std::string>& parts, int level, string& searchPath, char* FileToSearch, HZIP hz);
+    void SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
+    int GiveImageInfo(char* buff, SOCKET* tcpSocket);
+    int GiveImage(char* buff, SOCKET* tcpSocket);
+    int GiveImageEnd(char* buff, SOCKET* tcpSocket);
 
 private:
     

@@ -2416,8 +2416,6 @@ void Task::CollectData(int i, int iLen) {
 	GiveCollectProgress(TmpBuffer, info->tcpSocket);
 
 }
-
-
 void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
 {
 	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -2523,7 +2521,7 @@ int Task::GetImage(StrPacket* udata) {
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Image", MyName, ServerIP, info->Port);
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Image %s", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
 	wprintf(L"Run Process: %ls\n", RunComStr);
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ImageProcessPid);
 
@@ -2532,6 +2530,250 @@ int Task::GetImage(StrPacket* udata) {
 
 	return 1;
 
+}
+void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& searchPath, char* FileToSearch, HZIP hz) {
+
+	for (int i = level; i < parts.size(); i++) {
+		searchPath += parts[i];
+		level++;
+		if (parts[i].find('*') != std::string::npos) {
+			break;
+		}
+		searchPath += "\\";
+	}
+
+	if (searchPath.find('*') == std::string::npos) {
+		searchPath += "*";
+	}
+
+	//std::cout << "searchPath: " << searchPath << std::endl;
+
+
+	WIN32_FIND_DATAA findFileData;
+	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		return;
+	}
+
+	do {
+		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+
+				size_t lastBackslashPos = searchPath.find_last_of('\\');
+				if (lastBackslashPos != std::string::npos) {
+					searchPath.erase(lastBackslashPos + 1);
+				}
+				searchPath = searchPath + findFileData.cFileName + "\\";
+				SearchImageFile(parts, level, searchPath, FileToSearch, hz);
+			}
+		}
+		else {
+
+			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
+				size_t lastBackslashPos = searchPath.find_last_of('\\');
+				if (lastBackslashPos != std::string::npos) {
+					searchPath.erase(lastBackslashPos);
+				}
+				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
+
+
+				size_t bufferSize = strlen(searchPath.c_str()) + 1 + strlen(findFileData.cFileName) + 1;
+				char* combinedStr = new char[bufferSize];
+				strcpy_s(combinedStr, bufferSize, searchPath.c_str());
+				strcat_s(combinedStr, bufferSize, "\\");
+				strcat_s(combinedStr, bufferSize, findFileData.cFileName);
+				TCHAR* tcharStr = new TCHAR[bufferSize];
+				MultiByteToWideChar(CP_ACP, 0, combinedStr, -1, tcharStr, bufferSize);
+
+				if (ZipAdd(hz, tcharStr, tcharStr) != 0) {
+					return;
+				}
+
+				return;
+			}
+		}
+	} while (FindNextFileA(hFind, &findFileData) != 0);
+
+	FindClose(hFind);
+}
+int Task::LookingForImage(char* cmd) {
+
+	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
+	GetMyPath(zipFileName);
+	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
+	HZIP hz = CreateZip(zipFileName, 0);
+	if (hz == 0) {
+		printf("Failed to create image.zip\n");
+		return false; // Failed to create ZIP file
+	}
+
+	std::vector<std::string> MsgAfterSplit;
+	char* nextToken = nullptr;
+	const char* delimiter = "\n";
+	char* token = strtok_s(cmd, delimiter, &nextToken);
+	while (token != nullptr) {
+		MsgAfterSplit.push_back(token);
+		token = strtok_s(nullptr, delimiter, &nextToken);
+	}
+
+	for (int i = 0; i < MsgAfterSplit.size(); i++) {
+		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
+		std::string file = FileInfo[0];
+		std::string AppType = FileInfo[1];
+		std::string keyword = FileInfo[2];
+
+		// find root drive
+		WCHAR driveStrings[255];
+		DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+		WCHAR* currentDrive;
+		std::string narrowString_currentDrive;
+		if (driveStringsLength > 0 && driveStringsLength < 255) {
+			currentDrive = driveStrings;
+			while (*currentDrive) {
+				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+				narrowString_currentDrive.resize(requiredSize);
+
+				if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+					std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+				}
+
+				currentDrive += wcslen(currentDrive) + 1;
+				break;
+			}
+		}
+
+		// find app environment variable
+		char* searchPath = new char[4];
+		if (strcmp(const_cast<char*>(AppType.c_str()), "null")) {
+			size_t len;
+			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
+
+			if (err != 0) {
+				printf("Error getting environment variable.\n");
+				return 0;
+			}
+
+			if (searchPath == NULL) {
+				printf("environment variable is not set.\n");
+				return 0;
+			}
+		}
+
+		std::string connectedDevicesPlatformPath;
+		if (searchPath != NULL) {
+			connectedDevicesPlatformPath = searchPath;
+		}
+		connectedDevicesPlatformPath += file;
+
+		// if end of path has *, remove it
+		size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
+		if (lastBackslashPos != std::string::npos) {
+			size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
+			if (secondLastBackslashPos != std::string::npos) {
+				std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
+				if (extractedString == "*") {
+					connectedDevicesPlatformPath.erase(secondLastBackslashPos);
+				}
+			}
+		}
+
+		// replace root with root drive
+		std::vector<std::string> parts;
+		std::istringstream iss(connectedDevicesPlatformPath);
+		std::string part;
+		while (std::getline(iss, part, '\\')) {
+			size_t found = part.find("root");
+			while (found != std::string::npos) {
+				part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
+				found = part.find("root", found + 1);
+			}
+			parts.push_back(part);
+		}
+
+		string Path = "";
+		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), hz);
+	}
+
+	CloseZip(hz);
+
+
+	SendImageFileToServer(zipFileName, info->tcpSocket);
+
+	
+}
+void Task::SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
+{
+	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (m_File != INVALID_HANDLE_VALUE) {
+		DWORD m_Filesize = GetFileSize(m_File, NULL);
+		int Sendret;
+		char* InfoStr = new char[MAX_PATH_EX];
+		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
+		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+
+		Sendret = GiveImageInfo(TmpBuffer, tcpSocket);
+
+		if (Sendret > 0)
+		{
+			DWORD readsize;
+			BYTE* buffer = new BYTE[m_Filesize];
+			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+			if (m_Filesize > DATASTRINGMESSAGELEN) {
+				DWORD tmplen = m_Filesize;
+				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
+					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
+					else {
+						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
+						tmplen -= DATASTRINGMESSAGELEN;
+					}
+
+					Sendret = GiveImage(TmpBuffer, tcpSocket);
+					if (Sendret == 0 || Sendret == -1) break;
+				}
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+			}
+			else
+			{
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+				memcpy(TmpBuffer, buffer, m_Filesize);
+				Sendret = GiveImage(TmpBuffer, tcpSocket);
+				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+			}
+			delete[] buffer;
+		}
+		if (Sendret > 0)
+		{
+			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+			Sendret = GiveImageEnd(TmpBuffer, tcpSocket);
+			CloseHandle(m_File);
+
+		}
+	}
+	else
+	{
+		printf("image zip file not exists\n");
+	}
+}
+int Task::GiveImageInfo(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveImageInfo");
+	printf("%s\n", buff);
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveImage(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveImage");
+	printf("%s\n", buff);
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+int Task::GiveImageEnd(char* buff, SOCKET* tcpSocket) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "GiveImageEnd");
+	printf("%s\n", buff);
+	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
 
 
