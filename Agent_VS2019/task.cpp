@@ -13,13 +13,15 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// handshake
     functionMap["GiveInfo"] = std::bind(&Task::GiveInfo, this);
-    functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
+	functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
+	functionFromServerMap["UpdateDetectMode"] = &Task::UpdateDetectMode;
+
+    
 
 	functionMap["DetectProcess"] = std::bind(&Task::DetectProcess_, this);
 
     // packet from server
-    functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
-    functionFromServerMap["UpdateDetectMode"] = &Task::UpdateDetectMode;
+    
 
 	// Scan
 	functionFromServerMap["GetScan"] = &Task::GetScan;
@@ -28,6 +30,7 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// Explorer
     functionFromServerMap["GetDrive"] = &Task::GetDrive; // ExplorerInfo_
+	functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
 	functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo_;
 
 	// Collect
@@ -37,6 +40,10 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// Image
 	functionFromServerMap["GetImage"] = &Task::GetImage;
+
+	// Update Agent 
+	functionFromServerMap["UpdateAgent"] = &Task::OpenUpdateAgentProcess;
+	functionMap["UpdateAgent"] = std::bind(&Task::UpdateAgent, this);
 	
 
     info = infoInstance;
@@ -2622,6 +2629,8 @@ int Task::LookingForImage(char* cmd) {
 		std::string AppType = FileInfo[1];
 		std::string keyword = FileInfo[2];
 
+		printf("%s %s %s\n", file, AppType, keyword);
+
 		// find root drive
 		WCHAR driveStrings[255];
 		DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
@@ -2774,6 +2783,132 @@ int Task::GiveImageEnd(char* buff, SOCKET* tcpSocket) {
 	strcpy_s(functionName, 24, "GiveImageEnd");
 	printf("%s\n", buff);
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+}
+
+int Task::OpenUpdateAgentProcess(StrPacket* udata) {
+
+	DWORD m_UpdateAgentProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	wstring filename = tool.GetFileName();
+	TCHAR MyName[MAX_PATH];
+	wcscpy_s(MyName, filename.c_str());
+
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d UpdateAgent", MyName, ServerIP, info->Port);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_UpdateAgentProcessPid);
+
+	info->processMap["UpdateAgent"] = m_UpdateAgentProcessPid;
+	log.logger("Debug", "UpdateAgent enabled");
+
+	return 1;
+
+}
+int Task::UpdateAgent() {
+	char* null = new char[1];
+	strcpy_s(null, 1, "");
+	ReadyUpdateAgent(null);
+	int fileSize = GiveUpdateInfo();
+	if (!fileSize) {
+		std::ofstream outFile("Agent_NewVersion.exe", std::ios::binary);
+		if (!outFile) {
+			std::cerr << "Error opening file for writing" << std::endl;
+			return 0;
+		}
+
+		char buffer[STRPACKETSIZE];
+		uint64_t receivedSize = 0;
+		SendACK(null);
+		while (receivedSize < fileSize) {
+			int bytesRead = recv(*info->tcpSocket, buffer, sizeof(buffer), 0);
+			if (bytesRead == -1) {
+				std::cerr << "Error receiving data" << std::endl;
+				outFile.close();
+				return 0;
+			}
+			SetKeys(BIT128, AESKey);
+			DecryptBuffer((BYTE*)buffer, STRPACKETSIZE);
+			StrPacket* udata;
+			udata = (StrPacket*)buffer;
+			if (!strcmp(udata->DoWorking, "GiveUpdate")) {
+				outFile.write(buffer, bytesRead);
+				receivedSize += bytesRead;
+			}
+			else {
+				return 0;
+			}
+			SendACK(null);
+		}
+		outFile.close();
+
+	}
+	else {
+		return 0;
+	}
+
+	GiveUpdateEnd();
+	SendACK(null);
+}
+int Task::ReadyUpdateAgent(char* buff) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "ReadyUpdateAgent");
+	printf("%s\n", buff);
+	return socketsend->SendMessageToServer(functionName, buff);
+}
+int Task::SendACK(char* buff) {
+	char* functionName = new char[24];
+	strcpy_s(functionName, 24, "DataRight");
+	printf("%s\n", buff);
+	return socketsend->SendMessageToServer(functionName, buff);
+}
+int Task::GiveUpdateInfo() {
+	char buff[STRPACKETSIZE];
+	int ret = recv(*info->tcpSocket, buff, sizeof(buff), 0);
+
+	if (ret == SOCKET_ERROR) {
+		std::cerr << "Error receiving ACK: " << WSAGetLastError() << std::endl;
+		return 0;
+	}
+
+	SetKeys(BIT128, AESKey);
+	DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
+
+	StrPacket* udata;
+	udata = (StrPacket*)buff;
+
+	if (!strcmp(udata->DoWorking, "GiveUpdateInfo")) {
+		return std::stoi(udata->csMsg);
+	}
+	else {
+		return 0;
+	}
+}
+int Task::GiveUpdateEnd() {
+	char buff[STRPACKETSIZE];
+	int ret = recv(*info->tcpSocket, buff, sizeof(buff), 0);
+
+	if (ret == SOCKET_ERROR) {
+		std::cerr << "Error receiving ACK: " << WSAGetLastError() << std::endl;
+		return 0;
+	}
+
+	SetKeys(BIT128, AESKey);
+	DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
+
+	StrPacket* udata;
+	udata = (StrPacket*)buff;
+
+	if (!strcmp(udata->DoWorking, "GiveUpdateEnd")) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
 }
 
 

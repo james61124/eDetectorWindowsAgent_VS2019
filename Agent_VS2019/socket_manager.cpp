@@ -86,6 +86,7 @@ void SocketManager::receiveTCP() {
                 }
             }
 
+            closesocket(*InfoInstance->tcpSocket);
             if (!connectTCP(InfoInstance->ServerIP, InfoInstance->Port)) perror("connection failed\n");
             else log.logger("Info", "server reconnect success");
             HandleTaskToServer("GiveInfo");

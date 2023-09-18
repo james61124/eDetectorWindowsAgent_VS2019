@@ -110,10 +110,19 @@ public:
     int GiveImage(char* buff, SOCKET* tcpSocket);
     int GiveImageEnd(char* buff, SOCKET* tcpSocket);
 
+    // update agent
+    int OpenUpdateAgentProcess(StrPacket* udata);
+    int UpdateAgent();
+    int ReadyUpdateAgent(char* buff);
+    int SendACK(char* buff);
+    int GiveUpdateInfo();
+    int GiveUpdateEnd();
+
 private:
     
     Tool tool;
     Log log;
+    const char* AESKey = "AES Encrypt Decrypt";
 
     // scan
     void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket);
