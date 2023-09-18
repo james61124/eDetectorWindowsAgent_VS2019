@@ -79,8 +79,8 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	std::string LogMsg = "Send: " + Task + " " + Msg;
 	log.logger("Info", LogMsg);
 
-	delete[] Work;
-	delete[] Mgs;
+	//delete[] Work;
+	//delete[] Mgs;
 	return ret;
 }
 

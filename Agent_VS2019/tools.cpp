@@ -11,10 +11,18 @@ std::vector<std::string> Tool::SplitMsg(char* msg) {
     // First call to strtok_s
     char* token = strtok_s(msg, delimiter, &nextToken);
     while (token != nullptr) {
+        //printf("token %s\n", token);
         MsgAfterSplit.push_back(token);
+
+        // Check if the next token is empty
+        if (nextToken != nullptr && *nextToken == '|') {
+            MsgAfterSplit.push_back(""); // Generate an empty string
+        }
+
         // Subsequent calls to strtok_s using the same context (nextToken)
         token = strtok_s(nullptr, delimiter, &nextToken);
     }
+
     return MsgAfterSplit;
 }
 

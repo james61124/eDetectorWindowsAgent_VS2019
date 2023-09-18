@@ -43,6 +43,9 @@ public:
     std::unordered_map<std::string, std::thread> threadMap;
     void startThread(const std::string& key, std::string functionName);
 
+    std::ofstream AgentFile;
+    char* AgentBuffer;
+
     // handshake
     int GiveInfo();
     int GiveDetectInfoFirst();
@@ -113,6 +116,8 @@ public:
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
     int UpdateAgent();
+    void AgentReceive();
+    void WriteNewAgentToFile(char* buffer, int totalReceivedSize);
     int ReadyUpdateAgent(char* buff);
     int SendACK(char* buff);
     int GiveUpdateInfo();

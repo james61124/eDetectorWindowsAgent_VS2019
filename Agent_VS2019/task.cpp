@@ -2349,6 +2349,8 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 
 		//TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
 		//GetMyPath(m_FilePath);
+
+
 		//_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
 		//HMODULE m_lib = LoadLibrary(m_FilePath);
 		//if (m_lib) {
@@ -2540,10 +2542,12 @@ int Task::GetImage(StrPacket* udata) {
 }
 void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& searchPath, char* FileToSearch, HZIP hz) {
 
+	
 	for (int i = level; i < parts.size(); i++) {
 		searchPath += parts[i];
 		level++;
-		if (parts[i].find('*') != std::string::npos) {
+		printf("parts[i]: %s\n", parts[i]);
+		if (parts[i].find('*') != std::string::npos || parts[i].empty()) {
 			break;
 		}
 		searchPath += "\\";
@@ -2553,12 +2557,13 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& s
 		searchPath += "*";
 	}
 
-	//std::cout << "searchPath: " << searchPath << std::endl;
+	std::cout << "searchPath: " << searchPath << std::endl;
 
 
 	WIN32_FIND_DATAA findFileData;
 	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
 	if (hFind == INVALID_HANDLE_VALUE) {
+		std::cout << "INVALID_HANDLE_VALUE" << std::endl;
 		return;
 	}
 
@@ -2576,7 +2581,7 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& s
 		}
 		else {
 
-			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
+			if (_stricmp(findFileData.cFileName, FileToSearch) == 0) {
 				size_t lastBackslashPos = searchPath.find_last_of('\\');
 				if (lastBackslashPos != std::string::npos) {
 					searchPath.erase(lastBackslashPos);
@@ -2616,7 +2621,7 @@ int Task::LookingForImage(char* cmd) {
 
 	std::vector<std::string> MsgAfterSplit;
 	char* nextToken = nullptr;
-	const char* delimiter = "\n";
+	const char* delimiter = ",";
 	char* token = strtok_s(cmd, delimiter, &nextToken);
 	while (token != nullptr) {
 		MsgAfterSplit.push_back(token);
@@ -2624,12 +2629,13 @@ int Task::LookingForImage(char* cmd) {
 	}
 
 	for (int i = 0; i < MsgAfterSplit.size(); i++) {
+		std::cout << MsgAfterSplit[i].c_str() << std::endl;
 		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
 		std::string file = FileInfo[0];
 		std::string AppType = FileInfo[1];
 		std::string keyword = FileInfo[2];
 
-		printf("%s %s %s\n", file, AppType, keyword);
+		printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
 
 		// find root drive
 		WCHAR driveStrings[255];
@@ -2643,7 +2649,7 @@ int Task::LookingForImage(char* cmd) {
 				narrowString_currentDrive.resize(requiredSize);
 
 				if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-					std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+					//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
 				}
 
 				currentDrive += wcslen(currentDrive) + 1;
@@ -2653,7 +2659,9 @@ int Task::LookingForImage(char* cmd) {
 
 		// find app environment variable
 		char* searchPath = new char[4];
-		if (strcmp(const_cast<char*>(AppType.c_str()), "null")) {
+		std::string connectedDevicesPlatformPath;
+
+		if (!AppType.empty()) {
 			size_t len;
 			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
 
@@ -2666,13 +2674,27 @@ int Task::LookingForImage(char* cmd) {
 				printf("environment variable is not set.\n");
 				return 0;
 			}
-		}
 
-		std::string connectedDevicesPlatformPath;
-		if (searchPath != NULL) {
 			connectedDevicesPlatformPath = searchPath;
+			connectedDevicesPlatformPath += "\\";
+
 		}
+		//else {
+		//	connectedDevicesPlatformPath = searchPath;
+		//	connectedDevicesPlatformPath += "\\";
+		//}
+
+		//std::string connectedDevicesPlatformPath;
+		//if (searchPath != NULL) {
+		//	connectedDevicesPlatformPath = searchPath;
+		//	connectedDevicesPlatformPath += "\\";
+		//}
+		//else {
+		//	std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+		//	connectedDevicesPlatformPath = narrowString_currentDrive;
+		//}
 		connectedDevicesPlatformPath += file;
+		
 
 		// if end of path has *, remove it
 		size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
@@ -2692,11 +2714,15 @@ int Task::LookingForImage(char* cmd) {
 		std::string part;
 		while (std::getline(iss, part, '\\')) {
 			size_t found = part.find("root");
-			while (found != std::string::npos) {
+			if (found != std::string::npos) {
 				part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
-				found = part.find("root", found + 1);
+				//found = part.find("root", found + 1);
 			}
-			parts.push_back(part);
+
+			if (!part.empty()) {
+				parts.push_back(part);
+			}
+			
 		}
 
 		string Path = "";
@@ -2809,50 +2835,136 @@ int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 	return 1;
 
 }
+void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
+	char* null = new char[1];
+	strcpy_s(null, 1, "");
+	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
+	GetMyPath(AgentNewVersion_exe);
+	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
+	std::wofstream outFile(AgentNewVersion_exe, std::ios::app);
+	if (!outFile.is_open()) {
+		log.logger("Error", "Explorer.txt open failed");
+	}
+	if (outFile.good()) outFile << buffer;
+	else {
+		log.logger("Error", "Error write data into NewAgent");
+	}
+
+	//AgentFile.write(buffer, totalReceivedSize);
+	//if (!AgentFile) {
+	//	log.logger("Error", "Error write data into NewAgent");
+	//}
+	outFile.close();
+	SendACK(null);
+}
+void Task::AgentReceive() {
+	while (true) {
+		char tmpbuffer[STRDATAPACKETSIZE];
+		uint64_t receivedSize = 0;
+		int totalReceivedSize = 0;
+		char buffer[STRDATAPACKETSIZE];
+
+		while (totalReceivedSize < STRDATAPACKETSIZE) {
+			//log.logger("Debug", "start receive");
+			int bytesRead = recv(*info->tcpSocket, tmpbuffer, sizeof(tmpbuffer), 0);
+			//log.logger("Debug", "finish receive");
+			if (bytesRead == -1) {
+				log.logger("Error", "UpdateAgent Error receiving data");
+				return;
+			}
+			
+			
+			memcpy(buffer + totalReceivedSize, tmpbuffer, STRDATAPACKETSIZE - totalReceivedSize);
+			totalReceivedSize += bytesRead;
+			log.logger("Debug", to_string(totalReceivedSize));
+			//memcpy(buffer, tmpbuffer, STRDATAPACKETSIZE);
+		}
+
+		//int bytesRead = recv(*info->tcpSocket, buffer, sizeof(buffer), 0);
+		//if (bytesRead == -1) {
+		//	log.logger("Error", "UpdateAgent Error receiving data");
+		//	return;
+		//}
+
+		SetKeys(BIT128, AESKey);
+		DecryptBuffer((BYTE*)buffer, STRPACKETSIZE);
+		StrDataPacket* udata;
+		udata = (StrDataPacket*)buffer;
+
+		cout << "Receive: " << udata->DoWorking << endl;
+		std::string Task(udata->DoWorking);
+		std::string TaskMsg(udata->csMsg);
+		std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
+		log.logger("Info", LogMsg);
+
+		if (!strcmp(udata->DoWorking, "GiveUpdate")) {
+			std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize); });
+			WriteNewAgentToFileThread.detach();
+		}
+		else {
+			break;
+		}
+	}
+}
 int Task::UpdateAgent() {
 	char* null = new char[1];
 	strcpy_s(null, 1, "");
+
+	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
+	GetMyPath(AgentNewVersion_exe);
+	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
+	DeleteFile(AgentNewVersion_exe);
+
 	ReadyUpdateAgent(null);
 	int fileSize = GiveUpdateInfo();
+	std::thread AgentReceiveThread([&]() { AgentReceive(); });
 	if (!fileSize) {
-		std::ofstream outFile("Agent_NewVersion.exe", std::ios::binary);
-		if (!outFile) {
-			std::cerr << "Error opening file for writing" << std::endl;
-			return 0;
-		}
-
-		char buffer[STRPACKETSIZE];
-		uint64_t receivedSize = 0;
-		SendACK(null);
-		while (receivedSize < fileSize) {
-			int bytesRead = recv(*info->tcpSocket, buffer, sizeof(buffer), 0);
-			if (bytesRead == -1) {
-				std::cerr << "Error receiving data" << std::endl;
-				outFile.close();
-				return 0;
-			}
-			SetKeys(BIT128, AESKey);
-			DecryptBuffer((BYTE*)buffer, STRPACKETSIZE);
-			StrPacket* udata;
-			udata = (StrPacket*)buffer;
-			if (!strcmp(udata->DoWorking, "GiveUpdate")) {
-				outFile.write(buffer, bytesRead);
-				receivedSize += bytesRead;
-			}
-			else {
-				return 0;
-			}
-			SendACK(null);
-		}
-		outFile.close();
-
+		log.logger("Error", "Error receiving New Agent Info");
 	}
-	else {
+	SendACK(null);
+	AgentReceiveThread.join();
+	SendACK(null);
+
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	log.logger("Debug", "wake up");
+
+	int desiredLength = fileSize;
+	TCHAR* filename = new TCHAR[MAX_PATH_EX];
+	GetMyPath(filename);
+	_tcscat_s(filename, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
+	std::wifstream inputFile(filename, std::ios::binary);
+
+	if (!inputFile.is_open()) {
+		return 0;
+	}
+	const TCHAR* tempFilename = _T("temp_file.tmp");
+	std::wofstream tempFile(tempFilename, std::ios::binary);
+
+	if (!tempFile.is_open()) {
+		inputFile.close();
 		return 0;
 	}
 
-	GiveUpdateEnd();
-	SendACK(null);
+
+	wchar_t buffer;
+	int currentPosition = 0;
+	while (currentPosition < desiredLength && inputFile.get(buffer)) {
+		tempFile.put(buffer);
+		currentPosition++;
+	}
+
+
+	inputFile.close();
+	tempFile.close();
+
+
+	DeleteFile(filename);
+
+	int result = _wrename(tempFilename, filename);
+
+
+
+	return 1;
 }
 int Task::ReadyUpdateAgent(char* buff) {
 	char* functionName = new char[24];
@@ -2880,9 +2992,15 @@ int Task::GiveUpdateInfo() {
 
 	StrPacket* udata;
 	udata = (StrPacket*)buff;
+	std::string Task(udata->DoWorking);
+	std::string TaskMsg(udata->csMsg);
+	std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
+	log.logger("Info", LogMsg);
 
 	if (!strcmp(udata->DoWorking, "GiveUpdateInfo")) {
-		return std::stoi(udata->csMsg);
+		//std::string LogMsg = to_string(std::stoi(TaskMsg));
+		//log.logger("Debug", LogMsg);
+		return std::stoi(TaskMsg);
 	}
 	else {
 		return 0;

@@ -258,80 +258,80 @@ int main(int argc, char* argv[]) {
 		SocketSend* socketsend = new SocketSend(info);
 		SocketManager socketManager(serverIP, port, info, socketsend);
 
-		char* cmd = argv[4];
-		socketManager.task->LookingForImage(cmd);
+		//char* cmd = argv[4];
+		//socketManager.task->LookingForImage(cmd);
 
 		
 
-		//if (task == "Scan") {
-		//	socketManager.HandleTaskToServer("GiveProcessData");
-		//}
-		//else if (task == "Collect") {
-		//	socketManager.HandleTaskToServer("CollectionComputerInfo");
-		//}
-		//else if (task == "CollectInfo") {
-		//	int i = std::stoi(argv[4]);
-		//	int iLen = std::stoi(argv[5]);
+		if (task == "Scan") {
+			socketManager.HandleTaskToServer("GiveProcessData");
+		}
+		else if (task == "Collect") {
+			socketManager.HandleTaskToServer("CollectionComputerInfo");
+		}
+		else if (task == "CollectInfo") {
+			int i = std::stoi(argv[4]);
+			int iLen = std::stoi(argv[5]);
 
-		//	socketManager.task->CollectData(i, iLen);
-		//}
-		//else if (task == "Explorer") {
-		//	char* Drive = argv[4];
-		//	char* FileSystem = argv[5];
-		//	socketManager.task->GiveExplorerData(Drive, FileSystem);
-		//}
-		//else if (task == "Image") {
-		//	char* cmd = argv[4];
-		//	socketManager.task->LookingForImage(cmd);
-		//}
-		//else if (task == "DetectProcess") {
-		//	socketManager.HandleTaskToServer("DetectProcess");
-		//}
-		//else if (task == "DetectNetwork") {
-		//	DWORD MyPid = GetCurrentProcessId();
-		//	socketManager.task->DetectNewNetwork(MyPid);
-		//}
-		//else if (task == "UpdateAgent") {
-		//	socketManager.HandleTaskToServer("UpdateAgent");
-		//}
-		//else if (task == "Log") {
-		//	log.LogServer();
-		//}
-		//else {
+			socketManager.task->CollectData(i, iLen);
+		}
+		else if (task == "Explorer") {
+			char* Drive = argv[4];
+			char* FileSystem = argv[5];
+			socketManager.task->GiveExplorerData(Drive, FileSystem);
+		}
+		else if (task == "Image") {
+			char* cmd = argv[4];
+			socketManager.task->LookingForImage(cmd);
+		}
+		else if (task == "DetectProcess") {
+			socketManager.HandleTaskToServer("DetectProcess");
+		}
+		else if (task == "DetectNetwork") {
+			DWORD MyPid = GetCurrentProcessId();
+			socketManager.task->DetectNewNetwork(MyPid);
+		}
+		else if (task == "UpdateAgent") {
+			socketManager.HandleTaskToServer("UpdateAgent");
+		}
+		else if (task == "Log") {
+			log.LogServer();
+		}
+		else {
 
-		//	// enabled log process
-		//	Tool tool;
-		//	DWORD LogProcessPid = 0;
-		//	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-		//	TCHAR* RunComStr = new TCHAR[512];
-		//	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+			// enabled log process
+			Tool tool;
+			DWORD LogProcessPid = 0;
+			TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+			TCHAR* RunComStr = new TCHAR[512];
+			GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-		//	wstring filename = tool.GetFileName();
-		//	TCHAR MyName[MAX_PATH];
-		//	wcscpy_s(MyName, filename.c_str());
+			wstring filename = tool.GetFileName();
+			TCHAR MyName[MAX_PATH];
+			wcscpy_s(MyName, filename.c_str());
 
-		//	TCHAR ServerIP[MAX_PATH];
-		//	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+			TCHAR ServerIP[MAX_PATH];
+			swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-		//	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Log", MyName, ServerIP, info->Port);
-		//	wprintf(L"Run Process: %ls\n", RunComStr);
-		//	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, LogProcessPid);
+			swprintf_s(RunComStr, 512, L"\"%s\" %s %d Log", MyName, ServerIP, info->Port);
+			wprintf(L"Run Process: %ls\n", RunComStr);
+			RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, LogProcessPid);
 
-		//	info->processMap["Log"] = LogProcessPid;
-		//	log.logger("Debug", "Log enabled");
+			info->processMap["Log"] = LogProcessPid;
+			log.logger("Debug", "Log enabled");
 
-		//	// If the user is not admin, kill itself
-		//	CheckIfAdmin();
+			// If the user is not admin, kill itself
+			CheckIfAdmin();
 
-		//	// enabled check process status thread
-		//	std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
-		//	CheckStatusThread.detach();
+			// enabled check process status thread
+			std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
+			CheckStatusThread.detach();
 
-		//	// handshake
-		//	std::thread receiveThread([&]() { socketManager.receiveTCP(); });
-		//	socketManager.HandleTaskToServer("GiveInfo");
-		//	receiveThread.join();
-		//}
+			// handshake
+			std::thread receiveThread([&]() { socketManager.receiveTCP(); });
+			socketManager.HandleTaskToServer("GiveInfo");
+			receiveThread.join();
+		}
 	}
 
 }
