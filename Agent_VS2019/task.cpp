@@ -78,11 +78,11 @@ int Task::GiveInfo() {
 
 	// file version
 	char* FileVersion = new char[64];
-	TCHAR* m_AgentPath = new TCHAR[MAX_PATH_EX];
-	GetMyPath(m_AgentPath);
-	_tcscat_s(m_AgentPath, MAX_PATH_EX, _T("\\StartSearch.exe"));
-	strcpy_s(FileVersion, 64, "null");
-	GetFileVersion(m_AgentPath, FileVersion);
+	//TCHAR* m_AgentPath = new TCHAR[MAX_PATH_EX];
+	//GetMyPath(m_AgentPath);
+	//_tcscat_s(m_AgentPath, MAX_PATH_EX, _T("\\StartSearch.exe"));
+	strcpy_s(FileVersion, 64, "1.0.0");
+	//GetFileVersion(m_AgentPath, FileVersion);
 
 	strcpy_s(functionName, 24, "GiveInfo");
 
@@ -2520,7 +2520,7 @@ int Task::GetImage(StrPacket* udata) {
 
 	DWORD m_ImageProcessPid = 0;
 	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-	TCHAR* RunComStr = new TCHAR[512];
+	TCHAR* RunComStr = new TCHAR[1024];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
 	wstring filename = tool.GetFileName();
@@ -2530,8 +2530,13 @@ int Task::GetImage(StrPacket* udata) {
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Image %s", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
+	swprintf_s(RunComStr, 1024, L"\"%s\" %s %d Image %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
 	wprintf(L"Run Process: %ls\n", RunComStr);
+
+	std::wstring wstrFilename(RunComStr);
+	std::string strFilename(wstrFilename.begin(), wstrFilename.end());
+	log.logger("Debug", strFilename);
+
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ImageProcessPid);
 
 	info->processMap["Image"] = m_ImageProcessPid;
@@ -2540,13 +2545,13 @@ int Task::GetImage(StrPacket* udata) {
 	return 1;
 
 }
-void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& searchPath, char* FileToSearch, HZIP hz) {
+
+void Task::SearchImageFile(std::vector<std::string>& parts, int level, string searchPath, char* FileToSearch, HZIP* hz) {
 
 	
 	for (int i = level; i < parts.size(); i++) {
 		searchPath += parts[i];
 		level++;
-		printf("parts[i]: %s\n", parts[i]);
 		if (parts[i].find('*') != std::string::npos || parts[i].empty()) {
 			break;
 		}
@@ -2577,6 +2582,16 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& s
 				}
 				searchPath = searchPath + findFileData.cFileName + "\\";
 				SearchImageFile(parts, level, searchPath, FileToSearch, hz);
+
+				//std::cout << "searchPath2: " << searchPath << std::endl;
+				lastBackslashPos = searchPath.find_last_of('\\');
+				if (lastBackslashPos != std::string::npos) {
+					size_t secondLastBackslashPos = searchPath.find_last_of('\\', lastBackslashPos - 1);
+					if (secondLastBackslashPos != std::string::npos) {
+						searchPath.erase(secondLastBackslashPos + 1);
+					}
+				}
+				//std::cout << "searchPath3: " << searchPath << std::endl;
 			}
 		}
 		else {
@@ -2588,7 +2603,7 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& s
 				}
 				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
 
-
+				// convert path to TCHAR
 				size_t bufferSize = strlen(searchPath.c_str()) + 1 + strlen(findFileData.cFileName) + 1;
 				char* combinedStr = new char[bufferSize];
 				strcpy_s(combinedStr, bufferSize, searchPath.c_str());
@@ -2596,10 +2611,103 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string& s
 				strcat_s(combinedStr, bufferSize, findFileData.cFileName);
 				TCHAR* tcharStr = new TCHAR[bufferSize];
 				MultiByteToWideChar(CP_ACP, 0, combinedStr, -1, tcharStr, bufferSize);
+				wprintf(_T("%s\n"), tcharStr);
 
-				if (ZipAdd(hz, tcharStr, tcharStr) != 0) {
+				// convert filename to TCHAR
+				int buffer_size = MultiByteToWideChar(CP_UTF8, 0, findFileData.cFileName, -1, nullptr, 0);
+				if (buffer_size == 0) {
+					std::cerr << "MultiByteToWideChar failed" << std::endl;
+				}
+				TCHAR* tcharFilename = new TCHAR[buffer_size];
+				if (MultiByteToWideChar(CP_UTF8, 0, findFileData.cFileName, -1, tcharFilename, buffer_size) == 0) {
+					std::cerr << "MultiByteToWideChar failed" << std::endl;
+				}
+
+				printf("convert destination\n");
+				//const TCHAR* destinationFileName = _T("destination");
+				TCHAR* destinationFileName = new TCHAR[MAX_PATH_EX];
+				GetMyPath(destinationFileName);
+				_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\"));
+				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
+
+				if (fs::exists(tcharStr)) {
+					/*if (CopyFile(tcharStr, destinationFileName, false)) {
+						wprintf(_T("Successfully copied %s to %s\n"), tcharStr, destinationFileName);
+					}
+					else {
+						DWORD error = GetLastError();
+						wprintf(_T("Failed to copy %s to %s. Error code: %d\n"), tcharStr, destinationFileName, error);
+					}*/
+
+					// Open the source file for reading
+					std::ifstream sourceFile(tcharStr, std::ios::binary);
+					if (!sourceFile) {
+						std::cerr << "Failed to open source file for reading" << std::endl;
+					}
+
+					// Open the destination file for writing
+					std::ofstream destinationFile(destinationFileName, std::ios::binary);
+					if (!destinationFile) {
+						std::cerr << "Failed to open destination file for writing" << std::endl;
+					}
+
+					// Copy data from the source file to the destination file
+					char buffer[4096];
+					while (!sourceFile.eof()) {
+						sourceFile.read(buffer, sizeof(buffer));
+						destinationFile.write(buffer, sourceFile.gcount());
+					}
+
+					// Close both files
+					sourceFile.close();
+					destinationFile.close();
+					
+					
+				}
+				else {
+					printf("failed to copy destination\n");
+				}
+
+				//std::ifstream sourceFile(tcharStr, std::ios::binary);
+				//if (!sourceFile) {
+				//	printf("failed to open source file\n");
+				//}
+
+				//std::ofstream destinationFile(destinationFileName, std::ios::binary);
+				//if (!destinationFile) {
+				//	printf("failed to open dest file\n");
+				//}
+
+				//printf("copy destination\n");
+				//try {
+				//	destinationFile << sourceFile.rdbuf();
+				//}
+				//catch (const std::exception& e) {
+				//	std::cerr << "Error: " << e.what() << std::endl;
+				//}
+				//sourceFile.close();
+				//destinationFile.close();
+
+				//TCHAR* destinationFileName = new TCHAR[MAX_PATH_EX];
+				//GetMyPath(destinationFileName);
+				//_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\Scan.txt"));
+
+				//TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
+				//GetMyPath(zipFileName);
+				//_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\Scan.zip"));
+				//DeleteFile(zipFileName);
+
+				wprintf(L"start add %s\n", destinationFileName);
+				if (ZipAdd(*hz, tcharFilename, destinationFileName) != 0) {
+					printf("ZipAdd failed\n");
 					return;
 				}
+				//CloseZip(*hz);
+
+				printf("finish add\n");
+				string cfilename = findFileData.cFileName;
+				string LogMsg = "add " + cfilename + " to zip";
+				log.logger("Info", LogMsg);
 
 				return;
 			}
@@ -2726,7 +2834,7 @@ int Task::LookingForImage(char* cmd) {
 		}
 
 		string Path = "";
-		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), hz);
+		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
 	}
 
 	CloseZip(hz);
@@ -2933,33 +3041,24 @@ int Task::UpdateAgent() {
 	GetMyPath(filename);
 	_tcscat_s(filename, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
 	std::wifstream inputFile(filename, std::ios::binary);
-
 	if (!inputFile.is_open()) {
 		return 0;
 	}
 	const TCHAR* tempFilename = _T("temp_file.tmp");
 	std::wofstream tempFile(tempFilename, std::ios::binary);
-
 	if (!tempFile.is_open()) {
 		inputFile.close();
 		return 0;
 	}
-
-
 	wchar_t buffer;
 	int currentPosition = 0;
 	while (currentPosition < desiredLength && inputFile.get(buffer)) {
 		tempFile.put(buffer);
 		currentPosition++;
 	}
-
-
 	inputFile.close();
 	tempFile.close();
-
-
 	DeleteFile(filename);
-
 	int result = _wrename(tempFilename, filename);
 
 

@@ -280,10 +280,10 @@ int main(int argc, char* argv[]) {
 			char* FileSystem = argv[5];
 			socketManager.task->GiveExplorerData(Drive, FileSystem);
 		}
-		else if (task == "Image") {
-			char* cmd = argv[4];
-			socketManager.task->LookingForImage(cmd);
-		}
+		//else if (task == "Image") {
+		//	char* cmd = argv[4];
+		//	socketManager.task->LookingForImage(cmd);
+		//}
 		else if (task == "DetectProcess") {
 			socketManager.HandleTaskToServer("DetectProcess");
 		}
@@ -291,9 +291,9 @@ int main(int argc, char* argv[]) {
 			DWORD MyPid = GetCurrentProcessId();
 			socketManager.task->DetectNewNetwork(MyPid);
 		}
-		else if (task == "UpdateAgent") {
-			socketManager.HandleTaskToServer("UpdateAgent");
-		}
+		//else if (task == "UpdateAgent") {
+		//	socketManager.HandleTaskToServer("UpdateAgent");
+		//}
 		else if (task == "Log") {
 			log.LogServer();
 		}
