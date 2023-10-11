@@ -2596,7 +2596,7 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
 
 				WCHAR volume[MAX_PATH + 1] = { '\0' };
-				if (GetVolumePathNameW(tcharFilename, volume, MAX_PATH) == FALSE) {
+				if (GetVolumePathNameW(tcharStr, volume, MAX_PATH) == FALSE) {
 					log.logger("Error", "Failed to GetVolumePathNameW");
 				}
 				HRESULT rc = CoInitialize(nullptr);
@@ -2709,16 +2709,17 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 
 				wstring src = snapshot_prop.m_pwszSnapshotDeviceObject;
 				src += L"\\";
-				//src += (tcharFilename + lstrlenW(volume));
-				src += tcharFilename;
+				src += (tcharFilename + lstrlenW(volume));
+				//src += tcharFilename;
+				wcout << "src: " << src << endl;
 
 				VssFreeSnapshotProperties(&snapshot_prop);
 
 				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, nullptr, 0, nullptr, nullptr);
 				std::string srcStr(requiredSize, 0);
 				WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, &srcStr[0], requiredSize, nullptr, nullptr);
-
-				if (CopyFileW(src.c_str(), destinationFileName, true) == FALSE) {
+				// src.c_str()
+				if (CopyFileW(tcharStr, destinationFileName, true) == FALSE) {
 
 					DWORD errorMessageID = GetLastError();
 					std::stringstream ss;
@@ -2726,15 +2727,13 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 					std::string errorMessage = ss.str();
 
 					string LogMsg;
+					cout << "errorMessage: " << errorMessage << endl;
 					log.logger("Error", srcStr + " copy file failed: " + errorMessage);
 					continue;
 				}
 				else {
 					log.logger("Info", srcStr + " copy file success");
 				}
-
-
-
 
 
 				wprintf(L"start add %s\n", destinationFileName);
@@ -2796,18 +2795,18 @@ int Task::LookingForImage(char* cmd) {
 
 	tool.CompressFileToZip(zipFileName, txt1);
 	
-	/*std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-	if (ZipAdd(hz, txt1, zipFileName) != 0) {
-		string LogMsg = "failed to add mock1 to zip";
-		log.logger("Error", LogMsg);
-	}
-	if (ZipAdd(hz, txt2, zipFileName) != 0) {
-		string LogMsg = "failed to add mock2 to zip";
-		log.logger("Error", LogMsg);
-	}*/
+	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+	//if (ZipAdd(hz, txt1, zipFileName) != 0) {
+	//	string LogMsg = "failed to add mock1 to zip";
+	//	log.logger("Error", LogMsg);
+	//}
+	//if (ZipAdd(hz, txt2, zipFileName) != 0) {
+	//	string LogMsg = "failed to add mock2 to zip";
+	//	log.logger("Error", LogMsg);
+	//}
 
-	/*DeleteFile(txt1);
-	DeleteFile(txt2);*/
+	DeleteFile(txt1);
+	DeleteFile(txt2);
 
 
 	//std::vector<std::string> MsgAfterSplit;
@@ -3226,47 +3225,6 @@ int Task::UpdateAgent() {
 
 	info->processMap["NewAgent"] = m_NewAgentProcessPid;
 	log.logger("Debug", "NewAgent enabled");
-
-	//log.logger("Info", "start update agent");
-	////int result = _tsystem(AgentNewVersion_exe);
-	//log.logger("Info", "finish update agent");
-	//if (result == 0) {
-	//	log.logger("Info", "update agent success");
-	//}
-	//else {
-	//	//DWORD dwError = GetLastError();
-	//	//std::stringstream ss;
-	//	//ss << dwError;
-	//	//std::string errorMessage = ss.str();
-	//	log.logger("Error", "update agent failed: " + std::to_string(result));
-	//}
-
-
-	/*STARTUPINFO si = { sizeof(STARTUPINFO) };
-	PROCESS_INFORMATION pi;
-	if (CreateProcess(NULL, AgentNewVersion_exe, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
-		log.logger("Info", "update agent success");
-		WaitForSingleObject(pi.hProcess, INFINITE);
-		CloseHandle(pi.hProcess);
-		CloseHandle(pi.hThread);
-	}
-	else {
-		DWORD dwError = GetLastError();
-		std::stringstream ss;
-		ss << dwError;
-		std::string errorMessage = ss.str();
-		log.logger("Error", "update agent failed: " + errorMessage);
-		return 1;
-	}*/
-
-	/*int status = system("./AgentNewVersion.exe");
-	if (status == -1) {
-		log.logger("Error", "update agent failed");
-		return 0;
-	}
-	else {
-		log.logger("Info", "successfully execute new agent");
-	}*/
 
 
 	return 1;
