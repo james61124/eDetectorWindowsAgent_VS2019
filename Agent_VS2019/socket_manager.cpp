@@ -129,9 +129,15 @@ void SocketManager::HandleTaskToServer(std::string functionName) {
         int ret;
         std::any argument;
         ret = task->functionMap[functionName](task, argument);
-        if (!ret) std::cout << functionName << " send failed" << std::endl;
+        if (!ret) {
+            std::cout << functionName << " send failed" << std::endl;
+            log.logger("Error", functionName + " send failed");
+        }
     }
-    else std::cout << functionName << " Function not found" << std::endl;
+    else { 
+        log.logger("Error", functionName + " Function not found");
+        std::cout << functionName << " Function not found" << std::endl; 
+    }
 }
 int SocketManager::HandleTaskFromServer(StrPacket* udata) {
     //printf("receive: %s, %s\n", udata->DoWorking, udata->csMsg);

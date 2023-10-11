@@ -83,9 +83,23 @@ void CheckIfAdmin() {
 				WCHAR* userName;
 				if (ConvertSidToStringSidW(tokenUser->User.Sid, &userName)) {
 					BOOL isAdmin = FALSE;
-					if (!CheckTokenMembership(NULL, tokenUser->User.Sid, &isAdmin) && isAdmin) {
-						log.logger("Debug", "Terminate non-admin Process");
-						TerminateProcess(currentProcessHandle, 0);
+					PSID systemSid;
+					SID_IDENTIFIER_AUTHORITY ntAuthority = SECURITY_NT_AUTHORITY;
+					if (!AllocateAndInitializeSid(&ntAuthority, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, &systemSid)) {
+						std::cerr << "Failed to allocate and initialize SID" << std::endl;
+					}
+
+					BOOL isMember;
+					if (CheckTokenMembership(NULL, systemSid, &isMember)) {
+						if (isMember) {
+							log.logger("Debug", "This is admin process");
+						}
+						else {
+							log.logger("Debug", "Terminate non-admin Process");
+							exit(0);
+							//TerminateProcess(currentProcessHandle, 0);
+						}
+						
 					}
 
 					LocalFree(userName);
@@ -97,6 +111,9 @@ void CheckIfAdmin() {
 		}
 
 		CloseHandle(currentProcessHandle);
+	}
+	else {
+		log.logger("Debug", "failed to OpenProcess");
 	}
 }
 
@@ -239,10 +256,10 @@ int main(int argc, char* argv[]) {
 		int count = 0;
 		if (password == 12345) {
 			while (true) {
-				/*if (!IsHavePID(MainPid)) break;
+				if (!IsHavePID(MainPid)) break;
 				if (count > 60) break;
 				Sleep(10000);
-				count++;*/
+				count++;
 			}
 		}
 	}
@@ -261,7 +278,7 @@ int main(int argc, char* argv[]) {
 		//char* cmd = argv[4];
 		//socketManager.task->LookingForImage(cmd);
 
-		
+		//
 
 		if (task == "Scan") {
 			socketManager.HandleTaskToServer("GiveProcessData");
@@ -280,10 +297,10 @@ int main(int argc, char* argv[]) {
 			char* FileSystem = argv[5];
 			socketManager.task->GiveExplorerData(Drive, FileSystem);
 		}
-		//else if (task == "Image") {
-		//	char* cmd = argv[4];
-		//	socketManager.task->LookingForImage(cmd);
-		//}
+		else if (task == "Image") {
+			char* cmd = argv[4];
+			socketManager.task->LookingForImage(cmd);
+		}
 		else if (task == "DetectProcess") {
 			socketManager.HandleTaskToServer("DetectProcess");
 		}
@@ -291,13 +308,16 @@ int main(int argc, char* argv[]) {
 			DWORD MyPid = GetCurrentProcessId();
 			socketManager.task->DetectNewNetwork(MyPid);
 		}
-		//else if (task == "UpdateAgent") {
-		//	socketManager.HandleTaskToServer("UpdateAgent");
-		//}
+		else if (task == "UpdateAgent") {
+			socketManager.HandleTaskToServer("UpdateAgent");
+		}
 		else if (task == "Log") {
 			log.LogServer();
 		}
 		else {
+
+			// If the user is not admin, kill itself
+			CheckIfAdmin();
 
 			// enabled log process
 			Tool tool;
@@ -320,8 +340,7 @@ int main(int argc, char* argv[]) {
 			info->processMap["Log"] = LogProcessPid;
 			log.logger("Debug", "Log enabled");
 
-			// If the user is not admin, kill itself
-			CheckIfAdmin();
+			
 
 			// enabled check process status thread
 			std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
@@ -330,6 +349,8 @@ int main(int argc, char* argv[]) {
 			// handshake
 			std::thread receiveThread([&]() { socketManager.receiveTCP(); });
 			socketManager.HandleTaskToServer("GiveInfo");
+			std::thread CheckConnectThread([&]() { socketManager.task->CheckConnect(); });
+			CheckConnectThread.detach();
 			receiveThread.join();
 		}
 	}

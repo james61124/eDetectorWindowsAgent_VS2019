@@ -72,12 +72,11 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 
 	int ret = sendTCP(buff, STRPACKETSIZE, info->tcpSocket);
 
-
-	printf("Send Message Packet: %s\n", Work);
+	printf("Send Message Packet: %s %d\n", Work, ret);
 	std::string Task(WorkNew);
 	std::string Msg(Mgs);
 	std::string LogMsg = "Send: " + Task + " " + Msg;
-	log.logger("Info", LogMsg);
+	if(ret) log.logger("Info", LogMsg);
 
 	//delete[] Work;
 	//delete[] Mgs;
@@ -94,7 +93,7 @@ bool SocketSend::sendTCP(char* data, long len, SOCKET* tcpSocket) {
 		std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
 	}
 	else {
-		// std::cout << "Data sent successfully." << std::endl;
+		std::cout << "Data sent successfully." << std::endl;
 	}
 
 	return ret;

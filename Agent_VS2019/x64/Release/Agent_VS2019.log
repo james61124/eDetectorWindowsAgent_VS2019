@@ -128,34 +128,34 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2573): message : 請參閱 'STATUS_SXS_EARLY_DEACTIVATION' 之前的定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\Ntstatus.h(14361,1): warning C4005: 'STATUS_SXS_INVALID_DEACTIVATION': 巨集重複定義
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\winnt.h(2574): message : 請參閱 'STATUS_SXS_INVALID_DEACTIVATION' 之前的定義
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(91,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(91,38): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(91,38): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(91,38): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(93,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(93,38): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(93,38): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(93,38): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(95,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(95,38): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(95,38): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(95,38): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(97,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(97,38): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(97,38): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(97,38): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(433,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'const char *'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(433,37): message : 請考慮在格式字串中使用 '%hs'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(433,37): message : 請考慮在格式字串中使用 '%Ts'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(433,37): message : 此警告採用 Visual C++ 使用的非標準語意
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(442,46): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(442,46): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1792,46): warning C4477: 'sprintf_s' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 2 的類型為 'ULONGLONG'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1792,46): message : 請考慮在格式字串中使用 '%lld'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1792,46): message : 請考慮在格式字串中使用 '%Id'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1792,46): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2322,6): warning C4101: 'Sendret': 未參考的區域變數
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2613,73): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(96,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(96,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(96,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(96,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(98,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(98,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(98,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(98,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(100,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(100,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(100,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(100,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(102,38): warning C4477: 'snprintf' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 8 的類型為 'unsigned __int64'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(102,38): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(102,38): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(102,38): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(425,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'const char *'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(425,37): message : 請考慮在格式字串中使用 '%hs'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(425,37): message : 請考慮在格式字串中使用 '%Ts'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(425,37): message : 此警告採用 Visual C++ 使用的非標準語意
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(434,46): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(434,46): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1784,46): warning C4477: 'sprintf_s' : 格式字串 '%d' 需要 'int' 類型的引數，但 variadic 引數 2 的類型為 'ULONGLONG'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1784,46): message : 請考慮在格式字串中使用 '%lld'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1784,46): message : 請考慮在格式字串中使用 '%Id'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(1784,46): message : 請考慮在格式字串中使用 '%I64d'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2314,6): warning C4101: 'Sendret': 未參考的區域變數
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2580,73): warning C4267: '引數': 將 'size_t' 轉換為 'int'，資料可能遺失
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xstring(2541,23): warning C4244: '引數': 將 'wchar_t' 轉換為 'const _Elem'，由於類型不同，可能導致資料遺失
           with
           [
@@ -181,21 +181,20 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
           [
               _Iter=wchar_t *
           ]
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2537): message : 請參考正在進行編譯的函式 樣板 具現化 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2496): message : 請參考正在進行編譯的函式 樣板 具現化 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'
           with
           [
               _Elem=wchar_t,
               _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
               _Alloc=std::allocator<char>
           ]
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2537): message : 請參考正在進行編譯的函式 樣板 具現化 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'
+C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2496): message : 請參考正在進行編譯的函式 樣板 具現化 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'
           with
           [
               _Elem=wchar_t,
               _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
               _Alloc=std::allocator<char>
           ]
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(2846): warning C4715: 'Task::LookingForImage': 不是所有控制路徑都傳回值
 agent.obj : warning LNK4075: 忽略 '/EDITANDCONTINUE'，由於 '/OPT:ICF' 規格
   正在產生程式碼
   Previous IPDB and IOBJ mismatch, fall back to full compilation.

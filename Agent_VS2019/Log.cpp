@@ -42,7 +42,7 @@ void Log::logger(const std::string& level, const std::string& message) {
 
 void Log::HandleLogClientConnection(SOCKET clientSocket) {
 
-    char buffer[1024];
+    char buffer[1005536];
     int bytesReceived = recv(clientSocket, buffer, sizeof(buffer), 0);
     if (bytesReceived > 0) {
         std::string message(buffer, bytesReceived);

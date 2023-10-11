@@ -109,15 +109,25 @@ int main(int argc, char* argv[]) {
 
 	/*const wchar_t* m_x64Str = GetMyPath() + _T("\\Client\\ClientSearch_x64.exe");
 	const wchar_t* m_x86Str = GetMyPath() + _T("\\Client\\ClientSearch_x86.exe");*/
-	if (argc < 3) {
-		std::cout << "usage: ./generate_onlinesearch.exe IP Port DetectPort\n";
+	if (argc < 4) {
+		std::cout << "usage: ./generate_onlinesearch.exe IP Port DetectPort Version.exe\n";
 		return 1;
 	}
 
 	std::remove("ClientSearch_x64.exe");
-	const wchar_t* oldFileName = L"Agent_VS2019.exe";
+
+	wchar_t* oldFileName = nullptr;
+	const char* mbString = argv[4];
+	int wideStrSize = MultiByteToWideChar(CP_UTF8, 0, mbString, -1, NULL, 0);
+	if (wideStrSize > 0) {
+		wchar_t* wideString = new wchar_t[wideStrSize];
+		MultiByteToWideChar(CP_UTF8, 0, mbString, -1, wideString, wideStrSize);
+		oldFileName = wideString;
+	}
+
+	//const wchar_t* oldFileName = L"Agent_VS2019.exe";
 	const wchar_t* newFileName = L"ClientSearch_x64.exe";
-	if (MoveFile(oldFileName, newFileName)) {
+	if (CopyFile(oldFileName, newFileName, true)) {
 		std::wcout << "File renamed successfully." << std::endl;
 	}
 	else {

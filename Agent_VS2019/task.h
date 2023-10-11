@@ -1,5 +1,6 @@
 #ifndef TASK_H
 #define TASK_H
+#pragma comment(lib, "vssapi.lib")
 
 
 #include <unordered_map>
@@ -11,6 +12,12 @@
 #include <sstream>
 
 #include <filesystem>
+
+#include <objbase.h>
+#include <vss.h>
+#include <vswriter.h>
+#include <vsbackup.h>
+#include <comdef.h>
 
 #include "tools.h"
 #include "socket_send.h"
@@ -120,7 +127,7 @@ public:
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
     int UpdateAgent();
-    void AgentReceive();
+    void AgentReceive(int fileSize);
     void WriteNewAgentToFile(char* buffer, int totalReceivedSize);
     int ReadyUpdateAgent(char* buff);
     int SendACK(char* buff);

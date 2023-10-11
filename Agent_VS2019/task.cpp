@@ -61,6 +61,7 @@ void Task::startThread(const std::string& key, std::string functionName) {
 // handshake
 int Task::GiveInfo() {
     // getSystemInfo();
+	printf("GiveInfo\n");
 	char* buffer = new char[STRINGMESSAGELEN];
 	char* SysInfo = tool.GetSysInfo();
 	char* OsStr = GetOSVersion();
@@ -78,11 +79,15 @@ int Task::GiveInfo() {
 
 	// file version
 	char* FileVersion = new char[64];
+	strcpy_s(FileVersion, 64, "1.0.0");
+
 	//TCHAR* m_AgentPath = new TCHAR[MAX_PATH_EX];
 	//GetMyPath(m_AgentPath);
 	//_tcscat_s(m_AgentPath, MAX_PATH_EX, _T("\\StartSearch.exe"));
-	strcpy_s(FileVersion, 64, "1.0.0");
 	//GetFileVersion(m_AgentPath, FileVersion);
+
+	
+	
 
 	strcpy_s(functionName, 24, "GiveInfo");
 
@@ -105,20 +110,6 @@ int Task::OpenCheckthread(StrPacket* udata) {
 		strcpy_s(info->UUID, 36, udata->csMsg);
 		WriteRegisterValue(udata->csMsg);
 	}
-
-	std::thread CheckConnectThread([&]() { CheckConnect(); });
-	CheckConnectThread.detach();
-
-	// strcpy(UUID,udata->csMsg);
-	// GiveDetectInfoFirst();
-
-	//std::future<int> CheckConnectThread = std::async(&Task::CheckConnect, this);
-	//CheckConnectThread.get();
-
-	 //std::thread CheckConnectThread(&Task::CheckConnect, this);
-	 //CheckConnectThread.join();
-
-	// store key into registry
 
 	return GiveDetectInfoFirst();
 
@@ -213,6 +204,8 @@ int Task::GiveDetectInfo() {
 	snprintf(buff, STRINGMESSAGELEN, "%d|%d", info->DetectProcess, info->DetectNetwork);
 	int ret = socketsend->SendMessageToServer(functionName, buff);
 
+	//UpdateAgent();
+
 	// network
 	//DWORD MyPid = GetCurrentProcessId();
 	//DetectNewNetwork(MyPid);
@@ -236,7 +229,6 @@ int Task::GiveDetectInfo() {
 }
 int Task::CheckConnect() {
 
-	SOCKET* tcpSocket = CreateNewSocket();
      while(true){
 		 char* functionName = new char[24];
 		 strcpy_s(functionName, 24, "CheckConnect");
@@ -2347,39 +2339,6 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 		info->processMap["CollectInfo"] = m_CollectInfoProcessPid;
 		log.logger("Debug", "CollectInfo enabled");
 
-		//TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
-		//GetMyPath(m_FilePath);
-
-
-		//_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
-		//HMODULE m_lib = LoadLibrary(m_FilePath);
-		//if (m_lib) {
-		//	printf("load dll success : %d\n", i);
-		//	TCHAR buffer[20]; // Adjust the buffer size as needed
-		//	_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), collect->CollectionNums[i]);
-		//	TCHAR* tcharString = buffer;
-
-		//	try {
-		//		collect->CollectionProcess(m_lib, DBName, tcharString);
-		//	}
-		//	catch (...) {
-		//		printf("collect failed\n");
-		//	}
-		//	
-		//	FreeLibrary(m_lib);
-		//}
-		//else {
-		//	printf("load dll failed\n");
-		//	log.logger("Error", "collection load dll failed\n");
-		//}
-
-		//memset(InfoStr, '\0', MAX_PATH_EX);
-		//sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
-		//memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-		//memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-
-		//GiveCollectProgress(TmpBuffer, tcpSocket);
-
 	}
 	//delete[] InfoStr;
 	delete[] RunComStr;
@@ -2545,7 +2504,6 @@ int Task::GetImage(StrPacket* udata) {
 	return 1;
 
 }
-
 void Task::SearchImageFile(std::vector<std::string>& parts, int level, string searchPath, char* FileToSearch, HZIP* hz) {
 
 	
@@ -2562,7 +2520,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 		searchPath += "*";
 	}
 
-	std::cout << "searchPath: " << searchPath << std::endl;
+	//string LogMsg = "search " + searchPath;
+	//log.logger("Debug", LogMsg);
 
 
 	WIN32_FIND_DATAA findFileData;
@@ -2596,7 +2555,14 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 		}
 		else {
 
-			if (_stricmp(findFileData.cFileName, FileToSearch) == 0) {
+			std::string cFileNameLower = findFileData.cFileName;
+			std::transform(cFileNameLower.begin(), cFileNameLower.end(), cFileNameLower.begin(), ::tolower);
+
+			std::string fileToSearchLower = FileToSearch;
+			std::transform(fileToSearchLower.begin(), fileToSearchLower.end(), fileToSearchLower.begin(), ::tolower);
+
+			if (cFileNameLower.find(fileToSearchLower) != std::string::npos) {
+			//if (_stricmp(findFileData.cFileName, FileToSearch) == 0) {
 				size_t lastBackslashPos = searchPath.find_last_of('\\');
 				if (lastBackslashPos != std::string::npos) {
 					searchPath.erase(lastBackslashPos);
@@ -2609,6 +2575,7 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				strcpy_s(combinedStr, bufferSize, searchPath.c_str());
 				strcat_s(combinedStr, bufferSize, "\\");
 				strcat_s(combinedStr, bufferSize, findFileData.cFileName);
+				string src_filename(combinedStr);
 				TCHAR* tcharStr = new TCHAR[bufferSize];
 				MultiByteToWideChar(CP_ACP, 0, combinedStr, -1, tcharStr, bufferSize);
 				wprintf(_T("%s\n"), tcharStr);
@@ -2623,93 +2590,166 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 					std::cerr << "MultiByteToWideChar failed" << std::endl;
 				}
 
-				printf("convert destination\n");
-				//const TCHAR* destinationFileName = _T("destination");
 				TCHAR* destinationFileName = new TCHAR[MAX_PATH_EX];
 				GetMyPath(destinationFileName);
 				_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\"));
 				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
 
-				if (fs::exists(tcharStr)) {
-					/*if (CopyFile(tcharStr, destinationFileName, false)) {
-						wprintf(_T("Successfully copied %s to %s\n"), tcharStr, destinationFileName);
+				WCHAR volume[MAX_PATH + 1] = { '\0' };
+				if (GetVolumePathNameW(tcharFilename, volume, MAX_PATH) == FALSE) {
+					log.logger("Error", "Failed to GetVolumePathNameW");
+				}
+				HRESULT rc = CoInitialize(nullptr);
+				if (rc != S_OK && rc != S_FALSE) {
+					if (rc == RPC_E_CHANGED_MODE) {
+						log.logger("Warning", "COM is already initialized in a different mode.");
 					}
 					else {
-						DWORD error = GetLastError();
-						wprintf(_T("Failed to copy %s to %s. Error code: %d\n"), tcharStr, destinationFileName, error);
-					}*/
-
-					// Open the source file for reading
-					std::ifstream sourceFile(tcharStr, std::ios::binary);
-					if (!sourceFile) {
-						std::cerr << "Failed to open source file for reading" << std::endl;
+						log.logger("Error", "CoInitialize failed");
+						CoUninitialize();
+						continue; 
 					}
+				}
 
-					// Open the destination file for writing
-					std::ofstream destinationFile(destinationFileName, std::ios::binary);
-					if (!destinationFile) {
-						std::cerr << "Failed to open destination file for writing" << std::endl;
-					}
+				IVssBackupComponents* components = NULL;
+				rc = CreateVssBackupComponents(&components);
+				if (rc != S_OK) {
+					log.logger("Error", "CreateVssBackupComponents failed");
+					CoUninitialize();
+					continue;
+				}
+				rc = components->InitializeForBackup();
+				if (rc != S_OK) {
+					log.logger("Error", "InitializeForBackup failed");
+					CoUninitialize();
+					continue;
+				}
+				IVssAsync* async;
+				rc = components->GatherWriterMetadata(&async);
+				if (rc != S_OK) {
+					log.logger("Error", "GatherWriterMetadata failed");
+					CoUninitialize();
+					continue;
+				}
+				rc = async->Wait();
+				if (rc != S_OK) {
+					log.logger("Error", "async->Wait() failed");
+					CoUninitialize();
+					continue;
+				}
+				rc = components->SetContext(VSS_CTX_BACKUP);
+				if (rc != S_OK) {
+					log.logger("Error", "SetContext failed");
+					CoUninitialize();
+					continue;
+				}
+				VSS_ID snapshot_set_id;
+				rc = components->StartSnapshotSet(&snapshot_set_id);
+				if (rc != S_OK) {
+					log.logger("Error", "StartSnapshotSet failed");
+					CoUninitialize();
+					continue;
+				}
 
-					// Copy data from the source file to the destination file
-					char buffer[4096];
-					while (!sourceFile.eof()) {
-						sourceFile.read(buffer, sizeof(buffer));
-						destinationFile.write(buffer, sourceFile.gcount());
-					}
 
-					// Close both files
-					sourceFile.close();
-					destinationFile.close();
-					
-					
+				VSS_ID snapshot_id;
+				rc = components->AddToSnapshotSet(volume, GUID_NULL, &snapshot_id);
+				if (rc != S_OK) {
+					log.logger("Error", "AddToSnapshotSet failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+
+
+				rc = components->SetBackupState(true, false, VSS_BT_FULL, false);
+				if (rc != S_OK) {
+					log.logger("Error", "SetBackupState failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+				rc = components->PrepareForBackup(&async);
+				if (rc != S_OK) {
+					log.logger("Error", "PrepareForBackup failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+				rc = async->Wait();
+				if (rc != S_OK) {
+					log.logger("Error", "async->Wait() failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+				rc = components->DoSnapshotSet(&async);
+				if (rc != S_OK) {
+					log.logger("Error", "DoSnapshotSet failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+				rc = async->Wait();
+				if (rc != S_OK) {
+					log.logger("Error", "Wait failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+
+				VSS_SNAPSHOT_PROP snapshot_prop;
+				rc = components->GetSnapshotProperties(snapshot_id, &snapshot_prop);
+				if (rc != S_OK) {
+					log.logger("Error", "GetSnapshotProperties failed;");
+					components->Release();
+					CoUninitialize();
+					continue;
+				}
+
+				wstring src = snapshot_prop.m_pwszSnapshotDeviceObject;
+				src += L"\\";
+				//src += (tcharFilename + lstrlenW(volume));
+				src += tcharFilename;
+
+				VssFreeSnapshotProperties(&snapshot_prop);
+
+				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, nullptr, 0, nullptr, nullptr);
+				std::string srcStr(requiredSize, 0);
+				WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, &srcStr[0], requiredSize, nullptr, nullptr);
+
+				if (CopyFileW(src.c_str(), destinationFileName, true) == FALSE) {
+
+					DWORD errorMessageID = GetLastError();
+					std::stringstream ss;
+					ss << errorMessageID;
+					std::string errorMessage = ss.str();
+
+					string LogMsg;
+					log.logger("Error", srcStr + " copy file failed: " + errorMessage);
+					continue;
 				}
 				else {
-					printf("failed to copy destination\n");
+					log.logger("Info", srcStr + " copy file success");
 				}
 
-				//std::ifstream sourceFile(tcharStr, std::ios::binary);
-				//if (!sourceFile) {
-				//	printf("failed to open source file\n");
-				//}
 
-				//std::ofstream destinationFile(destinationFileName, std::ios::binary);
-				//if (!destinationFile) {
-				//	printf("failed to open dest file\n");
-				//}
 
-				//printf("copy destination\n");
-				//try {
-				//	destinationFile << sourceFile.rdbuf();
-				//}
-				//catch (const std::exception& e) {
-				//	std::cerr << "Error: " << e.what() << std::endl;
-				//}
-				//sourceFile.close();
-				//destinationFile.close();
 
-				//TCHAR* destinationFileName = new TCHAR[MAX_PATH_EX];
-				//GetMyPath(destinationFileName);
-				//_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\Scan.txt"));
-
-				//TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
-				//GetMyPath(zipFileName);
-				//_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\Scan.zip"));
-				//DeleteFile(zipFileName);
 
 				wprintf(L"start add %s\n", destinationFileName);
 				if (ZipAdd(*hz, tcharFilename, destinationFileName) != 0) {
-					printf("ZipAdd failed\n");
-					return;
+					string cfilename = findFileData.cFileName;
+					string LogMsg = "failed to add " + cfilename + " to zip";
+					log.logger("Error", LogMsg);
+					continue;
 				}
-				//CloseZip(*hz);
 
-				printf("finish add\n");
 				string cfilename = findFileData.cFileName;
 				string LogMsg = "add " + cfilename + " to zip";
 				log.logger("Info", LogMsg);
 
-				return;
+				//return;
 			}
 		}
 	} while (FindNextFileA(hFind, &findFileData) != 0);
@@ -2721,127 +2761,156 @@ int Task::LookingForImage(char* cmd) {
 	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
 	GetMyPath(zipFileName);
 	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
-	HZIP hz = CreateZip(zipFileName, 0);
-	if (hz == 0) {
-		printf("Failed to create image.zip\n");
-		return false; // Failed to create ZIP file
+	//HZIP hz = CreateZip(zipFileName, 0);
+	//if (hz == 0) {
+	//	printf("Failed to create image.zip\n");
+	//	return false; // Failed to create ZIP file
+	//}
+
+
+	TCHAR* txt1 = new TCHAR[MAX_PATH_EX];
+	GetMyPath(txt1);
+	_tcscat_s(txt1, MAX_PATH_EX, _T("\\mock1.txt"));
+	std::wofstream outFile(txt1);
+	if (outFile.is_open()) {
+		std::wstring data = L"This is some sample data.\n";
+		outFile << data;
+		outFile.close();
+	}
+	else {
+		log.logger("Error", "failed to write data into mock1");
 	}
 
-	std::vector<std::string> MsgAfterSplit;
-	char* nextToken = nullptr;
-	const char* delimiter = ",";
-	char* token = strtok_s(cmd, delimiter, &nextToken);
-	while (token != nullptr) {
-		MsgAfterSplit.push_back(token);
-		token = strtok_s(nullptr, delimiter, &nextToken);
+	TCHAR* txt2 = new TCHAR[MAX_PATH_EX];
+	GetMyPath(txt2);
+	_tcscat_s(txt2, MAX_PATH_EX, _T("\\mock2.txt"));
+	std::wofstream outFile2(txt2);
+	if (outFile2.is_open()) {
+		std::wstring data = L"This is some sample data.\n";
+		outFile2 << data;
+		outFile2.close();
+	}
+	else {
+		log.logger("Error", "failed to write data into mock2");
 	}
 
-	for (int i = 0; i < MsgAfterSplit.size(); i++) {
-		std::cout << MsgAfterSplit[i].c_str() << std::endl;
-		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
-		std::string file = FileInfo[0];
-		std::string AppType = FileInfo[1];
-		std::string keyword = FileInfo[2];
-
-		printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
-
-		// find root drive
-		WCHAR driveStrings[255];
-		DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
-		WCHAR* currentDrive;
-		std::string narrowString_currentDrive;
-		if (driveStringsLength > 0 && driveStringsLength < 255) {
-			currentDrive = driveStrings;
-			while (*currentDrive) {
-				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
-				narrowString_currentDrive.resize(requiredSize);
-
-				if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-					//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-				}
-
-				currentDrive += wcslen(currentDrive) + 1;
-				break;
-			}
-		}
-
-		// find app environment variable
-		char* searchPath = new char[4];
-		std::string connectedDevicesPlatformPath;
-
-		if (!AppType.empty()) {
-			size_t len;
-			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
-
-			if (err != 0) {
-				printf("Error getting environment variable.\n");
-				return 0;
-			}
-
-			if (searchPath == NULL) {
-				printf("environment variable is not set.\n");
-				return 0;
-			}
-
-			connectedDevicesPlatformPath = searchPath;
-			connectedDevicesPlatformPath += "\\";
-
-		}
-		//else {
-		//	connectedDevicesPlatformPath = searchPath;
-		//	connectedDevicesPlatformPath += "\\";
-		//}
-
-		//std::string connectedDevicesPlatformPath;
-		//if (searchPath != NULL) {
-		//	connectedDevicesPlatformPath = searchPath;
-		//	connectedDevicesPlatformPath += "\\";
-		//}
-		//else {
-		//	std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-		//	connectedDevicesPlatformPath = narrowString_currentDrive;
-		//}
-		connectedDevicesPlatformPath += file;
-		
-
-		// if end of path has *, remove it
-		size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
-		if (lastBackslashPos != std::string::npos) {
-			size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
-			if (secondLastBackslashPos != std::string::npos) {
-				std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
-				if (extractedString == "*") {
-					connectedDevicesPlatformPath.erase(secondLastBackslashPos);
-				}
-			}
-		}
-
-		// replace root with root drive
-		std::vector<std::string> parts;
-		std::istringstream iss(connectedDevicesPlatformPath);
-		std::string part;
-		while (std::getline(iss, part, '\\')) {
-			size_t found = part.find("root");
-			if (found != std::string::npos) {
-				part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
-				//found = part.find("root", found + 1);
-			}
-
-			if (!part.empty()) {
-				parts.push_back(part);
-			}
-			
-		}
-
-		string Path = "";
-		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
+	tool.CompressFileToZip(zipFileName, txt1);
+	
+	/*std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+	if (ZipAdd(hz, txt1, zipFileName) != 0) {
+		string LogMsg = "failed to add mock1 to zip";
+		log.logger("Error", LogMsg);
 	}
+	if (ZipAdd(hz, txt2, zipFileName) != 0) {
+		string LogMsg = "failed to add mock2 to zip";
+		log.logger("Error", LogMsg);
+	}*/
 
-	CloseZip(hz);
+	/*DeleteFile(txt1);
+	DeleteFile(txt2);*/
+
+
+	//std::vector<std::string> MsgAfterSplit;
+	//char* nextToken = nullptr;
+	//const char* delimiter = ",";
+	//char* token = strtok_s(cmd, delimiter, &nextToken);
+	//while (token != nullptr) {
+	//	MsgAfterSplit.push_back(token);
+	//	token = strtok_s(nullptr, delimiter, &nextToken);
+	//}
+
+	//for (int i = 0; i < MsgAfterSplit.size(); i++) {
+	//	std::cout << MsgAfterSplit[i].c_str() << std::endl;
+	//	std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
+	//	std::string file = FileInfo[0];
+	//	std::string AppType = FileInfo[1];
+	//	std::string keyword = FileInfo[2];
+
+	//	printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
+
+	//	// find root drive
+	//	WCHAR driveStrings[255];
+	//	DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+	//	WCHAR* currentDrive;
+	//	std::string narrowString_currentDrive;
+	//	if (driveStringsLength > 0 && driveStringsLength < 255) {
+	//		currentDrive = driveStrings;
+	//		while (*currentDrive) {
+	//			int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+	//			narrowString_currentDrive.resize(requiredSize);
+
+	//			if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+	//				//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+	//			}
+
+	//			currentDrive += wcslen(currentDrive) + 1;
+	//			break;
+	//		}
+	//	}
+
+	//	// find app environment variable
+	//	char* searchPath = new char[4];
+	//	std::string connectedDevicesPlatformPath;
+
+	//	if (!AppType.empty()) {
+	//		size_t len;
+	//		errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
+
+	//		if (err != 0) {
+	//			printf("Error getting environment variable.\n");
+	//			return 0;
+	//		}
+
+	//		if (searchPath == NULL) {
+	//			printf("environment variable is not set.\n");
+	//			return 0;
+	//		}
+
+	//		connectedDevicesPlatformPath = searchPath;
+	//		connectedDevicesPlatformPath += "\\";
+
+	//	}
+	//	connectedDevicesPlatformPath += file;
+	//	
+
+	//	// if end of path has *, remove it
+	//	size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
+	//	if (lastBackslashPos != std::string::npos) {
+	//		size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
+	//		if (secondLastBackslashPos != std::string::npos) {
+	//			std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
+	//			if (extractedString == "*") {
+	//				connectedDevicesPlatformPath.erase(secondLastBackslashPos);
+	//			}
+	//		}
+	//	}
+
+	//	// replace root with root drive
+	//	std::vector<std::string> parts;
+	//	std::istringstream iss(connectedDevicesPlatformPath);
+	//	std::string part;
+	//	while (std::getline(iss, part, '\\')) {
+	//		size_t found = part.find("root");
+	//		if (found != std::string::npos) {
+	//			part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
+	//			//found = part.find("root", found + 1);
+	//		}
+
+	//		if (!part.empty()) {
+	//			parts.push_back(part);
+	//		}
+	//		
+	//	}
+
+	//	string Path = "";
+	//	SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
+	//}
+
+	//CloseZip(hz);
 
 
 	SendImageFileToServer(zipFileName, info->tcpSocket);
-
+	return 1;
 	
 }
 void Task::SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
@@ -2949,11 +3018,33 @@ void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
 	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
 	GetMyPath(AgentNewVersion_exe);
 	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
-	std::wofstream outFile(AgentNewVersion_exe, std::ios::app);
+	std::ofstream outFile(AgentNewVersion_exe, std::ios::app | std::ios::binary);
 	if (!outFile.is_open()) {
-		log.logger("Error", "Explorer.txt open failed");
+		log.logger("Error", "AgentNewVersion.exe open failed");
 	}
-	if (outFile.good()) outFile << buffer;
+	if (outFile.good()) { 
+		//int bufferSize = strlen(buffer) + 1;
+		//int wideBufferSize = MultiByteToWideChar(CP_UTF8, 0, buffer, bufferSize, nullptr, 0);
+		//wchar_t* wideBuffer = new wchar_t[wideBufferSize];
+		//MultiByteToWideChar(CP_UTF8, 0, buffer, bufferSize, wideBuffer, wideBufferSize);
+		//outFile.write(buffer, totalReceivedSize);
+
+		//outFile << buffer;
+
+		outFile.write(buffer, totalReceivedSize);
+
+		//if (totalReceivedSize == STRDATAPACKETSIZE - 100) {
+		//	std::string LogMsg = "equal: " + to_string(totalReceivedSize);
+		//	log.logger("Debug", LogMsg);
+		//	outFile << buffer;
+		//}
+		//else {
+		//	std::string LogMsg = "not equal: " + to_string(totalReceivedSize);
+		//	log.logger("Debug", LogMsg);
+		//	outFile.write(buffer, totalReceivedSize);
+		//}
+		
+	}
 	else {
 		log.logger("Error", "Error write data into NewAgent");
 	}
@@ -2964,29 +3055,66 @@ void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
 	//}
 	outFile.close();
 	SendACK(null);
+	
+
 }
-void Task::AgentReceive() {
+void Task::AgentReceive(int fileSize) {
+	int alreadyReceived = 0;
 	while (true) {
-		char tmpbuffer[STRDATAPACKETSIZE];
+		
 		uint64_t receivedSize = 0;
 		int totalReceivedSize = 0;
-		char buffer[STRDATAPACKETSIZE];
+		char* buffer = new char[STRDATAPACKETSIZE];
 
 		while (totalReceivedSize < STRDATAPACKETSIZE) {
-			//log.logger("Debug", "start receive");
-			int bytesRead = recv(*info->tcpSocket, tmpbuffer, sizeof(tmpbuffer), 0);
-			//log.logger("Debug", "finish receive");
+			char* tmpbuffer = new char[STRDATAPACKETSIZE];
+			int bytesRead = recv(*info->tcpSocket, tmpbuffer, STRDATAPACKETSIZE, 0);
 			if (bytesRead == -1) {
 				log.logger("Error", "UpdateAgent Error receiving data");
 				return;
 			}
+
+		/*	std::stringstream sss;
+			for (char c : tmpbuffer) {
+				sss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(c);
+			}
+			std::string hexStrings = sss.str();
+			std::string LogMsgs = "Recv: " + hexStrings;
+			log.logger("Info", LogMsgs);*/
+
 			
 			
-			memcpy(buffer + totalReceivedSize, tmpbuffer, STRDATAPACKETSIZE - totalReceivedSize);
+			
+			/*std::this_thread::sleep_for(std::chrono::seconds(1));
+			log.logger("Debug", "bytesRead: " + to_string(bytesRead));*/
+			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			memcpy(buffer + totalReceivedSize, tmpbuffer, bytesRead);
+
+	/*		TCHAR* outputFile = new TCHAR[MAX_PATH_EX];
+			GetMyPath(outputFile);
+			_tcscat_s(outputFile, MAX_PATH_EX, _T("\\myFile.txt"));
+			DeleteFile(outputFile);
+			std::wofstream outFile(outputFile, std::ios::app);
+			outFile << buffer;
+			outFile.close();*/
+
+	/*		string buf(tmpbuffer);
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			log.logger("Debug", "buffer: " + buf);*/
 			totalReceivedSize += bytesRead;
-			log.logger("Debug", to_string(totalReceivedSize));
-			//memcpy(buffer, tmpbuffer, STRDATAPACKETSIZE);
+			alreadyReceived += bytesRead;
+
+			
+
+			
+			//memcpy(buffer, tmpbuffer, STRDATAPACKETSIZE - totalReceivedSize);
 		}
+
+		
+
+
+		alreadyReceived -= 100;
+		//log.logger("Debug", to_string(alreadyReceived) + " " + to_string(totalReceivedSize-100));
 
 		//int bytesRead = recv(*info->tcpSocket, buffer, sizeof(buffer), 0);
 		//if (bytesRead == -1) {
@@ -2994,24 +3122,57 @@ void Task::AgentReceive() {
 		//	return;
 		//}
 
+		//log.logger("Info", buffer);
+
 		SetKeys(BIT128, AESKey);
-		DecryptBuffer((BYTE*)buffer, STRPACKETSIZE);
+		DecryptBuffer((BYTE*)buffer, STRDATAPACKETSIZE);
 		StrDataPacket* udata;
 		udata = (StrDataPacket*)buffer;
-
-		cout << "Receive: " << udata->DoWorking << endl;
+		std::string mac(udata->MAC);
+		std::string ip(udata->IP);
+		std::string uuid(udata->UUID);
 		std::string Task(udata->DoWorking);
 		std::string TaskMsg(udata->csMsg);
-		std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
+		//std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
+
+		std::string LogMsg = "Receive: " + Task;
 		log.logger("Info", LogMsg);
 
+	/*	std::stringstream ss;
+		for (char c : TaskMsg) {
+			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(c);
+		}
+		std::string hexString = ss.str();
+		std::string LogMsg = "After hex: " + hexString;
+		log.logger("Info", LogMsg);*/
+
+		
+
 		if (!strcmp(udata->DoWorking, "GiveUpdate")) {
-			std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize); });
-			WriteNewAgentToFileThread.detach();
+			if (alreadyReceived > fileSize) {
+				WriteNewAgentToFile(udata->csMsg, fileSize % 65436);
+			}
+			else {
+				WriteNewAgentToFile(udata->csMsg, STRDATAPACKETSIZE - 100);
+			}
+			/*std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize - 100); });
+			WriteNewAgentToFileThread.detach();*/
+		/*	if (alreadyReceived > fileSize) {
+				std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, alreadyReceived - fileSize); });
+				WriteNewAgentToFileThread.detach();
+			}
+			else {
+				std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize); });
+				WriteNewAgentToFileThread.detach();
+			}*/
+			
 		}
 		else {
 			break;
 		}
+
+		delete[] buffer;
+
 	}
 }
 int Task::UpdateAgent() {
@@ -3025,7 +3186,7 @@ int Task::UpdateAgent() {
 
 	ReadyUpdateAgent(null);
 	int fileSize = GiveUpdateInfo();
-	std::thread AgentReceiveThread([&]() { AgentReceive(); });
+	std::thread AgentReceiveThread([&]() { AgentReceive(fileSize); });
 	if (!fileSize) {
 		log.logger("Error", "Error receiving New Agent Info");
 	}
@@ -3033,34 +3194,79 @@ int Task::UpdateAgent() {
 	AgentReceiveThread.join();
 	SendACK(null);
 
-	std::this_thread::sleep_for(std::chrono::seconds(3));
-	log.logger("Debug", "wake up");
+	log.logger("Info", "start update agent");
 
-	int desiredLength = fileSize;
-	TCHAR* filename = new TCHAR[MAX_PATH_EX];
-	GetMyPath(filename);
-	_tcscat_s(filename, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
-	std::wifstream inputFile(filename, std::ios::binary);
-	if (!inputFile.is_open()) {
+	DWORD m_NewAgentProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	wstring filename = tool.GetFileName();
+	TCHAR MyName[MAX_PATH];
+	wcscpy_s(MyName, filename.c_str());
+
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\"", AgentNewVersion_exe);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+
+	std::string convertedStr;
+	size_t len = _tcslen(RunComStr);
+	size_t convertedLen = 0;
+	char* mbStr = new char[len + 1];
+	errno_t err = wcstombs_s(&convertedLen, mbStr, len + 1, RunComStr, len);
+	if (err == 0) {
+		mbStr[len] = '\0';
+		convertedStr = mbStr;
+	}
+	log.logger("Debug", "Run Process: " + convertedStr);
+
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_NewAgentProcessPid);
+
+	info->processMap["NewAgent"] = m_NewAgentProcessPid;
+	log.logger("Debug", "NewAgent enabled");
+
+	//log.logger("Info", "start update agent");
+	////int result = _tsystem(AgentNewVersion_exe);
+	//log.logger("Info", "finish update agent");
+	//if (result == 0) {
+	//	log.logger("Info", "update agent success");
+	//}
+	//else {
+	//	//DWORD dwError = GetLastError();
+	//	//std::stringstream ss;
+	//	//ss << dwError;
+	//	//std::string errorMessage = ss.str();
+	//	log.logger("Error", "update agent failed: " + std::to_string(result));
+	//}
+
+
+	/*STARTUPINFO si = { sizeof(STARTUPINFO) };
+	PROCESS_INFORMATION pi;
+	if (CreateProcess(NULL, AgentNewVersion_exe, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+		log.logger("Info", "update agent success");
+		WaitForSingleObject(pi.hProcess, INFINITE);
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
+	else {
+		DWORD dwError = GetLastError();
+		std::stringstream ss;
+		ss << dwError;
+		std::string errorMessage = ss.str();
+		log.logger("Error", "update agent failed: " + errorMessage);
+		return 1;
+	}*/
+
+	/*int status = system("./AgentNewVersion.exe");
+	if (status == -1) {
+		log.logger("Error", "update agent failed");
 		return 0;
 	}
-	const TCHAR* tempFilename = _T("temp_file.tmp");
-	std::wofstream tempFile(tempFilename, std::ios::binary);
-	if (!tempFile.is_open()) {
-		inputFile.close();
-		return 0;
-	}
-	wchar_t buffer;
-	int currentPosition = 0;
-	while (currentPosition < desiredLength && inputFile.get(buffer)) {
-		tempFile.put(buffer);
-		currentPosition++;
-	}
-	inputFile.close();
-	tempFile.close();
-	DeleteFile(filename);
-	int result = _wrename(tempFilename, filename);
-
+	else {
+		log.logger("Info", "successfully execute new agent");
+	}*/
 
 
 	return 1;

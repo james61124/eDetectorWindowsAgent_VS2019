@@ -63,6 +63,7 @@ public:
 
 private:
     Tool tool;
+    Log log;
     
 
 };
