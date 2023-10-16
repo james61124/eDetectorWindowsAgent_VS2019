@@ -164,6 +164,10 @@ private:
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
     void CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket);
     bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket);
+
+    int SendDataPacketToServer(const char* function, char* buff, SOCKET* tcpSocket);
+    int SendMessagePacketToServer(const char* function, char* buff);
+    void SendFileToServer(const char* function, const TCHAR* FileName, SOCKET* tcpSocket);
     
 
 

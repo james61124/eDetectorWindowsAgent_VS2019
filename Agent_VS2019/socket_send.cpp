@@ -71,12 +71,13 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	EncryptBuffer((BYTE*)buff, STRPACKETSIZE);
 
 	int ret = sendTCP(buff, STRPACKETSIZE, info->tcpSocket);
-
 	printf("Send Message Packet: %s %d\n", Work, ret);
+
 	std::string Task(WorkNew);
 	std::string Msg(Mgs);
 	std::string LogMsg = "Send: " + Task + " " + Msg;
-	if(ret) log.logger("Info", LogMsg);
+	if (ret) log.logger("Info", LogMsg);
+	else log.logger("Error", "Error " + LogMsg);
 
 	//delete[] Work;
 	//delete[] Mgs;
