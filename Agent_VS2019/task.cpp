@@ -606,13 +606,8 @@ int Task::DetectNewNetwork(int pMainProcessid) {
 				{
 					TCHAR* m_NetworkStr = new TCHAR[2048];
 					TCHAR* m_Path = new TCHAR[512];
-					//TCHAR * m_ComStr = new TCHAR[512];
 					time_t m_Time = 0;
-					//TCHAR * m_UserName = new TCHAR[_MAX_FNAME];
 					_tcscpy_s(m_Path, 512, _T("null"));
-					//_tcscpy_s(m_ComStr,512,_T("null"));
-					//_tcscpy_s(m_Time,20,_T("null"));
-					//_tcscpy_s(m_UserName,_MAX_FNAME,_T("null"));
 					m_MemPro->GetProcessOnlyPathAndTime(m_Pid, m_Path, m_Time);
 					if (_tcsicmp(m_Path, MyPath))
 					{
@@ -1691,109 +1686,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	return 0;
 }
 
-//
-//void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
-//{
-//
-//	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//	if (m_File != INVALID_HANDLE_VALUE)
-//	{
-//		DWORD m_Filesize = GetFileSize(m_File, NULL);
-//		int Sendret;
-//		char* InfoStr = new char[MAX_PATH_EX];
-//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-//
-//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-//
-//		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
-//		Sendret = 1;
-//		if (Sendret > 0)
-//		{
-//			DWORD readsize;
-//			BYTE* buffer = new BYTE[m_Filesize];
-//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-//			if (m_Filesize > DATASTRINGMESSAGELEN) {
-//				DWORD tmplen = m_Filesize;
-//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//					if (tmplen < DATASTRINGMESSAGELEN) { memcpy(TmpBuffer, buffer + i, tmplen); }
-//					else {
-//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-//						tmplen -= DATASTRINGMESSAGELEN;
-//					}
-//
-//					Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-//					if (Sendret == 0 || Sendret == -1) break;
-//				}
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			else
-//			{
-//				//unsigned char* buff = new unsigned char[DATASTRINGMESSAGELEN];
-//				printf("DATASTRINGMESSAGELEN else\n");
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//				memcpy(TmpBuffer, buffer, m_Filesize);
-//
-//				Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//
-//			}
-//			delete[] buffer;
-//		}
-//
-//		if (Sendret > 0)
-//		{
-//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//
-//			Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-//			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-//			GetMyPath(m_Path);
-//			CloseHandle(m_File);
-//
-//		}
-//	}
-//	else
-//	{
-//		log.logger("Error", "failed to send zip file\n");
-//		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//		delete[] TmpBuffer;
-//	}
-//}
-//
-//int Task::Explorer(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "Explorer");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveExplorerInfo");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveExplorerProgress");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveExplorerData");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//} 
-//int Task::GiveExplorerEnd(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveExplorerEnd");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveExplorerError");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-
 
 // collect 
 int Task::GetCollectInfo(StrPacket* udata) { 
@@ -2102,7 +1994,6 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	delete[] RunComStr;
 	delete[] RunExeStr;
 }
-
 void Task::CollectData(int i, int iLen) {
 	Collect* collect = new Collect;
 	char* InfoStr = new char[MAX_PATH_EX];
@@ -2142,97 +2033,6 @@ void Task::CollectData(int i, int iLen) {
 	int ret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, info->tcpSocket);
 
 }
-
-
-//void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
-//{
-//	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//	if (m_File != INVALID_HANDLE_VALUE) {
-//		DWORD m_Filesize = GetFileSize(m_File, NULL);
-//		int Sendret;
-//		char* InfoStr = new char[MAX_PATH_EX];
-//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-//
-//		Sendret = GiveCollectDataInfo(TmpBuffer, tcpSocket);
-//
-//		if (Sendret > 0)
-//		{
-//			DWORD readsize;
-//			BYTE* buffer = new BYTE[m_Filesize];
-//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-//			if (m_Filesize > DATASTRINGMESSAGELEN) {
-//				DWORD tmplen = m_Filesize;
-//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
-//					else {
-//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-//						tmplen -= DATASTRINGMESSAGELEN;
-//					}
-//
-//					Sendret = GiveCollectData(TmpBuffer, tcpSocket);
-//					if (Sendret == 0 || Sendret == -1) break;
-//				}
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			else
-//			{
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//				memcpy(TmpBuffer, buffer, m_Filesize);
-//				Sendret = GiveCollectData(TmpBuffer, tcpSocket);
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			delete[] buffer;
-//		}
-//		if (Sendret > 0)
-//		{
-//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			Sendret = GiveCollectDataEnd(TmpBuffer, tcpSocket);
-//
-//			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-//			GetMyPath(m_Path);
-//			tool.DeleteAllCsvFiles(m_Path);
-//			CloseHandle(m_File);
-//
-//		}
-//	}
-//	else
-//	{
-//		printf("DB file not exists\n");
-//		//BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-//		//memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//		////SendDataBufToServer(MyMAC, MyIP, "GiveCollectDataError", TmpBuffer);
-//		//delete[] TmpBuffer;
-//	}
-//}
-//
-//int Task::GiveCollectProgress(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveCollectProgress");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveCollectDataInfo(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveCollectDataInfo");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveCollectData(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveCollectData");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveCollectDataEnd(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveCollectDataEnd");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
 
 
 int Task::GetImage(StrPacket* udata) {
@@ -2495,82 +2295,6 @@ int Task::LookingForImage(char* cmd) {
 	
 }
 
-
-//void Task::SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
-//{
-//	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//	if (m_File != INVALID_HANDLE_VALUE) {
-//		DWORD m_Filesize = GetFileSize(m_File, NULL);
-//		int Sendret;
-//		char* InfoStr = new char[MAX_PATH_EX];
-//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-//
-//		Sendret = GiveImageInfo(TmpBuffer, tcpSocket);
-//
-//		if (Sendret > 0)
-//		{
-//			DWORD readsize;
-//			BYTE* buffer = new BYTE[m_Filesize];
-//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-//			if (m_Filesize > DATASTRINGMESSAGELEN) {
-//				DWORD tmplen = m_Filesize;
-//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
-//					else {
-//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-//						tmplen -= DATASTRINGMESSAGELEN;
-//					}
-//
-//					Sendret = GiveImage(TmpBuffer, tcpSocket);
-//					if (Sendret == 0 || Sendret == -1) break;
-//				}
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			else
-//			{
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//				memcpy(TmpBuffer, buffer, m_Filesize);
-//				Sendret = GiveImage(TmpBuffer, tcpSocket);
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			delete[] buffer;
-//		}
-//		if (Sendret > 0)
-//		{
-//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			Sendret = GiveImageEnd(TmpBuffer, tcpSocket);
-//			CloseHandle(m_File);
-//
-//		}
-//	}
-//	else
-//	{
-//		printf("image zip file not exists\n");
-//	}
-//}
-//int Task::GiveImageInfo(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveImageInfo");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveImage(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveImage");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveImageEnd(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveImageEnd");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-
 int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
 	DWORD m_UpdateAgentProcessPid = 0;
@@ -2687,36 +2411,52 @@ int Task::UpdateAgent() {
 
 	log.logger("Info", "start update agent");
 
-	DWORD m_NewAgentProcessPid = 0;
-	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-	TCHAR* RunComStr = new TCHAR[512];
-	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+	RunProcess(AgentNewVersion_exe, NULL, FALSE, FALSE);
 
-	wstring filename = tool.GetFileName();
-	TCHAR MyName[MAX_PATH];
-	wcscpy_s(MyName, filename.c_str());
+	//if (ret == 0)
+	//{
+	//	TCHAR* Md5Hashstr = new TCHAR[50];
+	//	memset(Md5Hashstr, '\0', 50);
+	//	if (Md5Hash(m_Info.m_FilePath, Md5Hashstr) == 0)
+	//	{
+	//		if (!_tcsicmp(Md5Hashstr, m_Info.HashStr))
+	//		{
+	//			RunProcess(m_Info.m_FilePath, NULL, FALSE, FALSE);
+	//		}
+	//	}
+	//	delete[] Md5Hashstr;
+	//}
 
-	TCHAR ServerIP[MAX_PATH];
-	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+	//DWORD m_NewAgentProcessPid = 0;
+	//TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	//TCHAR* RunComStr = new TCHAR[512];
+	//GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-	swprintf_s(RunComStr, 512, L"\"%s\"", AgentNewVersion_exe);
-	wprintf(L"Run Process: %ls\n", RunComStr);
+	//wstring filename = tool.GetFileName();
+	//TCHAR MyName[MAX_PATH];
+	//wcscpy_s(MyName, filename.c_str());
 
-	std::string convertedStr;
-	size_t len = _tcslen(RunComStr);
-	size_t convertedLen = 0;
-	char* mbStr = new char[len + 1];
-	errno_t err = wcstombs_s(&convertedLen, mbStr, len + 1, RunComStr, len);
-	if (err == 0) {
-		mbStr[len] = '\0';
-		convertedStr = mbStr;
-	}
-	log.logger("Debug", "Run Process: " + convertedStr);
+	//TCHAR ServerIP[MAX_PATH];
+	//swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_NewAgentProcessPid);
+	//swprintf_s(RunComStr, 512, L"\"%s\"", AgentNewVersion_exe);
+	//wprintf(L"Run Process: %ls\n", RunComStr);
 
-	info->processMap["NewAgent"] = m_NewAgentProcessPid;
-	log.logger("Debug", "NewAgent enabled");
+	//std::string convertedStr;
+	//size_t len = _tcslen(RunComStr);
+	//size_t convertedLen = 0;
+	//char* mbStr = new char[len + 1];
+	//errno_t err = wcstombs_s(&convertedLen, mbStr, len + 1, RunComStr, len);
+	//if (err == 0) {
+	//	mbStr[len] = '\0';
+	//	convertedStr = mbStr;
+	//}
+	//log.logger("Debug", "Run Process: " + convertedStr);
+
+	//RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_NewAgentProcessPid);
+
+	//info->processMap["NewAgent"] = m_NewAgentProcessPid;
+	//log.logger("Debug", "NewAgent enabled");
 
 
 	return 1;

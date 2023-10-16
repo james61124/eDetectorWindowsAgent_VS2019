@@ -76,31 +76,12 @@ public:
     int GiveProcessData();
     void ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket);
 
-    //void SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket);
-    //int ReadyScan(char* buff, SOCKET* tcpSocket);
-    //int GiveScan(char* buff, SOCKET* tcpSocket);
-    //int GiveScanFragment(char* buff, SOCKET* tcpSocket);
-    //int GiveScanEnd(char* buff, SOCKET* tcpSocket);
-    //int GiveScanProgress(char* buff, SOCKET* tcpSocket);
-    //int GiveScanDataInfo(char* buff, SOCKET* tcpSocket);
-
     // explorer
     int ExplorerInfo_(StrPacket* udata);
     int GiveDriveInfo();
     int GiveExplorerData(char* Drive, char* FileSystem);
 
-    //int Explorer(char* buff, SOCKET* tcpSocket);
-    //int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
-    //int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
-    //int GiveExplorerData(char* buff, SOCKET* tcpSocket);
-    //int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
-    //int GiveExplorerError(char* buff, SOCKET* tcpSocket);
-
     //collect
-    //int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
-    //int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
-    //int GiveCollectData(char* buff, SOCKET* tcpSocket);
-    //int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
     void CollectData(int i, int iLen);
 
 
@@ -121,10 +102,6 @@ public:
     int GetImage(StrPacket* udata);
     int LookingForImage(char* cmd);
     void SearchImageFile(std::vector<std::string>& parts, int level, string searchPath, char* FileToSearch, HZIP* hz);
-    //void SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
-    //int GiveImageInfo(char* buff, SOCKET* tcpSocket);
-    //int GiveImage(char* buff, SOCKET* tcpSocket);
-    //int GiveImageEnd(char* buff, SOCKET* tcpSocket);
 
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
