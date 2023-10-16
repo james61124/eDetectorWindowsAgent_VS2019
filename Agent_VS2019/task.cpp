@@ -2546,7 +2546,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				searchPath = searchPath + findFileData.cFileName + "\\";
 				SearchImageFile(parts, level, searchPath, FileToSearch, hz);
 
-				//std::cout << "searchPath2: " << searchPath << std::endl;
 				lastBackslashPos = searchPath.find_last_of('\\');
 				if (lastBackslashPos != std::string::npos) {
 					size_t secondLastBackslashPos = searchPath.find_last_of('\\', lastBackslashPos - 1);
@@ -2554,7 +2553,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 						searchPath.erase(secondLastBackslashPos + 1);
 					}
 				}
-				//std::cout << "searchPath3: " << searchPath << std::endl;
 			}
 		}
 		else {
@@ -2566,7 +2564,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 			std::transform(fileToSearchLower.begin(), fileToSearchLower.end(), fileToSearchLower.begin(), ::tolower);
 
 			if (cFileNameLower.find(fileToSearchLower) != std::string::npos) {
-			//if (_stricmp(findFileData.cFileName, FileToSearch) == 0) {
 				size_t lastBackslashPos = searchPath.find_last_of('\\');
 				if (lastBackslashPos != std::string::npos) {
 					searchPath.erase(lastBackslashPos);
@@ -2599,131 +2596,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\"));
 				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
 
-				//WCHAR volume[MAX_PATH + 1] = { '\0' };
-				//if (GetVolumePathNameW(tcharStr, volume, MAX_PATH) == FALSE) {
-				//	log.logger("Error", "Failed to GetVolumePathNameW");
-				//}
-				//HRESULT rc = CoInitialize(nullptr);
-				//if (rc != S_OK && rc != S_FALSE) {
-				//	if (rc == RPC_E_CHANGED_MODE) {
-				//		log.logger("Warning", "COM is already initialized in a different mode.");
-				//	}
-				//	else {
-				//		log.logger("Error", "CoInitialize failed");
-				//		CoUninitialize();
-				//		continue; 
-				//	}
-				//}
-
-				//IVssBackupComponents* components = NULL;
-				//rc = CreateVssBackupComponents(&components);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "CreateVssBackupComponents failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = components->InitializeForBackup();
-				//if (rc != S_OK) {
-				//	log.logger("Error", "InitializeForBackup failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//IVssAsync* async;
-				//rc = components->GatherWriterMetadata(&async);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "GatherWriterMetadata failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = async->Wait();
-				//if (rc != S_OK) {
-				//	log.logger("Error", "async->Wait() failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = components->SetContext(VSS_CTX_BACKUP);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "SetContext failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//VSS_ID snapshot_set_id;
-				//rc = components->StartSnapshotSet(&snapshot_set_id);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "StartSnapshotSet failed");
-				//	CoUninitialize();
-				//	continue;
-				//}
-
-
-				//VSS_ID snapshot_id;
-				//rc = components->AddToSnapshotSet(volume, GUID_NULL, &snapshot_id);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "AddToSnapshotSet failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-
-
-				//rc = components->SetBackupState(true, false, VSS_BT_FULL, false);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "SetBackupState failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = components->PrepareForBackup(&async);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "PrepareForBackup failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = async->Wait();
-				//if (rc != S_OK) {
-				//	log.logger("Error", "async->Wait() failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = components->DoSnapshotSet(&async);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "DoSnapshotSet failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-				//rc = async->Wait();
-				//if (rc != S_OK) {
-				//	log.logger("Error", "Wait failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-
-				//VSS_SNAPSHOT_PROP snapshot_prop;
-				//rc = components->GetSnapshotProperties(snapshot_id, &snapshot_prop);
-				//if (rc != S_OK) {
-				//	log.logger("Error", "GetSnapshotProperties failed;");
-				//	components->Release();
-				//	CoUninitialize();
-				//	continue;
-				//}
-
-				//wstring src = snapshot_prop.m_pwszSnapshotDeviceObject;
-				//src += L"\\";
-				//src += (tcharFilename + lstrlenW(volume));
-				////src += tcharFilename;
-				//wcout << "src: " << src << endl;
-
-				//VssFreeSnapshotProperties(&snapshot_prop);
-
-				/*int requiredSize = WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, nullptr, 0, nullptr, nullptr);
-				std::string srcStr(requiredSize, 0);
-				WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, &srcStr[0], requiredSize, nullptr, nullptr);*/
-				// src.c_str()
-
 				
 				std::wifstream sourceFile(tcharStr, std::ios::in | std::ios::binary);
 				std::wofstream destFile(destinationFileName, std::ios::binary);
@@ -2741,23 +2613,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 
 				destFile.close();
 				sourceFile.close();
-
-
-				/*if (CopyFileW(tcharStr, destinationFileName, true) == FALSE) {
-
-					DWORD errorMessageID = GetLastError();
-					std::stringstream ss;
-					ss << errorMessageID;
-					std::string errorMessage = ss.str();
-
-					string LogMsg;
-					cout << "errorMessage: " << errorMessage << endl;
-					log.logger("Error", srcStr + " copy file failed: " + errorMessage);
-					continue;
-				}
-				else {
-					log.logger("Info", srcStr + " copy file success");
-				}*/
 
 
 				wprintf(L"start add %s\n", destinationFileName);
@@ -2789,48 +2644,6 @@ int Task::LookingForImage(char* cmd) {
 		printf("Failed to create image.zip\n");
 		return false; // Failed to create ZIP file
 	}
-
-
-	//TCHAR* txt1 = new TCHAR[MAX_PATH_EX];
-	//GetMyPath(txt1);
-	//_tcscat_s(txt1, MAX_PATH_EX, _T("\\mock1.txt"));
-	//std::wofstream outFile(txt1);
-	//if (outFile.is_open()) {
-	//	std::wstring data = L"This is some sample data.\n";
-	//	outFile << data;
-	//	outFile.close();
-	//}
-	//else {
-	//	log.logger("Error", "failed to write data into mock1");
-	//}
-
-	//TCHAR* txt2 = new TCHAR[MAX_PATH_EX];
-	//GetMyPath(txt2);
-	//_tcscat_s(txt2, MAX_PATH_EX, _T("\\mock2.txt"));
-	//std::wofstream outFile2(txt2);
-	//if (outFile2.is_open()) {
-	//	std::wstring data = L"This is some sample data.\n";
-	//	outFile2 << data;
-	//	outFile2.close();
-	//}
-	//else {
-	//	log.logger("Error", "failed to write data into mock2");
-	//}
-
-	//tool.CompressFileToZip(zipFileName, txt1);
-	
-	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-	//if (ZipAdd(hz, txt1, zipFileName) != 0) {
-	//	string LogMsg = "failed to add mock1 to zip";
-	//	log.logger("Error", LogMsg);
-	//}
-	//if (ZipAdd(hz, txt2, zipFileName) != 0) {
-	//	string LogMsg = "failed to add mock2 to zip";
-	//	log.logger("Error", LogMsg);
-	//}
-
-	//DeleteFile(txt1);
-	//DeleteFile(txt2);
 
 
 	std::vector<std::string> MsgAfterSplit;
