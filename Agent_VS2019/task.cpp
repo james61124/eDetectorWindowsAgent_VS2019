@@ -1176,125 +1176,6 @@ void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	ret = SendDataPacketToServer("GiveScanEnd", pMode, tcpSocket);
 }
 
-//
-//void Task::SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
-//{
-//
-//	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-//	if (m_File != INVALID_HANDLE_VALUE)
-//	{
-//		DWORD m_Filesize = GetFileSize(m_File, NULL);
-//		int Sendret;
-//		char* InfoStr = new char[MAX_PATH_EX];
-//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-//
-//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-//
-//		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
-//		Sendret = 1;
-//		if (Sendret > 0)
-//		{
-//			DWORD readsize;
-//			BYTE* buffer = new BYTE[m_Filesize];
-//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-//			if (m_Filesize > DATASTRINGMESSAGELEN) {
-//				DWORD tmplen = m_Filesize;
-//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//					if (tmplen < DATASTRINGMESSAGELEN) { memcpy(TmpBuffer, buffer + i, tmplen); }
-//					else {
-//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-//						tmplen -= DATASTRINGMESSAGELEN;
-//					}
-//
-//					Sendret = GiveScan(TmpBuffer, tcpSocket);
-//					if (Sendret == 0 || Sendret == -1) break;
-//				}
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//			}
-//			else
-//			{
-//				//unsigned char* buff = new unsigned char[DATASTRINGMESSAGELEN];
-//				printf("DATASTRINGMESSAGELEN else\n");
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//				memcpy(TmpBuffer, buffer, m_Filesize);
-//
-//				Sendret = GiveScan(TmpBuffer, tcpSocket);
-//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//
-//			}
-//			delete[] buffer;
-//		}
-//
-//		if (Sendret > 0)
-//		{
-//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//
-//			Sendret = GiveScan(TmpBuffer, tcpSocket);
-//			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-//			GetMyPath(m_Path);
-//			CloseHandle(m_File);
-//
-//		}
-//	}
-//	else
-//	{
-//		log.logger("Error", "failed to send zip file\n");
-//		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-//		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-//		delete[] TmpBuffer;
-//	}
-//}
-//
-//int Task::ReadyScan(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "ReadyScan");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScanInfo(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScanInfo");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScan(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScan");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScanDataInfo(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScanDataInfo");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScanFragment(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScanFragment");
-//	printf("%s\n", buff);
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScanEnd(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScanEnd");
-//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//}
-//int Task::GiveScanProgress(char* buff, SOCKET* tcpSocket) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "GiveScanProgress");
-//	int ret = socketsend->SendDataToServer(functionName, buff, tcpSocket);
-//	if (ret <= 0) { 
-//		log.logger("Error", "GiveScanProgress Error"); 
-//		std::exit(0);
-//	}
-//	else {
-//		return ret;
-//	}
-//}
-
-
 // Explorer
 int Task::GetDrive(StrPacket* udata) { return GiveDriveInfo(); }
 int Task::GiveDriveInfo() { 
@@ -1925,8 +1806,6 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	TCHAR* RunComStr = new TCHAR[512];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-	//TCHAR MyName[MAX_PATH];
-	//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
 	wstring filename = tool.GetFileName();
 	TCHAR MyName[MAX_PATH];
 	wcscpy_s(MyName, filename.c_str());
@@ -1943,18 +1822,12 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	return 1; 
 }
 int Task::CollectionComputerInfo()
-
 {
-	//SOCKET* tcpSocket = CreateNewSocket();
-	//if (tcpSocket == nullptr) return 0;
-
-	printf("start collect...\n");
-	std::remove("collectcomputerinfo.db");
-
 	Collect* collect = new Collect;
 	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
 	GetMyPath(m_FullDbPath);
 	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+	DeleteFile(m_FullDbPath);
 
 	if (_waccess(m_FullDbPath, 00)) {
 		CreateProcessForCollection(m_FullDbPath, info->tcpSocket);
@@ -1981,10 +1854,9 @@ int Task::CollectionComputerInfo()
 			if (tool.CompressFileToZip(Collect_zip, collectcomputerinfo_db)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
 			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
 
-			SendDbFileToServer(Collect_zip, info->tcpSocket);
+			SendFileToServer("Collect", Collect_zip, info->tcpSocket);
 			DeleteFile(m_FullDbPath);
 			DeleteFile(Collect_zip);
-			//if (std::remove("Collect.zip") != 0) perror("Error delete Explorer.zip\n");
 		}
 		else {
 			printf("m_FullDbPath failed\n");
@@ -1992,8 +1864,6 @@ int Task::CollectionComputerInfo()
 		delete[] ConfigPath;
 	}
 	delete[] m_FullDbPath;
-
-	//closesocket(*tcpSocket);
 	return 1;
 }
 bool Task::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
@@ -2024,7 +1894,7 @@ bool Task::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineOb
 		}
 	}
 	else {
-		printf("LoadPredefineConfig failed\n");
+		log.logger("Error", "LoadPredefineConfig failed");
 	}
 	return bResult;
 }
@@ -2080,8 +1950,6 @@ void Task::ParsePredefineConfig(char* str, string* defineName, vector<PredefineO
 bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket)
 {
 	Collect* collect = new Collect;
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveCollectProgress");
 
 	bool bResult = false;
 	sqlite3* m_db;
@@ -2136,8 +2004,7 @@ bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<Pre
 		memset(TmpBuffer, '\x0', STRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		int Sendret = GiveCollectProgress(TmpBuffer, tcpSocket);
-		//auto Sendret = SendDataBufToServer(MyMAC, MyIP, "GiveCollectProgress", TmpBuffer);
+		int Sendret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, tcpSocket);
 	}
 	sqlite3_close(m_db);
 	return bResult;
@@ -2209,8 +2076,6 @@ void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
 
 	int iLen = sizeof(collect->CollectionNums) / sizeof(collect->CollectionNums[0]);
-
-	printf("start collect...\n");
 	for (int i = 0; i < iLen; i++) {
 
 		DWORD m_CollectInfoProcessPid = 0;
@@ -2259,7 +2124,7 @@ void Task::CollectData(int i, int iLen) {
 			collect->CollectionProcess(m_lib, m_FullDbPath, tcharString);
 		}
 		catch (...) {
-			printf("collect failed\n");
+			log.logger("Error", "collect failed");
 		}
 
 		FreeLibrary(m_lib);
@@ -2274,98 +2139,100 @@ void Task::CollectData(int i, int iLen) {
 	memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
 	memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-	GiveCollectProgress(TmpBuffer, info->tcpSocket);
+	int ret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, info->tcpSocket);
 
 }
-void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
-{
-	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (m_File != INVALID_HANDLE_VALUE) {
-		DWORD m_Filesize = GetFileSize(m_File, NULL);
-		int Sendret;
-		char* InfoStr = new char[MAX_PATH_EX];
-		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
-		Sendret = GiveCollectDataInfo(TmpBuffer, tcpSocket);
 
-		if (Sendret > 0)
-		{
-			DWORD readsize;
-			BYTE* buffer = new BYTE[m_Filesize];
-			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-			if (m_Filesize > DATASTRINGMESSAGELEN) {
-				DWORD tmplen = m_Filesize;
-				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
-					else {
-						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-						tmplen -= DATASTRINGMESSAGELEN;
-					}
-
-					Sendret = GiveCollectData(TmpBuffer, tcpSocket);
-					if (Sendret == 0 || Sendret == -1) break;
-				}
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			}
-			else
-			{
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-				memcpy(TmpBuffer, buffer, m_Filesize);
-				Sendret = GiveCollectData(TmpBuffer, tcpSocket);
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			}
-			delete[] buffer;
-		}
-		if (Sendret > 0)
-		{
-			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			Sendret = GiveCollectDataEnd(TmpBuffer, tcpSocket);
-
-			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-			GetMyPath(m_Path);
-			tool.DeleteAllCsvFiles(m_Path);
-			CloseHandle(m_File);
-
-		}
-	}
-	else
-	{
-		printf("DB file not exists\n");
-		//BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-		//memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-		////SendDataBufToServer(MyMAC, MyIP, "GiveCollectDataError", TmpBuffer);
-		//delete[] TmpBuffer;
-	}
-}
-
-int Task::GiveCollectProgress(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveCollectProgress");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveCollectDataInfo(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveCollectDataInfo");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveCollectData(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveCollectData");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveCollectDataEnd(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveCollectDataEnd");
-	printf("%s\n", buff);
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
+//void Task::SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket)
+//{
+//	HANDLE m_File = CreateFile(DBName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//	if (m_File != INVALID_HANDLE_VALUE) {
+//		DWORD m_Filesize = GetFileSize(m_File, NULL);
+//		int Sendret;
+//		char* InfoStr = new char[MAX_PATH_EX];
+//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
+//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+//
+//		Sendret = GiveCollectDataInfo(TmpBuffer, tcpSocket);
+//
+//		if (Sendret > 0)
+//		{
+//			DWORD readsize;
+//			BYTE* buffer = new BYTE[m_Filesize];
+//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+//			if (m_Filesize > DATASTRINGMESSAGELEN) {
+//				DWORD tmplen = m_Filesize;
+//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
+//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//					if (tmplen < DATASTRINGMESSAGELEN) memcpy(TmpBuffer, buffer + i, tmplen);
+//					else {
+//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
+//						tmplen -= DATASTRINGMESSAGELEN;
+//					}
+//
+//					Sendret = GiveCollectData(TmpBuffer, tcpSocket);
+//					if (Sendret == 0 || Sendret == -1) break;
+//				}
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			}
+//			else
+//			{
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//				memcpy(TmpBuffer, buffer, m_Filesize);
+//				Sendret = GiveCollectData(TmpBuffer, tcpSocket);
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			}
+//			delete[] buffer;
+//		}
+//		if (Sendret > 0)
+//		{
+//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			Sendret = GiveCollectDataEnd(TmpBuffer, tcpSocket);
+//
+//			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
+//			GetMyPath(m_Path);
+//			tool.DeleteAllCsvFiles(m_Path);
+//			CloseHandle(m_File);
+//
+//		}
+//	}
+//	else
+//	{
+//		printf("DB file not exists\n");
+//		//BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
+//		//memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//		////SendDataBufToServer(MyMAC, MyIP, "GiveCollectDataError", TmpBuffer);
+//		//delete[] TmpBuffer;
+//	}
+//}
+//
+//int Task::GiveCollectProgress(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveCollectProgress");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveCollectDataInfo(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveCollectDataInfo");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveCollectData(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveCollectData");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveCollectDataEnd(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveCollectDataEnd");
+//	printf("%s\n", buff);
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
 
 
 int Task::GetImage(StrPacket* udata) {
@@ -3045,6 +2912,8 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
 		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
 
+		if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectDataInfo", TmpBuffer, tcpSocket);
+
 		if (Sendret > 0)
 		{
 			DWORD readsize;
@@ -3059,9 +2928,10 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
 						tmplen -= DATASTRINGMESSAGELEN;
 					}
-
+					
 					if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
+					else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 					else log.logger("Error", "feature not found");
 
 					
@@ -3076,6 +2946,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 
 				if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
+				else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 				else log.logger("Error", "feature not found");
 
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -3087,13 +2958,17 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 		if (Sendret > 0)
 		{
 			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
+			GetMyPath(m_Path);
 
 			if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 			else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
+			else if (!strcmp(feature, "Collect")) { 
+				Sendret = SendDataPacketToServer("GiveCollectDataEnd", TmpBuffer, tcpSocket); 
+				tool.DeleteAllCsvFiles(m_Path);
+			}
 			else log.logger("Error", "feature not found");
 
-			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-			GetMyPath(m_Path);
 			CloseHandle(m_File);
 
 		}

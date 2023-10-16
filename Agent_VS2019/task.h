@@ -87,19 +87,20 @@ public:
     // explorer
     int ExplorerInfo_(StrPacket* udata);
     int GiveDriveInfo();
+    int GiveExplorerData(char* Drive, char* FileSystem);
+
     //int Explorer(char* buff, SOCKET* tcpSocket);
     //int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerData(char* Drive, char* FileSystem);
     //int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
     //int GiveExplorerData(char* buff, SOCKET* tcpSocket);
     //int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
     //int GiveExplorerError(char* buff, SOCKET* tcpSocket);
 
     //collect
-    int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
-    int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
-    int GiveCollectData(char* buff, SOCKET* tcpSocket);
-    int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
+    //int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
+    //int GiveCollectProgress(char* buff, SOCKET* tcpSocket);
+    //int GiveCollectData(char* buff, SOCKET* tcpSocket);
+    //int GiveCollectDataEnd(char* buff, SOCKET* tcpSocket);
     void CollectData(int i, int iLen);
 
 
