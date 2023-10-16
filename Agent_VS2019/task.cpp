@@ -2027,6 +2027,10 @@ int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
 
 // collect 
 int Task::GetCollectInfo(StrPacket* udata) { 
+	wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
+	GetMyPath(m_Path);
+	tool.DeleteAllCsvFiles(m_Path);
+
 	DWORD CollectProcessPid = 0;
 	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
 	TCHAR* RunComStr = new TCHAR[512];
@@ -2595,131 +2599,151 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\"));
 				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
 
-				WCHAR volume[MAX_PATH + 1] = { '\0' };
-				if (GetVolumePathNameW(tcharStr, volume, MAX_PATH) == FALSE) {
-					log.logger("Error", "Failed to GetVolumePathNameW");
-				}
-				HRESULT rc = CoInitialize(nullptr);
-				if (rc != S_OK && rc != S_FALSE) {
-					if (rc == RPC_E_CHANGED_MODE) {
-						log.logger("Warning", "COM is already initialized in a different mode.");
-					}
-					else {
-						log.logger("Error", "CoInitialize failed");
-						CoUninitialize();
-						continue; 
-					}
-				}
+				//WCHAR volume[MAX_PATH + 1] = { '\0' };
+				//if (GetVolumePathNameW(tcharStr, volume, MAX_PATH) == FALSE) {
+				//	log.logger("Error", "Failed to GetVolumePathNameW");
+				//}
+				//HRESULT rc = CoInitialize(nullptr);
+				//if (rc != S_OK && rc != S_FALSE) {
+				//	if (rc == RPC_E_CHANGED_MODE) {
+				//		log.logger("Warning", "COM is already initialized in a different mode.");
+				//	}
+				//	else {
+				//		log.logger("Error", "CoInitialize failed");
+				//		CoUninitialize();
+				//		continue; 
+				//	}
+				//}
 
-				IVssBackupComponents* components = NULL;
-				rc = CreateVssBackupComponents(&components);
-				if (rc != S_OK) {
-					log.logger("Error", "CreateVssBackupComponents failed");
-					CoUninitialize();
-					continue;
-				}
-				rc = components->InitializeForBackup();
-				if (rc != S_OK) {
-					log.logger("Error", "InitializeForBackup failed");
-					CoUninitialize();
-					continue;
-				}
-				IVssAsync* async;
-				rc = components->GatherWriterMetadata(&async);
-				if (rc != S_OK) {
-					log.logger("Error", "GatherWriterMetadata failed");
-					CoUninitialize();
-					continue;
-				}
-				rc = async->Wait();
-				if (rc != S_OK) {
-					log.logger("Error", "async->Wait() failed");
-					CoUninitialize();
-					continue;
-				}
-				rc = components->SetContext(VSS_CTX_BACKUP);
-				if (rc != S_OK) {
-					log.logger("Error", "SetContext failed");
-					CoUninitialize();
-					continue;
-				}
-				VSS_ID snapshot_set_id;
-				rc = components->StartSnapshotSet(&snapshot_set_id);
-				if (rc != S_OK) {
-					log.logger("Error", "StartSnapshotSet failed");
-					CoUninitialize();
-					continue;
-				}
-
-
-				VSS_ID snapshot_id;
-				rc = components->AddToSnapshotSet(volume, GUID_NULL, &snapshot_id);
-				if (rc != S_OK) {
-					log.logger("Error", "AddToSnapshotSet failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
+				//IVssBackupComponents* components = NULL;
+				//rc = CreateVssBackupComponents(&components);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "CreateVssBackupComponents failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = components->InitializeForBackup();
+				//if (rc != S_OK) {
+				//	log.logger("Error", "InitializeForBackup failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//IVssAsync* async;
+				//rc = components->GatherWriterMetadata(&async);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "GatherWriterMetadata failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = async->Wait();
+				//if (rc != S_OK) {
+				//	log.logger("Error", "async->Wait() failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = components->SetContext(VSS_CTX_BACKUP);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "SetContext failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//VSS_ID snapshot_set_id;
+				//rc = components->StartSnapshotSet(&snapshot_set_id);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "StartSnapshotSet failed");
+				//	CoUninitialize();
+				//	continue;
+				//}
 
 
-				rc = components->SetBackupState(true, false, VSS_BT_FULL, false);
-				if (rc != S_OK) {
-					log.logger("Error", "SetBackupState failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
-				rc = components->PrepareForBackup(&async);
-				if (rc != S_OK) {
-					log.logger("Error", "PrepareForBackup failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
-				rc = async->Wait();
-				if (rc != S_OK) {
-					log.logger("Error", "async->Wait() failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
-				rc = components->DoSnapshotSet(&async);
-				if (rc != S_OK) {
-					log.logger("Error", "DoSnapshotSet failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
-				rc = async->Wait();
-				if (rc != S_OK) {
-					log.logger("Error", "Wait failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
+				//VSS_ID snapshot_id;
+				//rc = components->AddToSnapshotSet(volume, GUID_NULL, &snapshot_id);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "AddToSnapshotSet failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
 
-				VSS_SNAPSHOT_PROP snapshot_prop;
-				rc = components->GetSnapshotProperties(snapshot_id, &snapshot_prop);
-				if (rc != S_OK) {
-					log.logger("Error", "GetSnapshotProperties failed;");
-					components->Release();
-					CoUninitialize();
-					continue;
-				}
 
-				wstring src = snapshot_prop.m_pwszSnapshotDeviceObject;
-				src += L"\\";
-				src += (tcharFilename + lstrlenW(volume));
-				//src += tcharFilename;
-				wcout << "src: " << src << endl;
+				//rc = components->SetBackupState(true, false, VSS_BT_FULL, false);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "SetBackupState failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = components->PrepareForBackup(&async);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "PrepareForBackup failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = async->Wait();
+				//if (rc != S_OK) {
+				//	log.logger("Error", "async->Wait() failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = components->DoSnapshotSet(&async);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "DoSnapshotSet failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
+				//rc = async->Wait();
+				//if (rc != S_OK) {
+				//	log.logger("Error", "Wait failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
 
-				VssFreeSnapshotProperties(&snapshot_prop);
+				//VSS_SNAPSHOT_PROP snapshot_prop;
+				//rc = components->GetSnapshotProperties(snapshot_id, &snapshot_prop);
+				//if (rc != S_OK) {
+				//	log.logger("Error", "GetSnapshotProperties failed;");
+				//	components->Release();
+				//	CoUninitialize();
+				//	continue;
+				//}
 
-				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, nullptr, 0, nullptr, nullptr);
+				//wstring src = snapshot_prop.m_pwszSnapshotDeviceObject;
+				//src += L"\\";
+				//src += (tcharFilename + lstrlenW(volume));
+				////src += tcharFilename;
+				//wcout << "src: " << src << endl;
+
+				//VssFreeSnapshotProperties(&snapshot_prop);
+
+				/*int requiredSize = WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, nullptr, 0, nullptr, nullptr);
 				std::string srcStr(requiredSize, 0);
-				WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, &srcStr[0], requiredSize, nullptr, nullptr);
+				WideCharToMultiByte(CP_UTF8, 0, src.c_str(), -1, &srcStr[0], requiredSize, nullptr, nullptr);*/
 				// src.c_str()
-				if (CopyFileW(tcharStr, destinationFileName, true) == FALSE) {
+
+				
+				std::wifstream sourceFile(tcharStr, std::ios::in | std::ios::binary);
+				std::wofstream destFile(destinationFileName, std::ios::binary);
+
+				if (sourceFile && destFile) {
+					destFile << sourceFile.rdbuf();
+				}
+				else {
+					DWORD errorMessageID = GetLastError();
+					std::stringstream ss;
+					ss << errorMessageID;
+					std::string errorMessage = ss.str();
+					log.logger("Error", searchPath + " copy file failed: " + errorMessage);
+				}
+
+				destFile.close();
+				sourceFile.close();
+
+
+				/*if (CopyFileW(tcharStr, destinationFileName, true) == FALSE) {
 
 					DWORD errorMessageID = GetLastError();
 					std::stringstream ss;
@@ -2733,7 +2757,7 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				}
 				else {
 					log.logger("Info", srcStr + " copy file success");
-				}
+				}*/
 
 
 				wprintf(L"start add %s\n", destinationFileName);
@@ -2760,40 +2784,40 @@ int Task::LookingForImage(char* cmd) {
 	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
 	GetMyPath(zipFileName);
 	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
-	//HZIP hz = CreateZip(zipFileName, 0);
-	//if (hz == 0) {
-	//	printf("Failed to create image.zip\n");
-	//	return false; // Failed to create ZIP file
+	HZIP hz = CreateZip(zipFileName, 0);
+	if (hz == 0) {
+		printf("Failed to create image.zip\n");
+		return false; // Failed to create ZIP file
+	}
+
+
+	//TCHAR* txt1 = new TCHAR[MAX_PATH_EX];
+	//GetMyPath(txt1);
+	//_tcscat_s(txt1, MAX_PATH_EX, _T("\\mock1.txt"));
+	//std::wofstream outFile(txt1);
+	//if (outFile.is_open()) {
+	//	std::wstring data = L"This is some sample data.\n";
+	//	outFile << data;
+	//	outFile.close();
+	//}
+	//else {
+	//	log.logger("Error", "failed to write data into mock1");
 	//}
 
+	//TCHAR* txt2 = new TCHAR[MAX_PATH_EX];
+	//GetMyPath(txt2);
+	//_tcscat_s(txt2, MAX_PATH_EX, _T("\\mock2.txt"));
+	//std::wofstream outFile2(txt2);
+	//if (outFile2.is_open()) {
+	//	std::wstring data = L"This is some sample data.\n";
+	//	outFile2 << data;
+	//	outFile2.close();
+	//}
+	//else {
+	//	log.logger("Error", "failed to write data into mock2");
+	//}
 
-	TCHAR* txt1 = new TCHAR[MAX_PATH_EX];
-	GetMyPath(txt1);
-	_tcscat_s(txt1, MAX_PATH_EX, _T("\\mock1.txt"));
-	std::wofstream outFile(txt1);
-	if (outFile.is_open()) {
-		std::wstring data = L"This is some sample data.\n";
-		outFile << data;
-		outFile.close();
-	}
-	else {
-		log.logger("Error", "failed to write data into mock1");
-	}
-
-	TCHAR* txt2 = new TCHAR[MAX_PATH_EX];
-	GetMyPath(txt2);
-	_tcscat_s(txt2, MAX_PATH_EX, _T("\\mock2.txt"));
-	std::wofstream outFile2(txt2);
-	if (outFile2.is_open()) {
-		std::wstring data = L"This is some sample data.\n";
-		outFile2 << data;
-		outFile2.close();
-	}
-	else {
-		log.logger("Error", "failed to write data into mock2");
-	}
-
-	tool.CompressFileToZip(zipFileName, txt1);
+	//tool.CompressFileToZip(zipFileName, txt1);
 	
 	//std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 	//if (ZipAdd(hz, txt1, zipFileName) != 0) {
@@ -2805,107 +2829,107 @@ int Task::LookingForImage(char* cmd) {
 	//	log.logger("Error", LogMsg);
 	//}
 
-	DeleteFile(txt1);
-	DeleteFile(txt2);
+	//DeleteFile(txt1);
+	//DeleteFile(txt2);
 
 
-	//std::vector<std::string> MsgAfterSplit;
-	//char* nextToken = nullptr;
-	//const char* delimiter = ",";
-	//char* token = strtok_s(cmd, delimiter, &nextToken);
-	//while (token != nullptr) {
-	//	MsgAfterSplit.push_back(token);
-	//	token = strtok_s(nullptr, delimiter, &nextToken);
-	//}
+	std::vector<std::string> MsgAfterSplit;
+	char* nextToken = nullptr;
+	const char* delimiter = ",";
+	char* token = strtok_s(cmd, delimiter, &nextToken);
+	while (token != nullptr) {
+		MsgAfterSplit.push_back(token);
+		token = strtok_s(nullptr, delimiter, &nextToken);
+	}
 
-	//for (int i = 0; i < MsgAfterSplit.size(); i++) {
-	//	std::cout << MsgAfterSplit[i].c_str() << std::endl;
-	//	std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
-	//	std::string file = FileInfo[0];
-	//	std::string AppType = FileInfo[1];
-	//	std::string keyword = FileInfo[2];
+	for (int i = 0; i < MsgAfterSplit.size(); i++) {
+		std::cout << MsgAfterSplit[i].c_str() << std::endl;
+		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
+		std::string file = FileInfo[0];
+		std::string AppType = FileInfo[1];
+		std::string keyword = FileInfo[2];
 
-	//	printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
+		printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
 
-	//	// find root drive
-	//	WCHAR driveStrings[255];
-	//	DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
-	//	WCHAR* currentDrive;
-	//	std::string narrowString_currentDrive;
-	//	if (driveStringsLength > 0 && driveStringsLength < 255) {
-	//		currentDrive = driveStrings;
-	//		while (*currentDrive) {
-	//			int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
-	//			narrowString_currentDrive.resize(requiredSize);
+		// find root drive
+		WCHAR driveStrings[255];
+		DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+		WCHAR* currentDrive;
+		std::string narrowString_currentDrive;
+		if (driveStringsLength > 0 && driveStringsLength < 255) {
+			currentDrive = driveStrings;
+			while (*currentDrive) {
+				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+				narrowString_currentDrive.resize(requiredSize);
 
-	//			if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-	//				//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-	//			}
+				if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+					//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+				}
 
-	//			currentDrive += wcslen(currentDrive) + 1;
-	//			break;
-	//		}
-	//	}
+				currentDrive += wcslen(currentDrive) + 1;
+				break;
+			}
+		}
 
-	//	// find app environment variable
-	//	char* searchPath = new char[4];
-	//	std::string connectedDevicesPlatformPath;
+		// find app environment variable
+		char* searchPath = new char[4];
+		std::string connectedDevicesPlatformPath;
 
-	//	if (!AppType.empty()) {
-	//		size_t len;
-	//		errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
+		if (!AppType.empty()) {
+			size_t len;
+			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
 
-	//		if (err != 0) {
-	//			printf("Error getting environment variable.\n");
-	//			return 0;
-	//		}
+			if (err != 0) {
+				printf("Error getting environment variable.\n");
+				return 0;
+			}
 
-	//		if (searchPath == NULL) {
-	//			printf("environment variable is not set.\n");
-	//			return 0;
-	//		}
+			if (searchPath == NULL) {
+				printf("environment variable is not set.\n");
+				return 0;
+			}
 
-	//		connectedDevicesPlatformPath = searchPath;
-	//		connectedDevicesPlatformPath += "\\";
+			connectedDevicesPlatformPath = searchPath;
+			connectedDevicesPlatformPath += "\\";
 
-	//	}
-	//	connectedDevicesPlatformPath += file;
-	//	
+		}
+		connectedDevicesPlatformPath += file;
+		
 
-	//	// if end of path has *, remove it
-	//	size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
-	//	if (lastBackslashPos != std::string::npos) {
-	//		size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
-	//		if (secondLastBackslashPos != std::string::npos) {
-	//			std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
-	//			if (extractedString == "*") {
-	//				connectedDevicesPlatformPath.erase(secondLastBackslashPos);
-	//			}
-	//		}
-	//	}
+		// if end of path has *, remove it
+		size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
+		if (lastBackslashPos != std::string::npos) {
+			size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
+			if (secondLastBackslashPos != std::string::npos) {
+				std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
+				if (extractedString == "*") {
+					connectedDevicesPlatformPath.erase(secondLastBackslashPos);
+				}
+			}
+		}
 
-	//	// replace root with root drive
-	//	std::vector<std::string> parts;
-	//	std::istringstream iss(connectedDevicesPlatformPath);
-	//	std::string part;
-	//	while (std::getline(iss, part, '\\')) {
-	//		size_t found = part.find("root");
-	//		if (found != std::string::npos) {
-	//			part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
-	//			//found = part.find("root", found + 1);
-	//		}
+		// replace root with root drive
+		std::vector<std::string> parts;
+		std::istringstream iss(connectedDevicesPlatformPath);
+		std::string part;
+		while (std::getline(iss, part, '\\')) {
+			size_t found = part.find("root");
+			if (found != std::string::npos) {
+				part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
+				//found = part.find("root", found + 1);
+			}
 
-	//		if (!part.empty()) {
-	//			parts.push_back(part);
-	//		}
-	//		
-	//	}
+			if (!part.empty()) {
+				parts.push_back(part);
+			}
+			
+		}
 
-	//	string Path = "";
-	//	SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
-	//}
+		string Path = "";
+		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
+	}
 
-	//CloseZip(hz);
+	CloseZip(hz);
 
 
 	SendImageFileToServer(zipFileName, info->tcpSocket);
