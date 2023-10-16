@@ -61,7 +61,6 @@ int SocketSend::SendMessageToServer(char* Work, char* Mgs) {
 	strcpy_s(WorkNew, sizeof(WorkNew), Work);
 	WorkNew[strlen(Work)] = '\0';
 	
-
 	strcpy_s(GetServerMessage.DoWorking, sizeof(GetServerMessage.DoWorking), WorkNew);
 	strcpy_s(GetServerMessage.csMsg, sizeof(GetServerMessage.csMsg), Mgs);
 

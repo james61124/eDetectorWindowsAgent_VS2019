@@ -351,6 +351,7 @@ int main(int argc, char* argv[]) {
 			socketManager.HandleTaskToServer("GiveInfo");
 			std::thread CheckConnectThread([&]() { socketManager.task->CheckConnect(); });
 			CheckConnectThread.detach();
+			//socketManager.HandleTaskToServer("UpdateAgent");
 			receiveThread.join();
 		}
 	}

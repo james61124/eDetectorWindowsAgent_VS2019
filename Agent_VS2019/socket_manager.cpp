@@ -62,6 +62,12 @@ bool SocketManager::connectTCP(const std::string& serverIP, int port) {
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
+    //sockaddr_in localAddr;
+    //int len = sizeof(localAddr);
+    //if (getsockname(tcpSocket, (struct sockaddr*)&localAddr, &len) == 0) {
+    //    std::cout << "Connected from local port: " << ntohs(localAddr.sin_port) << std::endl;
+    //}
+
     InfoInstance->tcpSocket = &tcpSocket;
     return true;
 }

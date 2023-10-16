@@ -79,7 +79,6 @@ int Task::GiveInfo() {
 	// file version
 	char* FileVersion = new char[64];
 	strcpy_s(FileVersion, 64, "1.0.2");
-
 	strcpy_s(functionName, 24, "GiveInfo");
 
 	int VMret = VirtualMachine(info->MAC);
@@ -2324,10 +2323,10 @@ void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
 	strcpy_s(null, 1, "");
 	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
 	GetMyPath(AgentNewVersion_exe);
-	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
+	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\ClientAgent.exe"));
 	std::ofstream outFile(AgentNewVersion_exe, std::ios::app | std::ios::binary);
 	if (!outFile.is_open()) {
-		log.logger("Error", "AgentNewVersion.exe open failed");
+		log.logger("Error", "ClientAgent.exe open failed");
 	}
 	if (outFile.good()) { 
 		outFile.write(buffer, totalReceivedSize);
@@ -2395,7 +2394,7 @@ int Task::UpdateAgent() {
 
 	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
 	GetMyPath(AgentNewVersion_exe);
-	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\AgentNewVersion.exe"));
+	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\ClientAgent.exe"));
 	DeleteFile(AgentNewVersion_exe);
 
 	ReadyUpdateAgent(null);

@@ -153,41 +153,42 @@ void GetThisIP(char* Ipstr, unsigned int StrSize)//取得內部IP
 }
 void RunProcess(TCHAR* AppName, TCHAR* CmdLine, BOOL isWait, BOOL isShow)
 {
-	//PROCESS_INFORMATION processInformation;
-	//STARTUPINFO startupInfo;
-	//memset(&processInformation, 0, sizeof(processInformation));
-	//memset(&startupInfo, 0, sizeof(startupInfo));
-	//startupInfo.cb = sizeof(startupInfo);
+	DWORD g_ProcessLevel = NORMAL_PRIORITY_CLASS;
+	PROCESS_INFORMATION processInformation;
+	STARTUPINFO startupInfo;
+	memset(&processInformation, 0, sizeof(processInformation));
+	memset(&startupInfo, 0, sizeof(startupInfo));
+	startupInfo.cb = sizeof(startupInfo);
 
-	//BOOL result;
-	//TCHAR tempCmdLine[MAX_PATH_EX * 2];  //Needed since CreateProcessW may change the contents of CmdLine
-	//if (CmdLine != NULL)
-	//{
-	//	_tcscpy_s(tempCmdLine, MAX_PATH_EX * 2, CmdLine);
-	//	if (isShow)
-	//		result = ::CreateProcess(AppName, tempCmdLine, NULL, NULL, FALSE, g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
-	//	else
-	//		result = ::CreateProcess(AppName, tempCmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW | g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
-	//}
-	//else
-	//{
-	//	if (isShow)
-	//		result = ::CreateProcess(AppName, CmdLine, NULL, NULL, FALSE, g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
-	//	else
-	//		result = ::CreateProcess(AppName, CmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW | g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
-	//}
+	BOOL result;
+	TCHAR tempCmdLine[MAX_PATH_EX * 2];  //Needed since CreateProcessW may change the contents of CmdLine
+	if (CmdLine != NULL)
+	{
+		_tcscpy_s(tempCmdLine, MAX_PATH_EX * 2, CmdLine);
+		if (isShow)
+			result = ::CreateProcess(AppName, tempCmdLine, NULL, NULL, FALSE, g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
+		else
+			result = ::CreateProcess(AppName, tempCmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW | g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
+	}
+	else
+	{
+		if (isShow)
+			result = ::CreateProcess(AppName, CmdLine, NULL, NULL, FALSE, g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
+		else
+			result = ::CreateProcess(AppName, CmdLine, NULL, NULL, FALSE, CREATE_NO_WINDOW | g_ProcessLevel, NULL, NULL, &startupInfo, &processInformation);
+	}
 
-	//if (result == 0)
-	//{
-	//	wprintf(L"ERROR: CreateProcess failed!");
-	//}
-	//else
-	//{
-	//	if (isWait)
-	//		WaitForSingleObject(processInformation.hProcess, INFINITE);
-	//	CloseHandle(processInformation.hProcess);
-	//	CloseHandle(processInformation.hThread);
-	//}
+	if (result == 0)
+	{
+		wprintf(L"ERROR: CreateProcess failed!");
+	}
+	else
+	{
+		if (isWait)
+			WaitForSingleObject(processInformation.hProcess, INFINITE);
+		CloseHandle(processInformation.hProcess);
+		CloseHandle(processInformation.hThread);
+	}
 }
 bool RunProcessEx(TCHAR* AppName, TCHAR* CmdLine, size_t CmdLineLen, BOOL isWait, BOOL isShow, DWORD& pid, int m_TimeOut)
 {
