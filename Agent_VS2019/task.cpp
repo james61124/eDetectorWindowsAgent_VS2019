@@ -1381,8 +1381,6 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	TCHAR* RunComStr = new TCHAR[512];
 	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-	//TCHAR MyName[MAX_PATH];
-	//swprintf_s(MyName, MAX_PATH, L"%hs", "./Agent_VS2019");
 	wstring filename = tool.GetFileName();
 	TCHAR MyName[MAX_PATH];
 	wcscpy_s(MyName, filename.c_str());
@@ -1404,11 +1402,7 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 }
 int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 
-
-	//SOCKET* tcpSocket = CreateNewSocket();
-	//if (tcpSocket == nullptr) return 0;
 	int ret = 0;
-
 	ExplorerInfo* m_Info = new ExplorerInfo;
 	wchar_t DriveName[20];
 	size_t convertedChars = 0;
@@ -1431,22 +1425,22 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 			{
 				NTFSSearchCore* searchCore = new NTFSSearchCore;
 				try {
-					printf("NTFS start...\n");
 					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, info->tcpSocket, Drive, FileSystem);
 				}
 				catch (...) {
 					ret = 1;
 				}
+
 				if (ret == 0) {
 					char* null = new char[5];
 					strcpy_s(null, 5, "null");
-					ret = GiveExplorerEnd(null, info->tcpSocket);
+					ret = SendDataPacketToServer("GiveExplorerEnd", null, info->tcpSocket);
 					delete[] null;
 				}
 				else {
 					char* msg = new char[22];
 					strcpy_s(msg, 22, "ErrorLoadingMFTTable");
-					ret = GiveExplorerError(msg, info->tcpSocket);
+					ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
 					delete[] msg;
 				}
 
@@ -1613,7 +1607,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 		{
 			char* msg = new char[22];
 			strcpy_s(msg, 22, "ErrorNotFormat");
-			ret = GiveExplorerError(msg, info->tcpSocket);
+			ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
 			delete[] msg;
 
 		}
@@ -1622,7 +1616,7 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 	{
 		char* msg = new char[22];
 		strcpy_s(msg, 22, "ErrorNoDrive");
-		ret = GiveExplorerError(msg, info->tcpSocket);
+		ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
 		delete[] msg;
 	}
 
@@ -1640,13 +1634,13 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	
 	CNTFSVolume* m_curSelectedVol = new CNTFSVolume(vol_name);
 	if (m_curSelectedVol == NULL) {
-		printf("Error when getVolumeByName\n");
+		log.logger("Error", "Error when getVolumeByName");
 		delete m_curSelectedVol;
 		return 1;
 	}
 
 	if (!m_curSelectedVol->IsVolumeOK()) {
-		printf("Not a valid NTFS volume or NTFS version < 3.0\n");
+		log.logger("Error", "Not a valid NTFS volume or NTFS version < 3.0");
 		delete m_curSelectedVol;
 		return 1;
 	}
@@ -1659,7 +1653,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	// Give Drive Info to Server
 	char* RecordCount = new char[DATASTRINGMESSAGELEN];
 	sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%s|%s", Drive, FileSystem);
-	int	ret = Explorer(RecordCount ,tcpSocket);
+	int ret = SendDataPacketToServer("Explorer", RecordCount, tcpSocket);
 
 	TCHAR* Explorer_txt = new TCHAR[MAX_PATH_EX];
 	GetMyPath(Explorer_txt);
@@ -1670,8 +1664,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	_tcscat_s(Explorer_zip, MAX_PATH_EX, _T("\\Explorer.zip"));
 	DeleteFile(Explorer_zip);
 
-	//std::remove("Explorer.txt");
-	//std::remove("Explorer.zip");	
 
 	std::wofstream outFile(Explorer_txt, std::ios::app);
 	if (!outFile.is_open()) {
@@ -1679,14 +1671,12 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	}
 
 	// collect Explorer
-	printf("Collecting Explorer...\n");
 	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++) {
-	//for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < 30000; m_progressIdx++) {
 		if (m_progressIdx % 10000 == 0) {
 			printf("%d\n", m_progressIdx);
 			char* Progress = new char[DATASTRINGMESSAGELEN];
 			sprintf_s(Progress, DATASTRINGMESSAGELEN, "%u/%d", m_progressIdx, m_curSelectedVol->GetRecordsCount());
-			GiveExplorerProgress(Progress, tcpSocket);
+			SendDataPacketToServer("GiveExplorerProgress", Progress, tcpSocket);
 			delete[] Progress;
 		}
 
@@ -1775,7 +1765,7 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		if ((m_Count % 60) == 0 && m_Count >= 60) {
 			if (outFile.good()) outFile << TempStr;
 			else {
-				log.logger("Error", "write to txt failed");
+				log.logger("Error", "write to explorer txt failed");
 			}
 			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
 		}
@@ -1784,10 +1774,6 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 		delete fr;
 	}
 	outFile.close();
-	
-
-	//const TCHAR* zipFileName = Explorer_zip;
-	//const TCHAR* sourceFilePath = Explorer_txt; // _T("Explorer.txt")
 	
 	// Compress Explorer.txt
 	if (tool.CompressFileToZip(Explorer_zip, Explorer_txt)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
@@ -1808,17 +1794,14 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 	// send GiveExplorerInfo
 	char* FileSize = new char[DATASTRINGMESSAGELEN];
 	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
-	ret = GiveExplorerInfo(FileSize, tcpSocket);
+	SendDataPacketToServer("GiveExplorerInfo", FileSize, tcpSocket);
 	delete[] FileSize;
 	
 	// send zip file
-	SendZipFileToServer(Explorer_zip, tcpSocket);
+	SendFileToServer("Explorer", Explorer_zip, tcpSocket);
 
 	DeleteFile(Explorer_txt);
 	DeleteFile(Explorer_zip);
-
-	//if (std::remove("Explorer.txt") != 0) perror("Error delete Explorer.txt\n");
-	//if (std::remove("Explorer.zip") != 0) perror("Error delete Explorer.zip\n");
 
 
 	delete[] TempStr;
@@ -1826,107 +1809,109 @@ int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket,
 
 	return 0;
 }
-void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
-{
 
-	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (m_File != INVALID_HANDLE_VALUE)
-	{
-		DWORD m_Filesize = GetFileSize(m_File, NULL);
-		int Sendret;
-		char* InfoStr = new char[MAX_PATH_EX];
-		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
-
-		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-
-		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
-		Sendret = 1;
-		if (Sendret > 0)
-		{
-			DWORD readsize;
-			BYTE* buffer = new BYTE[m_Filesize];
-			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
-			if (m_Filesize > DATASTRINGMESSAGELEN) {
-				DWORD tmplen = m_Filesize;
-				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
-					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-					if (tmplen < DATASTRINGMESSAGELEN) { memcpy(TmpBuffer, buffer + i, tmplen); }
-					else {
-						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
-						tmplen -= DATASTRINGMESSAGELEN;
-					}
-
-					Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-					if (Sendret == 0 || Sendret == -1) break;
-				}
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-			}
-			else
-			{
-				//unsigned char* buff = new unsigned char[DATASTRINGMESSAGELEN];
-				printf("DATASTRINGMESSAGELEN else\n");
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-				memcpy(TmpBuffer, buffer, m_Filesize);
-
-				Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-
-			}
-			delete[] buffer;
-		}
-
-		if (Sendret > 0)
-		{
-			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-
-			Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
-			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
-			GetMyPath(m_Path);
-			CloseHandle(m_File);
-
-		}
-	}
-	else
-	{
-		log.logger("Error", "failed to send zip file\n");
-		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-		delete[] TmpBuffer;
-	}
-}
-
-int Task::Explorer(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "Explorer");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerInfo");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerProgress");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerData");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-} 
-int Task::GiveExplorerEnd(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerEnd");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
-int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
-	char* functionName = new char[24];
-	strcpy_s(functionName, 24, "GiveExplorerError");
-	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
-}
+//
+//void Task::SendZipFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket)
+//{
+//
+//	HANDLE m_File = CreateFile(zipFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+//	if (m_File != INVALID_HANDLE_VALUE)
+//	{
+//		DWORD m_Filesize = GetFileSize(m_File, NULL);
+//		int Sendret;
+//		char* InfoStr = new char[MAX_PATH_EX];
+//		sprintf_s(InfoStr, MAX_PATH_EX, "%lu", m_Filesize);
+//
+//		char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+//		memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+//		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+//
+//		/*Sendret = socketsend->SendMessageToServer(functionName_GiveExplorerData, TmpBuffer);*/
+//		Sendret = 1;
+//		if (Sendret > 0)
+//		{
+//			DWORD readsize;
+//			BYTE* buffer = new BYTE[m_Filesize];
+//			ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+//			if (m_Filesize > DATASTRINGMESSAGELEN) {
+//				DWORD tmplen = m_Filesize;
+//				for (DWORD i = 0; i < m_Filesize; i += DATASTRINGMESSAGELEN) {
+//					memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//					if (tmplen < DATASTRINGMESSAGELEN) { memcpy(TmpBuffer, buffer + i, tmplen); }
+//					else {
+//						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
+//						tmplen -= DATASTRINGMESSAGELEN;
+//					}
+//
+//					Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
+//					if (Sendret == 0 || Sendret == -1) break;
+//				}
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//			}
+//			else
+//			{
+//				//unsigned char* buff = new unsigned char[DATASTRINGMESSAGELEN];
+//				printf("DATASTRINGMESSAGELEN else\n");
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//				memcpy(TmpBuffer, buffer, m_Filesize);
+//
+//				Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
+//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//
+//			}
+//			delete[] buffer;
+//		}
+//
+//		if (Sendret > 0)
+//		{
+//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//
+//			Sendret = GiveExplorerData(TmpBuffer, tcpSocket);
+//			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
+//			GetMyPath(m_Path);
+//			CloseHandle(m_File);
+//
+//		}
+//	}
+//	else
+//	{
+//		log.logger("Error", "failed to send zip file\n");
+//		BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
+//		memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
+//		delete[] TmpBuffer;
+//	}
+//}
+//
+//int Task::Explorer(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "Explorer");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveExplorerInfo(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveExplorerInfo");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveExplorerProgress(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveExplorerProgress");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveExplorerData(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveExplorerData");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//} 
+//int Task::GiveExplorerEnd(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveExplorerEnd");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
+//int Task::GiveExplorerError(char* buff, SOCKET* tcpSocket) {
+//	char* functionName = new char[24];
+//	strcpy_s(functionName, 24, "GiveExplorerError");
+//	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
+//}
 
 
 // collect 
@@ -3076,6 +3061,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 					}
 
 					if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
+					else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 					else log.logger("Error", "feature not found");
 
 					
@@ -3089,6 +3075,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 				memcpy(TmpBuffer, buffer, m_Filesize);
 
 				if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
+				else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 				else log.logger("Error", "feature not found");
 
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -3102,6 +3089,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
 
 			if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
+			else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 			else log.logger("Error", "feature not found");
 
 			wchar_t* m_Path = new wchar_t[MAX_PATH_EX];

@@ -75,24 +75,25 @@ public:
     int GiveScanInfo(char* buff, SOCKET* tcpSocket);
     int GiveProcessData();
     void ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket);
-    void SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket);
-    int ReadyScan(char* buff, SOCKET* tcpSocket);
-    int GiveScan(char* buff, SOCKET* tcpSocket);
-    int GiveScanFragment(char* buff, SOCKET* tcpSocket);
-    int GiveScanEnd(char* buff, SOCKET* tcpSocket);
-    int GiveScanProgress(char* buff, SOCKET* tcpSocket);
-    int GiveScanDataInfo(char* buff, SOCKET* tcpSocket);
+
+    //void SendScanFileToServer(const TCHAR* zipFileName, SOCKET* tcpSocket);
+    //int ReadyScan(char* buff, SOCKET* tcpSocket);
+    //int GiveScan(char* buff, SOCKET* tcpSocket);
+    //int GiveScanFragment(char* buff, SOCKET* tcpSocket);
+    //int GiveScanEnd(char* buff, SOCKET* tcpSocket);
+    //int GiveScanProgress(char* buff, SOCKET* tcpSocket);
+    //int GiveScanDataInfo(char* buff, SOCKET* tcpSocket);
 
     // explorer
     int ExplorerInfo_(StrPacket* udata);
     int GiveDriveInfo();
-    int Explorer(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
+    //int Explorer(char* buff, SOCKET* tcpSocket);
+    //int GiveExplorerInfo(char* buff, SOCKET* tcpSocket);
     int GiveExplorerData(char* Drive, char* FileSystem);
-    int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerData(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
-    int GiveExplorerError(char* buff, SOCKET* tcpSocket);
+    //int GiveExplorerProgress(char* buff, SOCKET* tcpSocket);
+    //int GiveExplorerData(char* buff, SOCKET* tcpSocket);
+    //int GiveExplorerEnd(char* buff, SOCKET* tcpSocket);
+    //int GiveExplorerError(char* buff, SOCKET* tcpSocket);
 
     //collect
     int GiveCollectDataInfo(char* buff, SOCKET* tcpSocket);
