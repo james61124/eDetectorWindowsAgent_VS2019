@@ -1187,7 +1187,8 @@ void IPtoken(char* IPstr, int& IP1, int& IP2, int& IP3, int& IP4)
 //            //        if (error)
 //            //            printf("Invalid Argument to asctime_s\n");
 //            //        else
-//            //            /* asctime_s returns the string terminated by \n\0 */
+//            //            /* asctime_s returns the string 
+// d by \n\0 */
 //            //            printf("%s", buffer);
 //            //    }
 //			//

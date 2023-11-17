@@ -44,6 +44,9 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 	// Update Agent 
 	functionFromServerMap["UpdateAgent"] = &Task::OpenUpdateAgentProcess;
 	functionMap["UpdateAgent"] = std::bind(&Task::UpdateAgent, this);
+
+	// TerminateAll
+	functionFromServerMap["TerminateAll"] = &Task::TerminateAll;
 	
 
     info = infoInstance;
@@ -2048,8 +2051,8 @@ int Task::GetImage(StrPacket* udata) {
 	TCHAR ServerIP[MAX_PATH];
 	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-	swprintf_s(RunComStr, 1024, L"\"%s\" %s %d Image %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
-	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_ImageProcessPid);
+	swprintf_s(RunComStr, 4096, L"\"%s\" %s %d Image %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
+	RunProcessEx(RunExeStr, RunComStr, 4096, FALSE, FALSE, m_ImageProcessPid);
 
 	info->processMap["Image"] = m_ImageProcessPid;
 	log.logger("Debug", "Image enabled");
@@ -2073,6 +2076,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 		searchPath += "*";
 	}
 
+	//log.logger("Debug", searchPath);
+
 
 	WIN32_FIND_DATAA findFileData;
 	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
@@ -2080,6 +2085,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 		std::cout << "INVALID_HANDLE_VALUE" << std::endl;
 		return;
 	}
+
+	int first = 0;
 
 	do {
 		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
@@ -2092,6 +2099,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				searchPath = searchPath + findFileData.cFileName + "\\";
 				SearchImageFile(parts, level, searchPath, FileToSearch, hz);
 
+				printf("first: %s\n", searchPath.c_str());
+
 				lastBackslashPos = searchPath.find_last_of('\\');
 				if (lastBackslashPos != std::string::npos) {
 					size_t secondLastBackslashPos = searchPath.find_last_of('\\', lastBackslashPos - 1);
@@ -2099,6 +2108,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 						searchPath.erase(secondLastBackslashPos + 1);
 					}
 				}
+
+				printf("second: %s\n", searchPath.c_str());
 			}
 		}
 		else {
@@ -2110,10 +2121,14 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 			std::transform(fileToSearchLower.begin(), fileToSearchLower.end(), fileToSearchLower.begin(), ::tolower);
 
 			if (cFileNameLower.find(fileToSearchLower) != std::string::npos) {
-				size_t lastBackslashPos = searchPath.find_last_of('\\');
-				if (lastBackslashPos != std::string::npos) {
-					searchPath.erase(lastBackslashPos);
+				if (!first) {
+					size_t lastBackslashPos = searchPath.find_last_of('\\');
+					if (lastBackslashPos != std::string::npos) {
+						searchPath.erase(lastBackslashPos);
+					}
+					first = 1;
 				}
+				
 				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
 
 				// convert path to TCHAR
@@ -2143,10 +2158,35 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
 
 				
-				std::wifstream sourceFile(tcharStr, std::ios::in | std::ios::binary);
-				std::wofstream destFile(destinationFileName, std::ios::binary);
 
-				if (sourceFile && destFile) {
+				
+				//std::wifstream sourceFile(tcharStr);
+				//std::wofstream destFile(destinationFileName);
+				//destFile << sourceFile.rdbuf();
+
+				std::wifstream sourceFile;
+				sourceFile.open(src_filename, std::ios::in);
+
+				//std::wifstream sourceFile(src_filename, std::ios::in);
+				if (!sourceFile) {
+					log.logger("Error", "Failed to open " + src_filename + " for reading.");
+					printf("Failed to open %s for reading.\n", src_filename.c_str());
+				}
+
+				std::wofstream destFile(destinationFileName);
+				if (!destFile) {
+					log.logger("Error", "Failed to open the destination file for writing.");
+					printf("Failed to open the destination file for writing.\n");
+				}
+
+				CopyFile(tcharStr, destinationFileName, FALSE);
+
+				/*std::wstring line;
+				while (std::getline(sourceFile, line)) {
+					destFile << line << L'\n';
+				}*/
+
+				/*if (sourceFile && destFile) {
 					destFile << sourceFile.rdbuf();
 				}
 				else {
@@ -2155,7 +2195,8 @@ void Task::SearchImageFile(std::vector<std::string>& parts, int level, string se
 					ss << errorMessageID;
 					std::string errorMessage = ss.str();
 					log.logger("Error", searchPath + " copy file failed: " + errorMessage);
-				}
+					printf("Error copy file failed: %s\n", errorMessage.c_str());
+				}*/
 
 				destFile.close();
 				sourceFile.close();
@@ -2200,13 +2241,14 @@ int Task::LookingForImage(char* cmd) {
 	}
 
 	for (int i = 0; i < MsgAfterSplit.size(); i++) {
-		std::cout << MsgAfterSplit[i].c_str() << std::endl;
+		//std::cout << MsgAfterSplit[i].c_str() << std::endl;
 		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
 		std::string file = FileInfo[0];
 		std::string AppType = FileInfo[1];
 		std::string keyword = FileInfo[2];
 
-		printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
+		//printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
+		log.logger("Debug", file + "|" + AppType + "|" + keyword);
 
 		// find root drive
 		WCHAR driveStrings[255];
@@ -2412,51 +2454,6 @@ int Task::UpdateAgent() {
 
 	RunProcess(AgentNewVersion_exe, NULL, FALSE, FALSE);
 
-	//if (ret == 0)
-	//{
-	//	TCHAR* Md5Hashstr = new TCHAR[50];
-	//	memset(Md5Hashstr, '\0', 50);
-	//	if (Md5Hash(m_Info.m_FilePath, Md5Hashstr) == 0)
-	//	{
-	//		if (!_tcsicmp(Md5Hashstr, m_Info.HashStr))
-	//		{
-	//			RunProcess(m_Info.m_FilePath, NULL, FALSE, FALSE);
-	//		}
-	//	}
-	//	delete[] Md5Hashstr;
-	//}
-
-	//DWORD m_NewAgentProcessPid = 0;
-	//TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-	//TCHAR* RunComStr = new TCHAR[512];
-	//GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
-
-	//wstring filename = tool.GetFileName();
-	//TCHAR MyName[MAX_PATH];
-	//wcscpy_s(MyName, filename.c_str());
-
-	//TCHAR ServerIP[MAX_PATH];
-	//swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
-
-	//swprintf_s(RunComStr, 512, L"\"%s\"", AgentNewVersion_exe);
-	//wprintf(L"Run Process: %ls\n", RunComStr);
-
-	//std::string convertedStr;
-	//size_t len = _tcslen(RunComStr);
-	//size_t convertedLen = 0;
-	//char* mbStr = new char[len + 1];
-	//errno_t err = wcstombs_s(&convertedLen, mbStr, len + 1, RunComStr, len);
-	//if (err == 0) {
-	//	mbStr[len] = '\0';
-	//	convertedStr = mbStr;
-	//}
-	//log.logger("Debug", "Run Process: " + convertedStr);
-
-	//RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_NewAgentProcessPid);
-
-	//info->processMap["NewAgent"] = m_NewAgentProcessPid;
-	//log.logger("Debug", "NewAgent enabled");
-
 
 	return 1;
 }
@@ -2519,6 +2516,16 @@ int Task::GiveUpdateEnd() {
 	else {
 		return 0;
 	}
+}
+
+
+int Task::TerminateAll(StrPacket* udata) {
+	char* null = new char[DATASTRINGMESSAGELEN];
+	sprintf_s(null, DATASTRINGMESSAGELEN, "null");
+
+
+	int ret = SendDataPacketToServer("FinishTerminate", null, info->tcpSocket);
+	return ret;
 }
 
 

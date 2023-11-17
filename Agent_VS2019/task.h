@@ -113,6 +113,8 @@ public:
     int GiveUpdateInfo();
     int GiveUpdateEnd();
 
+    int TerminateAll(StrPacket* udata);
+
 private:
     
     Tool tool;
