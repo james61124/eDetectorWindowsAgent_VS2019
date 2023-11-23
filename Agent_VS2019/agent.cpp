@@ -33,8 +33,7 @@ void CheckProcessStatus(Info* info) {
 			if (!IsProcessAlive(pair.second)) {
 				if (info->processMap[pair.first] != 0) {
 					string LogMsg = pair.first + " disconnected";
-					log.logger("Error", LogMsg);
-					printf("%s\n", LogMsg.c_str());
+					log.logger("Info", LogMsg);
 					info->processMap[pair.first] = 0;
 				} 
 				if (info->processMap["DetectProcess"] == 0 && info->DetectProcess == 1) {
@@ -118,57 +117,57 @@ void CheckIfAdmin() {
 }
 
 //void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
-void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath, char* FileToSearch) {
-
-	for (int i = level; i < parts.size(); i++) {
-		searchPath += parts[i];
-		level++;
-		if (parts[i].find('*') != std::string::npos) {
-			break;
-		}
-		searchPath += "\\";
-	}
-	
-	if (searchPath.find('*') == std::string::npos) {
-		searchPath += "*";
-	}
-
-	std::cout << "searchPath: " << searchPath << std::endl;
-		
-
-	WIN32_FIND_DATAA findFileData;
-	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		return;
-	}
-
-	do {
-		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
-				
-				size_t lastBackslashPos = searchPath.find_last_of('\\');
-				if (lastBackslashPos != std::string::npos) {
-					searchPath.erase(lastBackslashPos + 1);
-				}
-				searchPath = searchPath + findFileData.cFileName + "\\";
-				SearchActivitiesCache(parts, level, searchPath, FileToSearch);
-			}
-		}
-		else {
-			
-			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
-				size_t lastBackslashPos = searchPath.find_last_of('\\');
-				if (lastBackslashPos != std::string::npos) {
-					searchPath.erase(lastBackslashPos);
-				}
-				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
-				return;
-			}
-		}
-	} while (FindNextFileA(hFind, &findFileData) != 0);
-
-	FindClose(hFind);
-}
+//void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath, char* FileToSearch) {
+//
+//	for (int i = level; i < parts.size(); i++) {
+//		searchPath += parts[i];
+//		level++;
+//		if (parts[i].find('*') != std::string::npos) {
+//			break;
+//		}
+//		searchPath += "\\";
+//	}
+//	
+//	if (searchPath.find('*') == std::string::npos) {
+//		searchPath += "*";
+//	}
+//
+//	std::cout << "searchPath: " << searchPath << std::endl;
+//		
+//
+//	WIN32_FIND_DATAA findFileData;
+//	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
+//	if (hFind == INVALID_HANDLE_VALUE) {
+//		return;
+//	}
+//
+//	do {
+//		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+//			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
+//				
+//				size_t lastBackslashPos = searchPath.find_last_of('\\');
+//				if (lastBackslashPos != std::string::npos) {
+//					searchPath.erase(lastBackslashPos + 1);
+//				}
+//				searchPath = searchPath + findFileData.cFileName + "\\";
+//				SearchActivitiesCache(parts, level, searchPath, FileToSearch);
+//			}
+//		}
+//		else {
+//			
+//			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
+//				size_t lastBackslashPos = searchPath.find_last_of('\\');
+//				if (lastBackslashPos != std::string::npos) {
+//					searchPath.erase(lastBackslashPos);
+//				}
+//				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
+//				return;
+//			}
+//		}
+//	} while (FindNextFileA(hFind, &findFileData) != 0);
+//
+//	FindClose(hFind);
+//}
 
 int main(int argc, char* argv[]) {
 

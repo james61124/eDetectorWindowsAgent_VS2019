@@ -47,6 +47,9 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// TerminateAll
 	functionFromServerMap["TerminateAll"] = &Task::TerminateAll;
+
+	// RemoveAgent
+	functionFromServerMap["RemoveAgent"] = &Task::RemoveAgent;
 	
 
     info = infoInstance;
@@ -81,7 +84,7 @@ int Task::GiveInfo() {
 
 	// file version
 	char* FileVersion = new char[64];
-	strcpy_s(FileVersion, 64, "1.0.2");
+	strcpy_s(FileVersion, 64, "1.0.4");
 	strcpy_s(functionName, 24, "GiveInfo");
 
 	int VMret = VirtualMachine(info->MAC);
@@ -2060,167 +2063,140 @@ int Task::GetImage(StrPacket* udata) {
 	return 1;
 
 }
-void Task::SearchImageFile(std::vector<std::string>& parts, int level, string searchPath, char* FileToSearch, HZIP* hz) {
 
-	
-	for (int i = level; i < parts.size(); i++) {
-		searchPath += parts[i];
-		level++;
-		if (parts[i].find('*') != std::string::npos || parts[i].empty()) {
-			break;
-		}
-		searchPath += "\\";
-	}
-
-	if (searchPath.find('*') == std::string::npos) {
-		searchPath += "*";
-	}
-
-	//log.logger("Debug", searchPath);
-
-
-	WIN32_FIND_DATAA findFileData;
-	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
-	if (hFind == INVALID_HANDLE_VALUE) {
-		std::cout << "INVALID_HANDLE_VALUE" << std::endl;
-		return;
-	}
-
-	int first = 0;
-
-	do {
-		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
-
-				size_t lastBackslashPos = searchPath.find_last_of('\\');
-				if (lastBackslashPos != std::string::npos) {
-					searchPath.erase(lastBackslashPos + 1);
-				}
-				searchPath = searchPath + findFileData.cFileName + "\\";
-				SearchImageFile(parts, level, searchPath, FileToSearch, hz);
-
-				printf("first: %s\n", searchPath.c_str());
-
-				lastBackslashPos = searchPath.find_last_of('\\');
-				if (lastBackslashPos != std::string::npos) {
-					size_t secondLastBackslashPos = searchPath.find_last_of('\\', lastBackslashPos - 1);
-					if (secondLastBackslashPos != std::string::npos) {
-						searchPath.erase(secondLastBackslashPos + 1);
-					}
-				}
-
-				printf("second: %s\n", searchPath.c_str());
-			}
-		}
-		else {
-
-			std::string cFileNameLower = findFileData.cFileName;
-			std::transform(cFileNameLower.begin(), cFileNameLower.end(), cFileNameLower.begin(), ::tolower);
-
-			std::string fileToSearchLower = FileToSearch;
-			std::transform(fileToSearchLower.begin(), fileToSearchLower.end(), fileToSearchLower.begin(), ::tolower);
-
-			if (cFileNameLower.find(fileToSearchLower) != std::string::npos) {
-				if (!first) {
-					size_t lastBackslashPos = searchPath.find_last_of('\\');
-					if (lastBackslashPos != std::string::npos) {
-						searchPath.erase(lastBackslashPos);
-					}
-					first = 1;
-				}
-				
-				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
-
-				// convert path to TCHAR
-				size_t bufferSize = strlen(searchPath.c_str()) + 1 + strlen(findFileData.cFileName) + 1;
-				char* combinedStr = new char[bufferSize];
-				strcpy_s(combinedStr, bufferSize, searchPath.c_str());
-				strcat_s(combinedStr, bufferSize, "\\");
-				strcat_s(combinedStr, bufferSize, findFileData.cFileName);
-				string src_filename(combinedStr);
-				TCHAR* tcharStr = new TCHAR[bufferSize];
-				MultiByteToWideChar(CP_ACP, 0, combinedStr, -1, tcharStr, bufferSize);
-				wprintf(_T("%s\n"), tcharStr);
-
-				// convert filename to TCHAR
-				int buffer_size = MultiByteToWideChar(CP_UTF8, 0, findFileData.cFileName, -1, nullptr, 0);
-				if (buffer_size == 0) {
-					std::cerr << "MultiByteToWideChar failed" << std::endl;
-				}
-				TCHAR* tcharFilename = new TCHAR[buffer_size];
-				if (MultiByteToWideChar(CP_UTF8, 0, findFileData.cFileName, -1, tcharFilename, buffer_size) == 0) {
-					std::cerr << "MultiByteToWideChar failed" << std::endl;
-				}
-
-				TCHAR* destinationFileName = new TCHAR[MAX_PATH_EX];
-				GetMyPath(destinationFileName);
-				_tcscat_s(destinationFileName, MAX_PATH_EX, _T("\\"));
-				_tcscat_s(destinationFileName, MAX_PATH_EX, tcharFilename);
-
-				
-
-				
-				//std::wifstream sourceFile(tcharStr);
-				//std::wofstream destFile(destinationFileName);
-				//destFile << sourceFile.rdbuf();
-
-				std::wifstream sourceFile;
-				sourceFile.open(src_filename, std::ios::in);
-
-				//std::wifstream sourceFile(src_filename, std::ios::in);
-				if (!sourceFile) {
-					log.logger("Error", "Failed to open " + src_filename + " for reading.");
-					printf("Failed to open %s for reading.\n", src_filename.c_str());
-				}
-
-				std::wofstream destFile(destinationFileName);
-				if (!destFile) {
-					log.logger("Error", "Failed to open the destination file for writing.");
-					printf("Failed to open the destination file for writing.\n");
-				}
-
-				CopyFile(tcharStr, destinationFileName, FALSE);
-
-				/*std::wstring line;
-				while (std::getline(sourceFile, line)) {
-					destFile << line << L'\n';
-				}*/
-
-				/*if (sourceFile && destFile) {
-					destFile << sourceFile.rdbuf();
-				}
-				else {
-					DWORD errorMessageID = GetLastError();
-					std::stringstream ss;
-					ss << errorMessageID;
-					std::string errorMessage = ss.str();
-					log.logger("Error", searchPath + " copy file failed: " + errorMessage);
-					printf("Error copy file failed: %s\n", errorMessage.c_str());
-				}*/
-
-				destFile.close();
-				sourceFile.close();
-
-				if (ZipAdd(*hz, tcharFilename, destinationFileName) != 0) {
-					string cfilename = findFileData.cFileName;
-					string LogMsg = "failed to add " + cfilename + " to zip";
-					log.logger("Error", LogMsg);
-					continue;
-				}
-				else {
-					string cfilename = findFileData.cFileName;
-					string LogMsg = "add " + cfilename + " to zip";
-					log.logger("Info", LogMsg);
-				}
-
-				//return;
-			}
-		}
-	} while (FindNextFileA(hFind, &findFileData) != 0);
-
-	FindClose(hFind);
+std::string Task::ToUpper(const std::string& str) {
+	std::string result = str;
+	std::transform(result.begin(), result.end(), result.begin(),
+		[](unsigned char c) { return std::toupper(c); });
+	return result;
 }
+
+void Task::SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz) {
+
+	if (directory.string().find('*') != std::string::npos) {
+
+		while (start != finish && start->string().find('*') == std::string::npos) {
+			root /= *start++;
+			std::cout << root << std::endl;
+		}
+
+		if (!fs::is_directory(root)) {
+			std::string Msg = directory.string() + "is not a directory";
+			log.logger("Error", Msg);
+			return;
+		}
+
+		try {
+
+			for (const auto& entry : fs::directory_iterator(root)) {
+
+				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
+					std::string Msg = "Found file: " + entry.path().string();
+					log.logger("Debug", Msg);
+
+					try {
+						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
+						GetMyPath(targetPath);
+						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
+						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
+
+						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
+						GetMyPath(imageFile);
+						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
+						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
+
+						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
+							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
+							char* buffer = new char[bufferSize];
+							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
+							std::string result(buffer);
+
+							string LogMsg = "failed to add " + result + " to zip";
+							log.logger("Error", LogMsg);
+							continue;
+						}
+						else {
+							string LogMsg = "add " + entry.path().filename().string() + " to zip";
+							log.logger("Info", LogMsg);
+						}
+						//DeleteFile(entry.path().c_str());
+					}
+					catch (const fs::filesystem_error& ex) {
+						std::string errorMessage = ex.what();
+						Msg = "Error during copy: " + errorMessage;
+						log.logger("Error", Msg);
+					}
+
+				}
+				else if (fs::is_directory(entry.path())) {
+					start++;
+					SearchForFile(entry.path(), directory, start, finish, targetFile, hz);
+					start--;
+				}
+			}
+
+		}
+		catch (...) {
+			return;
+		}
+	}
+	else {
+
+		try {
+			for (const auto& entry : fs::directory_iterator(directory)) {
+				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
+					std::string Msg = "Found file: " + entry.path().string();
+					log.logger("Debug", Msg);
+					try {
+						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
+						GetMyPath(targetPath);
+						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
+						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
+
+						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
+						GetMyPath(imageFile);
+						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
+						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
+
+						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
+							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
+							char* buffer = new char[bufferSize];
+							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
+							std::string result(buffer);
+
+							string LogMsg = "failed to add " + result + " to zip";
+							log.logger("Error", LogMsg);
+							continue;
+						}
+						else {
+							string LogMsg = "add " + entry.path().filename().string() + " to zip";
+							log.logger("Info", LogMsg);
+						}
+						//DeleteFile(entry.path().c_str());
+					}
+					catch (const fs::filesystem_error& ex) {
+						std::string errorMessage = ex.what();
+						Msg = "Error during copy: " + errorMessage;
+						log.logger("Error", Msg);
+					}
+
+				}
+				else if (fs::is_directory(entry.path())) {
+					SearchForFile(entry.path(), entry.path(), start, finish, targetFile, hz);
+				}
+			}
+		}
+		catch (...) {
+			return;
+		}
+	}
+}
+
 int Task::LookingForImage(char* cmd) {
+
+	string Msg = cmd;
+	string LogMsg = "cmd: " + Msg;
+	log.logger("Debug", LogMsg);
 
 	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
 	GetMyPath(zipFileName);
@@ -2231,6 +2207,7 @@ int Task::LookingForImage(char* cmd) {
 		return false; // Failed to create ZIP file
 	}
 
+	std::vector<ImageType>image;
 	std::vector<std::string> MsgAfterSplit;
 	char* nextToken = nullptr;
 	const char* delimiter = ",";
@@ -2240,97 +2217,94 @@ int Task::LookingForImage(char* cmd) {
 		token = strtok_s(nullptr, delimiter, &nextToken);
 	}
 
+	// find root drive
+	//WCHAR driveStrings[255];
+	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+	//WCHAR* currentDrive;
+	//std::string narrowString_currentDrive; // here
+	//if (driveStringsLength > 0 && driveStringsLength < 255) {
+	//	currentDrive = driveStrings;
+	//	while (*currentDrive) {
+	//		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+	//		narrowString_currentDrive.resize(requiredSize);
+
+	//		if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+	//			//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+	//		}
+
+	//		currentDrive += wcslen(currentDrive) + 1;
+	//		break;
+	//	}
+	//}
+
 	for (int i = 0; i < MsgAfterSplit.size(); i++) {
-		//std::cout << MsgAfterSplit[i].c_str() << std::endl;
-		std::vector<std::string> FileInfo = tool.SplitMsg(const_cast<char*>(MsgAfterSplit[i].c_str()));
-		std::string file = FileInfo[0];
-		std::string AppType = FileInfo[1];
-		std::string keyword = FileInfo[2];
+		std::vector<std::string> FileInfo;
+		nextToken = nullptr;
+		delimiter = "|";
 
-		//printf("%s %s %s\n", file.c_str(), AppType.c_str(), keyword.c_str());
-		log.logger("Debug", file + "|" + AppType + "|" + keyword);
+		char* charArray = new char[MsgAfterSplit[i].size() + 1];
+		strcpy_s(charArray, MsgAfterSplit[i].size() + 1, MsgAfterSplit[i].c_str());
 
-		// find root drive
-		WCHAR driveStrings[255];
-		DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
-		WCHAR* currentDrive;
-		std::string narrowString_currentDrive;
-		if (driveStringsLength > 0 && driveStringsLength < 255) {
-			currentDrive = driveStrings;
-			while (*currentDrive) {
-				int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
-				narrowString_currentDrive.resize(requiredSize);
-
-				if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-					//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-				}
-
-				currentDrive += wcslen(currentDrive) + 1;
-				break;
+		token = strtok_s(charArray, delimiter, &nextToken);
+		while (token != nullptr) {
+			FileInfo.push_back(token);
+			if (nextToken != nullptr && *nextToken == '|') {
+				FileInfo.push_back(""); // Generate an empty string
 			}
+			token = strtok_s(nullptr, delimiter, &nextToken);
+		}
+		delete[] charArray;
+
+		size_t pos = FileInfo[0].find("root");
+		while (pos != std::string::npos) {
+			FileInfo[0].replace(pos, 4, "C");
+			pos = FileInfo[0].find("root", pos + 1);
 		}
 
-		// find app environment variable
 		char* searchPath = new char[4];
-		std::string connectedDevicesPlatformPath;
+		std::string APPDATAPATH;
 
-		if (!AppType.empty()) {
+		if (!FileInfo[1].empty()) {
 			size_t len;
-			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(AppType.c_str()));
+			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(FileInfo[1].c_str()));
 
 			if (err != 0) {
-				printf("Error getting environment variable.\n");
-				return 0;
+				log.logger("Error", "Error getting environment variable");
+				continue;
 			}
 
 			if (searchPath == NULL) {
-				printf("environment variable is not set.\n");
-				return 0;
+				log.logger("Error", "environment variable is not set.");
+				continue;
 			}
 
-			connectedDevicesPlatformPath = searchPath;
-			connectedDevicesPlatformPath += "\\";
+			APPDATAPATH = searchPath;
+
+			//printf("search path: %s\n", searchPath);
+			if (FileInfo[0].substr(0, 1) != "\\") APPDATAPATH += "\\";
 
 		}
-		connectedDevicesPlatformPath += file;
-		
 
-		// if end of path has *, remove it
-		size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
-		if (lastBackslashPos != std::string::npos) {
-			size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
-			if (secondLastBackslashPos != std::string::npos) {
-				std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
-				if (extractedString == "*") {
-					connectedDevicesPlatformPath.erase(secondLastBackslashPos);
-				}
-			}
-		}
 
-		// replace root with root drive
-		std::vector<std::string> parts;
-		std::istringstream iss(connectedDevicesPlatformPath);
-		std::string part;
-		while (std::getline(iss, part, '\\')) {
-			size_t found = part.find("root");
-			if (found != std::string::npos) {
-				part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
-				//found = part.find("root", found + 1);
-			}
+		APPDATAPATH += FileInfo[0];
+		FileInfo[0] = APPDATAPATH;
 
-			if (!part.empty()) {
-				parts.push_back(part);
-			}
-			
-		}
 
-		string Path = "";
-		SearchImageFile(parts, 0, Path, const_cast<char*>(keyword.c_str()), &hz);
+		//printf("%s %s %s\n", FileInfo[0].c_str(), FileInfo[1].c_str(), FileInfo[2].c_str());
+		string Msg = FileInfo[0] + " " + FileInfo[1] + " " + FileInfo[2];
+		log.logger("Debug", Msg);
+
+		fs::path filePath = FileInfo[0];
+		const auto relative_parent = filePath.parent_path().relative_path();
+		std::filesystem::path root = filePath.root_path();
+		std::filesystem::path::const_iterator start = begin(relative_parent);
+		std::filesystem::path::const_iterator finish = end(relative_parent);
+
+		SearchForFile(root, filePath, start, finish, FileInfo[2], &hz);
+
 	}
 
 	CloseZip(hz);
-
-
 	SendFileToServer("Image", zipFileName, info->tcpSocket);
 	return 1;
 	
@@ -2523,9 +2497,69 @@ int Task::TerminateAll(StrPacket* udata) {
 	char* null = new char[DATASTRINGMESSAGELEN];
 	sprintf_s(null, DATASTRINGMESSAGELEN, "null");
 
+	for (const auto& entry : info->processMap) {
+		if (entry.first == "Log") continue;
+		if (entry.second != 0) {
+			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, entry.second);
+			if (hProcess) {
+				TerminateProcess(hProcess, 0);
+				CloseHandle(hProcess);
+			}
+		}
+	}
 
 	int ret = SendDataPacketToServer("FinishTerminate", null, info->tcpSocket);
 	return ret;
+}
+
+int Task::RemoveAgent(StrPacket* udata) {
+#if defined _M_IX86
+	UnloadNTDriver(DRIVER_ENUMPROCESS);
+#endif
+	wchar_t* myfilepath = new wchar_t[MAX_PATH];
+	GetModuleFileName(GetModuleHandle(NULL), myfilepath, MAX_PATH);
+	wchar_t Folderpath[MAX_PATH];
+#ifndef _M_IX86
+	int m_csidl = CSIDL_PROGRAM_FILESX86;
+#else
+	int m_csidl = CSIDL_PROGRAM_FILES;
+#endif
+	if (SHGetSpecialFolderPath(NULL, Folderpath, m_csidl, false))
+	{
+		wcscat_s(Folderpath, MAX_PATH, L"\\eDetectorClient");
+		wchar_t* ServicePath = new wchar_t[MAX_PATH];
+		swprintf_s(ServicePath, MAX_PATH, L"%s\\iForensicsService.exe", Folderpath);
+		if (!_waccess(ServicePath, 00))
+		{
+			wchar_t* CommandLine = new wchar_t[_MAX_PATH];
+			swprintf_s(CommandLine, _MAX_PATH, L"/c \"%s\" /uninstall", ServicePath);
+			CmdCommandWork(CommandLine, true);
+			swprintf_s(CommandLine, _MAX_PATH, L"/c c:\\windows\\system32\\sc.exe delete iForensics_ClientSearch_Service");
+			CmdCommandWork(CommandLine, true);
+			//if(FindPID(L"iForensicsService.exe")!=0)
+			//{
+			swprintf_s(CommandLine, _MAX_PATH, L"/c c:\\windows\\system32\\taskkill.exe /f /im iForensicsService.exe & c:\\windows\\system32\\ping.exe 127.0.0.1 -n 2");
+			CmdCommandWork(CommandLine, true);
+			//}
+			delete[] CommandLine;
+		}
+		delete[] ServicePath;
+
+		FolderClear(Folderpath, const_cast<TCHAR*>(_T("\\*.*")));
+
+		wchar_t* CommandLine = new wchar_t[512];
+
+		swprintf_s(CommandLine, 512, L"/c c:\\windows\\system32\\taskkill.exe /f /im ClientSearch.exe");
+		CmdCommandWork(CommandLine, false);
+		swprintf_s(CommandLine, 512, L"/c c:\\windows\\system32\\ping.exe 127.0.0.1 -n 2 & erase /F \"%s\"", myfilepath);
+		CmdCommandWork(CommandLine, false);
+		swprintf_s(CommandLine, 512, L"/c c:\\windows\\system32\\ping.exe 127.0.0.1 -n 2 & rd \"%s\" /s /q", Folderpath);
+		CmdCommandWork(CommandLine, false);
+
+		delete[] CommandLine;
+	}
+	delete[] myfilepath;
+	return 1;
 }
 
 

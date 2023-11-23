@@ -35,7 +35,11 @@
 
 namespace fs = std::filesystem;
 
-
+struct ImageType {
+    char path[512];
+    char APPTYPE[512];
+    char filename[512];
+};
 
 
 class Task {
@@ -101,7 +105,8 @@ public:
     // image
     int GetImage(StrPacket* udata);
     int LookingForImage(char* cmd);
-    void SearchImageFile(std::vector<std::string>& parts, int level, string searchPath, char* FileToSearch, HZIP* hz);
+    void SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz);
+    std::string ToUpper(const std::string& str);
 
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
@@ -114,6 +119,7 @@ public:
     int GiveUpdateEnd();
 
     int TerminateAll(StrPacket* udata);
+    int RemoveAgent(StrPacket* udata);
 
 private:
     
