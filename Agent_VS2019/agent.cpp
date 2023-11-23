@@ -37,7 +37,9 @@ void CheckProcessStatus(Info* info) {
 					info->processMap[pair.first] = 0;
 				} 
 				if (info->processMap["DetectProcess"] == 0 && info->DetectProcess == 1) {
-					log.logger("Info", "DetectProcess connected");
+					std::string Msg = std::to_string(info->DetectProcess);
+					std::string LogMsg = "DetectProcess connected" + Msg;
+					log.logger("Info", LogMsg);
 
 					Tool tool;
 					DWORD DetectProcessPid = 0;
@@ -309,6 +311,9 @@ int main(int argc, char* argv[]) {
 		}
 		else if (task == "UpdateAgent") {
 			socketManager.HandleTaskToServer("UpdateAgent");
+		}
+		else if (task == "TerminateAll") {
+			socketManager.task->TerminateAllTask();
 		}
 		else if (task == "Log") {
 			log.LogServer();

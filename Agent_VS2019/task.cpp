@@ -1312,7 +1312,12 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 					ret = 1;
 				}
 
-				if (ret == 0) {
+				/*char* null = new char[5];
+				strcpy_s(null, 5, "null");
+				ret = SendDataPacketToServer("GiveExplorerEnd", null, info->tcpSocket);
+				delete[] null;*/
+
+				/*if (ret == 0) {
 					char* null = new char[5];
 					strcpy_s(null, 5, "null");
 					ret = SendDataPacketToServer("GiveExplorerEnd", null, info->tcpSocket);
@@ -1321,9 +1326,9 @@ int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 				else {
 					char* msg = new char[22];
 					strcpy_s(msg, 22, "ErrorLoadingMFTTable");
-					ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
+					ret = SendDataPacketToServer("GiveExplorerEnd", msg, info->tcpSocket);
 					delete[] msg;
-				}
+				}*/
 
 				delete searchCore;
 			}
@@ -2119,7 +2124,7 @@ void Task::SearchForFile(std::filesystem::path root, std::filesystem::path direc
 							string LogMsg = "add " + entry.path().filename().string() + " to zip";
 							log.logger("Info", LogMsg);
 						}
-						//DeleteFile(entry.path().c_str());
+						DeleteFile(imageFile);
 					}
 					catch (const fs::filesystem_error& ex) {
 						std::string errorMessage = ex.what();
@@ -2172,7 +2177,7 @@ void Task::SearchForFile(std::filesystem::path root, std::filesystem::path direc
 							string LogMsg = "add " + entry.path().filename().string() + " to zip";
 							log.logger("Info", LogMsg);
 						}
-						//DeleteFile(entry.path().c_str());
+						DeleteFile(imageFile);
 					}
 					catch (const fs::filesystem_error& ex) {
 						std::string errorMessage = ex.what();
@@ -2493,12 +2498,12 @@ int Task::GiveUpdateEnd() {
 }
 
 
-int Task::TerminateAll(StrPacket* udata) {
+int Task::TerminateAllTask() {
 	char* null = new char[DATASTRINGMESSAGELEN];
 	sprintf_s(null, DATASTRINGMESSAGELEN, "null");
 
 	for (const auto& entry : info->processMap) {
-		if (entry.first == "Log") continue;
+		if (entry.first == "Log" || entry.first == "DetectProcess" || entry.first == "DetectNetwork") continue;
 		if (entry.second != 0) {
 			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, entry.second);
 			if (hProcess) {
@@ -2510,6 +2515,30 @@ int Task::TerminateAll(StrPacket* udata) {
 
 	int ret = SendDataPacketToServer("FinishTerminate", null, info->tcpSocket);
 	return ret;
+}
+
+int Task::TerminateAll(StrPacket* udata) {
+
+	DWORD m_ImageProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[1024];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	wstring filename = tool.GetFileName();
+	TCHAR MyName[MAX_PATH];
+	wcscpy_s(MyName, filename.c_str());
+
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 4096, L"\"%s\" %s %d TerminateAll %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
+	RunProcessEx(RunExeStr, RunComStr, 4096, FALSE, FALSE, m_ImageProcessPid);
+
+	info->processMap["TerminateAll"] = m_ImageProcessPid;
+	log.logger("Debug", "TerminateAll enabled");
+
+	return 1;
+
 }
 
 int Task::RemoveAgent(StrPacket* udata) {
@@ -2642,7 +2671,7 @@ void Task::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKET* 
 			GetMyPath(m_Path);
 
 			if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
-			else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
+			else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerEnd", TmpBuffer, tcpSocket);
 			else if (!strcmp(feature, "Collect")) { 
 				Sendret = SendDataPacketToServer("GiveCollectDataEnd", TmpBuffer, tcpSocket); 
 				tool.DeleteAllCsvFiles(m_Path);

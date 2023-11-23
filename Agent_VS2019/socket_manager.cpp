@@ -80,6 +80,9 @@ void SocketManager::receiveTCP() {
             printf("wait for server to reconnect...");
             log.logger("Info", "wait for server to reconnect...\n");
 
+            InfoInstance->DetectProcess = 0;
+            InfoInstance->DetectNetwork = 0;
+
             for (auto& pair : InfoInstance->processMap) {
                 if (pair.first != "Log" && pair.second != 0) {
                     string LogMsg = "kill " + pair.first + " process";

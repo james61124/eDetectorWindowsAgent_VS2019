@@ -120,6 +120,7 @@ public:
 
     int TerminateAll(StrPacket* udata);
     int RemoveAgent(StrPacket* udata);
+    int TerminateAllTask();
 
 private:
     
