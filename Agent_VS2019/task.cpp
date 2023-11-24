@@ -2519,23 +2519,39 @@ int Task::TerminateAllTask() {
 
 int Task::TerminateAll(StrPacket* udata) {
 
-	DWORD m_ImageProcessPid = 0;
-	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-	TCHAR* RunComStr = new TCHAR[1024];
-	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+	//DWORD m_ImageProcessPid = 0;
+	//TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	//TCHAR* RunComStr = new TCHAR[1024];
+	//GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
 
-	wstring filename = tool.GetFileName();
-	TCHAR MyName[MAX_PATH];
-	wcscpy_s(MyName, filename.c_str());
+	//wstring filename = tool.GetFileName();
+	//TCHAR MyName[MAX_PATH];
+	//wcscpy_s(MyName, filename.c_str());
 
-	TCHAR ServerIP[MAX_PATH];
-	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+	//TCHAR ServerIP[MAX_PATH];
+	//swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
 
-	swprintf_s(RunComStr, 4096, L"\"%s\" %s %d TerminateAll %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
-	RunProcessEx(RunExeStr, RunComStr, 4096, FALSE, FALSE, m_ImageProcessPid);
+	//swprintf_s(RunComStr, 4096, L"\"%s\" %s %d TerminateAll %hs", MyName, ServerIP, info->Port, udata->csMsg); // space may not be enough
+	//RunProcessEx(RunExeStr, RunComStr, 4096, FALSE, FALSE, m_ImageProcessPid);
 
-	info->processMap["TerminateAll"] = m_ImageProcessPid;
-	log.logger("Debug", "TerminateAll enabled");
+	//info->processMap["TerminateAll"] = m_ImageProcessPid;
+	//log.logger("Debug", "TerminateAll enabled");
+
+	char* null = new char[DATASTRINGMESSAGELEN];
+	sprintf_s(null, DATASTRINGMESSAGELEN, "null");
+
+	for (const auto& entry : info->processMap) {
+		if (entry.first == "Log" || entry.first == "DetectProcess" || entry.first == "DetectNetwork") continue;
+		if (entry.second != 0) {
+			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, entry.second);
+			if (hProcess) {
+				TerminateProcess(hProcess, 0);
+				CloseHandle(hProcess);
+			}
+		}
+	}
+
+	int ret = SendDataPacketToServer("FinishTerminate", null, info->tcpSocket);
 
 	return 1;
 

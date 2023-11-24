@@ -1,8 +1,8 @@
 #include "Collect.h"
 
 Collect::Collect() {
-	CollectionNums[0] = 101;
-	CollectionNums[1] = 102;
+	CollectionNums[0] = 102; // 101
+	CollectionNums[1] = 101; // 102
 	CollectionNums[2] = 103;
 	CollectionNums[3] = 104;
 	CollectionNums[4] = 105;
@@ -49,6 +49,8 @@ Collect::Collect() {
 	CollectionNums[45] = 241;
 	CollectionNums[46] = 242;
 	CollectionNums[47] = 243;
+
+	//CollectionNums[0] = 202;
 
 	/*CollectionNums[0] = 101;
 	CollectionNums[1] = 202;*/
