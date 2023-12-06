@@ -50,6 +50,13 @@ struct ProcessInfoData
 	std::set<std::string> InlineHookInfo;
 	wchar_t UnKnownHash[50];
 	//vector<UnKnownDataInfo> UnKnownData;
+
+	std::wstring ProductName;
+	std::wstring FileVersion;
+	std::wstring FileDescription;
+	std::wstring CompanyName;
+	std::wstring user_name;
+	DWORD Priority;
 };
 
 struct UnKnownDataInfo

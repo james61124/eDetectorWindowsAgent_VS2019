@@ -6,6 +6,12 @@
 #include "tools.h"
 #include "Log.h"
 
+#include "Scan.h"
+#include "AllTask.h"
+#include "CollectInfo.h"
+#include "Explorer.h"
+#include "Image.h"
+
 
 bool IsProcessAlive(DWORD pid) {
 	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
@@ -118,133 +124,13 @@ void CheckIfAdmin() {
 	}
 }
 
-//void SearchActivitiesCache(const std::string& directory, const std::string& remainingPath) {
-//void SearchActivitiesCache(std::vector<std::string>& parts, int level, string &searchPath, char* FileToSearch) {
-//
-//	for (int i = level; i < parts.size(); i++) {
-//		searchPath += parts[i];
-//		level++;
-//		if (parts[i].find('*') != std::string::npos) {
-//			break;
-//		}
-//		searchPath += "\\";
-//	}
-//	
-//	if (searchPath.find('*') == std::string::npos) {
-//		searchPath += "*";
-//	}
-//
-//	std::cout << "searchPath: " << searchPath << std::endl;
-//		
-//
-//	WIN32_FIND_DATAA findFileData;
-//	HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findFileData);
-//	if (hFind == INVALID_HANDLE_VALUE) {
-//		return;
-//	}
-//
-//	do {
-//		if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-//			if (strcmp(findFileData.cFileName, ".") != 0 && strcmp(findFileData.cFileName, "..") != 0) {
-//				
-//				size_t lastBackslashPos = searchPath.find_last_of('\\');
-//				if (lastBackslashPos != std::string::npos) {
-//					searchPath.erase(lastBackslashPos + 1);
-//				}
-//				searchPath = searchPath + findFileData.cFileName + "\\";
-//				SearchActivitiesCache(parts, level, searchPath, FileToSearch);
-//			}
-//		}
-//		else {
-//			
-//			if (strcmp(findFileData.cFileName, FileToSearch) == 0) {
-//				size_t lastBackslashPos = searchPath.find_last_of('\\');
-//				if (lastBackslashPos != std::string::npos) {
-//					searchPath.erase(lastBackslashPos);
-//				}
-//				printf("Found file: %s\\%s\n", searchPath.c_str(), findFileData.cFileName);
-//				return;
-//			}
-//		}
-//	} while (FindNextFileA(hFind, &findFileData) != 0);
-//
-//	FindClose(hFind);
-//}
+void HandleScan(SocketManager &socketManager) {
+	socketManager.HandleTaskToServer("GiveProcessData");
+}
+
+
 
 int main(int argc, char* argv[]) {
-
-	//WCHAR driveStrings[255];
-	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
-	//WCHAR* currentDrive;
-	//std::string narrowString_currentDrive;
-	//if (driveStringsLength > 0 && driveStringsLength < 255) {
-	//	currentDrive = driveStrings;
-	//	while (*currentDrive) {
-	//		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
-	//		narrowString_currentDrive.resize(requiredSize);
-
-	//		if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-	//			std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-	//		}
-
-	//		currentDrive += wcslen(currentDrive) + 1;
-	//		break;
-	//	}
-	//}
-
-
-	//char* searchPath = new char[4];
-	//if (strcmp(argv[2], "null")) {
-	//	size_t len;
-	//	errno_t err = _dupenv_s(&searchPath, &len, argv[2]);
-
-	//	if (err != 0) {
-	//		printf("Error getting LOCALAPPDATA environment variable.\n");
-	//		return 1;
-	//	}
-
-	//	if (searchPath == NULL) {
-	//		printf("LOCALAPPDATA environment variable is not set.\n");
-	//		return 1;
-	//	}
-	//}
-	//
-	//std::string connectedDevicesPlatformPath;
-	//if (searchPath != NULL) {
-	//	connectedDevicesPlatformPath = searchPath;
-	//}
-	//std::string argv1(argv[1]);
-	//connectedDevicesPlatformPath += argv1;
-
-	//// if end of path has *, remove it
-	//size_t lastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\');
-	//if (lastBackslashPos != std::string::npos) {
-	//	size_t secondLastBackslashPos = connectedDevicesPlatformPath.find_last_of('\\', lastBackslashPos - 1);
-	//	if (secondLastBackslashPos != std::string::npos) {
-	//		std::string extractedString = connectedDevicesPlatformPath.substr(secondLastBackslashPos + 1, lastBackslashPos - secondLastBackslashPos - 1);
-	//		if (extractedString == "*") {
-	//			connectedDevicesPlatformPath.erase(secondLastBackslashPos);
-	//		}
-	//	}
-	//}
-
-	//// replace root with root drive
-	//std::vector<std::string> parts;
-	//std::istringstream iss(connectedDevicesPlatformPath);
-	//std::string part;
-	//while (std::getline(iss, part, '\\')) {
-	//	size_t found = part.find("root");
-	//	while (found != std::string::npos) {
-	//		part.replace(found, 4, narrowString_currentDrive.substr(0, 1));
-	//		found = part.find("root", found + 1);
-	//	}
-	//	parts.push_back(part);
-	//}
-
-	//string Path = "";
-	//SearchActivitiesCache(parts, 0, Path, argv[3]);
-
-
 
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <serverIP> <port>" << std::endl;
@@ -265,42 +151,84 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	else {
-		//std::wstring wideStr = std::wstring(argv[1]);
-		//std::string serverIP(wideStr.begin(), wideStr.end());
+
 		std::string serverIP = argv[1];
 		int port = std::stoi(argv[2]);
 		std::string task = argv[3];
+
+		int i = 0;
+		int iLen = 0;
+		char* Drive = new char[100];
+		char* FileSystem = new char[100];
+		char* cmd = new char[100];
+
+		if (task == "CollectInfo") {
+			i = std::stoi(argv[4]);
+			iLen = std::stoi(argv[5]);
+		}
+
+		if (task == "Explorer") {
+			Drive = argv[4];
+			FileSystem = argv[5];
+		}
+
+		if (task == "Image") {
+			cmd = argv[4];
+		}
+
 
 		Log log;
 		Info* info = new Info();
 		SocketSend* socketsend = new SocketSend(info);
 		SocketManager socketManager(serverIP, port, info, socketsend);
 
-		//char* cmd = argv[4];
-		//socketManager.task->LookingForImage(cmd);
+		std::unordered_map<std::string, AllTask*> taskMap{
+			{"Scan", new Scan(info, socketsend)},
+			{"Collect", new Collect(info, socketsend)},
+			{"CollectInfo", new CollectInfo(info, socketsend, i, iLen)},
+			{"Explorer", new Explorer(info, socketsend, Drive, FileSystem)},
+			{"Image", new Image(info, socketsend, cmd)}
+		};
 
-		//
+		//std::unordered_map<std::string, std::function<void()>> taskMap = {
+		//	{"Scan", [&]() { HandleScan(socketManager); }},
+		//	{"Collect", [&]() { HandleCollect(); }},
+		//	{"CollectInfo", [&]() { HandleCollectInfo(std::stoi(argv[4]), std::stoi(argv[5])); }},
+		//	{"Explorer", [&]() { HandleExplorer(argv[4], argv[5]); }},
+		//	{"Image", [&]() { HandleImage(argv[4]); }},
+		//	{"DetectProcess", [&]() { HandleDetectProcess(); }},
+		//	{"DetectNetwork", [&]() { HandleDetectNetwork(); }},
+		//	{"UpdateAgent", [&]() { HandleUpdateAgent(); }},
+		//	{"TerminateAll", [&]() { HandleTerminateAll(); }},
+		//	{"Log", [&]() { HandleLog(); }}
+		//};
 
 		if (task == "Scan") {
-			socketManager.HandleTaskToServer("GiveProcessData");
+			//socketManager.HandleTaskToServer("GiveProcessData");
+			taskMap[task]->DoTask();
 		}
 		else if (task == "Collect") {
-			socketManager.HandleTaskToServer("CollectionComputerInfo");
+			//socketManager.HandleTaskToServer("CollectionComputerInfo");
+			taskMap[task]->DoTask();
 		}
 		else if (task == "CollectInfo") {
-			int i = std::stoi(argv[4]);
+			/*int i = std::stoi(argv[4]);
 			int iLen = std::stoi(argv[5]);
 
-			socketManager.task->CollectData(i, iLen);
+			socketManager.task->CollectData(i, iLen);*/
+			taskMap[task]->DoTask();
 		}
 		else if (task == "Explorer") {
-			char* Drive = argv[4];
+			/*char* Drive = argv[4];
 			char* FileSystem = argv[5];
-			socketManager.task->GiveExplorerData(Drive, FileSystem);
+			socketManager.task->GiveExplorerData(Drive, FileSystem);*/
+
+			taskMap[task]->DoTask();
 		}
 		else if (task == "Image") {
-			char* cmd = argv[4];
-			socketManager.task->LookingForImage(cmd);
+			//char* cmd = argv[4];
+			//socketManager.task->LookingForImage(cmd);
+			taskMap[task]->DoTask();
 		}
 		else if (task == "DetectProcess") {
 			socketManager.HandleTaskToServer("DetectProcess");

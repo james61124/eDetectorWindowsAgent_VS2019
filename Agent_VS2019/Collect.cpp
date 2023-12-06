@@ -59,6 +59,54 @@ Collect::Collect() {
 
 }
 
+Collect::Collect(Info* infoInstance, SocketSend* socketSendInstance) {
+	info = infoInstance;
+	socketsend = socketSendInstance;
+}
+
+void Collect::DoTask() {
+	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
+	GetMyPath(m_FullDbPath);
+	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+	DeleteFile(m_FullDbPath);
+
+	if (_waccess(m_FullDbPath, 00)) {
+		CreateProcessForCollection(m_FullDbPath, info->tcpSocket);
+		wchar_t* ConfigPath = new wchar_t[MAX_PATH_EX];
+		GetMyPath(ConfigPath);
+		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
+		map<string, vector<PredefineObj>> mapPredefine;
+		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
+		{
+			char* InfoStr = new char[MAX_PATH_EX];
+			InsertFromToInCombination(m_FullDbPath, &mapPredefine, info->tcpSocket);
+		}
+
+		if (!_waccess(m_FullDbPath, 00))
+		{
+			TCHAR* collectcomputerinfo_db = new TCHAR[MAX_PATH_EX];
+			GetMyPath(collectcomputerinfo_db);
+			_tcscat_s(collectcomputerinfo_db, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+
+			TCHAR* Collect_zip = new TCHAR[MAX_PATH_EX];
+			GetMyPath(Collect_zip);
+			_tcscat_s(Collect_zip, MAX_PATH_EX, _T("\\Collect.zip"));
+
+			if (tool.CompressFileToZip(Collect_zip, collectcomputerinfo_db)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
+			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
+
+			SendFileToServer("Collect", Collect_zip, info->tcpSocket);
+			DeleteFile(m_FullDbPath);
+			DeleteFile(Collect_zip);
+		}
+		else {
+			printf("m_FullDbPath failed\n");
+		}
+		delete[] ConfigPath;
+	}
+	delete[] m_FullDbPath;
+}
+
 void Collect::CollectionProcess(HMODULE plib, TCHAR* pdbName, TCHAR* pWorkNum)
 {
 	wstring m_TempPath = GetMyTempPath(pdbName);
@@ -666,7 +714,6 @@ bool Collect::WriteSQLiteDB(sqlite3* pdb, char* pQuery)
 	//delete [] query;
 	return ret;
 }
-
 bool Collect::GetQueryByTable(string* query, string TableName, string QueryFilter)
 {
 	bool bResult = true;
@@ -721,7 +768,6 @@ bool Collect::GetQueryByTable(string* query, string TableName, string QueryFilte
 
 	return bResult;
 }
-
 bool Collect::GetDataByQuery(const string& query, sqlite3* m_db, vector<CombineObj>* vecCombineObj)
 {
 	sqlite3_stmt* statement;
@@ -754,7 +800,6 @@ bool Collect::GetDataByQuery(const string& query, sqlite3* m_db, vector<CombineO
 	sqlite3_finalize(statement);
 	return vecCombineObj->size() > 0 ? true : false;
 }
-
 bool Collect::WriteDataSetToDB(sqlite3* m_db, const vector<CombineObj> vecCombineObj, const string DefineName, const string MAC, const string IP, const string TableName, int id)
 {
 	/*CombineObj combineObj;*/
@@ -795,3 +840,277 @@ bool Collect::WriteDataSetToDB(sqlite3* m_db, const vector<CombineObj> vecCombin
 	}
 	return true;
 }
+
+
+bool Collect::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
+{
+	bool bResult = false;
+	if (!_waccess(ConfigPath, 00))
+	{
+		fstream fin;
+		fin.open(ConfigPath, ios::in);
+		{
+			char* linestr = new char[STRPACKETSIZE];
+			string DefineName, TableName, OutStr;
+			while (fin.getline(linestr, STRPACKETSIZE, '\n'))
+			{
+				DefineName.clear();
+				vector<PredefineObj> tmpVec;
+				ParsePredefineConfig(linestr, &DefineName, &tmpVec);
+				if (!DefineName.empty() && tmpVec.size() > 0)
+				{
+					mapPredefine->insert(pair<string, vector<PredefineObj>>(DefineName, tmpVec));
+				}
+			}
+		}
+		fin.close();
+		if (mapPredefine->size() > 0)
+		{
+			bResult = true;
+		}
+	}
+	else {
+		log.logger("Error", "LoadPredefineConfig failed");
+	}
+	return bResult;
+}
+void Collect::ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp)
+{
+	char* psc;
+	char* next_token = NULL;
+	bool bFirst = true;
+	psc = strtok_s(str, ";", &next_token);
+
+	while (psc != NULL)
+	{
+		if (bFirst == true)
+		{
+			*defineName = psc;
+			bFirst = false;
+		}
+		else
+		{
+			char* subStr;
+			char* next_token_subStr = NULL;
+			subStr = strtok_s(psc, "|", &next_token_subStr);
+			char* next_token_client = NULL;
+			subStr = strtok_s(subStr, ",", &next_token_client);
+			vector<string> vecClients;
+			while (subStr != NULL)
+			{
+				string client = subStr;
+				vecClients.push_back(client);
+				subStr = strtok_s(NULL, ",", &next_token_client);
+			}
+
+			subStr = strtok_s(psc, "|", &next_token_subStr);
+			string TableName = subStr;
+			subStr = strtok_s(NULL, "|", &next_token_subStr);
+			string FilterStr = subStr;
+			PredefineObj tmpObj;
+			//TableName.erase(std::remove_if(TableName.begin(), TableName.end(), isspace), TableName.end());
+			TableName.erase(std::remove_if(TableName.begin(), TableName.end(), [](char c) {
+				return std::isspace(static_cast<unsigned char>(c));
+				}), TableName.end());
+
+			tmpObj.TableName = TableName;
+			tmpObj.vecFilterCondition = FilterStr;
+			if (!tmpObj.TableName.empty() && !tmpObj.vecFilterCondition.empty())
+			{
+				Vmp->push_back(tmpObj);
+			}
+		}
+		psc = strtok_s(NULL, ";", &next_token);
+	}
+}
+bool Collect::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket)
+{
+	bool bResult = false;
+	sqlite3* m_db;
+	string query;
+	if (!sqlite3_open16(DBName, &m_db))
+	{
+		for (auto& Predefine : *mapPredefine)
+		{
+			query.clear();
+			query = "CREATE TABLE ";
+			query += Predefine.first;
+			query += " (id INTEGER PRIMARY KEY AUTOINCREMENT, mac TEXT, ip TEXT, \
+													table_id INTEGER, item TEXT, date TEXT, type TEXT, etc TEXT)";
+			// 可能已存在，所以不判斷建成功失敗 或者進去調整function
+			WriteSQLiteDB(m_db, (char*)query.c_str());
+			for (auto& TableFilter : Predefine.second)
+			{
+				query.clear();
+				if (GetQueryByTable(&query, TableFilter.TableName, TableFilter.vecFilterCondition))
+				{
+					vector<CombineObj> vecCombineObj;
+					GetDataByQuery(query, m_db, &vecCombineObj);
+					int id = 0;
+					query.clear();
+					query = "SELECT MAX(id) FROM";
+					query += Predefine.first;
+
+					sqlite3_stmt* statement;
+					if (sqlite3_prepare(m_db, query.c_str(), -1, &statement, 0) == SQLITE_OK)
+					{
+						int res = 0;
+						if (res != SQLITE_DONE && res != SQLITE_ERROR)
+						{
+							res = sqlite3_step(statement);
+							if (res == SQLITE_ROW)
+							{
+								id = sqlite3_column_int(statement, 0);
+							}
+						}
+					}
+					sqlite3_finalize(statement);
+					WriteDataSetToDB(m_db, vecCombineObj, Predefine.first, info->MAC, info->IP, TableFilter.TableName, id);
+				}
+			}
+		}
+
+		char* InfoStr = new char[MAX_PATH_EX];
+		//BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
+		char* TmpBuffer = new char[STRINGMESSAGELEN];
+		memset(InfoStr, '\0', MAX_PATH_EX);
+		sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", 35, 35);
+		memset(TmpBuffer, '\x0', STRINGMESSAGELEN);
+		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+
+		int Sendret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, tcpSocket);
+	}
+	sqlite3_close(m_db);
+	return bResult;
+}
+//bool Collect::GetQueryByTable(string* query, string TableName, string QueryFilter)
+//{
+//	bool bResult = true;
+//	*query += "SELECT ";
+//	if (TableName == "ARPCache") { *query += "id, internetaddress, physicaladdress "; }
+//	else if (TableName == "BaseService") { *query += "id, name, pathname FROM "; }
+//	else if (TableName == "ChromeDownload") { *query += "id, download_url, start_time, target_path "; }
+//	else if (TableName == "ChromeHistory") { *query += "id, url, last_visit_time, title FROM "; }
+//	else if (TableName == "ChromeKeywordSearch") { *query += "id, term, title FROM "; }
+//	else if (TableName == "ChromeLogin") { *query += "id, origin_url, date_created, username_value "; }
+//	else if (TableName == "EventApplication") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
+//	else if (TableName == "EventSecurity") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
+//	else if (TableName == "EventSystem") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
+//	else if (TableName == "FirefoxHistory") { *query += "id, url, last_visit_time, title "; }
+//	else if (TableName == "FirefoxLogin") { *query += "id, hostname, timelastused, username "; }
+//	else if (TableName == "IECache") { *query += "id, sourceurlname, lastaccesstime, localfilename "; }
+//	else if (TableName == "IEHistory") { *query += "id, url, visitedtime, title "; }
+//	else if (TableName == "InstalledSoftware") { *query += "id, displayname, registrytime, publisher "; }
+//	else if (TableName == "MUICache") { *query += "id, applicationpath, applicationname "; }
+//	else if (TableName == "Network") { *query += "id, processname, remoteaddress "; }
+//	else if (TableName == "NetworkResources") { *query += "id, resourcesname, ipaddress "; }
+//	else if (TableName == "OpenedFiles") { *query += "id, processname, processid "; }
+//	else if (TableName == "Prefetch") { *query += "id, processname, lastruntime, processpath "; }
+//	else if (TableName == "Process") { *query += "id, process_name, processcreatetime, process_path "; }
+//	else if (TableName == "RecentFile") { *query += "id, name, accesstime, fullpath "; }
+//	else if (TableName == "Service") { *query += "id, name, pathname "; }
+//	else if (TableName == "ShellBags") { *query += "id, path, lastmodifiedtime, slotpath "; }
+//	else if (TableName == "Shortcuts") { *query += "id, shortcutname, modifytime, linkto "; }
+//	else if (TableName == "StartRun") { *query += "id, name, command "; }
+//	else if (TableName == "SystemInfo") { *query += "id, hotfix, os "; }
+//	else if (TableName == "TaskSchedule") { *query += "id, name, lastruntime, path "; }
+//	else if (TableName == "USBdevices") { *query += "id, device_description, last_arrival_date, device_letter "; }
+//	else if (TableName == "UserAssist") { *query += "id, name, modifiedtime, of_times_executed "; }
+//	else if (TableName == "UserProfiles") { *query += "id, username, lastlogontime, usersid "; }
+//	else if (TableName == "Wireless") { *query += "id, profilename, lastmodifiedtime, authentication "; }
+//	else if (TableName == "JumpList") { *query += "id, fullpath, recordtime, application_id "; }
+//	else if (TableName == "WindowsActivity") { *query += "id, app_id, last_modified_on_client, activity_type "; }
+//	else if (TableName == "NetworkDataUsageMonitor") { *query += "id, app_name, timestamp, bytes_sent "; }
+//	else if (TableName == "AppResourceUsageMonitor") { *query += "id, app_name, timestamp, backgroundbyteswritten "; }
+//	else { bResult = false; }
+//
+//	if (bResult == true)
+//	{
+//		*query += "FROM ";
+//		*query += TableName;
+//		if (!QueryFilter.empty())
+//		{
+//			*query += " WHERE ";
+//			*query += QueryFilter;
+//		}
+//	}
+//
+//	return bResult;
+//}
+void Collect::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
+{
+
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	int Sendret;
+	char* InfoStr = new char[MAX_PATH_EX];
+	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+
+	int iLen = sizeof(CollectionNums) / sizeof(CollectionNums[0]);
+	for (int i = 0; i < iLen; i++) {
+
+		DWORD m_CollectInfoProcessPid = 0;
+		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+		TCHAR* RunComStr = new TCHAR[512];
+		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+		wstring filename = tool.GetFileName();
+		TCHAR MyName[MAX_PATH];
+		wcscpy_s(MyName, filename.c_str());
+
+		TCHAR ServerIP[MAX_PATH];
+		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+		swprintf_s(RunComStr, 512, L"\"%s\" %s %d CollectInfo %d %d", MyName, ServerIP, info->Port, i, iLen);
+		wprintf(L"Run Process: %ls\n", RunComStr);
+		RunProcessEx(RunExeStr, RunComStr, 1024, TRUE, FALSE, m_CollectInfoProcessPid); // wait for the previous one finish
+
+		info->processMap["CollectInfo"] = m_CollectInfoProcessPid;
+		log.logger("Debug", "CollectInfo enabled");
+
+	}
+	//delete[] InfoStr;
+	delete[] RunComStr;
+	delete[] RunExeStr;
+}
+//void Collect::CollectData(int i, int iLen) {
+//
+//	char* InfoStr = new char[MAX_PATH_EX];
+//	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
+//	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+//	GetMyPath(m_FilePath);
+//	_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
+//	HMODULE m_lib = LoadLibrary(m_FilePath);
+//	if (m_lib) {
+//		printf("load dll success : %d\n", i);
+//		TCHAR buffer[20]; // Adjust the buffer size as needed
+//		_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), CollectionNums[i]);
+//		TCHAR* tcharString = buffer;
+//
+//		try {
+//			wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
+//			GetMyPath(m_FullDbPath);
+//			_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
+//			collect->CollectionProcess(m_lib, m_FullDbPath, tcharString);
+//		}
+//		catch (...) {
+//			log.logger("Error", "collect failed");
+//		}
+//
+//		FreeLibrary(m_lib);
+//	}
+//	else {
+//		printf("load dll failed\n");
+//		log.logger("Error", "collection load dll failed\n");
+//	}
+//
+//	memset(InfoStr, '\0', MAX_PATH_EX);
+//	sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
+//	memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
+//	memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
+//
+//	int ret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, info->tcpSocket);
+//
+//}

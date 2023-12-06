@@ -18,16 +18,16 @@
 #include <vswriter.h>
 #include <vsbackup.h>
 #include <comdef.h>
+#include <ctime>
+#include <chrono>
 
 #include "tools.h"
 #include "socket_send.h"
 #include "MemProcess.h"
 
 //#include "File.h"
-#include "NTFSSearchCore.h"
 
 #include "sqlite3.h"
-
 #include "Collect.h"
 
 
@@ -35,11 +35,11 @@
 
 namespace fs = std::filesystem;
 
-struct ImageType {
-    char path[512];
-    char APPTYPE[512];
-    char filename[512];
-};
+//struct ImageType {
+//    char path[512];
+//    char APPTYPE[512];
+//    char filename[512];
+//};
 
 
 class Task {
@@ -73,17 +73,12 @@ public:
     int GiveDetectProcess(char* buff, SOCKET* tcpSocket);
     int GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket);
     int GiveDetectNetwork(char* buff, SOCKET* tcpSocket);
-    
-
-    // scan
-    int GiveScanInfo(char* buff, SOCKET* tcpSocket);
-    int GiveProcessData();
-    void ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket);
 
     // explorer
     int ExplorerInfo_(StrPacket* udata);
     int GiveDriveInfo();
-    int GiveExplorerData(char* Drive, char* FileSystem);
+    //int GiveExplorerData(char* Drive, char* FileSystem);
+    //void SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned int& FileIndex, char* TmpSend, unsigned int& m_ProgressCount, unsigned int& m_Count);
 
     //collect
     void CollectData(int i, int iLen);
@@ -104,9 +99,9 @@ public:
 
     // image
     int GetImage(StrPacket* udata);
-    int LookingForImage(char* cmd);
-    void SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz);
-    std::string ToUpper(const std::string& str);
+    //int LookingForImage(char* cmd);
+    //void SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz);
+    //std::string ToUpper(const std::string& str);
 
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
@@ -128,14 +123,11 @@ private:
     Log log;
     const char* AESKey = "AES Encrypt Decrypt";
 
-    // scan
-    void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket);
-
     // detect
     int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
     void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
-    int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
+    //int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
     void SendZipFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
 
     
@@ -145,13 +137,13 @@ private:
     void SendNetworkDetectToServer(vector<string>* pInfo);
 
     // collect
-    int CollectionComputerInfo(); 
+    /*int CollectionComputerInfo(); 
     bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
     void SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
     bool GetQueryByTable(string* query, string TableName, string QueryFilter);
     void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
     void CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket);
-    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket);
+    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket);*/
 
     int SendDataPacketToServer(const char* function, char* buff, SOCKET* tcpSocket);
     int SendMessagePacketToServer(const char* function, char* buff);

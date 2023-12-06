@@ -17,6 +17,11 @@
 #include <tchar.h>
 
 #include <Iphlpapi.h>
+#include <comdef.h>
+#include <ctime>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
 
 #include "Process.h"
@@ -128,6 +133,7 @@ bool CheckDigitalSignature(TCHAR* m_Path);
 void SetProcessPriority(TCHAR* m_Path);
 //void ErrorLog(char * Str);
 wstring GetMyTempPath(TCHAR* pdnPathName);
+wchar_t* SystemTimeToUnixTime(SYSTEMTIME system_time);
 
 
 #endif

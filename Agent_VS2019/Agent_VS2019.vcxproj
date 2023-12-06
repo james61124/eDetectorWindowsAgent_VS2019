@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp" />
+    <ClCompile Include="AllTask.cpp" />
     <ClCompile Include="AutoRun.cpp" />
     <ClCompile Include="caes.cpp" />
     <ClCompile Include="CEntry.cpp" />
@@ -27,16 +28,20 @@
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CFolderEntry.cpp" />
     <ClCompile Include="Collect.cpp" />
+    <ClCompile Include="CollectInfo.cpp" />
     <ClCompile Include="CRootFolder.cpp" />
     <ClCompile Include="CVolumeAccess.cpp" />
+    <ClCompile Include="Explorer.cpp" />
     <ClCompile Include="FAT32General.cpp" />
     <ClCompile Include="GlobalFunction.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="info.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MemProcess.cpp" />
     <ClCompile Include="NTFSSearchCore.cpp" />
     <ClCompile Include="NTFS_FileRecord.cpp" />
     <ClCompile Include="PeFunction.cpp" />
+    <ClCompile Include="Scan.cpp" />
     <ClCompile Include="socket_manager.cpp" />
     <ClCompile Include="socket_send.cpp" />
     <ClCompile Include="task.cpp" />
@@ -45,6 +50,7 @@
     <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllTask.h" />
     <ClInclude Include="AutoRun.h" />
     <ClInclude Include="caes.h" />
     <ClInclude Include="CEntry.h" />
@@ -52,12 +58,15 @@
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CFolderEntry.h" />
     <ClInclude Include="Collect.h" />
+    <ClInclude Include="CollectInfo.h" />
     <ClInclude Include="CRootFolder.h" />
     <ClInclude Include="CVolumeAccess.h" />
+    <ClInclude Include="Explorer.h" />
     <ClInclude Include="FAT32General.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="general.h" />
     <ClInclude Include="GlobalFunction.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="internal.h" />
     <ClInclude Include="Log.h" />
@@ -70,6 +79,7 @@
     <ClInclude Include="NTFS_FileRecord.h" />
     <ClInclude Include="PeFunction.h" />
     <ClInclude Include="Process.h" />
+    <ClInclude Include="Scan.h" />
     <ClInclude Include="socket_manager.h" />
     <ClInclude Include="socket_send.h" />
     <ClInclude Include="sqlite3.h" />

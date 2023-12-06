@@ -10,7 +10,7 @@ public:
 	CFileSystem(TCHAR* aDriveLetter);
 	~CFileSystem(void);
 
-	bool initFDT(void *argv,char* pMAC,char* pIP,char * SendStr,unsigned int & pProgressCount,unsigned int & pCount,DWORD & pLastCluster,vector<DeleteFATFileInfo>* pDelInfo,clock_t & pStartTime);
+	bool initFDT(void *argv, TCHAR* FileName, char* pMAC,char* pIP,char * SendStr,unsigned int & pProgressCount,unsigned int & pCount,DWORD & pLastCluster,vector<DeleteFATFileInfo>* pDelInfo,clock_t & pStartTime);
 	bool LoadScanExplorer(void *argv,char* pMAC,char* pIP,char * SendStr,unsigned int & pProgressCount,unsigned int & pCount,DWORD & pLastCluster,vector<DeleteFATFileInfo>* pDelInfo,clock_t & pStartTime,ScanExplorerInfo * pInfo,TCHAR* pFilePath);
 	int GetRecordsCount();
 	BOOL GetRecoverInfo(unsigned int pIndex,TCHAR * pFileName,ULONGLONG & m_FileSize);

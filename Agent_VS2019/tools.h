@@ -64,7 +64,6 @@ public:
     bool CompressFileToZip(const TCHAR* zipFileName, const TCHAR* sourceFilePath);
 
     // Process
-
     void LoadApiPattern(std::set<DWORD>* pApiName);
 
     const char* WideCharToConstChar(const wchar_t* wideString);

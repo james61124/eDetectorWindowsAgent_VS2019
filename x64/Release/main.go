@@ -26,7 +26,7 @@ func main() {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		
+
 		fmt.Printf("%s %s %s %s ", request.IP, request.Port, request.DetectPort, request.Version)
 		exeFile := generateExe(request.IP, request.Port, request.DetectPort, request.Version)
 
@@ -36,6 +36,13 @@ func main() {
 	})
 
 	router.Run(":8080")
+}
+
+func generateUniqueFileName() string {
+	newUUID := uuid.New()
+	uniqueFileName := newUUID.String()
+
+	return uniqueFileName
 }
 
 func generateExe(ip string, port string, detectPort string, version string) string {
@@ -50,7 +57,7 @@ func generateExe(ip string, port string, detectPort string, version string) stri
 	if _, err := os.Stat(generateExePath); err != nil {
 		log.Fatalf("Failed to find AgentGenerator.exe: %v", err)
 	}
-	cmd := exec.Command(generateExePath, ip, port, detectPort, version)
+	cmd := exec.Command("./AgentGenerator.exe", ip, port, detectPort, version)
 
 	if err := cmd.Run(); err != nil {
 		log.Fatalf("Failed to run command: %v", err)

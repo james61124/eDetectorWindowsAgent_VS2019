@@ -3762,3 +3762,18 @@ wstring GetMyTempPath(TCHAR* pdnPathName)
 	return ret;
 }
 
+wchar_t* SystemTimeToUnixTime(SYSTEMTIME system_time) {
+	wchar_t time[100];
+	std::swprintf(time, 100, L"%02hu/%02hu/%02hu %02hu:%02hu:%02hu", system_time.wYear, system_time.wMonth, system_time.wDay, system_time.wHour, system_time.wMinute, system_time.wSecond);
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, time, -1, nullptr, 0, nullptr, nullptr);
+	std::string time_str(bufferSize, 0);
+	WideCharToMultiByte(CP_UTF8, 0, time, -1, &time_str[0], bufferSize, nullptr, nullptr);
+	std::tm tm = {};
+	std::istringstream ss(time_str);
+	ss >> std::get_time(&tm, "%Y/%m/%d %H:%M:%S");
+	std::time_t unixTime = std::mktime(&tm);
+	wchar_t* time_buf = new wchar_t[100];
+	std::swprintf(time_buf, 100, L"%ld", unixTime);
+	return time_buf;
+}
+

@@ -17,7 +17,7 @@ CFileSystem::~CFileSystem(void)
 		delete m_rootDir;
 }
 
-bool CFileSystem::initFDT(void *argv,char* pMAC,char* pIP,char * SendStr,unsigned int & pProgressCount,unsigned int & pCount,DWORD & pLastCluster,vector<DeleteFATFileInfo>* pDelInfo,clock_t & pStartTime)
+bool CFileSystem::initFDT(void *argv, TCHAR* FileName, char* pMAC,char* pIP,char * SendStr,unsigned int & pProgressCount,unsigned int & pCount,DWORD & pLastCluster,vector<DeleteFATFileInfo>* pDelInfo,clock_t & pStartTime)
 {	
 	// Cleans any older data
 	if (m_rootDir != NULL)
@@ -31,7 +31,8 @@ bool CFileSystem::initFDT(void *argv,char* pMAC,char* pIP,char * SendStr,unsigne
 	else
 	{
 		m_rootDir = new CRootFolder();
-		bool ret = m_rootDir->load(argv, pMAC,pIP,5,SendStr,pProgressCount,pCount,pLastCluster,pDelInfo,pStartTime);
+		//bool ret = m_rootDir->load(argv, pMAC,pIP,5,SendStr,pProgressCount,pCount,pLastCluster,pDelInfo,pStartTime);
+		bool ret = m_rootDir->load(argv, FileName, pMAC, pIP, 0, SendStr, pProgressCount, pCount, pLastCluster, pDelInfo, pStartTime);
 		return ret;
 	}
 }

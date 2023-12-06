@@ -19,15 +19,6 @@
     <Filter Include="Scan">
       <UniqueIdentifier>{55e95325-2b4b-43a3-b061-0d82897050c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="File">
-      <UniqueIdentifier>{809f5c03-c55f-41e3-94da-f3d7633f4ccd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="File\FAT32">
-      <UniqueIdentifier>{5b762de4-0e2e-407a-8d49-faa4cb622536}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="File\NTFS">
-      <UniqueIdentifier>{0a0b940e-ca8e-4283-8f37-cedf6a694f7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Collect">
       <UniqueIdentifier>{2c0a37e6-49f1-4b1b-b765-8cbcfd58fd2f}</UniqueIdentifier>
     </Filter>
@@ -36,6 +27,18 @@
     </Filter>
     <Filter Include="Log">
       <UniqueIdentifier>{05b2eaf5-4da4-42a0-bc55-bfe51a69f6d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explorer">
+      <UniqueIdentifier>{809f5c03-c55f-41e3-94da-f3d7633f4ccd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explorer\FAT32">
+      <UniqueIdentifier>{5b762de4-0e2e-407a-8d49-faa4cb622536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Explorer\NTFS">
+      <UniqueIdentifier>{0a0b940e-ca8e-4283-8f37-cedf6a694f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image">
+      <UniqueIdentifier>{94b82735-1f06-4132-aa65-da98cf07c61a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -73,34 +76,34 @@
       <Filter>Scan</Filter>
     </ClCompile>
     <ClCompile Include="CEntry.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="CFileEntry.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="CFileSystem.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="CFolderEntry.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="CRootFolder.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="CVolumeAccess.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="FAT32General.cpp">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClCompile>
     <ClCompile Include="NTFSSearchCore.cpp">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClCompile>
     <ClCompile Include="Collect.cpp">
       <Filter>Collect</Filter>
     </ClCompile>
     <ClCompile Include="NTFS_FileRecord.cpp">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClCompile>
     <ClCompile Include="unzip.cpp">
       <Filter>Zip</Filter>
@@ -110,6 +113,21 @@
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Scan.cpp">
+      <Filter>Scan</Filter>
+    </ClCompile>
+    <ClCompile Include="AllTask.cpp">
+      <Filter>資源檔</Filter>
+    </ClCompile>
+    <ClCompile Include="CollectInfo.cpp">
+      <Filter>Collect</Filter>
+    </ClCompile>
+    <ClCompile Include="Explorer.cpp">
+      <Filter>Explorer</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,58 +165,58 @@
       <Filter>Scan</Filter>
     </ClInclude>
     <ClInclude Include="CEntry.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="CFileEntry.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="CFileSystem.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="CFolderEntry.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="CRootFolder.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="CVolumeAccess.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="FAT32General.h">
-      <Filter>File\FAT32</Filter>
+      <Filter>Explorer\FAT32</Filter>
     </ClInclude>
     <ClInclude Include="NTFSSearchCore.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="Process.h">
       <Filter>Scan</Filter>
     </ClInclude>
     <ClInclude Include="general.h">
-      <Filter>File</Filter>
+      <Filter>Explorer</Filter>
     </ClInclude>
     <ClInclude Include="internal.h">
-      <Filter>File</Filter>
+      <Filter>Explorer</Filter>
     </ClInclude>
     <ClInclude Include="File.h">
-      <Filter>File</Filter>
+      <Filter>Explorer</Filter>
     </ClInclude>
     <ClInclude Include="Collect.h">
       <Filter>Collect</Filter>
     </ClInclude>
     <ClInclude Include="NTFS.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="NTFS_Attribute.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="NTFS_Common.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="NTFS_DataType.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="NTFS_FileRecord.h">
-      <Filter>File\NTFS</Filter>
+      <Filter>Explorer\NTFS</Filter>
     </ClInclude>
     <ClInclude Include="sqlite3.h">
       <Filter>Collect</Filter>
@@ -211,6 +229,21 @@
     </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Scan.h">
+      <Filter>Scan</Filter>
+    </ClInclude>
+    <ClInclude Include="AllTask.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="CollectInfo.h">
+      <Filter>Collect</Filter>
+    </ClInclude>
+    <ClInclude Include="Explorer.h">
+      <Filter>Explorer</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

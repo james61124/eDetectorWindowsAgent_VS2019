@@ -52,8 +52,7 @@ private:
 	static TCHAR*			s_driveLetter;
 	static CVolumeAccess*	s_instance;
 
-	// Ctors
-	CVolumeAccess(TCHAR* aVolumeDriveLetter);
+	
 
 	// Member functions
 	bool lockAndDismount();
@@ -73,6 +72,9 @@ private:
 	// Clean resources
 	void clean();
 public:
+
+	// Ctors
+	CVolumeAccess(TCHAR* aVolumeDriveLetter);
 
 	DWORD getRootDirCluster();
 	DWORD getSectorNumFromCluster(DWORD adwClusterNum);

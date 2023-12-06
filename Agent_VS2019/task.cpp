@@ -16,8 +16,6 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 	functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
 	functionFromServerMap["UpdateDetectMode"] = &Task::UpdateDetectMode;
 
-    
-
 	functionMap["DetectProcess"] = std::bind(&Task::DetectProcess_, this);
 
     // packet from server
@@ -25,7 +23,7 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 
 	// Scan
 	functionFromServerMap["GetScan"] = &Task::GetScan;
-	functionMap["GiveProcessData"] = std::bind(&Task::GiveProcessData, this);
+	//functionMap["GiveProcessData"] = std::bind(&Task::GiveProcessData, this);
 	
 
 	// Explorer
@@ -34,7 +32,7 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 	functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo_;
 
 	// Collect
-	functionMap["CollectionComputerInfo"] = std::bind(&Task::CollectionComputerInfo, this);
+	//functionMap["CollectionComputerInfo"] = std::bind(&Task::CollectionComputerInfo, this);
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
     functionFromServerMap["DataRight"] = &Task::DataRight;
 
@@ -733,7 +731,6 @@ int Task::GiveDetectNetwork(char* buff, SOCKET* tcpSocket) {
 	return socketsend->SendDataToServer(functionName, buff, tcpSocket);
 }
 
-
 // scan
 int Task::GetScan(StrPacket* udata) {
 	DWORD m_ScanProcessPid = 0;
@@ -757,423 +754,6 @@ int Task::GetScan(StrPacket* udata) {
 
 	return 1;
 
-}
-int Task::GiveProcessData() {
-	char* Scan = new char[5];
-	strcpy_s(Scan, 5, "Scan");
-
-    std::set<DWORD> m_ApiName;
-    tool.LoadApiPattern(&m_ApiName);
-    std::map<DWORD, ProcessInfoData> m_ProcessInfo;
-    std::vector<UnKnownDataInfo> m_UnKnownData;
-
-	// start scan
-	char* null = new char[1];
-	strcpy_s(null, 1, "");
-	int ret = SendDataPacketToServer("ReadyScan", null, info->tcpSocket);
-    ScanRunNowProcess(this, &m_ProcessInfo, &m_ApiName, &m_UnKnownData, info->tcpSocket);
-
-	// send scan file
-	if (!m_ProcessInfo.empty()) {
-		try {
-			GiveScanDataSendServer(info->MAC, info->IP, Scan, &m_ProcessInfo, &m_UnKnownData, info->tcpSocket);
-		}
-		catch (...) {
-			log.logger("Error", "GiveScanDataSendServer failed");
-		}
-	}
-
-    m_UnKnownData.clear();
-    m_ProcessInfo.clear();
-    m_ApiName.clear();
-    return ret;
-
-}
-void Task::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket)
-{
-	MemProcess* m_MemPro = new MemProcess;
-	map<DWORD, process_info_Ex> process_list;
-	m_MemPro->LoadNowProcessInfo(&process_list);
-	vector<TCPInformation> NetInfo;
-	char* OSstr = GetOSVersion();
-
-	if ((strstr(OSstr, "Windows XP") != 0) || (strstr(OSstr, "Windows Server 2003") != 0)) GetTcpInformationXPEx(&NetInfo);
-	else if (strstr(OSstr, "Windows 2000") != 0) {}
-	else GetTcpInformationEx(&NetInfo);
-	delete[] OSstr;
-	time_t NetworkClock;
-	time(&NetworkClock);
-
-	map<wstring, BOOL> m_ServiceRun;
-	set<wstring> m_StartRun;
-	AutoRun* m_AutoRun = new AutoRun;
-	m_AutoRun->LoadServiceStartCommand(&m_ServiceRun);
-	m_AutoRun->LoadAutoRunStartCommand(&m_StartRun);
-
-	int InfoSize = (int)process_list.size();
-	int InfoCount = 0;
-	map<DWORD, process_info_Ex>::iterator pt;
-
-	char* buff = new char[DATASTRINGMESSAGELEN];
-	sprintf_s(buff, DATASTRINGMESSAGELEN, "%d", InfoSize);
-	int ret = SendDataPacketToServer("GiveScanInfo", buff, tcpSocket);
-	if (!ret) {
-		log.logger("Error", "GiveScanInfo send failed");
-		return;
-	}
-	delete[] buff;
-
-
-	for (pt = process_list.begin(); pt != process_list.end(); pt++, InfoCount++) {
-		printf("%d/%d\n", InfoCount, InfoSize);
-		char* Progress = new char[DATASTRINGMESSAGELEN];
-		sprintf_s(Progress, DATASTRINGMESSAGELEN, "%d/%d", InfoCount, InfoSize);
-		int ret = SendDataPacketToServer("GiveScanProgress", Progress, tcpSocket);
-		delete[] Progress;
-
-		if (!m_MemPro->IsWindowsProcessNormal(&process_list, pt->first)) {
-			ProcessInfoData m_Info;
-			m_Info.HideAttribute = FALSE;
-			m_Info.HideProcess = pt->second.IsHide;
-			lstrcpy(m_Info.ProcessName, pt->second.process_name);
-			_tcscpy_s(m_Info.ProcessPath, MAX_PATH_EX, pt->second.process_Path);
-			_tcscpy_s(m_Info.ProcessTime, 20, _T("null"));
-			_tcscpy_s(m_Info.ProcessCTime, 20, _T("null"));
-			_tcscpy_s(m_Info.ParentCTime, 20, _T("null"));
-			if (pt->second.ProcessCreateTime > 0) swprintf_s(m_Info.ProcessCTime, 20, _T("%llu"), pt->second.ProcessCreateTime);
-			if (pt->second.parentCreateTime > 0) swprintf_s(m_Info.ParentCTime, 20, _T("%llu"), pt->second.parentCreateTime);
-			if (!_tcscmp(m_Info.ProcessPath, _T("null"))) m_MemPro->SearchExecutePath(pt->first, m_Info.ProcessPath, pt->second.process_name);
-
-			SYSTEMTIME sys;
-			GetLocalTime(&sys);
-			swprintf_s(m_Info.ProcessTime, 20, _T("%4d/%02d/%02d %02d:%02d:%02d"), sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond);
-			m_Info.ParentID = pt->second.parent_pid;
-			if (pt->second.parentCreateTime > 0) m_MemPro->GetProcessPath(pt->second.parent_pid, m_Info.ParentPath, true, NULL, NULL);
-			else _tcscpy_s(m_Info.ParentPath, MAX_PATH_EX, _T("null"));
-			_tcscpy_s(m_Info.UnKnownHash, 50, _T("null"));
-			m_Info.Injected = m_MemPro->CheckIsInjection(pt->first, pMembuf, m_Info.ProcessName, m_Info.UnKnownHash);
-			m_Info.StartRun = m_MemPro->CheckIsStartRun(&m_ServiceRun, &m_StartRun, pt->first/*,m_Info.HideService*/);
-
-			m_MemPro->CheckIsInlineHook(pt->first, &m_Info.InlineHookInfo);
-
-			TCHAR Md5Hashstr[50];
-			memset(Md5Hashstr, '\0', 50);
-			DWORD MD5ret = Md5Hash(m_Info.ProcessPath, Md5Hashstr);
-			if (MD5ret == 0) lstrcpy(m_Info.ProcessHash, Md5Hashstr);
-			else lstrcpy(m_Info.ProcessHash, _T("null"));
-
-			if (_tcscmp(m_Info.ProcessPath, _T("null"))) {
-				DWORD AttRet = GetFileAttributes(m_Info.ProcessPath);
-				if ((AttRet & FILE_ATTRIBUTE_HIDDEN) == FILE_ATTRIBUTE_HIDDEN) m_Info.HideAttribute = TRUE;
-				DigitalSignatureInfo* DSinfo = new DigitalSignatureInfo;
-				_tcscpy_s(DSinfo->SignerSubjectName, 256, _T("null"));
-				bool DSret = GetDigitalSignature(m_Info.ProcessPath, DSinfo);
-				if (DSret) swprintf_s(m_Info.SignerSubjectName, 256, _T("%s"), DSinfo->SignerSubjectName);
-				else lstrcpy(m_Info.SignerSubjectName, _T("null"));
-				delete DSinfo;
-			}
-			else lstrcpy(m_Info.SignerSubjectName, _T("null"));
-
-			set<DWORD> ApiStringHash;
-			m_MemPro->DumpExecute(pt->first, pt->second.process_name, pApiName, &ApiStringHash, m_Info.ProcessPath, &m_Info.Abnormal_dll);
-			m_Info.InjectionOther = FALSE;
-			m_Info.InjectionPE = FALSE;
-			m_MemPro->CheckInjectionPtn(&ApiStringHash, m_Info.InjectionOther, m_Info.InjectionPE);
-			ApiStringHash.clear();
-			vector<TCPInformation>::iterator Tcpit;
-			for (Tcpit = NetInfo.begin(); Tcpit != NetInfo.end(); Tcpit++) {
-				if ((*Tcpit).ProcessID == pt->first) {
-					WORD add1, add2, add3, add4;
-					add1 = (WORD)((*Tcpit).LocalAddr & 255);
-					add2 = (WORD)(((*Tcpit).LocalAddr >> 8) & 255);
-					add3 = (WORD)(((*Tcpit).LocalAddr >> 16) & 255);
-					add4 = (WORD)(((*Tcpit).LocalAddr >> 24) & 255);
-					WORD add5, add6, add7, add8;
-					add5 = (WORD)((*Tcpit).RemoteAddr & 255);
-					add6 = (WORD)(((*Tcpit).RemoteAddr >> 8) & 255);
-					add7 = (WORD)(((*Tcpit).RemoteAddr >> 16) & 255);
-					add8 = (WORD)(((*Tcpit).RemoteAddr >> 24) & 255);
-					char str[65536];
-					sprintf_s(str, 65536, "%d.%d.%d.%d,%u,%d.%d.%d.%d,%u,%s>%lld", add1, add2, add3, add4, ntohs((u_short)(*Tcpit).LocalPort), add5, add6, add7, add8, ntohs((u_short)(*Tcpit).RemotePort), Convert2State((*Tcpit).State), NetworkClock);
-					m_Info.NetString.insert(str);
-				}
-			}
-			pInfo->insert(pair<DWORD, ProcessInfoData>(pt->first, m_Info));
-		}
-	}
-
-	delete m_MemPro;
-	delete m_AutoRun;
-	m_StartRun.clear();
-	m_ServiceRun.clear();
-	NetInfo.clear();
-	process_list.clear();
-}
-void Task::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket)
-{
-	char* buff = new char[DATASTRINGMESSAGELEN];
-	map<DWORD, ProcessInfoData>::iterator vit;
-	int AllCount = (int)pFileInfo->size();
-	int m_Count = 0;
-
-	TCHAR* Scan_txt = new TCHAR[MAX_PATH_EX];
-	GetMyPath(Scan_txt);
-	_tcscat_s(Scan_txt, MAX_PATH_EX, _T("\\Scan.txt"));
-	DeleteFile(Scan_txt);
-	TCHAR* Scan_zip = new TCHAR[MAX_PATH_EX];
-	GetMyPath(Scan_zip);
-	_tcscat_s(Scan_zip, MAX_PATH_EX, _T("\\Scan.zip"));
-	DeleteFile(Scan_zip);
-	std::wofstream outFile(Scan_txt, std::ios::app);
-	if (!outFile.is_open()) log.logger("Error", "Scan.txt open failed");
-
-	int ret = 1;
-
-	for (vit = pFileInfo->begin(); vit != pFileInfo->end(); vit++)
-	{
-		if (_tcscmp(vit->second.ProcessHash, _T("null")))
-		{
-			wchar_t* wTempStr = new wchar_t[DATASTRINGMESSAGELEN];
-
-			// command line
-			HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, vit->first);
-			MemProcess* m_MemPro = new MemProcess;
-			TCHAR* Comstr = new TCHAR[MAX_PATH_EX];
-			DWORD ret1 = m_MemPro->GetRemoteCommandLineW(processHandle, Comstr, MAX_PATH_EX);
-			if (ret1 == 0) _tcscpy_s(Comstr, MAX_PATH_EX, _T(""));
-			CloseHandle(processHandle);
-
-			// parent name, parent path
-			TCHAR* ParentName = new TCHAR[MAX_PATH];
-			TCHAR* ParentPath = new TCHAR[MAX_PATH];
-			_tcscpy_s(ParentName, 259, _T("null"));
-			_tcscpy_s(ParentPath, 259, _T("null"));
-			auto it = pFileInfo->find(vit->second.ParentID);
-			if (it != pFileInfo->end()) {
-				_tcscpy_s(ParentName, MAX_PATH, it->second.ProcessName);
-				_tcscpy_s(ParentPath, MAX_PATH, it->second.ProcessPath);
-			}
-
-			int Service = 0, AutoRun = 0;
-			if (vit->second.StartRun == 1) Service = 1;
-			else if (vit->second.StartRun == 2) AutoRun = 1;
-			else if (vit->second.StartRun == 3) {
-				Service = 1;
-				AutoRun = 1;
-			}
-
-			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
-				, vit->second.ProcessName, vit->second.ProcessCTime, Comstr, vit->second.ProcessHash, vit->second.ProcessPath,
-				vit->second.ParentID, ParentName, ParentPath, vit->second.SignerSubjectName, vit->first, vit->second.InjectionPE, vit->second.InjectionOther
-				, vit->second.Injected, Service, AutoRun, vit->second.HideProcess, vit->second.HideAttribute
-			);
-
-			// abnormal dll
-			char* cTempStr = CStringToCharArray(wTempStr, CP_UTF8);
-			strcpy_s(buff, DATASTRINGMESSAGELEN, cTempStr);
-			if (!vit->second.Abnormal_dll.empty())
-			{
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|");
-				set<string>::iterator dllit;
-				for (dllit = vit->second.Abnormal_dll.begin(); dllit != vit->second.Abnormal_dll.end(); dllit++)
-				{
-					char* dllstr = new char[4096];
-					sprintf_s(dllstr, 4096, "%s;", (*dllit).c_str());
-					if ((strlen(dllstr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
-					{
-						if (outFile.good()) outFile << buff;
-						else log.logger("Error", "write to Scan.txt failed");
-						memset(buff, '\0', DATASTRINGMESSAGELEN);
-						if (ret <= 0)
-						{
-							delete[] dllstr;
-							break;
-						}
-					}
-					strcat_s(buff, DATASTRINGMESSAGELEN, dllstr);
-					delete[] dllstr;
-				}
-				if (ret <= 0)
-					break;
-			}
-			else
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|null");
-
-
-			// inline hook
-			if (!vit->second.InlineHookInfo.empty())
-			{
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|");
-				set<string>::iterator Inlineit;
-				for (Inlineit = vit->second.InlineHookInfo.begin(); Inlineit != vit->second.InlineHookInfo.end(); Inlineit++)
-				{
-					char* Inlinestr = new char[4096];
-					sprintf_s(Inlinestr, 4096, "%s;", (*Inlineit).c_str());
-					if ((strlen(Inlinestr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
-					{
-						if (outFile.good()) outFile << buff;
-						else log.logger("Error", "write to Scan.txt failed");
-						memset(buff, '\0', DATASTRINGMESSAGELEN);
-						if (ret <= 0)
-						{
-							delete[] Inlinestr;
-							break;
-						}
-					}
-					strcat_s(buff, DATASTRINGMESSAGELEN, Inlinestr);
-					delete[] Inlinestr;
-				}
-				if (ret <= 0)
-					break;
-			}
-			else
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|null");
-
-			// Network
-			if (!vit->second.NetString.empty())
-			{
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|");
-				set<string>::iterator netit;
-				for (netit = vit->second.NetString.begin(); netit != vit->second.NetString.end(); netit++)
-				{
-					char* netstr = new char[4096];
-					sprintf_s(netstr, 4096, "%s;", (*netit).c_str());
-					if ((strlen(netstr) + strlen(buff)) >= DATASTRINGMESSAGELEN)
-					{
-						if (outFile.good()) outFile << buff;
-						else log.logger("Error", "write to Scan.txt failed");
-						memset(buff, '\0', DATASTRINGMESSAGELEN);
-						if (ret <= 0)
-						{
-							delete[] netstr;
-							break;
-						}
-					}
-					strcat_s(buff, DATASTRINGMESSAGELEN, netstr);
-					delete[] netstr;
-				}
-				if (ret <= 0)
-					break;
-			}
-			else
-				strcat_s(buff, DATASTRINGMESSAGELEN, "|null");
-
-
-			delete[] ParentName;
-			delete[] ParentPath;
-			delete[] Comstr;
-			delete[] cTempStr;
-
-			if (outFile.good()) outFile << buff << "\n";
-			else log.logger("Error", "write to Scan.txt failed");
-
-		}
-		m_Count++;
-	}
-	outFile.close();
-
-	//m_Hash.clear();
-	
-	//if (!pUnKnownData->empty())
-	//{
-	//	printf("pUnKnownData\n");
-	//	vector<UnKnownDataInfo>::iterator ut;
-	//	memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-	//	wchar_t* wUnKownInfoStr = new wchar_t[DATASTRINGMESSAGELEN];
-	//	int ret = 1;
-	//	char* cUnKownInfoStr = NULL;
-	//	for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
-	//	{
-	//		swprintf_s(wUnKownInfoStr, DATASTRINGMESSAGELEN, L"%lu|%s|%d", (*ut).Pid, (*ut).ProcessName, (*ut).SizeInfo);
-	//		cUnKownInfoStr = CStringToCharArray(wUnKownInfoStr, CP_UTF8);
-	//		sprintf_s(TempStr, DATASTRINGMESSAGELEN, "%s", cUnKownInfoStr);
-	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TempStr);
-	//		if (ret <= 0)
-	//			break;
-	//		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-	//		if ((*ut).SizeInfo > DATASTRINGMESSAGELEN /*&& ret != -3*/)
-	//		{
-	//			int tmplen = (*ut).SizeInfo;
-	//			for (DWORD i = 0; i < (*ut).SizeInfo; i += DATASTRINGMESSAGELEN)
-	//			{
-	//				char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-	//				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-	//				if (tmplen < DATASTRINGMESSAGELEN)
-	//					memcpy(TmpBuffer, (*ut).Data + i, tmplen);
-	//				else
-	//				{
-	//					memcpy(TmpBuffer, (*ut).Data + i, DATASTRINGMESSAGELEN);
-	//					tmplen -= DATASTRINGMESSAGELEN;
-	//				}
-	//				ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
-	//				//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
-	//				delete[] TmpBuffer;
-	//				if (ret <= 0)
-	//				{
-	//					break;
-	//				}
-	//			}
-	//			if (ret <= 0)
-	//				break;
-	//		}
-	//		else
-	//		{
-	//			char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-	//			memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
-	//			memcpy(TmpBuffer, (*ut).Data, (*ut).SizeInfo);
-	//			ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownInfo, TmpBuffer);
-	//			//Sendret = m_Client->SendDataBufToServer(pInfo->MAC,pInfo->IP,WorkStr,TmpBuffer);
-	//			delete[] TmpBuffer;
-	//			if (ret <= 0)
-	//				break;
-	//		}
-	//		
-	//		ret = socketsend->SendMessageToServer(functionName_GiveProcessUnknownEnd, null);
-	//		if (ret <= 0)
-	//			break;
-	//		delete[] cUnKownInfoStr;
-	//		cUnKownInfoStr = NULL;
-	//	}
-	//	if (cUnKownInfoStr != NULL)
-	//		delete[] cUnKownInfoStr;
-	//	delete[] wUnKownInfoStr;
-	//	for (ut = pUnKnownData->begin(); ut != pUnKnownData->end(); ut++)
-	//	{
-	//		delete[](*ut).Data;
-	//	}
-	//}
-
-	// Compress Scan.txt
-	if (tool.CompressFileToZip(Scan_zip, Scan_txt)) _tprintf(_T("File compressed and added to Scan ZIP successfully.\n"));
-	else log.logger("Error", "failed to add file to Scan Zip");
-
-	// Get Scan.txt Size
-	std::ifstream file(Scan_zip, std::ios::binary);
-	if (!file.is_open()) {
-		std::cout << "Failed to open file." << std::endl;
-		log.logger("Error", "failed to open zip file");
-		return;
-	}
-	file.seekg(0, std::ios::end);
-	std::streampos fileSize = file.tellg();
-	file.close();
-	long long fileSizeLL = static_cast<long long>(fileSize);
-
-	// send GiveScanInfo
-	char* FileSize = new char[DATASTRINGMESSAGELEN];
-	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
-	ret = SendDataPacketToServer("GiveScanDataInfo", FileSize, tcpSocket);
-	delete[] FileSize;
-
-	// send zip file
-	SendFileToServer("Scan", Scan_zip, tcpSocket);
-
-	DeleteFile(Scan_txt);
-	DeleteFile(Scan_zip);
-
-
-	delete[] buff;
-	ret = SendDataPacketToServer("GiveScanEnd", pMode, tcpSocket);
 }
 
 // Explorer
@@ -1281,423 +861,7 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 
 	return 1;
 }
-int Task::GiveExplorerData(char* Drive, char* FileSystem) {
 
-	int ret = 0;
-	ExplorerInfo* m_Info = new ExplorerInfo;
-	wchar_t DriveName[20];
-	size_t convertedChars = 0;
-	mbstowcs_s(&convertedChars, DriveName, sizeof(DriveName) / sizeof(wchar_t), Drive, sizeof(Drive) - 1);
-	CFileSystem* pfat = new CFileSystem(DriveName);
-	m_Info->Drive = static_cast<wchar_t>(Drive[0]);
-	mbstowcs_s(&convertedChars, m_Info->DriveInfo, sizeof(m_Info->DriveInfo) / sizeof(wchar_t), FileSystem, sizeof(FileSystem) - 1);
-
-
-	wchar_t* drive = new wchar_t[5];
-	swprintf_s(drive, 5, L"%c:\\", m_Info->Drive);
-	wchar_t* volname = new wchar_t[_MAX_FNAME];
-	wchar_t* filesys = new wchar_t[_MAX_FNAME];
-	DWORD VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
-	if (GetVolumeInformation(drive, volname, _MAX_FNAME, &VolumeSerialNumber, &MaximumComponentLength, &FileSystemFlags, filesys, _MAX_FNAME))
-	{
-		if ((wcsstr(m_Info->DriveInfo, filesys) != 0))
-		{
-			if (!wcscmp(filesys, L"NTFS"))
-			{
-				NTFSSearchCore* searchCore = new NTFSSearchCore;
-				try {
-					ret = NTFSSearch(m_Info->Drive, info->MAC, info->IP, info->tcpSocket, Drive, FileSystem);
-				}
-				catch (...) {
-					ret = 1;
-				}
-
-				/*char* null = new char[5];
-				strcpy_s(null, 5, "null");
-				ret = SendDataPacketToServer("GiveExplorerEnd", null, info->tcpSocket);
-				delete[] null;*/
-
-				/*if (ret == 0) {
-					char* null = new char[5];
-					strcpy_s(null, 5, "null");
-					ret = SendDataPacketToServer("GiveExplorerEnd", null, info->tcpSocket);
-					delete[] null;
-				}
-				else {
-					char* msg = new char[22];
-					strcpy_s(msg, 22, "ErrorLoadingMFTTable");
-					ret = SendDataPacketToServer("GiveExplorerEnd", msg, info->tcpSocket);
-					delete[] msg;
-				}*/
-
-				delete searchCore;
-			}
-			else if (!wcscmp(filesys, L"FAT32"))
-			{
-				//int ret1 = 1;
-				//char* TempStr = new char[DATASTRINGMESSAGELEN];
-				//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				//char* m_DataStr = new char[1000];
-				//sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null,null,null|0|1\n");
-				//strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				//vector<DeleteFATFileInfo> FATDeleteFile;
-				//DWORD LastCluster = 0;
-				//unsigned int Count = 1;
-				//unsigned int ProgressCount = 1;
-				//clock_t start;
-				//start = clock();
-				//bool ret = pfat->initFDT(this, info->MAC, info->IP, TempStr, ProgressCount, Count, LastCluster, &FATDeleteFile, start);
-				//if (ret)
-				//{
-				//	if (!FATDeleteFile.empty())
-				//	{
-				//		vector<DeleteFATFileInfo>::iterator it;
-				//		for (it = FATDeleteFile.begin(); it != FATDeleteFile.end(); it++)
-				//		{
-				//			LastCluster++;
-				//			if (LastCluster == 5)
-				//				LastCluster++;
-				//			wchar_t* wstr = new wchar_t[1024];
-				//			DWORD FirstClister = (*it).FirstDataCluster + 5;
-				//			if ((*it).isDirectory == 0)
-				//			{
-				//				TCHAR* m_MD5Str = new TCHAR[50];
-				//				memset(m_MD5Str, '\0', 50);
-				//				TCHAR* Signaturestr = new TCHAR[20];
-				//				memset(Signaturestr, '\0', 20);
-				//				//DWORD FirstCluster = newEntry->GetTheFirstDataCluster()+5;
-				//				if (pfat->FileHashAndSignature((*it).FirstDataCluster, (*it).FileSize, (*it).FileName, m_MD5Str, Signaturestr))
-				//				{
-				//					swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,%lu|%lu|1\n",
-				//						LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-				//						, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-				//						(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-				//						(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, m_MD5Str, Signaturestr, FirstClister, (*it).FileSize);
-				//				}
-				//				else
-				//				{
-				//					swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
-				//						LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-				//						, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-				//						(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-				//						(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
-				//				}
-				//				delete[] Signaturestr;
-				//				delete[] m_MD5Str;
-				//			}
-				//			else
-				//			{
-				//				swprintf_s(wstr, 1024, L"%lu|%s|%lu|1|%d|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,%lu|%lu|1\n",
-				//					LastCluster, (*it).FileName, (*it).ParentFirstDataCluster, (*it).isDirectory
-				//					, (*it).CT.wYear, (*it).CT.wMonth, (*it).CT.wDay, (*it).CT.wHour, (*it).CT.wMinute, (*it).CT.wSecond,
-				//					(*it).WT.wYear, (*it).WT.wMonth, (*it).WT.wDay, (*it).WT.wHour, (*it).WT.wMinute, (*it).WT.wSecond,
-				//					(*it).AT.wYear, (*it).AT.wMonth, (*it).AT.wDay, (*it).AT.wHour, (*it).AT.wMinute, (*it).AT.wSecond, FirstClister, (*it).FileSize);
-				//			}
-				//			char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
-				//			strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				//			ProgressCount++;
-				//			Count++;
-				//			clock_t endTime = clock();
-				//			if ((endTime - start) > 300000)
-				//			{
-				//				char* ProgressStr = new char[10];
-				//				sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-				//				strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//				ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-				//				if (ret1 <= 0)
-				//				{
-				//					delete[] ProgressStr;
-				//					delete[] m_DataStr;
-				//					delete[] wstr;
-				//					break;
-				//				}
-				//				start = clock();
-				//				Count = 0;
-				//				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				//				delete[] ProgressStr;
-				//			}
-				//			else
-				//			{
-				//				if ((Count % 60) == 0 && Count >= 60)
-				//				{
-				//					char* ProgressStr = new char[10];
-				//					sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-				//					strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//					ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-				//					if (ret1 <= 0)
-				//					{
-				//						delete[] ProgressStr;
-				//						delete[] m_DataStr;
-				//						delete[] wstr;
-				//						break;
-				//					}
-				//					start = clock();
-				//					Count = 0;
-				//					memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				//					delete[] ProgressStr;
-				//				}
-				//			}
-				//			delete[] m_DataStr;
-				//			delete[] wstr;
-				//		}
-				//	}
-				//	if (ret1 > 0)
-				//	{
-				//		if (TempStr[0] != '\0')
-				//		{
-				//			char* ProgressStr = new char[10];
-				//			sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-				//			strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//			ret1 = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr, info->tcpSocket);
-				//			delete[] ProgressStr;
-				//		}
-				//	}
-				//	if (ret1 > 0)
-				//		int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
-				//}
-				//else
-				//	ret = socketsend->SendMessageToServer(functionName_GiveExplorerError, ErrorLoadingFATTable);
-				//FATDeleteFile.clear();
-				//delete[] m_DataStr;
-				//delete[] TempStr;
-			}
-			else
-			{
-				//char* TempStr = new char[DATASTRINGMESSAGELEN];
-				//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				//char* m_DataStr = new char[1000];
-				//sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
-				//strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				////wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
-				//unsigned int ProgressCount = 1;
-				//unsigned int Index = 5;
-				//unsigned int Count = 1;
-				//int ret = 1;
-				//SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
-				//if (TempStr[0] != '\0')
-				//{
-				//	char* ProgressStr = new char[10];
-				//	sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-				//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
-				//	delete[] ProgressStr;
-				//}
-				////if(Client_Socket->IsOpened())
-				//if (ret > 0)
-				//	int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
-				//delete[] m_DataStr;
-				//delete[] TempStr;
-			}
-		}
-		else
-		{
-			char* msg = new char[22];
-			strcpy_s(msg, 22, "ErrorNotFormat");
-			ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
-			delete[] msg;
-
-		}
-	}
-	else
-	{
-		char* msg = new char[22];
-		strcpy_s(msg, 22, "ErrorNoDrive");
-		ret = SendDataPacketToServer("GiveExplorerError", msg, info->tcpSocket);
-		delete[] msg;
-	}
-
-	delete[] filesys;
-	delete[] volname;
-	delete[] drive;
-	delete m_Info;
-
-	//delete[] wMgs;
-	//closesocket(*tcpSocket);
-	return ret;
-
-}
-int Task::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem) {
-	
-	CNTFSVolume* m_curSelectedVol = new CNTFSVolume(vol_name);
-	if (m_curSelectedVol == NULL) {
-		log.logger("Error", "Error when getVolumeByName");
-		delete m_curSelectedVol;
-		return 1;
-	}
-
-	if (!m_curSelectedVol->IsVolumeOK()) {
-		log.logger("Error", "Not a valid NTFS volume or NTFS version < 3.0");
-		delete m_curSelectedVol;
-		return 1;
-	}
-
-	unsigned int m_progressIdx;
-	unsigned int m_Count = 0;
-	char* TempStr = new char[DATASTRINGMESSAGELEN];
-	memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-
-	// Give Drive Info to Server
-	char* RecordCount = new char[DATASTRINGMESSAGELEN];
-	sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%s|%s", Drive, FileSystem);
-	int ret = SendDataPacketToServer("Explorer", RecordCount, tcpSocket);
-
-	TCHAR* Explorer_txt = new TCHAR[MAX_PATH_EX];
-	GetMyPath(Explorer_txt);
-	_tcscat_s(Explorer_txt, MAX_PATH_EX, _T("\\Explorer.txt"));
-	DeleteFile(Explorer_txt);
-	TCHAR* Explorer_zip = new TCHAR[MAX_PATH_EX];
-	GetMyPath(Explorer_zip);
-	_tcscat_s(Explorer_zip, MAX_PATH_EX, _T("\\Explorer.zip"));
-	DeleteFile(Explorer_zip);
-
-
-	std::wofstream outFile(Explorer_txt, std::ios::app);
-	if (!outFile.is_open()) {
-		log.logger("Error", "Explorer.txt open failed");
-	}
-
-	// collect Explorer
-	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++) {
-		if (m_progressIdx % 10000 == 0) {
-			printf("%d\n", m_progressIdx);
-			char* Progress = new char[DATASTRINGMESSAGELEN];
-			sprintf_s(Progress, DATASTRINGMESSAGELEN, "%u/%d", m_progressIdx, m_curSelectedVol->GetRecordsCount());
-			SendDataPacketToServer("GiveExplorerProgress", Progress, tcpSocket);
-			delete[] Progress;
-		}
-
-		CFileRecord* fr = new CFileRecord(m_curSelectedVol);
-		if (fr == NULL) {
-			printf("CFileRecord is null\n");
-			continue;	// skip to next
-		}
-
-		// Only parse Standard Information and File Name attributes
-		fr->SetAttrMask(MASK_FILE_NAME | MASK_DATA);	// StdInfo will always be parsed
-		if (!fr->ParseFileRecord(m_progressIdx))
-		{
-			delete fr;
-			continue;	// skip to next
-		}
-
-		if (!fr->ParseFileAttrs())
-		{
-			delete fr;
-			continue;	// skip to next
-		}
-
-		TCHAR fn[MAX_PATH];
-		if (fr->GetFileName(fn, MAX_PATH) <= 0)
-		{
-			delete fr;
-			continue;	// skip to next
-		}
-
-		ULONGLONG datalen = 0;
-
-		if (!fr->IsDirectory())
-		{
-			const CAttrBase* data = fr->FindStream();
-			if (data)
-			{
-				datalen = data->GetDataSize();
-				if (fr->IsCompressed() && datalen == 0)
-					datalen = fr->GetFileSize();
-			}
-			else
-			{
-				if (fr->IsCompressed() && datalen == 0)
-					datalen = fr->GetFileSize();
-			}
-		}
-		ULONGLONG ParentId = 0;
-		ParentId = fr->GetParentRef();
-		if (ParentId == 0)
-			ParentId = 5;
-		else
-			ParentId = ParentId & 0x0000FFFFFFFFFFFF;
-
-		FILETIME	FileCreateTime;		// File creation time
-		FILETIME	FileWriteTime;		// File altered time
-		FILETIME	FileAccessTime;		// File read time
-		FILETIME	EntryModifiedTime;
-		fr->GetFileCreateTime(&FileCreateTime);
-		fr->GetFileWriteTime(&FileWriteTime);
-		fr->GetFileAccessTime(&FileAccessTime);
-		fr->GetEntryModifiedTime(&EntryModifiedTime);
-
-		time_t createTimeUnix = tool.FileTimeToUnixTime(FileCreateTime);
-		time_t writeTimeUnix = tool.FileTimeToUnixTime(FileWriteTime);
-		time_t accessTimeUnix = tool.FileTimeToUnixTime(FileAccessTime);
-		time_t modifiedTimeUnix = tool.FileTimeToUnixTime(EntryModifiedTime);
-
-		wchar_t CreateTimeWstr[50];
-		wchar_t WriteTimeWstr[50];
-		wchar_t AccessTimeWstr[50];
-		wchar_t EntryModifiedTimeWstr[50];
-		swprintf_s(CreateTimeWstr, 50, L"%lld", static_cast<long long>(createTimeUnix));
-		swprintf_s(WriteTimeWstr, 50, L"%lld", static_cast<long long>(writeTimeUnix));
-		swprintf_s(AccessTimeWstr, 50, L"%lld", static_cast<long long>(accessTimeUnix));
-		if (EntryModifiedTime.dwLowDateTime != 0) swprintf_s(EntryModifiedTimeWstr, 50, L"%lld", static_cast<long long>(modifiedTimeUnix));
-		else swprintf_s(EntryModifiedTimeWstr, 50, L"1");
-
-		wchar_t* wstr = new wchar_t[1024];
-		swprintf_s(wstr, 1024, L"%s|%d|%d|%s|%s|%s|%s|%llu|%u|%llu\n", fn, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen, m_progressIdx, ParentId);
-		
-		// write to Explorer.txt
-		char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
-		strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-		delete[] wstr;
-		if ((m_Count % 60) == 0 && m_Count >= 60) {
-			if (outFile.good()) outFile << TempStr;
-			else {
-				log.logger("Error", "write to explorer txt failed");
-			}
-			memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-		}
-
-		m_Count++;
-		delete fr;
-	}
-	outFile.close();
-	
-	// Compress Explorer.txt
-	if (tool.CompressFileToZip(Explorer_zip, Explorer_txt)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
-	else log.logger("Error", "failed to add file to Zip");
-
-	// Get Explorer.txt Size
-	std::ifstream file(Explorer_zip, std::ios::binary);
-	if (!file.is_open()) {
-		std::cout << "Failed to open file." << std::endl;
-		log.logger("Error", "failed to open zip file");
-		return 0;
-	}
-	file.seekg(0, std::ios::end);
-	std::streampos fileSize = file.tellg();
-	file.close();
-	long long fileSizeLL = static_cast<long long>(fileSize);
-
-	// send GiveExplorerInfo
-	char* FileSize = new char[DATASTRINGMESSAGELEN];
-	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
-	SendDataPacketToServer("GiveExplorerInfo", FileSize, tcpSocket);
-	delete[] FileSize;
-	
-	// send zip file
-	SendFileToServer("Explorer", Explorer_zip, tcpSocket);
-
-	DeleteFile(Explorer_txt);
-	DeleteFile(Explorer_zip);
-
-
-	delete[] TempStr;
-	delete m_curSelectedVol;
-
-	return 0;
-}
-
-
-// collect 
 int Task::GetCollectInfo(StrPacket* udata) { 
 	wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
 	GetMyPath(m_Path);
@@ -1723,328 +887,6 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	
 	return 1; 
 }
-int Task::CollectionComputerInfo()
-{
-	Collect* collect = new Collect;
-	wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
-	GetMyPath(m_FullDbPath);
-	_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-	DeleteFile(m_FullDbPath);
-
-	if (_waccess(m_FullDbPath, 00)) {
-		CreateProcessForCollection(m_FullDbPath, info->tcpSocket);
-		wchar_t* ConfigPath = new wchar_t[MAX_PATH_EX];
-		GetMyPath(ConfigPath);
-		_tcscat_s(ConfigPath, MAX_PATH_EX, _T("\\predefine.config"));
-		map<string, vector<PredefineObj>> mapPredefine;
-		if (LoadPredefineConfig(ConfigPath, &mapPredefine))
-		{
-			char* InfoStr = new char[MAX_PATH_EX];
-			InsertFromToInCombination(m_FullDbPath, &mapPredefine, info->tcpSocket);
-		}
-
-		if (!_waccess(m_FullDbPath, 00))
-		{
-			TCHAR* collectcomputerinfo_db = new TCHAR[MAX_PATH_EX];
-			GetMyPath(collectcomputerinfo_db);
-			_tcscat_s(collectcomputerinfo_db, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-
-			TCHAR* Collect_zip = new TCHAR[MAX_PATH_EX];
-			GetMyPath(Collect_zip);
-			_tcscat_s(Collect_zip, MAX_PATH_EX, _T("\\Collect.zip"));
-
-			if (tool.CompressFileToZip(Collect_zip, collectcomputerinfo_db)) _tprintf(_T("File compressed and added to ZIP successfully.\n"));
-			else _tprintf(_T("Failed to compress and add file to ZIP.\n"));
-
-			SendFileToServer("Collect", Collect_zip, info->tcpSocket);
-			DeleteFile(m_FullDbPath);
-			DeleteFile(Collect_zip);
-		}
-		else {
-			printf("m_FullDbPath failed\n");
-		}
-		delete[] ConfigPath;
-	}
-	delete[] m_FullDbPath;
-	return 1;
-}
-bool Task::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
-{
-	bool bResult = false;
-	if (!_waccess(ConfigPath, 00))
-	{
-		fstream fin;
-		fin.open(ConfigPath, ios::in);
-		{
-			char* linestr = new char[STRPACKETSIZE];
-			string DefineName, TableName, OutStr;
-			while (fin.getline(linestr, STRPACKETSIZE, '\n'))
-			{
-				DefineName.clear();
-				vector<PredefineObj> tmpVec;
-				ParsePredefineConfig(linestr, &DefineName, &tmpVec);
-				if (!DefineName.empty() && tmpVec.size() > 0)
-				{
-					mapPredefine->insert(pair<string, vector<PredefineObj>>(DefineName, tmpVec));
-				}
-			}
-		}
-		fin.close();
-		if (mapPredefine->size() > 0)
-		{
-			bResult = true;
-		}
-	}
-	else {
-		log.logger("Error", "LoadPredefineConfig failed");
-	}
-	return bResult;
-}
-void Task::ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp)
-{
-	char* psc;
-	char* next_token = NULL;
-	bool bFirst = true;
-	psc = strtok_s(str, ";", &next_token);
-
-	while (psc != NULL)
-	{
-		if (bFirst == true)
-		{
-			*defineName = psc;
-			bFirst = false;
-		}
-		else
-		{
-			char* subStr;
-			char* next_token_subStr = NULL;
-			subStr = strtok_s(psc, "|", &next_token_subStr);
-			char* next_token_client = NULL;
-			subStr = strtok_s(subStr, ",", &next_token_client);
-			vector<string> vecClients;
-			while (subStr != NULL)
-			{
-				string client = subStr;
-				vecClients.push_back(client);
-				subStr = strtok_s(NULL, ",", &next_token_client);
-			}
-
-			subStr = strtok_s(psc, "|", &next_token_subStr);
-			string TableName = subStr;
-			subStr = strtok_s(NULL, "|", &next_token_subStr);
-			string FilterStr = subStr;
-			PredefineObj tmpObj;
-			//TableName.erase(std::remove_if(TableName.begin(), TableName.end(), isspace), TableName.end());
-			TableName.erase(std::remove_if(TableName.begin(), TableName.end(), [](char c) {
-				return std::isspace(static_cast<unsigned char>(c));
-				}), TableName.end());
-
-			tmpObj.TableName = TableName;
-			tmpObj.vecFilterCondition = FilterStr;
-			if (!tmpObj.TableName.empty() && !tmpObj.vecFilterCondition.empty())
-			{
-				Vmp->push_back(tmpObj);
-			}
-		}
-		psc = strtok_s(NULL, ";", &next_token);
-	}
-}
-bool Task::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket)
-{
-	Collect* collect = new Collect;
-
-	bool bResult = false;
-	sqlite3* m_db;
-	string query;
-	if (!sqlite3_open16(DBName, &m_db))
-	{
-		for (auto& Predefine : *mapPredefine)
-		{
-			query.clear();
-			query = "CREATE TABLE ";
-			query += Predefine.first;
-			query += " (id INTEGER PRIMARY KEY AUTOINCREMENT, mac TEXT, ip TEXT, \
-													table_id INTEGER, item TEXT, date TEXT, type TEXT, etc TEXT)";
-			// 可能已存在，所以不判斷建成功失敗 或者進去調整function
-			collect->WriteSQLiteDB(m_db, (char*)query.c_str());
-			for (auto& TableFilter : Predefine.second)
-			{
-				query.clear();
-				if (GetQueryByTable(&query, TableFilter.TableName, TableFilter.vecFilterCondition))
-				{
-					vector<CombineObj> vecCombineObj;
-					collect->GetDataByQuery(query, m_db, &vecCombineObj);
-					int id = 0;
-					query.clear();
-					query = "SELECT MAX(id) FROM";
-					query += Predefine.first;
-
-					sqlite3_stmt* statement;
-					if (sqlite3_prepare(m_db, query.c_str(), -1, &statement, 0) == SQLITE_OK)
-					{
-						int res = 0;
-						if (res != SQLITE_DONE && res != SQLITE_ERROR)
-						{
-							res = sqlite3_step(statement);
-							if (res == SQLITE_ROW)
-							{
-								id = sqlite3_column_int(statement, 0);
-							}
-						}
-					}
-					sqlite3_finalize(statement);
-					collect->WriteDataSetToDB(m_db, vecCombineObj, Predefine.first, info->MAC, info->IP, TableFilter.TableName, id);
-				}
-			}
-		}
-
-		char* InfoStr = new char[MAX_PATH_EX];
-		//BYTE* TmpBuffer = new BYTE[DATASTRINGMESSAGELEN];
-		char* TmpBuffer = new char[STRINGMESSAGELEN];
-		memset(InfoStr, '\0', MAX_PATH_EX);
-		sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", 35, 35);
-		memset(TmpBuffer, '\x0', STRINGMESSAGELEN);
-		memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-
-		int Sendret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, tcpSocket);
-	}
-	sqlite3_close(m_db);
-	return bResult;
-}
-bool Task::GetQueryByTable(string* query, string TableName, string QueryFilter)
-{
-	bool bResult = true;
-	*query += "SELECT ";
-	if (TableName == "ARPCache") { *query += "id, internetaddress, physicaladdress "; }
-	else if (TableName == "BaseService") { *query += "id, name, pathname FROM "; }
-	else if (TableName == "ChromeDownload") { *query += "id, download_url, start_time, target_path "; }
-	else if (TableName == "ChromeHistory") { *query += "id, url, last_visit_time, title FROM "; }
-	else if (TableName == "ChromeKeywordSearch") { *query += "id, term, title FROM "; }
-	else if (TableName == "ChromeLogin") { *query += "id, origin_url, date_created, username_value "; }
-	else if (TableName == "EventApplication") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-	else if (TableName == "EventSecurity") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-	else if (TableName == "EventSystem") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-	else if (TableName == "FirefoxHistory") { *query += "id, url, last_visit_time, title "; }
-	else if (TableName == "FirefoxLogin") { *query += "id, hostname, timelastused, username "; }
-	else if (TableName == "IECache") { *query += "id, sourceurlname, lastaccesstime, localfilename "; }
-	else if (TableName == "IEHistory") { *query += "id, url, visitedtime, title "; }
-	else if (TableName == "InstalledSoftware") { *query += "id, displayname, registrytime, publisher "; }
-	else if (TableName == "MUICache") { *query += "id, applicationpath, applicationname "; }
-	else if (TableName == "Network") { *query += "id, processname, remoteaddress "; }
-	else if (TableName == "NetworkResources") { *query += "id, resourcesname, ipaddress "; }
-	else if (TableName == "OpenedFiles") { *query += "id, processname, processid "; }
-	else if (TableName == "Prefetch") { *query += "id, processname, lastruntime, processpath "; }
-	else if (TableName == "Process") { *query += "id, process_name, processcreatetime, process_path "; }
-	else if (TableName == "RecentFile") { *query += "id, name, accesstime, fullpath "; }
-	else if (TableName == "Service") { *query += "id, name, pathname "; }
-	else if (TableName == "ShellBags") { *query += "id, path, lastmodifiedtime, slotpath "; }
-	else if (TableName == "Shortcuts") { *query += "id, shortcutname, modifytime, linkto "; }
-	else if (TableName == "StartRun") { *query += "id, name, command "; }
-	else if (TableName == "SystemInfo") { *query += "id, hotfix, os "; }
-	else if (TableName == "TaskSchedule") { *query += "id, name, lastruntime, path "; }
-	else if (TableName == "USBdevices") { *query += "id, device_description, last_arrival_date, device_letter "; }
-	else if (TableName == "UserAssist") { *query += "id, name, modifiedtime, of_times_executed "; }
-	else if (TableName == "UserProfiles") { *query += "id, username, lastlogontime, usersid "; }
-	else if (TableName == "Wireless") { *query += "id, profilename, lastmodifiedtime, authentication "; }
-	else if (TableName == "JumpList") { *query += "id, fullpath, recordtime, application_id "; }
-	else if (TableName == "WindowsActivity") { *query += "id, app_id, last_modified_on_client, activity_type "; }
-	else if (TableName == "NetworkDataUsageMonitor") { *query += "id, app_name, timestamp, bytes_sent "; }
-	else if (TableName == "AppResourceUsageMonitor") { *query += "id, app_name, timestamp, backgroundbyteswritten "; }
-	else { bResult = false; }
-
-	if (bResult == true)
-	{
-		*query += "FROM ";
-		*query += TableName;
-		if (!QueryFilter.empty())
-		{
-			*query += " WHERE ";
-			*query += QueryFilter;
-		}
-	}
-
-	return bResult;
-}
-void Task::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
-{
-	Collect* collect = new Collect;
-
-	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-	TCHAR* RunComStr = new TCHAR[512];
-	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
-
-	int Sendret;
-	char* InfoStr = new char[MAX_PATH_EX];
-	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-
-	int iLen = sizeof(collect->CollectionNums) / sizeof(collect->CollectionNums[0]);
-	for (int i = 0; i < iLen; i++) {
-
-		DWORD m_CollectInfoProcessPid = 0;
-		TCHAR* RunExeStr = new TCHAR[MAX_PATH];
-		TCHAR* RunComStr = new TCHAR[512];
-		GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
-
-		wstring filename = tool.GetFileName();
-		TCHAR MyName[MAX_PATH];
-		wcscpy_s(MyName, filename.c_str());
-
-		TCHAR ServerIP[MAX_PATH];
-		swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
-
-		swprintf_s(RunComStr, 512, L"\"%s\" %s %d CollectInfo %d %d", MyName, ServerIP, info->Port, i, iLen);
-		wprintf(L"Run Process: %ls\n", RunComStr);
-		RunProcessEx(RunExeStr, RunComStr, 1024, TRUE, FALSE, m_CollectInfoProcessPid); // wait for the previous one finish
-
-		info->processMap["CollectInfo"] = m_CollectInfoProcessPid;
-		log.logger("Debug", "CollectInfo enabled");
-
-	}
-	//delete[] InfoStr;
-	delete[] RunComStr;
-	delete[] RunExeStr;
-}
-void Task::CollectData(int i, int iLen) {
-	Collect* collect = new Collect;
-	char* InfoStr = new char[MAX_PATH_EX];
-	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
-	GetMyPath(m_FilePath);
-	_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
-	HMODULE m_lib = LoadLibrary(m_FilePath);
-	if (m_lib) {
-		printf("load dll success : %d\n", i);
-		TCHAR buffer[20]; // Adjust the buffer size as needed
-		_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), collect->CollectionNums[i]);
-		TCHAR* tcharString = buffer;
-
-		try {
-			wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
-			GetMyPath(m_FullDbPath);
-			_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-			collect->CollectionProcess(m_lib, m_FullDbPath, tcharString);
-		}
-		catch (...) {
-			log.logger("Error", "collect failed");
-		}
-
-		FreeLibrary(m_lib);
-	}
-	else {
-		printf("load dll failed\n");
-		log.logger("Error", "collection load dll failed\n");
-	}
-
-	memset(InfoStr, '\0', MAX_PATH_EX);
-	sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
-	memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-	memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-
-	int ret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, info->tcpSocket);
-
-}
-
-
 int Task::GetImage(StrPacket* udata) {
 
 	DWORD m_ImageProcessPid = 0;
@@ -2069,251 +911,253 @@ int Task::GetImage(StrPacket* udata) {
 
 }
 
-std::string Task::ToUpper(const std::string& str) {
-	std::string result = str;
-	std::transform(result.begin(), result.end(), result.begin(),
-		[](unsigned char c) { return std::toupper(c); });
-	return result;
-}
-
-void Task::SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz) {
-
-	if (directory.string().find('*') != std::string::npos) {
-
-		while (start != finish && start->string().find('*') == std::string::npos) {
-			root /= *start++;
-			std::cout << root << std::endl;
-		}
-
-		if (!fs::is_directory(root)) {
-			std::string Msg = directory.string() + "is not a directory";
-			log.logger("Error", Msg);
-			return;
-		}
-
-		try {
-
-			for (const auto& entry : fs::directory_iterator(root)) {
-
-				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
-					std::string Msg = "Found file: " + entry.path().string();
-					log.logger("Debug", Msg);
-
-					try {
-						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
-						GetMyPath(targetPath);
-						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
-						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
-
-						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
-						GetMyPath(imageFile);
-						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
-						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
-
-						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
-							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
-							char* buffer = new char[bufferSize];
-							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
-							std::string result(buffer);
-
-							string LogMsg = "failed to add " + result + " to zip";
-							log.logger("Error", LogMsg);
-							continue;
-						}
-						else {
-							string LogMsg = "add " + entry.path().filename().string() + " to zip";
-							log.logger("Info", LogMsg);
-						}
-						DeleteFile(imageFile);
-					}
-					catch (const fs::filesystem_error& ex) {
-						std::string errorMessage = ex.what();
-						Msg = "Error during copy: " + errorMessage;
-						log.logger("Error", Msg);
-					}
-
-				}
-				else if (fs::is_directory(entry.path())) {
-					start++;
-					SearchForFile(entry.path(), directory, start, finish, targetFile, hz);
-					start--;
-				}
-			}
-
-		}
-		catch (...) {
-			return;
-		}
-	}
-	else {
-
-		try {
-			for (const auto& entry : fs::directory_iterator(directory)) {
-				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
-					std::string Msg = "Found file: " + entry.path().string();
-					log.logger("Debug", Msg);
-					try {
-						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
-						GetMyPath(targetPath);
-						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
-						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
-
-						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
-						GetMyPath(imageFile);
-						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
-						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
-
-						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
-							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
-							char* buffer = new char[bufferSize];
-							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
-							std::string result(buffer);
-
-							string LogMsg = "failed to add " + result + " to zip";
-							log.logger("Error", LogMsg);
-							continue;
-						}
-						else {
-							string LogMsg = "add " + entry.path().filename().string() + " to zip";
-							log.logger("Info", LogMsg);
-						}
-						DeleteFile(imageFile);
-					}
-					catch (const fs::filesystem_error& ex) {
-						std::string errorMessage = ex.what();
-						Msg = "Error during copy: " + errorMessage;
-						log.logger("Error", Msg);
-					}
-
-				}
-				else if (fs::is_directory(entry.path())) {
-					SearchForFile(entry.path(), entry.path(), start, finish, targetFile, hz);
-				}
-			}
-		}
-		catch (...) {
-			return;
-		}
-	}
-}
-
-int Task::LookingForImage(char* cmd) {
-
-	string Msg = cmd;
-	string LogMsg = "cmd: " + Msg;
-	log.logger("Debug", LogMsg);
-
-	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
-	GetMyPath(zipFileName);
-	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
-	HZIP hz = CreateZip(zipFileName, 0);
-	if (hz == 0) {
-		log.logger("Error", "Failed to create image.zip");
-		return false; // Failed to create ZIP file
-	}
-
-	std::vector<ImageType>image;
-	std::vector<std::string> MsgAfterSplit;
-	char* nextToken = nullptr;
-	const char* delimiter = ",";
-	char* token = strtok_s(cmd, delimiter, &nextToken);
-	while (token != nullptr) {
-		MsgAfterSplit.push_back(token);
-		token = strtok_s(nullptr, delimiter, &nextToken);
-	}
-
-	// find root drive
-	//WCHAR driveStrings[255];
-	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
-	//WCHAR* currentDrive;
-	//std::string narrowString_currentDrive; // here
-	//if (driveStringsLength > 0 && driveStringsLength < 255) {
-	//	currentDrive = driveStrings;
-	//	while (*currentDrive) {
-	//		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
-	//		narrowString_currentDrive.resize(requiredSize);
-
-	//		if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
-	//			//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
-	//		}
-
-	//		currentDrive += wcslen(currentDrive) + 1;
-	//		break;
-	//	}
-	//}
-
-	for (int i = 0; i < MsgAfterSplit.size(); i++) {
-		std::vector<std::string> FileInfo;
-		nextToken = nullptr;
-		delimiter = "|";
-
-		char* charArray = new char[MsgAfterSplit[i].size() + 1];
-		strcpy_s(charArray, MsgAfterSplit[i].size() + 1, MsgAfterSplit[i].c_str());
-
-		token = strtok_s(charArray, delimiter, &nextToken);
-		while (token != nullptr) {
-			FileInfo.push_back(token);
-			if (nextToken != nullptr && *nextToken == '|') {
-				FileInfo.push_back(""); // Generate an empty string
-			}
-			token = strtok_s(nullptr, delimiter, &nextToken);
-		}
-		delete[] charArray;
-
-		size_t pos = FileInfo[0].find("root");
-		while (pos != std::string::npos) {
-			FileInfo[0].replace(pos, 4, "C");
-			pos = FileInfo[0].find("root", pos + 1);
-		}
-
-		char* searchPath = new char[4];
-		std::string APPDATAPATH;
-
-		if (!FileInfo[1].empty()) {
-			size_t len;
-			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(FileInfo[1].c_str()));
-
-			if (err != 0) {
-				log.logger("Error", "Error getting environment variable");
-				continue;
-			}
-
-			if (searchPath == NULL) {
-				log.logger("Error", "environment variable is not set.");
-				continue;
-			}
-
-			APPDATAPATH = searchPath;
-
-			//printf("search path: %s\n", searchPath);
-			if (FileInfo[0].substr(0, 1) != "\\") APPDATAPATH += "\\";
-
-		}
-
-
-		APPDATAPATH += FileInfo[0];
-		FileInfo[0] = APPDATAPATH;
-
-
-		//printf("%s %s %s\n", FileInfo[0].c_str(), FileInfo[1].c_str(), FileInfo[2].c_str());
-		string Msg = FileInfo[0] + " " + FileInfo[1] + " " + FileInfo[2];
-		log.logger("Debug", Msg);
-
-		fs::path filePath = FileInfo[0];
-		const auto relative_parent = filePath.parent_path().relative_path();
-		std::filesystem::path root = filePath.root_path();
-		std::filesystem::path::const_iterator start = begin(relative_parent);
-		std::filesystem::path::const_iterator finish = end(relative_parent);
-
-		SearchForFile(root, filePath, start, finish, FileInfo[2], &hz);
-
-	}
-
-	CloseZip(hz);
-	SendFileToServer("Image", zipFileName, info->tcpSocket);
-	return 1;
-	
-}
+//std::string Task::ToUpper(const std::string& str) {
+//	std::string result = str;
+//	std::transform(result.begin(), result.end(), result.begin(),
+//		[](unsigned char c) { return std::toupper(c); });
+//	return result;
+//}
+//void Task::SearchForFile(std::filesystem::path root, std::filesystem::path directory, std::filesystem::path::const_iterator start, std::filesystem::path::const_iterator finish, const std::string& targetFile, HZIP* hz) {
+//
+//	if (directory.string().find('*') != std::string::npos) {
+//
+//		while (start != finish && start->string().find('*') == std::string::npos) {
+//			root /= *start++;
+//			std::cout << root << std::endl;
+//		}
+//
+//		if (!fs::is_directory(root)) {
+//			std::string Msg = directory.string() + "is not a directory";
+//			log.logger("Error", Msg);
+//			return;
+//		}
+//
+//		try {
+//
+//			for (const auto& entry : fs::directory_iterator(root)) {
+//
+//				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
+//					std::string Msg = "Found file: " + entry.path().string();
+//					log.logger("Debug", Msg);
+//
+//					try {
+//						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
+//						GetMyPath(targetPath);
+//						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
+//						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
+//
+//						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
+//						GetMyPath(imageFile);
+//						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
+//						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
+//
+//						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
+//							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
+//							char* buffer = new char[bufferSize];
+//							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
+//							std::string result(buffer);
+//
+//							string LogMsg = "failed to add " + result + " to zip";
+//							log.logger("Error", LogMsg);
+//							continue;
+//						}
+//						else {
+//							string LogMsg = "add " + entry.path().filename().string() + " to zip";
+//							log.logger("Info", LogMsg);
+//						}
+//						DeleteFile(imageFile);
+//					}
+//					catch (const fs::filesystem_error& ex) {
+//						std::string errorMessage = ex.what();
+//						Msg = "Error during copy: " + errorMessage;
+//						log.logger("Error", Msg);
+//					}
+//
+//				}
+//				else if (fs::is_directory(entry.path())) {
+//					start++;
+//					SearchForFile(entry.path(), directory, start, finish, targetFile, hz);
+//					start--;
+//				}
+//			}
+//
+//		}
+//		catch (...) {
+//			return;
+//		}
+//	}
+//	else {
+//
+//		try {
+//			for (const auto& entry : fs::directory_iterator(directory)) {
+//				if (ToUpper(entry.path().filename().string()).find(ToUpper(targetFile)) != std::string::npos) {
+//					std::string Msg = "Found file: " + entry.path().string();
+//					log.logger("Debug", Msg);
+//					try {
+//						TCHAR* targetPath = new TCHAR[MAX_PATH_EX];
+//						GetMyPath(targetPath);
+//						fs::copy(entry.path(), targetPath, fs::copy_options::recursive);
+//						_tcscat_s(targetPath, MAX_PATH_EX, _T("\\image.zip"));
+//
+//						TCHAR* imageFile = new TCHAR[MAX_PATH_EX];
+//						GetMyPath(imageFile);
+//						_tcscat_s(imageFile, MAX_PATH_EX, _T("\\"));
+//						_tcscat_s(imageFile, MAX_PATH_EX, entry.path().filename().c_str());
+//
+//						if (ZipAdd(*hz, entry.path().filename().c_str(), imageFile) != 0) {
+//							int bufferSize = WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, nullptr, 0, nullptr, nullptr);
+//							char* buffer = new char[bufferSize];
+//							WideCharToMultiByte(CP_UTF8, 0, imageFile, -1, buffer, bufferSize, nullptr, nullptr);
+//							std::string result(buffer);
+//
+//							string LogMsg = "failed to add " + result + " to zip";
+//							log.logger("Error", LogMsg);
+//							continue;
+//						}
+//						else {
+//							string LogMsg = "add " + entry.path().filename().string() + " to zip";
+//							log.logger("Info", LogMsg);
+//						}
+//						DeleteFile(imageFile);
+//					}
+//					catch (const fs::filesystem_error& ex) {
+//						std::string errorMessage = ex.what();
+//						Msg = "Error during copy: " + errorMessage;
+//						log.logger("Error", Msg);
+//					}
+//
+//				}
+//				else if (fs::is_directory(entry.path())) {
+//					SearchForFile(entry.path(), entry.path(), start, finish, targetFile, hz);
+//				}
+//			}
+//		}
+//		catch (...) {
+//			return;
+//		}
+//	}
+//}
+//int Task::LookingForImage(char* cmd) {
+//
+//	char* null = new char[1];
+//	strcpy_s(null, 1, "");
+//	int ret = SendDataPacketToServer("ReadyImage", null, info->tcpSocket);
+//
+//	string Msg = cmd;
+//	string LogMsg = "cmd: " + Msg;
+//	log.logger("Debug", LogMsg);
+//
+//	TCHAR* zipFileName = new TCHAR[MAX_PATH_EX];
+//	GetMyPath(zipFileName);
+//	_tcscat_s(zipFileName, MAX_PATH_EX, _T("\\image.zip"));
+//	HZIP hz = CreateZip(zipFileName, 0);
+//	if (hz == 0) {
+//		log.logger("Error", "Failed to create image.zip");
+//		return false; // Failed to create ZIP file
+//	}
+//
+//	std::vector<ImageType>image;
+//	std::vector<std::string> MsgAfterSplit;
+//	char* nextToken = nullptr;
+//	const char* delimiter = ",";
+//	char* token = strtok_s(cmd, delimiter, &nextToken);
+//	while (token != nullptr) {
+//		MsgAfterSplit.push_back(token);
+//		token = strtok_s(nullptr, delimiter, &nextToken);
+//	}
+//
+//	// find root drive
+//	//WCHAR driveStrings[255];
+//	//DWORD driveStringsLength = GetLogicalDriveStringsW(255, driveStrings);
+//	//WCHAR* currentDrive;
+//	//std::string narrowString_currentDrive; // here
+//	//if (driveStringsLength > 0 && driveStringsLength < 255) {
+//	//	currentDrive = driveStrings;
+//	//	while (*currentDrive) {
+//	//		int requiredSize = WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, NULL, 0, NULL, NULL);
+//	//		narrowString_currentDrive.resize(requiredSize);
+//
+//	//		if (WideCharToMultiByte(CP_UTF8, 0, currentDrive, -1, &narrowString_currentDrive[0], requiredSize, NULL, NULL)) {
+//	//			//std::cout << "currentDrive: " << narrowString_currentDrive << std::endl;
+//	//		}
+//
+//	//		currentDrive += wcslen(currentDrive) + 1;
+//	//		break;
+//	//	}
+//	//}
+//
+//	for (int i = 0; i < MsgAfterSplit.size(); i++) {
+//		std::vector<std::string> FileInfo;
+//		nextToken = nullptr;
+//		delimiter = "|";
+//
+//		char* charArray = new char[MsgAfterSplit[i].size() + 1];
+//		strcpy_s(charArray, MsgAfterSplit[i].size() + 1, MsgAfterSplit[i].c_str());
+//
+//		token = strtok_s(charArray, delimiter, &nextToken);
+//		while (token != nullptr) {
+//			FileInfo.push_back(token);
+//			if (nextToken != nullptr && *nextToken == '|') {
+//				FileInfo.push_back(""); // Generate an empty string
+//			}
+//			token = strtok_s(nullptr, delimiter, &nextToken);
+//		}
+//		delete[] charArray;
+//
+//		size_t pos = FileInfo[0].find("root");
+//		while (pos != std::string::npos) {
+//			FileInfo[0].replace(pos, 4, "C");
+//			pos = FileInfo[0].find("root", pos + 1);
+//		}
+//
+//		char* searchPath = new char[4];
+//		std::string APPDATAPATH;
+//
+//		if (!FileInfo[1].empty()) {
+//			size_t len;
+//			errno_t err = _dupenv_s(&searchPath, &len, const_cast<char*>(FileInfo[1].c_str()));
+//
+//			if (err != 0) {
+//				log.logger("Error", "Error getting environment variable");
+//				continue;
+//			}
+//
+//			if (searchPath == NULL) {
+//				log.logger("Error", "environment variable is not set.");
+//				continue;
+//			}
+//
+//			APPDATAPATH = searchPath;
+//
+//			//printf("search path: %s\n", searchPath);
+//			if (FileInfo[0].substr(0, 1) != "\\") APPDATAPATH += "\\";
+//
+//		}
+//
+//
+//		APPDATAPATH += FileInfo[0];
+//		FileInfo[0] = APPDATAPATH;
+//
+//
+//		//printf("%s %s %s\n", FileInfo[0].c_str(), FileInfo[1].c_str(), FileInfo[2].c_str());
+//		string Msg = FileInfo[0] + " " + FileInfo[1] + " " + FileInfo[2];
+//		log.logger("Debug", Msg);
+//
+//		fs::path filePath = FileInfo[0];
+//		const auto relative_parent = filePath.parent_path().relative_path();
+//		std::filesystem::path root = filePath.root_path();
+//		std::filesystem::path::const_iterator start = begin(relative_parent);
+//		std::filesystem::path::const_iterator finish = end(relative_parent);
+//
+//		SearchForFile(root, filePath, start, finish, FileInfo[2], &hz);
+//
+//	}
+//
+//	CloseZip(hz);
+//	SendFileToServer("Image", zipFileName, info->tcpSocket);
+//	return 1;
+//	
+//}
 
 int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
