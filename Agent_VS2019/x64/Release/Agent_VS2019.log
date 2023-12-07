@@ -144,12 +144,6 @@ C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(92,42): warning C447
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(92,42): message : 請考慮在格式字串中使用 '%lld'
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(92,42): message : 請考慮在格式字串中使用 '%Id'
 C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(92,42): message : 請考慮在格式字串中使用 '%I64d'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(389,37): warning C4477: 'swprintf_s' : 格式字串 '%s' 需要 'wchar_t *' 類型的引數，但 variadic 引數 1 的類型為 'const char *'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(389,37): message : 請考慮在格式字串中使用 '%hs'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(389,37): message : 請考慮在格式字串中使用 '%Ts'
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(389,37): message : 此警告採用 Visual C++ 使用的非標準語意
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(398,46): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
-C:\james\eDetectorWindowsAgent_VS2019\Agent_VS2019\task.cpp(398,46): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
 agent.obj : warning LNK4075: 忽略 '/EDITANDCONTINUE'，由於 '/OPT:ICF' 規格
   正在產生程式碼
   0 of 1955 functions ( 0.0%) were compiled, the rest were copied from previous compilation.

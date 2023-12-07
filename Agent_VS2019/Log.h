@@ -13,8 +13,13 @@
 #include <tchar.h>
 #include "GlobalFunction.h"
 
-class Log {
+class Log{
 public:
+
+	//Log();
+	//Log(Info* infoInstance, SocketSend* socketSendInstance);
+	//void DoTask() override;
+
 	std::queue<std::string>MsgQueue;
 	std::mutex queueMutex;
 

@@ -14,14 +14,26 @@ void Explorer::DoTask() {
 	size_t convertedChars = 0;
 	mbstowcs_s(&convertedChars, DriveName, sizeof(DriveName) / sizeof(wchar_t), Drive, sizeof(Drive) - 1);
 
-	m_Info->Drive = static_cast<wchar_t>(Drive[0]);
-	mbstowcs_s(&convertedChars, m_Info->DriveInfo, sizeof(m_Info->DriveInfo) / sizeof(wchar_t), FileSystem, sizeof(FileSystem) - 1);
 
-	m_Info->Drive = 'D';
-	_tcscpy_s(m_Info->DriveInfo, _T("exFAT"));
+	log.logger("Debug", FileSystem);
+
+	m_Info->Drive = static_cast<wchar_t>(Drive[0]);
+	//mbstowcs_s(&convertedChars, m_Info->DriveInfo, sizeof(m_Info->DriveInfo) / sizeof(wchar_t), FileSystem, sizeof(FileSystem) - 1);
+	MultiByteToWideChar(CP_ACP, 0, FileSystem, -1, m_Info->DriveInfo, _countof(m_Info->DriveInfo));
+	//_tcscpy(m_Info->DriveInfo, FileSystem);
+	//wcscpy(m_Info->DriveInfo, FileSystem);
+
+	/*m_Info->Drive = 'F';
+	_tcscpy_s(m_Info->DriveInfo, _T("FAT32"));*/
 
 	wchar_t* drive = new wchar_t[5];
 	swprintf_s(drive, 5, L"%c:\\", m_Info->Drive);
+
+	std::wstring wstr = m_Info->DriveInfo;
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	std::string str(bufferSize, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+	log.logger("Debug", str);
 
 	wchar_t* volname = new wchar_t[_MAX_FNAME];
 	wchar_t* filesys = new wchar_t[_MAX_FNAME];
@@ -69,6 +81,10 @@ void Explorer::DoTask() {
 				unsigned int ProgressCount = 1;
 				clock_t start;
 				start = clock();
+
+				char* RecordCount = new char[DATASTRINGMESSAGELEN];
+				sprintf_s(RecordCount, DATASTRINGMESSAGELEN, "%s|%s", Drive, FileSystem);
+				int tmp = SendDataPacketToServer("Explorer", RecordCount, info->tcpSocket);
 
 				TCHAR* Explorer_txt = new TCHAR[MAX_PATH_EX];
 				GetMyPath(Explorer_txt);
@@ -240,29 +256,29 @@ void Explorer::DoTask() {
 			}
 			else
 			{
-				char* TempStr = new char[DATASTRINGMESSAGELEN];
-				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				char* m_DataStr = new char[1000];
-				sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
-				strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				//wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
-				unsigned int ProgressCount = 1;
-				unsigned int Index = 5;
-				unsigned int Count = 1;
-				int ret = 1;
-				SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
-				/*if (TempStr[0] != '\0')
-				{
-					char* ProgressStr = new char[10];
-					sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-					strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-					ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
-					delete[] ProgressStr;
-				}*/
-				//if(Client_Socket->IsOpened())
-				//if (ret > 0) int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
-				delete[] m_DataStr;
-				delete[] TempStr;
+				//char* TempStr = new char[DATASTRINGMESSAGELEN];
+				//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+				//char* m_DataStr = new char[1000];
+				//sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
+				//strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+				////wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
+				//unsigned int ProgressCount = 1;
+				//unsigned int Index = 5;
+				//unsigned int Count = 1;
+				//int ret = 1;
+				//SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
+				///*if (TempStr[0] != '\0')
+				//{
+				//	char* ProgressStr = new char[10];
+				//	sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+				//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+				//	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+				//	delete[] ProgressStr;
+				//}*/
+				////if(Client_Socket->IsOpened())
+				////if (ret > 0) int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				//delete[] m_DataStr;
+				//delete[] TempStr;
 			}
 		}
 		else

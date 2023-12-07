@@ -3,6 +3,76 @@
 
 #include <sstream>
 
+//Log::Log() {
+//
+//}
+//
+//Log::Log(Info* infoInstance, SocketSend* socketSendInstance) {
+//    info = infoInstance;
+//    socketsend = socketSendInstance;
+//}
+
+void Log::LogServer() {
+    TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+    GetMyPath(m_FilePath);
+    _tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\log.txt"));
+    DeleteFile(m_FilePath);
+    //std::remove("log.txt");
+
+    WSADATA wsData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {
+        std::cerr << "Failed to initialize Winsock." << std::endl;
+        return;
+    }
+
+    SOCKET listeningSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (listeningSocket == INVALID_SOCKET) {
+        std::cerr << "Error creating listening socket." << std::endl;
+        WSACleanup();
+        return;
+    }
+
+    sockaddr_in serverAddr;
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(12345);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(listeningSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::cerr << "Error binding socket." << std::endl;
+        closesocket(listeningSocket);
+        WSACleanup();
+        return;
+    }
+
+    if (listen(listeningSocket, SOMAXCONN) == SOCKET_ERROR) {
+        std::cerr << "Error listening on socket." << std::endl;
+        closesocket(listeningSocket);
+        WSACleanup();
+        return;
+    }
+
+    std::thread LogThread([&]() { WriteToLogFile(); });
+    LogThread.detach();
+
+
+    while (true) {
+        sockaddr_in clientAddr;
+        int clientAddrSize = sizeof(clientAddr);
+        SOCKET clientSocket = accept(listeningSocket, (sockaddr*)&clientAddr, &clientAddrSize);
+        if (clientSocket != INVALID_SOCKET) {
+            std::cout << "New client connected." << std::endl;
+            std::thread LogReceiveThread([&]() { HandleLogClientConnection(clientSocket); });
+            LogReceiveThread.detach();
+        }
+        else {
+            std::cerr << "Error accepting client connection." << std::endl;
+        }
+    }
+
+    closesocket(listeningSocket);
+    WSACleanup();
+}
+
 void Log::logger(const std::string& level, const std::string& message) {
     WSADATA wsData;
     if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {
@@ -86,69 +156,6 @@ void Log::WriteToLogFile() {
     }
     
 }
-
-void Log::LogServer() {
-    TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
-    GetMyPath(m_FilePath);
-    _tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\log.txt"));
-    DeleteFile(m_FilePath);
-    //std::remove("log.txt");
-
-    WSADATA wsData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {
-        std::cerr << "Failed to initialize Winsock." << std::endl;
-        return;
-    }
-
-    SOCKET listeningSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (listeningSocket == INVALID_SOCKET) {
-        std::cerr << "Error creating listening socket." << std::endl;
-        WSACleanup();
-        return;
-    }
-
-    sockaddr_in serverAddr;
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(12345);
-    serverAddr.sin_addr.s_addr = INADDR_ANY;
-
-    if (bind(listeningSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-        std::cerr << "Error binding socket." << std::endl;
-        closesocket(listeningSocket);
-        WSACleanup();
-        return;
-    }
-
-    if (listen(listeningSocket, SOMAXCONN) == SOCKET_ERROR) {
-        std::cerr << "Error listening on socket." << std::endl;
-        closesocket(listeningSocket);
-        WSACleanup();
-        return;
-    }
-
-    std::thread LogThread([&]() { WriteToLogFile(); });
-    LogThread.detach();
-
-    
-    while (true) {
-        sockaddr_in clientAddr;
-        int clientAddrSize = sizeof(clientAddr);
-        SOCKET clientSocket = accept(listeningSocket, (sockaddr*)&clientAddr, &clientAddrSize);
-        if (clientSocket != INVALID_SOCKET) {
-            std::cout << "New client connected." << std::endl;
-            std::thread LogReceiveThread([&]() { HandleLogClientConnection(clientSocket); });
-            LogReceiveThread.detach();
-        }
-        else {
-            std::cerr << "Error accepting client connection." << std::endl;
-        }
-    }
-
-    closesocket(listeningSocket);
-    WSACleanup();
-}
-
-
 
 void Log::EnqueueMessage(const std::string& message) {
     std::lock_guard<std::mutex> lock(queueMutex);

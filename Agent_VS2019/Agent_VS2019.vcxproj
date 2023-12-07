@@ -31,6 +31,8 @@
     <ClCompile Include="CollectInfo.cpp" />
     <ClCompile Include="CRootFolder.cpp" />
     <ClCompile Include="CVolumeAccess.cpp" />
+    <ClCompile Include="DetectNetwork.cpp" />
+    <ClCompile Include="DetectProcess.cpp" />
     <ClCompile Include="Explorer.cpp" />
     <ClCompile Include="FAT32General.cpp" />
     <ClCompile Include="GlobalFunction.cpp" />
@@ -47,6 +49,7 @@
     <ClCompile Include="task.cpp" />
     <ClCompile Include="tools.cpp" />
     <ClCompile Include="unzip.cpp" />
+    <ClCompile Include="UpdateAgent.cpp" />
     <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +64,8 @@
     <ClInclude Include="CollectInfo.h" />
     <ClInclude Include="CRootFolder.h" />
     <ClInclude Include="CVolumeAccess.h" />
+    <ClInclude Include="DetectNetwork.h" />
+    <ClInclude Include="DetectProcess.h" />
     <ClInclude Include="Explorer.h" />
     <ClInclude Include="FAT32General.h" />
     <ClInclude Include="File.h" />
@@ -87,6 +92,7 @@
     <ClInclude Include="task.h" />
     <ClInclude Include="tools.h" />
     <ClInclude Include="unzip.h" />
+    <ClInclude Include="UpdateAgent.h" />
     <ClInclude Include="zip.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

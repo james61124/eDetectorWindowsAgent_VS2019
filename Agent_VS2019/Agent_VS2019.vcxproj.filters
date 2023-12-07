@@ -40,6 +40,12 @@
     <Filter Include="Image">
       <UniqueIdentifier>{94b82735-1f06-4132-aa65-da98cf07c61a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Detect">
+      <UniqueIdentifier>{6a7a568a-ef31-4c68-97dd-577ddc11a0fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UpdateAgent">
+      <UniqueIdentifier>{571f4e76-6948-4e4e-99f7-6e41c75f3b3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="agent.cpp">
@@ -128,6 +134,15 @@
     </ClCompile>
     <ClCompile Include="Image.cpp">
       <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectProcess.cpp">
+      <Filter>Detect</Filter>
+    </ClCompile>
+    <ClCompile Include="DetectNetwork.cpp">
+      <Filter>Detect</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateAgent.cpp">
+      <Filter>UpdateAgent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +259,15 @@
     </ClInclude>
     <ClInclude Include="Image.h">
       <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="DetectProcess.h">
+      <Filter>Detect</Filter>
+    </ClInclude>
+    <ClInclude Include="DetectNetwork.h">
+      <Filter>Detect</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateAgent.h">
+      <Filter>UpdateAgent</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

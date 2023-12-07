@@ -69,10 +69,10 @@ public:
     int CheckConnect();
 
     // detect
-    int DetectProcess_();
-    int GiveDetectProcess(char* buff, SOCKET* tcpSocket);
-    int GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket);
-    int GiveDetectNetwork(char* buff, SOCKET* tcpSocket);
+    //int DetectProcess_();
+    //int GiveDetectProcess(char* buff, SOCKET* tcpSocket);
+    //int GiveDetectProcessFrag(char* buff, SOCKET* tcpSocket);
+    //int GiveDetectNetwork(char* buff, SOCKET* tcpSocket);
 
     // explorer
     int ExplorerInfo_(StrPacket* udata);
@@ -105,17 +105,17 @@ public:
 
     // update agent
     int OpenUpdateAgentProcess(StrPacket* udata);
-    int UpdateAgent();
-    void AgentReceive(int fileSize);
-    void WriteNewAgentToFile(char* buffer, int totalReceivedSize);
-    int ReadyUpdateAgent(char* buff);
-    int SendACK(char* buff);
-    int GiveUpdateInfo();
-    int GiveUpdateEnd();
+    //int UpdateAgent();
+    //void AgentReceive(int fileSize);
+    //void WriteNewAgentToFile(char* buffer, int totalReceivedSize);
+    //int ReadyUpdateAgent(char* buff);
+    //int SendACK(char* buff);
+    //int GiveUpdateInfo();
+    //int GiveUpdateEnd();
 
     int TerminateAll(StrPacket* udata);
     int RemoveAgent(StrPacket* udata);
-    int TerminateAllTask();
+    //int TerminateAllTask();
 
 private:
     
@@ -124,8 +124,8 @@ private:
     const char* AESKey = "AES Encrypt Decrypt";
 
     // detect
-    int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
-    void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
+    //int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
+    //void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
     //int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
     void SendZipFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
@@ -134,16 +134,7 @@ private:
     char* GetMyPCDrive();
 
     
-    void SendNetworkDetectToServer(vector<string>* pInfo);
-
-    // collect
-    /*int CollectionComputerInfo(); 
-    bool LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine); 
-    void SendDbFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
-    bool GetQueryByTable(string* query, string TableName, string QueryFilter);
-    void ParsePredefineConfig(char* str, string* defineName, vector<PredefineObj>* Vmp);
-    void CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket);
-    bool InsertFromToInCombination(TCHAR* DBName, const map<string, vector<PredefineObj>>* mapPredefine, SOCKET* tcpSocket);*/
+    //void SendNetworkDetectToServer(vector<string>* pInfo);
 
     int SendDataPacketToServer(const char* function, char* buff, SOCKET* tcpSocket);
     int SendMessagePacketToServer(const char* function, char* buff);

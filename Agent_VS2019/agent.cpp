@@ -11,7 +11,9 @@
 #include "CollectInfo.h"
 #include "Explorer.h"
 #include "Image.h"
-
+#include "DetectProcess.h"
+#include "DetectNetwork.h"
+#include "UpdateAgent.h"
 
 bool IsProcessAlive(DWORD pid) {
 	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
@@ -124,10 +126,6 @@ void CheckIfAdmin() {
 	}
 }
 
-void HandleScan(SocketManager &socketManager) {
-	socketManager.HandleTaskToServer("GiveProcessData");
-}
-
 
 
 int main(int argc, char* argv[]) {
@@ -155,6 +153,7 @@ int main(int argc, char* argv[]) {
 		std::string serverIP = argv[1];
 		int port = std::stoi(argv[2]);
 		std::string task = argv[3];
+		DWORD MyPid = GetCurrentProcessId();
 
 		int i = 0;
 		int iLen = 0;
@@ -187,67 +186,17 @@ int main(int argc, char* argv[]) {
 			{"Collect", new Collect(info, socketsend)},
 			{"CollectInfo", new CollectInfo(info, socketsend, i, iLen)},
 			{"Explorer", new Explorer(info, socketsend, Drive, FileSystem)},
-			{"Image", new Image(info, socketsend, cmd)}
+			{"Image", new Image(info, socketsend, cmd)},
+			{"DetectProcess", new DetectProcess(info, socketsend)},
+			{"DetectNetwork", new DetectNetwork(info, socketsend, MyPid)},
+			{"UpdateAgent", new UpdateAgent(info, socketsend)}
 		};
 
-		//std::unordered_map<std::string, std::function<void()>> taskMap = {
-		//	{"Scan", [&]() { HandleScan(socketManager); }},
-		//	{"Collect", [&]() { HandleCollect(); }},
-		//	{"CollectInfo", [&]() { HandleCollectInfo(std::stoi(argv[4]), std::stoi(argv[5])); }},
-		//	{"Explorer", [&]() { HandleExplorer(argv[4], argv[5]); }},
-		//	{"Image", [&]() { HandleImage(argv[4]); }},
-		//	{"DetectProcess", [&]() { HandleDetectProcess(); }},
-		//	{"DetectNetwork", [&]() { HandleDetectNetwork(); }},
-		//	{"UpdateAgent", [&]() { HandleUpdateAgent(); }},
-		//	{"TerminateAll", [&]() { HandleTerminateAll(); }},
-		//	{"Log", [&]() { HandleLog(); }}
-		//};
 
-		if (task == "Scan") {
-			//socketManager.HandleTaskToServer("GiveProcessData");
-			taskMap[task]->DoTask();
-		}
-		else if (task == "Collect") {
-			//socketManager.HandleTaskToServer("CollectionComputerInfo");
-			taskMap[task]->DoTask();
-		}
-		else if (task == "CollectInfo") {
-			/*int i = std::stoi(argv[4]);
-			int iLen = std::stoi(argv[5]);
-
-			socketManager.task->CollectData(i, iLen);*/
-			taskMap[task]->DoTask();
-		}
-		else if (task == "Explorer") {
-			/*char* Drive = argv[4];
-			char* FileSystem = argv[5];
-			socketManager.task->GiveExplorerData(Drive, FileSystem);*/
-
-			taskMap[task]->DoTask();
-		}
-		else if (task == "Image") {
-			//char* cmd = argv[4];
-			//socketManager.task->LookingForImage(cmd);
-			taskMap[task]->DoTask();
-		}
-		else if (task == "DetectProcess") {
-			socketManager.HandleTaskToServer("DetectProcess");
-		}
-		else if (task == "DetectNetwork") {
-			DWORD MyPid = GetCurrentProcessId();
-			socketManager.task->DetectNewNetwork(MyPid);
-		}
-		else if (task == "UpdateAgent") {
-			socketManager.HandleTaskToServer("UpdateAgent");
-		}
-		else if (task == "TerminateAll") {
-			socketManager.task->TerminateAllTask();
-		}
-		else if (task == "Log") {
-			log.LogServer();
-		}
+		auto it = taskMap.find(task);
+		if (it != taskMap.end()) taskMap[task]->DoTask();
+		else if(task == "Log") log.LogServer();
 		else {
-
 			// If the user is not admin, kill itself
 			CheckIfAdmin();
 
@@ -272,8 +221,6 @@ int main(int argc, char* argv[]) {
 			info->processMap["Log"] = LogProcessPid;
 			log.logger("Debug", "Log enabled");
 
-			
-
 			// enabled check process status thread
 			std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
 			CheckStatusThread.detach();
@@ -283,9 +230,111 @@ int main(int argc, char* argv[]) {
 			socketManager.HandleTaskToServer("GiveInfo");
 			std::thread CheckConnectThread([&]() { socketManager.task->CheckConnect(); });
 			CheckConnectThread.detach();
-			//socketManager.HandleTaskToServer("UpdateAgent");
 			receiveThread.join();
 		}
+
+		//std::unordered_map<std::string, std::function<void()>> taskMap = {
+		//	{"Scan", [&]() { HandleScan(socketManager); }},
+		//	{"Collect", [&]() { HandleCollect(); }},
+		//	{"CollectInfo", [&]() { HandleCollectInfo(std::stoi(argv[4]), std::stoi(argv[5])); }},
+		//	{"Explorer", [&]() { HandleExplorer(argv[4], argv[5]); }},
+		//	{"Image", [&]() { HandleImage(argv[4]); }},
+		//	{"DetectProcess", [&]() { HandleDetectProcess(); }},
+		//	{"DetectNetwork", [&]() { HandleDetectNetwork(); }},
+		//	{"UpdateAgent", [&]() { HandleUpdateAgent(); }},
+		//	{"TerminateAll", [&]() { HandleTerminateAll(); }},
+		//	{"Log", [&]() { HandleLog(); }}
+		//};
+
+
+
+		//if (task == "Scan") {
+		//	//socketManager.HandleTaskToServer("GiveProcessData");
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "Collect") {
+		//	//socketManager.HandleTaskToServer("CollectionComputerInfo");
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "CollectInfo") {
+		//	/*int i = std::stoi(argv[4]);
+		//	int iLen = std::stoi(argv[5]);
+
+		//	socketManager.task->CollectData(i, iLen);*/
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "Explorer") {
+		//	/*char* Drive = argv[4];
+		//	char* FileSystem = argv[5];
+		//	socketManager.task->GiveExplorerData(Drive, FileSystem);*/
+
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "Image") {
+		//	//char* cmd = argv[4];
+		//	//socketManager.task->LookingForImage(cmd);
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "DetectProcess") {
+		//	//socketManager.HandleTaskToServer("DetectProcess");
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "DetectNetwork") {
+		//	//DWORD MyPid = GetCurrentProcessId();
+		//	//socketManager.task->DetectNewNetwork(MyPid);
+		//	taskMap[task]->DoTask();
+		//}
+		//else if (task == "UpdateAgent") {
+		//	//socketManager.HandleTaskToServer("UpdateAgent");
+		//	taskMap[task]->DoTask();
+		//}
+		////else if (task == "TerminateAll") {
+		////	socketManager.task->TerminateAllTask();
+		////}
+		//else if (task == "Log") {
+		//	//log.LogServer();
+		//	taskMap[task]->DoTask();
+		//}
+		//else {
+
+		//	// If the user is not admin, kill itself
+		//	CheckIfAdmin();
+
+		//	// enabled log process
+		//	Tool tool;
+		//	DWORD LogProcessPid = 0;
+		//	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+		//	TCHAR* RunComStr = new TCHAR[512];
+		//	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+		//	wstring filename = tool.GetFileName();
+		//	TCHAR MyName[MAX_PATH];
+		//	wcscpy_s(MyName, filename.c_str());
+
+		//	TCHAR ServerIP[MAX_PATH];
+		//	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+		//	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Log", MyName, ServerIP, info->Port);
+		//	wprintf(L"Run Process: %ls\n", RunComStr);
+		//	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, LogProcessPid);
+
+		//	info->processMap["Log"] = LogProcessPid;
+		//	log.logger("Debug", "Log enabled");
+
+		//	
+
+		//	// enabled check process status thread
+		//	std::thread CheckStatusThread([&]() { CheckProcessStatus(info); });
+		//	CheckStatusThread.detach();
+
+		//	// handshake
+		//	std::thread receiveThread([&]() { socketManager.receiveTCP(); });
+		//	socketManager.HandleTaskToServer("GiveInfo");
+		//	std::thread CheckConnectThread([&]() { socketManager.task->CheckConnect(); });
+		//	CheckConnectThread.detach();
+		//	//socketManager.HandleTaskToServer("UpdateAgent");
+		//	receiveThread.join();
+		//}
 	}
 
 }
