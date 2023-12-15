@@ -77,8 +77,7 @@ public:
     // explorer
     int ExplorerInfo_(StrPacket* udata);
     int GiveDriveInfo();
-    //int GiveExplorerData(char* Drive, char* FileSystem);
-    //void SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned int& FileIndex, char* TmpSend, unsigned int& m_ProgressCount, unsigned int& m_Count);
+    char* GetMyPCDrive();
 
     //collect
     void CollectData(int i, int iLen);
@@ -123,19 +122,8 @@ private:
     Log log;
     const char* AESKey = "AES Encrypt Decrypt";
 
-    // detect
-    //int DetectProcessRisk(int pMainProcessid, bool IsFirst, set<DWORD>* pApiName, SOCKET* tcpSocket);
-    //void SendProcessDataToServer(vector<ProcessInfoData>* pInfo, SOCKET* tcpSocket);
 
-    //int NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSocket, char* Drive, char* FileSystem);
     void SendZipFileToServer(const TCHAR* DBName, SOCKET* tcpSocket);
-
-    
-    char* GetMyPCDrive();
-
-    
-    //void SendNetworkDetectToServer(vector<string>* pInfo);
-
     int SendDataPacketToServer(const char* function, char* buff, SOCKET* tcpSocket);
     int SendMessagePacketToServer(const char* function, char* buff);
     void SendFileToServer(const char* function, const TCHAR* FileName, SOCKET* tcpSocket);

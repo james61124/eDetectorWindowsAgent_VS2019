@@ -16,40 +16,32 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 	functionFromServerMap["OpenCheckthread"] = &Task::OpenCheckthread;
 	functionFromServerMap["UpdateDetectMode"] = &Task::UpdateDetectMode;
 
-	//functionMap["DetectProcess"] = std::bind(&Task::DetectProcess_, this);
-
-    // packet from server
-    
-
 	// Scan
 	functionFromServerMap["GetScan"] = &Task::GetScan;
-	//functionMap["GiveProcessData"] = std::bind(&Task::GiveProcessData, this);
 	
-
 	// Explorer
     functionFromServerMap["GetDrive"] = &Task::GetDrive; // ExplorerInfo_
 	functionMap["GiveDriveInfo"] = std::bind(&Task::GiveDriveInfo, this);
 	functionFromServerMap["ExplorerInfo"] = &Task::ExplorerInfo_;
 
 	// Collect
-	//functionMap["CollectionComputerInfo"] = std::bind(&Task::CollectionComputerInfo, this);
     functionFromServerMap["GetCollectInfo"] = &Task::GetCollectInfo;
-    functionFromServerMap["DataRight"] = &Task::DataRight;
-
+    
 	// Image
 	functionFromServerMap["GetImage"] = &Task::GetImage;
 
 	// Update Agent 
 	functionFromServerMap["UpdateAgent"] = &Task::OpenUpdateAgentProcess;
-	//functionMap["UpdateAgent"] = std::bind(&Task::UpdateAgent, this);
 
 	// TerminateAll
 	functionFromServerMap["TerminateAll"] = &Task::TerminateAll;
 
 	// RemoveAgent
 	functionFromServerMap["RemoveAgent"] = &Task::RemoveAgent;
-	
+	functionFromServerMap["RejectAgent"] = &Task::RemoveAgent;
 
+	functionFromServerMap["DataRight"] = &Task::DataRight;
+	
     info = infoInstance;
     socketsend = socketSendInstance;
 }
@@ -82,7 +74,7 @@ int Task::GiveInfo() {
 
 	// file version
 	char* FileVersion = new char[64];
-	strcpy_s(FileVersion, 64, "1.0.4");
+	strcpy_s(FileVersion, 64, "1.0.5");
 	strcpy_s(functionName, 24, "GiveInfo");
 
 	int VMret = VirtualMachine(info->MAC);
@@ -250,68 +242,68 @@ char* Task::GetMyPCDrive()
 	char* driveStr = new char[STRINGMESSAGELEN];
 	driveStr[0] = '\0';
 
-	strcat_s(driveStr, STRINGMESSAGELEN, "F-FAT32,USB|C-NTFS,HDD|");
-	//for (int i = 2; i < 26; i++)
-	//{
-	//	char* drive = new char[10];
-	//	strcpy_s(drive, 10, GetDriveStr(i));
-	//	UINT type = GetDriveTypeA(drive);
-	//	if (!(type == DRIVE_FIXED || type == DRIVE_REMOVABLE))
-	//	{
-	//		delete[] drive;
-	//		continue;
-	//	}
-	//	char* volname = new char[_MAX_FNAME];
-	//	char* filesys = new char[_MAX_FNAME];
-	//	DWORD VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
-	//	if (GetVolumeInformationA(drive, volname, _MAX_FNAME, &VolumeSerialNumber, &MaximumComponentLength, &FileSystemFlags, filesys, _MAX_FNAME))
-	//	{
-	//		//drive.Remove(L'\\');
-	//		for (int j = (int)strlen(drive) - 1; j >= 0; j--)
-	//		{
-	//			if (drive[j] == ':')
-	//			{
-	//				drive[j] = '\x0';
-	//				break;
-	//			}
-	//		}
-	//		if (type == DRIVE_FIXED)
-	//		{
-	//			if (!strcmp(filesys, "NTFS") || !strcmp(filesys, "FAT32")) {
-	//				strcat_s(driveStr, STRINGMESSAGELEN, drive);
-	//				strcat_s(driveStr, STRINGMESSAGELEN, "-");
-	//				strcat_s(driveStr, STRINGMESSAGELEN, filesys);
-	//				strcat_s(driveStr, STRINGMESSAGELEN, ",HDD");
-	//				strcat_s(driveStr, STRINGMESSAGELEN, "|");
-	//			}
+	//strcat_s(driveStr, STRINGMESSAGELEN, "F-FAT32,USB|C-NTFS,HDD|");
+	for (int i = 2; i < 26; i++)
+	{
+		char* drive = new char[10];
+		strcpy_s(drive, 10, GetDriveStr(i));
+		UINT type = GetDriveTypeA(drive);
+		if (!(type == DRIVE_FIXED || type == DRIVE_REMOVABLE))
+		{
+			delete[] drive;
+			continue;
+		}
+		char* volname = new char[_MAX_FNAME];
+		char* filesys = new char[_MAX_FNAME];
+		DWORD VolumeSerialNumber, MaximumComponentLength, FileSystemFlags;
+		if (GetVolumeInformationA(drive, volname, _MAX_FNAME, &VolumeSerialNumber, &MaximumComponentLength, &FileSystemFlags, filesys, _MAX_FNAME))
+		{
+			//drive.Remove(L'\\');
+			for (int j = (int)strlen(drive) - 1; j >= 0; j--)
+			{
+				if (drive[j] == ':')
+				{
+					drive[j] = '\x0';
+					break;
+				}
+			}
+			if (type == DRIVE_FIXED)
+			{
+				if (!strcmp(filesys, "NTFS") || !strcmp(filesys, "FAT32")) {
+					strcat_s(driveStr, STRINGMESSAGELEN, drive);
+					strcat_s(driveStr, STRINGMESSAGELEN, "-");
+					strcat_s(driveStr, STRINGMESSAGELEN, filesys);
+					strcat_s(driveStr, STRINGMESSAGELEN, ",HDD");
+					strcat_s(driveStr, STRINGMESSAGELEN, "|");
+				}
 
-	//			/*strcat_s(driveStr, STRINGMESSAGELEN, drive);
-	//			strcat_s(driveStr, STRINGMESSAGELEN, "-");
-	//			strcat_s(driveStr, STRINGMESSAGELEN, filesys);
-	//			strcat_s(driveStr, STRINGMESSAGELEN, ",HDD");
-	//			strcat_s(driveStr, STRINGMESSAGELEN, "|");*/
-	//		}
-	//		else if (type == DRIVE_REMOVABLE)
-	//		{
-	//			if (!strcmp(filesys, "NTFS") || !strcmp(filesys, "FAT32")) {
-	//				strcat_s(driveStr, STRINGMESSAGELEN, drive);
-	//				strcat_s(driveStr, STRINGMESSAGELEN, "-");
-	//				strcat_s(driveStr, STRINGMESSAGELEN, filesys);
-	//				strcat_s(driveStr, STRINGMESSAGELEN, ",USB");
-	//				strcat_s(driveStr, STRINGMESSAGELEN, "|");
-	//			}
+				/*strcat_s(driveStr, STRINGMESSAGELEN, drive);
+				strcat_s(driveStr, STRINGMESSAGELEN, "-");
+				strcat_s(driveStr, STRINGMESSAGELEN, filesys);
+				strcat_s(driveStr, STRINGMESSAGELEN, ",HDD");
+				strcat_s(driveStr, STRINGMESSAGELEN, "|");*/
+			}
+			else if (type == DRIVE_REMOVABLE)
+			{
+				if (!strcmp(filesys, "NTFS") || !strcmp(filesys, "FAT32")) {
+					strcat_s(driveStr, STRINGMESSAGELEN, drive);
+					strcat_s(driveStr, STRINGMESSAGELEN, "-");
+					strcat_s(driveStr, STRINGMESSAGELEN, filesys);
+					strcat_s(driveStr, STRINGMESSAGELEN, ",USB");
+					strcat_s(driveStr, STRINGMESSAGELEN, "|");
+				}
 
-	//			/*strcat_s(driveStr, STRINGMESSAGELEN, drive);
-	//			strcat_s(driveStr, STRINGMESSAGELEN, "-");
-	//			strcat_s(driveStr, STRINGMESSAGELEN, filesys);
-	//			strcat_s(driveStr, STRINGMESSAGELEN, ",USB");
-	//			strcat_s(driveStr, STRINGMESSAGELEN, "|");*/
-	//		}
-	//	}
-	//	delete[] filesys;
-	//	delete[] volname;
-	//	delete[] drive;
-	//}
+				/*strcat_s(driveStr, STRINGMESSAGELEN, drive);
+				strcat_s(driveStr, STRINGMESSAGELEN, "-");
+				strcat_s(driveStr, STRINGMESSAGELEN, filesys);
+				strcat_s(driveStr, STRINGMESSAGELEN, ",USB");
+				strcat_s(driveStr, STRINGMESSAGELEN, "|");*/
+			}
+		}
+		delete[] filesys;
+		delete[] volname;
+		delete[] drive;
+	}
 	return driveStr;
 }
 int Task::ExplorerInfo_(StrPacket* udata) {
@@ -322,17 +314,14 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	char* FileSystem = new char[20];
 
 	char* context; 
-	log.logger("Debug udata", udata->csMsg);
 
 	char* token = strtok_s(udata->csMsg, delimiter, &context);
 	if (token != nullptr) {
 		strncpy_s(Drive, sizeof(Drive), token, _TRUNCATE);
-		log.logger("Debug token", token);
 
 		token = strtok_s(nullptr, delimiter, &context);
 		if (token != nullptr) {
 			strncpy_s(FileSystem, sizeof(FileSystem), token, _TRUNCATE);
-			log.logger("Debug token", token);
 		}
 	}
 
@@ -368,8 +357,6 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	TCHAR FileSystem_[MAX_PATH];
 	swprintf_s(FileSystem_, MAX_PATH, L"%hs", FileSystem);
 
-	log.logger("Debug", FileSystem);
-
 	swprintf_s(RunComStr, 512, L"\"%s\" %s %d Explorer %s %s", MyName, ServerIP, info->Port, Drive_, FileSystem_);
 	wprintf(L"Run Process: %ls\n", RunComStr);
 	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, ExplorerProcessPid);
@@ -380,6 +367,7 @@ int Task::ExplorerInfo_(StrPacket* udata) {
 	return 1;
 }
 
+// Collect
 int Task::GetCollectInfo(StrPacket* udata) { 
 	wchar_t* m_Path = new wchar_t[MAX_PATH_EX];
 	GetMyPath(m_Path);
@@ -405,6 +393,8 @@ int Task::GetCollectInfo(StrPacket* udata) {
 	
 	return 1; 
 }
+
+// Image
 int Task::GetImage(StrPacket* udata) {
 
 	DWORD m_ImageProcessPid = 0;
@@ -429,6 +419,7 @@ int Task::GetImage(StrPacket* udata) {
 
 }
 
+// UpdateAgent
 int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
 	DWORD m_UpdateAgentProcessPid = 0;
@@ -454,182 +445,7 @@ int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
 }
 
-//void Task::WriteNewAgentToFile(char* buffer, int totalReceivedSize) {
-//	char* null = new char[1];
-//	strcpy_s(null, 1, "");
-//	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
-//	GetMyPath(AgentNewVersion_exe);
-//	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\ClientAgent.exe"));
-//	std::ofstream outFile(AgentNewVersion_exe, std::ios::app | std::ios::binary);
-//	if (!outFile.is_open()) {
-//		log.logger("Error", "ClientAgent.exe open failed");
-//	}
-//	if (outFile.good()) { 
-//		outFile.write(buffer, totalReceivedSize);
-//	}
-//	else {
-//		log.logger("Error", "Error write data into NewAgent");
-//	}
-//	outFile.close();
-//	SendACK(null);
-//
-//}
-//void Task::AgentReceive(int fileSize) {
-//	int alreadyReceived = 0;
-//	while (true) {
-//		
-//		uint64_t receivedSize = 0;
-//		int totalReceivedSize = 0;
-//		char* buffer = new char[STRDATAPACKETSIZE];
-//
-//		while (totalReceivedSize < STRDATAPACKETSIZE) {
-//			char* tmpbuffer = new char[STRDATAPACKETSIZE];
-//			int bytesRead = recv(*info->tcpSocket, tmpbuffer, STRDATAPACKETSIZE, 0);
-//			if (bytesRead == -1) {
-//				log.logger("Error", "UpdateAgent Error receiving data");
-//				return;
-//			}
-//			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-//			memcpy(buffer + totalReceivedSize, tmpbuffer, bytesRead);
-//			totalReceivedSize += bytesRead;
-//			alreadyReceived += bytesRead;
-//
-//		}
-//		alreadyReceived -= 100;
-//
-//		SetKeys(BIT128, AESKey);
-//		DecryptBuffer((BYTE*)buffer, STRDATAPACKETSIZE);
-//		StrDataPacket* udata;
-//		udata = (StrDataPacket*)buffer;
-//
-//		std::string Task(udata->DoWorking);
-//		std::string TaskMsg(udata->csMsg);
-//		std::string LogMsg = "Receive: " + Task;
-//		log.logger("Info", LogMsg);
-//
-//		if (!strcmp(udata->DoWorking, "GiveUpdate")) {
-//			if (alreadyReceived > fileSize) {
-//				WriteNewAgentToFile(udata->csMsg, fileSize % 65436);
-//			}
-//			else {
-//				WriteNewAgentToFile(udata->csMsg, STRDATAPACKETSIZE - 100);
-//			}
-//			
-//		}
-//		else {
-//			break;
-//		}
-//
-//		delete[] buffer;
-//
-//	}
-//}
-//int Task::UpdateAgent() {
-//	char* null = new char[1];
-//	strcpy_s(null, 1, "");
-//
-//	TCHAR* AgentNewVersion_exe = new TCHAR[MAX_PATH_EX];
-//	GetMyPath(AgentNewVersion_exe);
-//	_tcscat_s(AgentNewVersion_exe, MAX_PATH_EX, _T("\\ClientAgent.exe"));
-//	DeleteFile(AgentNewVersion_exe);
-//
-//	ReadyUpdateAgent(null);
-//
-//	int fileSize = GiveUpdateInfo();
-//	std::thread AgentReceiveThread([&]() { AgentReceive(fileSize); });
-//	if (!fileSize) {
-//		log.logger("Error", "Error receiving New Agent Info");
-//	}
-//	SendACK(null);
-//	AgentReceiveThread.join();
-//	SendACK(null);
-//
-//	log.logger("Info", "start update agent");
-//
-//	RunProcess(AgentNewVersion_exe, NULL, FALSE, FALSE);
-//
-//
-//	return 1;
-//}
-//int Task::ReadyUpdateAgent(char* buff) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "ReadyUpdateAgent");
-//	printf("%s\n", buff);
-//	return socketsend->SendMessageToServer(functionName, buff);
-//}
-//int Task::SendACK(char* buff) {
-//	char* functionName = new char[24];
-//	strcpy_s(functionName, 24, "DataRight");
-//	printf("%s\n", buff);
-//	return socketsend->SendMessageToServer(functionName, buff);
-//}
-//int Task::GiveUpdateInfo() {
-//	char buff[STRPACKETSIZE];
-//	int ret = recv(*info->tcpSocket, buff, sizeof(buff), 0);
-//
-//	if (ret == SOCKET_ERROR) {
-//		std::cerr << "Error receiving ACK: " << WSAGetLastError() << std::endl;
-//		return 0;
-//	}
-//
-//	SetKeys(BIT128, AESKey);
-//	DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
-//
-//	StrPacket* udata;
-//	udata = (StrPacket*)buff;
-//	std::string Task(udata->DoWorking);
-//	std::string TaskMsg(udata->csMsg);
-//	std::string LogMsg = "Receive: " + Task + " " + TaskMsg;
-//	log.logger("Info", LogMsg);
-//
-//	if (!strcmp(udata->DoWorking, "GiveUpdateInfo")) {
-//		return std::stoi(TaskMsg);
-//	}
-//	else {
-//		return 0;
-//	}
-//}
-//int Task::GiveUpdateEnd() {
-//	char buff[STRPACKETSIZE];
-//	int ret = recv(*info->tcpSocket, buff, sizeof(buff), 0);
-//
-//	if (ret == SOCKET_ERROR) {
-//		std::cerr << "Error receiving ACK: " << WSAGetLastError() << std::endl;
-//		return 0;
-//	}
-//
-//	SetKeys(BIT128, AESKey);
-//	DecryptBuffer((BYTE*)buff, STRPACKETSIZE);
-//
-//	StrPacket* udata;
-//	udata = (StrPacket*)buff;
-//
-//	if (!strcmp(udata->DoWorking, "GiveUpdateEnd")) {
-//		return 1;
-//	}
-//	else {
-//		return 0;
-//	}
-//}
-//int Task::TerminateAllTask() {
-//	char* null = new char[DATASTRINGMESSAGELEN];
-//	sprintf_s(null, DATASTRINGMESSAGELEN, "null");
-//
-//	for (const auto& entry : info->processMap) {
-//		if (entry.first == "Log" || entry.first == "DetectProcess" || entry.first == "DetectNetwork") continue;
-//		if (entry.second != 0) {
-//			HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, entry.second);
-//			if (hProcess) {
-//				TerminateProcess(hProcess, 0);
-//				CloseHandle(hProcess);
-//			}
-//		}
-//	}
-//
-//	int ret = SendDataPacketToServer("FinishTerminate", null, info->tcpSocket);
-//	return ret;
-//}
-
+// Terminate Task
 int Task::TerminateAll(StrPacket* udata) {
 
 	//DWORD m_ImageProcessPid = 0;
@@ -670,6 +486,7 @@ int Task::TerminateAll(StrPacket* udata) {
 
 }
 
+// Remove Agent
 int Task::RemoveAgent(StrPacket* udata) {
 #if defined _M_IX86
 	UnloadNTDriver(DRIVER_ENUMPROCESS);

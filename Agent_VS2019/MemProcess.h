@@ -149,11 +149,12 @@ public:
 	void CheckIsInlineHook(DWORD pid, set<string>* pInlineHook);
 	BOOL DumpExecute(DWORD pid, wchar_t* pName, set<DWORD>* pApiBace, set<DWORD>* pStr, TCHAR* pProcessPath, set<string>* pIsAbnormal_dll);
 	void CheckInjectionPtn(set<DWORD>* pStringsHash, BOOL& pIsOther, BOOL& pIsPE);
+	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
 
 private:
 	
 	
-	int GetProcessMappedFileName(HANDLE ProcessHandle, PVOID BaseAddress, wchar_t* FileName);
+	
 	
 	
 	void GetProcessDetectInfo(DWORD pid, TCHAR* pPath, TCHAR* pComStr);

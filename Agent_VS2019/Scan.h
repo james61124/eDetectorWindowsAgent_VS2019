@@ -27,4 +27,7 @@ public:
 	void GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD, ProcessInfoData>* pFileInfo, vector<UnKnownDataInfo>* pUnKnownData, SOCKET* tcpSocket);
 	BOOL GetFileVersion_(TCHAR* pPath, wstring* pFileVersionStr);
 	DWORD GetRemoteCommandLineW(HANDLE hProcess, LPWSTR pszBuffer, UINT bufferLength);
+
+    int ProcessDump(DumpMemoryInfo* pInfo);
+    int ScanInjectedProcessDump(ScanMemoryInfo* pInfo);
 };

@@ -181,7 +181,7 @@ int main(int argc, char* argv[]) {
 		SocketSend* socketsend = new SocketSend(info);
 		SocketManager socketManager(serverIP, port, info, socketsend);
 
-		std::unordered_map<std::string, AllTask*> taskMap{
+		std::unordered_map<std::string, AllTask*> taskMap {
 			{"Scan", new Scan(info, socketsend)},
 			{"Collect", new Collect(info, socketsend)},
 			{"CollectInfo", new CollectInfo(info, socketsend, i, iLen)},

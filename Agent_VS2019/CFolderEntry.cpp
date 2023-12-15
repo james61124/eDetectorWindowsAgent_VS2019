@@ -631,7 +631,7 @@ bool CFolderEntry::load(void *argv, TCHAR* FileName,char* pMAC,char* pIP,DWORD F
 								wchar_t* write_time = SystemTimeToUnixTime(WT);
 								wchar_t* access_time = SystemTimeToUnixTime(AT);
 								swprintf_s(wstr, 1024, L"%s|0|2|%s|%s|%s|null,null|0|%lu|%lu\n",
-									wtr, create_time, write_time, access_time, FatherID, FirstCluster);
+									wtr, create_time, write_time, access_time, FirstCluster, FatherID);
 
 								//swprintf_s(wstr,1024,L"%lu|%s|%lu|0|2|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,null|0|1\n", FirstCluster,wtr,
 								////swprintf_s(wstr, 1024, L"%lu|%s|%lu|0|2|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,null|0|1\n", pLastCluster, wtr,
@@ -779,7 +779,7 @@ bool CFolderEntry::load(void *argv, TCHAR* FileName,char* pMAC,char* pIP,DWORD F
 								if(FileHashAndSignature(newEntry->GetTheFirstDataCluster(),newEntry->getFileSize(),wtr,m_MD5Str,Signaturestr))
 								{
 									swprintf_s(wstr, 1024, L"%s|0|0|%s|%s|%s|%s,%s|%lu|%lu|%lu\n",
-										wtr, create_time, write_time, access_time, m_MD5Str, Signaturestr, newEntry->getFileSize(), FatherID, FirstCluster);
+										wtr, create_time, write_time, access_time, m_MD5Str, Signaturestr, newEntry->getFileSize(), FirstCluster, FatherID);
 
 									//swprintf_s(wstr,1024,L"%lu|%s|%lu|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,null|%lu|1\n",FirstCluster,wtr,
 									//	//swprintf_s(wstr, 1024, L"%lu|%s|%lu|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,null|%lu|1\n", pLastCluster, wtr,
@@ -790,7 +790,7 @@ bool CFolderEntry::load(void *argv, TCHAR* FileName,char* pMAC,char* pIP,DWORD F
 								else
 								{
 									swprintf_s(wstr, 1024, L"%s|0|0|%s|%s|%s|null,null|%lu|%lu|%lu\n",
-										wtr, create_time, write_time, access_time, newEntry->getFileSize(), FatherID, FirstCluster);
+										wtr, create_time, write_time, access_time, newEntry->getFileSize(), FirstCluster, FatherID);
 
 									//swprintf_s(wstr,1024,L"%lu|%s|%lu|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null,null,null|%lu|1\n",FirstCluster,wtr,
 									//	//swprintf_s(wstr, 1024, L"%lu|%s|%lu|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s,%s,null|%lu|1\n", pLastCluster, wtr,

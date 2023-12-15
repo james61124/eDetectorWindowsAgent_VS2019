@@ -39,6 +39,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="info.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MemoryTree.cpp" />
     <ClCompile Include="MemProcess.cpp" />
     <ClCompile Include="NTFSSearchCore.cpp" />
     <ClCompile Include="NTFS_FileRecord.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="info.h" />
     <ClInclude Include="internal.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MemoryTree.h" />
     <ClInclude Include="MemProcess.h" />
     <ClInclude Include="NTFS.h" />
     <ClInclude Include="NTFSSearchCore.h" />

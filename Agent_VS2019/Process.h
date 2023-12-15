@@ -17,6 +17,7 @@
 
 #include <Mstcpip.h>
 #include <IPHlpApi.h>
+#include "StrPacket.h"
 
 #define MAX_PATH 260
 #define MAX_PATH_EX 512
@@ -224,6 +225,28 @@ struct TaskSchedulerInfo
 	TCHAR HighPrivilege[32];
 	TCHAR Author[1024];
 	TCHAR RunOnNetwork[32];
+};
+
+struct ScanMemoryInfo
+{
+	char MAC[MACLEN];
+	char IP[IPLEN];
+	unsigned int Num;
+	int ProcessID;
+	TCHAR FileName[MAX_PATH];
+	TCHAR MD5Str[50];
+	TCHAR ScheduleName[MAX_PATH];
+};
+
+struct DumpMemoryInfo
+{
+	char MAC[MACLEN];
+	char IP[IPLEN];
+	int ProcessID;
+	TCHAR FileName[MAX_PATH];
+	BOOL ReadMode;
+	BOOL WriteMode;
+	BOOL ExecuteMode;
 };
 
 #endif // PROCESS_H

@@ -11,6 +11,10 @@ void Image::DoTask() {
 	strcpy_s(null, 1, "");
 	int ret = SendDataPacketToServer("ReadyImage", null, info->tcpSocket);
 
+	cmd = new char[4096];
+	strcpy_s(cmd, 4096, "root:\\windows\\system32\\sru\\||srudb.dat,\\ConnectedDevicesPlatform\\|LOCALAPPDATA|ActivitiesCache.db,root:\\Users\\||NTUSER.DAT,\\Microsoft\\windows\\|LOCALAPPDATA|UsrClass.dat,root:\\windows\\system32\\config\\||SYSTEM,root:\\windows\\system32\\config\\||SOFTWARE,root:\\windows\\system32\\config\\||SAM,root:\\windows\\system32\\config\\||SECURITY,root:\\Windows\\inf\\||setupapi.dev.log,root:\\Windows\\System32\\winevt\\Logs\\||.evtx,root:\\Windows\\System32\\Config\\||.evt,root:\\ProgramData\\Microsoft\\Wlansvc\\Profiles\\Interfaces\\*\\||.xml,\\Microsoft\\terminal server client\\cache\\cache|LOCALAPPDATA|.bin,\\Microsoft\\windows\\recent\\|APPDATA|automaticdestinations,\\Microsoft\\windows\\|APPDATA|recent,root:\\||windows\\prefetch\\,root:\\||inetpub\\logs,");
+	//strcpy_s(cmd, 4096, "\\Google\\Chrome\\User Data\\|LOCALAPPDATA|History,\\Google\\Chrome\\User Data\\|LOCALAPPDATA|Login Data,\\Mozilla\\Firefox\\Profiles\\|APPDATA|places.sqlite,\\Mozilla\\Firefox\\Profiles\\|APPDATA|logins.json,\\Microsoft\\Windows\\WebCache\\|LOCALAPPDATA|WebCacheV01.dat,\\Microsoft\\Windows\\History\\History.IE5\\|LOCALAPPDATA|WebCacheV01.dat,\\Packages\\Microsoft.MicrosoftEdge_\\AC\\MicrosoftEdge\\User\\Default\\DataStore\\Data\\nouser1\\DBStore\|LOCALAPPDATA|spartan.edb,\\FileZilla\\|APPDATA|filezilla.xml,\\FileZilla\\|APPDATA|recentservers.xml,\\Microsoft\\OneDrive\\logs\\Common\\FileCoAuth-|LOCALAPPDATA|.odl,\\Microsoft\\OneDrive\\logs\\Personal\\|APPDATA|ObfuscationStringMap.txt,\\Dropbox|LOCALAPPDATA|info.json,\\Dropbox\\instance1|LOCALAPPDATA|config.dbx,\\Dropbox\\instance1|LOCALAPPDATA|deleted.dbx,\\Dropbox\\instance1|LOCALAPPDATA|filecache.dbx,\\LINE\\Data\\db|LOCALAPPDATA|.edb,\\Microsoft.SkypeApp_kzf8qxf38zg5c\\|LOCALAPPDATA|LocalState,\\Microsoft\\Skype for Desktop\\IndexedDB\\|APPDATA|file__0.indexeddb.leveldb,");
+	//cmd = "root:\windows\system32\sru\||srudb.dat,\ConnectedDevicesPlatform\\|LOCALAPPDATA|ActivitiesCache.db,root:\Users\\||NTUSER.DAT,\Microsoft\windows\|LOCALAPPDATA|UsrClass.dat,root:\windows\system32\config\||SYSTEM,root:\windows\system32\config\||SOFTWARE,root:\windows\system32\config\||SAM,root:\windows\system32\config\||SECURITY,root:\Windows\inf\||setupapi.dev.log,root:\Windows\System32\winevt\Logs\||.evtx,root:\Windows\System32\Config\||.evt,root:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\*\||.xml,\Microsoft\terminal server client\cache\cache|LOCALAPPDATA|.bin,\Microsoft\windows\recent\|APPDATA|automaticdestinations,\Microsoft\windows\|APPDATA|recent,root:\||windows\prefetch\,root:\||inetpub\logs,";
 	string Msg = cmd;
 	string LogMsg = "cmd: " + Msg;
 	log.logger("Debug", LogMsg);
@@ -108,7 +112,7 @@ void Image::DoTask() {
 
 
 		//printf("%s %s %s\n", FileInfo[0].c_str(), FileInfo[1].c_str(), FileInfo[2].c_str());
-		string Msg = FileInfo[0] + " " + FileInfo[1] + " " + FileInfo[2];
+		string Msg = FileInfo[0] + "|" + FileInfo[1] + "|" + FileInfo[2];
 		log.logger("Debug", Msg);
 
 		fs::path filePath = FileInfo[0];
@@ -183,7 +187,7 @@ void Image::SearchForFile(std::filesystem::path root, std::filesystem::path dire
 					}
 					catch (const fs::filesystem_error& ex) {
 						std::string errorMessage = ex.what();
-						Msg = "Error during copy: " + errorMessage;
+						Msg = errorMessage;
 						log.logger("Error", Msg);
 					}
 
@@ -236,7 +240,7 @@ void Image::SearchForFile(std::filesystem::path root, std::filesystem::path dire
 					}
 					catch (const fs::filesystem_error& ex) {
 						std::string errorMessage = ex.what();
-						Msg = "Error during copy: " + errorMessage;
+						Msg = errorMessage;
 						log.logger("Error", Msg);
 					}
 

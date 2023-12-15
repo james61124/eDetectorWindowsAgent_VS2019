@@ -7,6 +7,11 @@ Scan::Scan(Info* infoInstance, SocketSend* socketSendInstance) {
 }
 
 void Scan::DoTask() {
+
+	//DumpMemoryInfo* pInfo = new DumpMemoryInfo;
+	//pInfo->ProcessID = 8388;
+	//ProcessDump(pInfo);
+
 	char* Scan = new char[5];
 	strcpy_s(Scan, 5, "Scan");
 
@@ -196,7 +201,6 @@ DWORD Scan::GetRemoteCommandLineW(HANDLE hProcess, LPWSTR pszBuffer, UINT buffer
 	FreeLibrary(hNtDll);
 	return (DWORD)bytesRead / sizeof(wchar_t);
 }
-
 void Scan::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set<DWORD>* pApiName, vector<UnKnownDataInfo>* pMembuf, SOCKET* tcpSocket)
 {
 	MemProcess* m_MemPro = new MemProcess;
@@ -280,42 +284,42 @@ void Scan::ScanRunNowProcess(void* argv, map<DWORD, ProcessInfoData>* pInfo, set
 				else lstrcpy(m_Info.SignerSubjectName, _T("null"));
 				delete DSinfo;
 
-				wstring FileVersionStr[12];
-				GetFileVersion_((TCHAR*)m_Info.ProcessPath, FileVersionStr);
-				m_Info.CompanyName = FileVersionStr[COMPANYNAME];
-				m_Info.FileVersion = FileVersionStr[FILESVERSION];
-				m_Info.FileDescription = FileVersionStr[FILEDESCRIPTION];
-				m_Info.ProductName = FileVersionStr[PRODUCTNAME];
+				//wstring FileVersionStr[12];
+				//GetFileVersion_((TCHAR*)m_Info.ProcessPath, FileVersionStr);
+				//m_Info.CompanyName = FileVersionStr[COMPANYNAME];
+				//m_Info.FileVersion = FileVersionStr[FILESVERSION];
+				//m_Info.FileDescription = FileVersionStr[FILEDESCRIPTION];
+				//m_Info.ProductName = FileVersionStr[PRODUCTNAME];
 
-				HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_VM_READ, FALSE, pt->first);
-				if (processHandle != NULL) {
-					TCHAR* m_FilePath = new TCHAR[512];
-					memset(m_FilePath, 0, 512);
-					DWORD ret1 = GetRemoteCommandLineW(processHandle, m_FilePath, 512);
-					_tcscpy_s(m_FilePath, 512, _T("null"));
-					GetUserSID(processHandle, m_FilePath);
-					if (_tcscmp(m_FilePath, _T("null"))) {
-						SID_NAME_USE SidType;
-						TCHAR* lpName = new TCHAR[_MAX_FNAME];
-						TCHAR* lpDomain = new TCHAR[_MAX_FNAME];
-						DWORD dwSize = _MAX_FNAME;
-						PSID Sid;
-						if (ConvertStringSidToSid(m_FilePath, &Sid)) {
-							if (LookupAccountSid(NULL, Sid, lpName, &dwSize, lpDomain, &dwSize, &SidType))
-							{
-								//_tcscpy_s(pUserName,_MAX_FNAME,lpName);
-								m_Info.user_name = lpName;
-							}
-						}
-						if (m_Info.user_name.empty())
-							m_Info.user_name = m_FilePath;
-						LocalFree(Sid);
-						delete[] lpDomain;
-						delete[] lpName;
-					}
-				}
-				m_Info.Priority = GetPriorityClass(processHandle);
-				CloseHandle(processHandle);
+				//HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_VM_READ, FALSE, pt->first);
+				//if (processHandle != NULL) {
+				//	TCHAR* m_FilePath = new TCHAR[512];
+				//	memset(m_FilePath, 0, 512);
+				//	DWORD ret1 = GetRemoteCommandLineW(processHandle, m_FilePath, 512);
+				//	_tcscpy_s(m_FilePath, 512, _T("null"));
+				//	GetUserSID(processHandle, m_FilePath);
+				//	if (_tcscmp(m_FilePath, _T("null"))) {
+				//		SID_NAME_USE SidType;
+				//		TCHAR* lpName = new TCHAR[_MAX_FNAME];
+				//		TCHAR* lpDomain = new TCHAR[_MAX_FNAME];
+				//		DWORD dwSize = _MAX_FNAME;
+				//		PSID Sid;
+				//		if (ConvertStringSidToSid(m_FilePath, &Sid)) {
+				//			if (LookupAccountSid(NULL, Sid, lpName, &dwSize, lpDomain, &dwSize, &SidType))
+				//			{
+				//				//_tcscpy_s(pUserName,_MAX_FNAME,lpName);
+				//				m_Info.user_name = lpName;
+				//			}
+				//		}
+				//		if (m_Info.user_name.empty())
+				//			m_Info.user_name = m_FilePath;
+				//		LocalFree(Sid);
+				//		delete[] lpDomain;
+				//		delete[] lpName;
+				//	}
+				//}
+				//m_Info.Priority = GetPriorityClass(processHandle);
+				//CloseHandle(processHandle);
 
 			}
 			else lstrcpy(m_Info.SignerSubjectName, _T("null"));
@@ -408,18 +412,18 @@ void Scan::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 				AutoRun = 1;
 			}
 
-			/*	swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
+			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d"
 					, vit->second.ProcessName, vit->second.ProcessCTime, Comstr, vit->second.ProcessHash, vit->second.ProcessPath,
 					vit->second.ParentID, ParentName, ParentPath, vit->second.SignerSubjectName, vit->first, vit->second.InjectionPE, vit->second.InjectionOther
 					, vit->second.Injected, Service, AutoRun, vit->second.HideProcess, vit->second.HideAttribute
-				);*/
+				);
 
-			swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d|%s|%s|%s|%s|%s|%d"
+			/*swprintf_s(wTempStr, DATASTRINGMESSAGELEN, L"%s|%s|%s|%s|%s|%ld|%s|%s|%s|%ld|%d,%d|%d|%d,%d|%d,%d|%s|%s|%s|%s|%s|%d"
 				, vit->second.ProcessName, vit->second.ProcessCTime, Comstr, vit->second.ProcessHash, vit->second.ProcessPath,
 				vit->second.ParentID, ParentName, ParentPath, vit->second.SignerSubjectName, vit->first, vit->second.InjectionPE, vit->second.InjectionOther
 				, vit->second.Injected, Service, AutoRun, vit->second.HideProcess, vit->second.HideAttribute, vit->second.ProductName, vit->second.FileVersion
 				, vit->second.FileDescription, vit->second.CompanyName, vit->second.user_name, vit->second.Priority
-			);
+			);*/
 
 			// abnormal dll
 			char* cTempStr = CStringToCharArray(wTempStr, CP_UTF8);
@@ -621,10 +625,395 @@ void Scan::GiveScanDataSendServer(char* pMAC, char* pIP, char* pMode, map<DWORD,
 	// send zip file
 	SendFileToServer("Scan", Scan_zip, tcpSocket);
 
-	DeleteFile(Scan_txt);
+	//DeleteFile(Scan_txt);
 	DeleteFile(Scan_zip);
 
 
 	delete[] buff;
 	ret = SendDataPacketToServer("GiveScanEnd", pMode, tcpSocket);
+}
+
+int Scan::ProcessDump(DumpMemoryInfo* pInfo) {
+	TCHAR* Scan_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Scan_txt);
+	_tcscat_s(Scan_txt, MAX_PATH_EX, _T("\\Scan.txt"));
+	DeleteFile(Scan_txt);
+	std::wofstream outFile(Scan_txt, std::ios::app);
+	if (!outFile.is_open()) log.logger("Error", "Scan.txt open failed");
+
+	MemProcess* m_MemPro = new MemProcess;
+	HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, false, pInfo->ProcessID);
+	if (!hProc)
+	{
+		return -1;
+	}
+#ifndef _M_IX86
+	SIZE_T ptype = m_MemPro->Process32or64(hProc);
+	if (!ptype)
+	{
+		/*AfxMessageBox(_T("IsWow64Process failed."));*/
+		CloseHandle(hProc);
+		return -1;
+	}
+	SIZE_T startmem = 0;
+	SIZE_T maxmem = 0x7FFF0000;
+	if (ptype == 64)
+	{
+		maxmem = 0x7FFFFFEFFFF;
+	}
+#else
+	SIZE_T ptype = 32;
+	SIZE_T startmem = 0;
+	SIZE_T maxmem = 0x7FFF0000;
+#endif
+	int count = 0;
+	wchar_t lastfilename[MAX_PATH];
+	while (startmem < maxmem)
+	{
+		MEMORY_BASIC_INFORMATION mbi;
+		SIZE_T size = VirtualQueryEx(hProc, (LPVOID)startmem, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+		if (!size)
+		{
+			CloseHandle(hProc);
+			return -2;
+		}
+		TCHAR* output = new TCHAR[_MAX_FNAME];
+		TCHAR* m_FileName = new TCHAR[_MAX_FNAME];
+#ifndef _M_IX86
+		if (startmem, ptype == 64)
+			swprintf_s(output, _MAX_FNAME, _T("%016I64X-%016I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+		else
+			swprintf_s(output, _MAX_FNAME, _T("%08I64X-%08I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+#else
+		swprintf_s(output, _MAX_FNAME, _T("%08I64X-%08I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+#endif
+		if (mbi.State == MEM_COMMIT)
+		{
+			char* buffer = new char[mbi.RegionSize];
+			SIZE_T nread = 0;
+			//DWORD oldprotect;
+			//if (VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,PAGE_EXECUTE_READWRITE,&oldprotect))
+			//{
+			//	mbi.AllocationProtect = oldprotect;
+			//	VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,oldprotect,&oldprotect);
+			ReadProcessMemory(hProc, mbi.BaseAddress, buffer, mbi.RegionSize, &nread);
+			swprintf_s(m_FileName, _MAX_FNAME, _T("%.3d_%s"), count, output);
+			//output = L"output\\"+output;
+			if (nread == mbi.RegionSize)
+			{
+				bool typeok = false;
+				if (pInfo->ReadMode)
+				{
+					if (((mbi.AllocationProtect & PAGE_READONLY) ||
+						(mbi.AllocationProtect & PAGE_READWRITE) ||
+						(mbi.AllocationProtect & PAGE_WRITECOPY) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_READ) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_READWRITE) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_WRITECOPY))
+						)
+					{
+						typeok = true;
+					}
+				}
+				if (pInfo->WriteMode)
+				{
+					if (((mbi.AllocationProtect & PAGE_READWRITE) ||
+						(mbi.AllocationProtect & PAGE_WRITECOPY) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_READWRITE) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_WRITECOPY))
+						)
+					{
+						typeok = true;
+					}
+				}
+				if (pInfo->ExecuteMode)
+				{
+					if (((mbi.AllocationProtect & PAGE_EXECUTE) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_READ) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_READWRITE) ||
+						(mbi.AllocationProtect & PAGE_EXECUTE_WRITECOPY))
+						)
+					{
+						typeok = true;
+					}
+				}
+				if (typeok)
+				{
+					if (m_MemPro->GetProcessMappedFileName(hProc, mbi.BaseAddress, lastfilename))
+						swprintf_s(m_FileName, _MAX_FNAME, _T("%s"), lastfilename);
+					char* cFileName = CStringToCharArray(m_FileName, CP_UTF8);
+					double precentage = (double)100 * startmem / maxmem;
+					unsigned int m_Progress = (unsigned int)precentage;
+					int Sendret = 1;
+					char* InfoStr = new char[MAX_PATH_EX];
+#ifndef _M_IX86
+					sprintf_s(InfoStr, MAX_PATH_EX, "%llu|%u|%s", mbi.RegionSize, m_Progress, cFileName);
+#else
+					sprintf_s(InfoStr, MAX_PATH_EX, "%lu|%u|%s", mbi.RegionSize, m_Progress, cFileName);
+#endif
+					BYTE* TmpBuffer1 = new BYTE[STRDATAPACKETSIZE];
+					memset(TmpBuffer1, '\x0', STRDATAPACKETSIZE);
+					memcpy(TmpBuffer1, InfoStr, strlen(InfoStr));
+					//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemDataInfo", TmpBuffer1);
+					//Sendret = SendDataPacketToServer("GiveMemDataInfo", InfoStr, info->tcpSocket);
+					if (outFile.good()) outFile << "GiveMemDataInfo\n";
+					if (outFile.good()) outFile << InfoStr;
+					if (outFile.good()) outFile << "\n";
+					delete[] TmpBuffer1;
+					if (Sendret == 0 || Sendret == -1)
+					{
+						delete[] InfoStr;
+						delete[] cFileName;
+						delete[] buffer;
+						CloseHandle(hProc);
+						return -3;
+					}
+					delete[] InfoStr;
+					log.logger("Debug", "mbi.RegionSize start");
+					if (mbi.RegionSize > STRDATAPACKETSIZE)
+					{
+						SIZE_T tmplen = mbi.RegionSize;
+						for (SIZE_T i = 0; i < mbi.RegionSize; i += STRDATAPACKETSIZE)
+						{
+							log.logger("Debug", "mbi.RegionSize");
+							BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+							memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+							if (tmplen < STRDATAPACKETSIZE)
+								memcpy(TmpBuffer, buffer + i, tmplen);
+							else
+							{
+								memcpy(TmpBuffer, buffer + i, STRDATAPACKETSIZE);
+								tmplen -= STRDATAPACKETSIZE;
+							}
+							//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemData", TmpBuffer);
+							char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+							//Sendret = SendDataPacketToServer("GiveMemData", charBuffer, info->tcpSocket);
+							if (outFile.good()) outFile << "GiveMemData\n";
+							if (outFile.good()) outFile << charBuffer;
+							if (outFile.good()) outFile << "\n";
+							delete[] TmpBuffer;
+							if (Sendret == 0 || Sendret == -1)
+							{
+								delete[] cFileName;
+								delete[] buffer;
+								CloseHandle(hProc);
+								return -3;
+							}
+						}
+					}
+					else
+					{
+						log.logger("Debug", "mbi.RegionSize failed");
+						BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+						memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+						memcpy(TmpBuffer, buffer, mbi.RegionSize);
+						//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemData", TmpBuffer);
+						char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+						//Sendret = SendDataPacketToServer("GiveMemData", charBuffer, info->tcpSocket);
+						if (outFile.good()) outFile << "GiveMemData\n";
+						if (outFile.good()) outFile << charBuffer;
+						if (outFile.good()) outFile << "\n";
+						delete[] TmpBuffer;
+						if (Sendret == 0 || Sendret == -1)
+						{
+							delete[] cFileName;
+							delete[] buffer;
+							CloseHandle(hProc);
+							return -3;
+						}
+					}
+					delete[] cFileName;
+					count++;
+				}
+			}
+			//}
+			//delete [] buffer;
+		}
+		startmem = (SIZE_T)mbi.BaseAddress + (SIZE_T)mbi.RegionSize;
+		delete[] m_FileName;
+		delete[] output;
+	}
+	CloseHandle(hProc);
+	return 0;
+}
+int Scan::ScanInjectedProcessDump(ScanMemoryInfo* pInfo)
+{
+	log.logger("Debug", "ScanInjectedProcessDump.");
+	MemProcess* m_MemPro = new MemProcess;
+	int retNum = 0;
+	HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, false, 8388);
+	if (!hProc) {
+		log.logger("Error", "OpenProcess failed.");
+		retNum = -1;
+	}
+	else {
+		log.logger("Debug", "OpenProcess success.");
+#ifndef _M_IX86
+		SIZE_T ptype = m_MemPro->Process32or64(hProc);
+#else
+		SIZE_T ptype = 32;
+#endif
+		if (!ptype) {
+			log.logger("Error", "IsWow64Process failed.");
+			retNum = -1;
+		}
+		else {
+			log.logger("Debug", "IsWow64Process success.");
+#ifndef _M_IX86
+			SIZE_T startmem = 0;
+			SIZE_T maxmem = 0x7FFF0000;
+			if (ptype == 64) maxmem = 0x7FFFFFEFFFF;
+#else
+			//SIZE_T ptype = 32;
+			SIZE_T startmem = 0;
+			SIZE_T maxmem = 0x7FFF0000;
+#endif
+			//int count = 0;
+			wchar_t lastfilename[MAX_PATH];
+			while (startmem < maxmem) {
+				MEMORY_BASIC_INFORMATION mbi;
+				SIZE_T size = VirtualQueryEx(hProc, (LPVOID)startmem, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+				if (!size) {
+					log.logger("Error", "VirtualQueryEx failed.");
+					retNum = -2;
+					break;
+				}
+				TCHAR* output = new TCHAR[_MAX_FNAME];
+				TCHAR* m_FileName = new TCHAR[_MAX_FNAME];
+#ifndef _M_IX86
+				if (startmem, ptype == 64)
+					swprintf_s(output, _MAX_FNAME, _T("%016I64X-%016I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+				else
+					swprintf_s(output, _MAX_FNAME, _T("%08I64X-%08I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+#else
+				swprintf_s(output, _MAX_FNAME, _T("%08I64X-%08I64X.bin"), startmem, (SIZE_T)mbi.BaseAddress + mbi.RegionSize);
+#endif
+				if (mbi.State == MEM_COMMIT) {
+					char* buffer = new char[mbi.RegionSize];
+					SIZE_T nread = 0;
+					//DWORD oldprotect;
+					//if (VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,PAGE_EXECUTE_READWRITE,&oldprotect))
+					//{
+					//	mbi.AllocationProtect = oldprotect;
+					//	VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,oldprotect,&oldprotect);
+					ReadProcessMemory(hProc, mbi.BaseAddress, buffer, mbi.RegionSize, &nread);
+					//swprintf_s(m_FileName,_MAX_FNAME,_T("%.3d_%s"),count,output);
+					//output = L"output\\"+output;
+					if (nread == mbi.RegionSize)
+					{
+						bool typeok = false;
+						if (mbi.AllocationProtect & PAGE_EXECUTE_READWRITE)
+						{
+							if (!m_MemPro->GetProcessMappedFileName(hProc, mbi.BaseAddress, lastfilename))
+							{
+								typeok = true;
+								swprintf_s(m_FileName, _MAX_FNAME, _T("PAGE_EXECUTE_READWRITE_%s"), output);
+							}
+						}
+						else if (mbi.AllocationProtect & PAGE_EXECUTE_WRITECOPY)
+						{
+							if (!m_MemPro->GetProcessMappedFileName(hProc, mbi.BaseAddress, lastfilename))
+							{
+								typeok = true;
+								swprintf_s(m_FileName, _MAX_FNAME, _T("PAGE_EXECUTE_WRITECOPY_%s"), output);
+							}
+						}
+
+						if (typeok)
+						{
+							log.logger("Debug", "typeok true");
+							char* cFileName = CStringToCharArray(m_FileName, CP_UTF8);
+							//double precentage = (double)100*startmem/maxmem;
+							//unsigned int m_Progress = (unsigned int)precentage;
+							int Sendret;
+							char* InfoStr = new char[MAX_PATH_EX];
+#ifndef _M_IX86
+							sprintf_s(InfoStr, MAX_PATH_EX, "%llu|0|%s", mbi.RegionSize, cFileName);
+#else
+							sprintf_s(InfoStr, MAX_PATH_EX, "%lu|0|%s", mbi.RegionSize, cFileName);
+#endif
+							BYTE* InfoBuffer = new BYTE[STRDATAPACKETSIZE];
+							memset(InfoBuffer, '\x0', STRDATAPACKETSIZE);
+							memcpy(InfoBuffer, InfoStr, strlen(InfoStr));
+							//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemScanInfo", InfoBuffer);
+							Sendret = SendDataPacketToServer("GiveMemScanInfo", InfoStr, info->tcpSocket);
+							delete[] InfoBuffer;
+							if (Sendret <= 0)
+							{
+								delete[] InfoStr;
+								delete[] cFileName;
+								delete[] buffer;
+								delete[] m_FileName;
+								delete[] output;
+								//CloseHandle(hProc);
+								retNum = -3;
+								break;
+							}
+							//delete[] InfoStr;
+							if (mbi.RegionSize > STRDATAPACKETSIZE)
+							{
+								SIZE_T tmplen = mbi.RegionSize;
+								for (SIZE_T i = 0; i < mbi.RegionSize; i += STRDATAPACKETSIZE)
+								{
+									BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+									memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+									if (tmplen < STRDATAPACKETSIZE)
+										memcpy(TmpBuffer, buffer + i, tmplen);
+									else
+									{
+										memcpy(TmpBuffer, buffer + i, STRDATAPACKETSIZE);
+										tmplen -= STRDATAPACKETSIZE;
+									}
+									//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemScanData", TmpBuffer);
+									Sendret = SendDataPacketToServer("GiveMemScanInfo", InfoStr, info->tcpSocket);
+									delete[] TmpBuffer;
+									if (Sendret <= 0)
+									{
+										delete[] cFileName;
+										delete[] buffer;
+										//CloseHandle(hProc);
+										delete[] m_FileName;
+										delete[] output;
+										retNum = -3;
+										break;
+									}
+								}
+							}
+							else
+							{
+								BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+								memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+								memcpy(TmpBuffer, buffer, mbi.RegionSize);
+								//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveMemScanData", TmpBuffer);
+								Sendret = SendDataPacketToServer("GiveMemScanInfo", InfoStr, info->tcpSocket);
+								delete[] TmpBuffer;
+								if (Sendret == 0 || Sendret == -1)
+								{
+									delete[] cFileName;
+									delete[] buffer;
+									delete[] m_FileName;
+									delete[] output;
+									//CloseHandle(hProc);
+									retNum = -3;
+									break;
+								}
+							}
+							delete[] cFileName;
+							//count++;
+						}
+						else {
+							log.logger("Debug", "typeok false");
+						}
+					}
+					//}
+					delete[] buffer;
+				}
+				startmem = (SIZE_T)mbi.BaseAddress + (SIZE_T)mbi.RegionSize;
+				delete[] m_FileName;
+				delete[] output;
+			}
+		}
+		CloseHandle(hProc);
+	}
+	return retNum;
 }

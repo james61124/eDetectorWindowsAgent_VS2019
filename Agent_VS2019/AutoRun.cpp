@@ -328,20 +328,15 @@ void AutoRun::ParsingStartupFile(vector<AutoRunInfo>* pInfo, TCHAR* m_Path, TCHA
 void AutoRun::LoadRegisterAutoRun(vector<AutoRunInfo>* pInfo)
 {
 #ifndef _M_IX86
-	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
+
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"));
-	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServices"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion\\RunServicesOnce"));
-	//printf("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run\n");
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"));
 	LoadRegisterInfo(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\RunOnce"));
-	//printf("SYSTEM\\CurrentControlSet\\Control\\SafeBoot\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\SafeBoot"), _T("AlternateShell"), false, false);
-	printf("SOFTWARE\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
-	printf("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components\n");
 	LoadRegisterInfoEx(pInfo, HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Wow6432Node\\Microsoft\\Active Setup\\Installed Components"), _T("StubPath"), true, false);
 
 	//printf("Software\\Microsoft\\Windows\\CurrentVersion\\Run\n");
@@ -400,7 +395,7 @@ void AutoRun::LoadRegisterInfo(vector<AutoRunInfo>* pInfo, HKEY pKey, const wcha
 {
 	HKEY hKey = NULL;
 	LONG lResult;
-	lResult = RegOpenKeyEx(pKey, RegPath, 0, KEY_QUERY_VALUE, &hKey);
+	lResult = RegOpenKeyEx(pKey, RegPath, 0, KEY_QUERY_VALUE | KEY_WOW64_64KEY, &hKey);
 
 	if (lResult == ERROR_SUCCESS)
 	{
@@ -1055,13 +1050,10 @@ void AutoRun::LoadRegisterInfoEx(vector<AutoRunInfo>* pInfo, HKEY pKey, const wc
 	if (IsChildItem)
 	{
 		vector<wstring> strInfo;
-		printf("LoadRegisterChildItem start\n");
 		LoadRegisterChildItem(&strInfo, pKey, RegPath, Is32Bit);
-		printf("LoadRegisterChildItem end\n");
 		if (!strInfo.empty())
 		{
 			vector<wstring>::iterator it;
-			printf("strInfo for loop\n");
 			for (it = strInfo.begin(); it != strInfo.end(); it++)
 			{
 				TCHAR* m_RegPath = new TCHAR[MAX_PATH_EX];
@@ -1074,9 +1066,7 @@ void AutoRun::LoadRegisterInfoEx(vector<AutoRunInfo>* pInfo, HKEY pKey, const wc
 	}
 	else
 	{
-		printf("LoadRegisterDataEx start\n");
 		LoadRegisterDataEx(pInfo, pKey, RegPath, KeyStr, Is32Bit);
-		printf("LoadRegisterDataEx end\n");
 	}
 }
 void AutoRun::LoadRegisterChildItem(vector<wstring>* pStrInfo, HKEY pKey, const wchar_t* RegPath, bool Is32Bit)
@@ -1117,7 +1107,7 @@ void AutoRun::LoadRegisterDataEx(vector<AutoRunInfo>* pInfo, HKEY pKey, const wc
 	if (Is32Bit)
 		lResult = RegOpenKeyEx(pKey, RegPath, 0, KEY_QUERY_VALUE | KEY_WOW64_32KEY, &hKey);
 	else
-		lResult = RegOpenKeyEx(pKey, RegPath, 0, KEY_QUERY_VALUE, &hKey);
+		lResult = RegOpenKeyEx(pKey, RegPath, 0, KEY_QUERY_VALUE | KEY_WOW64_64KEY, &hKey);
 	if (lResult == ERROR_SUCCESS)
 	{
 

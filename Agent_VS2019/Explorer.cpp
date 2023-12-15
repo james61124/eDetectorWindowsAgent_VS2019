@@ -15,7 +15,7 @@ void Explorer::DoTask() {
 	mbstowcs_s(&convertedChars, DriveName, sizeof(DriveName) / sizeof(wchar_t), Drive, sizeof(Drive) - 1);
 
 
-	log.logger("Debug", FileSystem);
+	//log.logger("Debug", FileSystem);
 
 	m_Info->Drive = static_cast<wchar_t>(Drive[0]);
 	//mbstowcs_s(&convertedChars, m_Info->DriveInfo, sizeof(m_Info->DriveInfo) / sizeof(wchar_t), FileSystem, sizeof(FileSystem) - 1);
@@ -33,7 +33,7 @@ void Explorer::DoTask() {
 	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 	std::string str(bufferSize, '\0');
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
-	log.logger("Debug", str);
+	//log.logger("Debug", str);
 
 	wchar_t* volname = new wchar_t[_MAX_FNAME];
 	wchar_t* filesys = new wchar_t[_MAX_FNAME];
@@ -124,7 +124,7 @@ void Explorer::DoTask() {
 									wchar_t* access_time = SystemTimeToUnixTime((*it).AT);
 									swprintf_s(wstr, 1024, L"%s|1|%d|%s|%s|%s|%s,%s|%lu|%lu|%lu\n",
 										(*it).FileName, (*it).isDirectory
-										, create_time, write_time, access_time, m_MD5Str, Signaturestr, (*it).FileSize, (*it).ParentFirstDataCluster, LastCluster);
+										, create_time, write_time, access_time, m_MD5Str, Signaturestr, (*it).FileSize, LastCluster, (*it).ParentFirstDataCluster);
 								}
 								else
 								{
@@ -133,7 +133,7 @@ void Explorer::DoTask() {
 									wchar_t* access_time = SystemTimeToUnixTime((*it).AT);
 									swprintf_s(wstr, 1024, L"%s|1|%d|%s|%s|%s|null,null|%lu|%lu|%lu\n",
 										(*it).FileName, (*it).isDirectory
-										, create_time, write_time, access_time, (*it).FileSize, (*it).ParentFirstDataCluster, LastCluster);
+										, create_time, write_time, access_time, (*it).FileSize, LastCluster, (*it).ParentFirstDataCluster);
 								}
 								delete[] Signaturestr;
 								delete[] m_MD5Str;
@@ -145,7 +145,7 @@ void Explorer::DoTask() {
 								wchar_t* access_time = SystemTimeToUnixTime((*it).AT);
 								swprintf_s(wstr, 1024, L"%s|1|%d|%s|%s|%s|null,null|%lu|%lu|%lu\n",
 									(*it).FileName, (*it).isDirectory
-									, create_time, write_time, access_time, (*it).FileSize, (*it).ParentFirstDataCluster, LastCluster);
+									, create_time, write_time, access_time, (*it).FileSize, LastCluster, (*it).ParentFirstDataCluster);
 							}
 							char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
 							strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
@@ -256,29 +256,29 @@ void Explorer::DoTask() {
 			}
 			else
 			{
-				//char* TempStr = new char[DATASTRINGMESSAGELEN];
-				//memset(TempStr, '\0', DATASTRINGMESSAGELEN);
-				//char* m_DataStr = new char[1000];
-				//sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
-				//strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
-				////wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
-				//unsigned int ProgressCount = 1;
-				//unsigned int Index = 5;
-				//unsigned int Count = 1;
-				//int ret = 1;
-				//SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
-				///*if (TempStr[0] != '\0')
-				//{
-				//	char* ProgressStr = new char[10];
-				//	sprintf_s(ProgressStr, 10, "%u", ProgressCount);
-				//	strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
-				//	ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
-				//	delete[] ProgressStr;
-				//}*/
-				////if(Client_Socket->IsOpened())
-				////if (ret > 0) int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
-				//delete[] m_DataStr;
-				//delete[] TempStr;
+				char* TempStr = new char[DATASTRINGMESSAGELEN];
+				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+				char* m_DataStr = new char[1000];
+				sprintf_s(m_DataStr, 1000, "5|.|5|0|2|1970/01/01 08:00:00|1970/01/01 08:00:00|1970/01/01 08:00:00|null|0|9\n");
+				strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+				//wchar_t * DriveStr = CharArrayToWString(drive,CP_UTF8);
+				unsigned int ProgressCount = 1;
+				unsigned int Index = 5;
+				unsigned int Count = 1;
+				int ret = 1;
+				SysExplorerSearch(drive, 5, Index, TempStr, ProgressCount, Count);
+				/*if (TempStr[0] != '\0')
+				{
+					char* ProgressStr = new char[10];
+					sprintf_s(ProgressStr, 10, "%u", ProgressCount);
+					strcat_s(TempStr, DATASTRINGMESSAGELEN, ProgressStr);
+					ret = socketsend->SendDataToServer(functionName_GiveExplorerData, TempStr);
+					delete[] ProgressStr;
+				}*/
+				//if(Client_Socket->IsOpened())
+				//if (ret > 0) int	ret = socketsend->SendMessageToServer(functionName_GiveExplorerEnd, null);
+				delete[] m_DataStr;
+				delete[] TempStr;
 			}
 		}
 		else
@@ -512,12 +512,20 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 			SystemTimeToTzSpecificLocalTime(NULL, &systemCreateTime, &localCreateTime);
 			SystemTimeToTzSpecificLocalTime(NULL, &systemWriteTime, &localWriteTime);
 			SystemTimeToTzSpecificLocalTime(NULL, &systemAccessTime, &localAccessTime);
-			swprintf_s(MyDataInfo, 1000, L"%u|%s|%u|0|2|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null|%lu|9\n",
+
+			wchar_t* create_time = SystemTimeToUnixTime(systemCreateTime);
+			wchar_t* write_time = SystemTimeToUnixTime(systemWriteTime);
+			wchar_t* access_time = SystemTimeToUnixTime(systemAccessTime);
+			
+			swprintf_s(MyDataInfo, 1000, L"%s|0|2|%s|%s|%s|null|%lu|%u|%u\n",
+				fd.cFileName, create_time, write_time, access_time, fd.nFileSizeLow, FileIndex, FatherNum);
+
+			/*swprintf_s(MyDataInfo, 1000, L"%u|%s|%u|0|2|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null|%lu|9\n",
 				FileIndex, fd.cFileName, FatherNum,
 				localCreateTime.wYear, localCreateTime.wMonth, localCreateTime.wDay, localCreateTime.wHour, localCreateTime.wMinute, localCreateTime.wSecond,
 				localWriteTime.wYear, localWriteTime.wMonth, localWriteTime.wDay, localWriteTime.wHour, localWriteTime.wMinute, localWriteTime.wSecond,
 				localAccessTime.wYear, localAccessTime.wMonth, localAccessTime.wDay, localAccessTime.wHour, localAccessTime.wMinute, localAccessTime.wSecond,
-				fd.nFileSizeLow);
+				fd.nFileSizeLow);*/
 
 			char* m_DataStr = CStringToCharArray(MyDataInfo, CP_UTF8);
 			strcat_s(TmpSend, DATASTRINGMESSAGELEN, m_DataStr);
@@ -529,7 +537,7 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 			{
 				char* ProgressStr = new char[10];
 				sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
-				strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
+				//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
 				int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
 				if (ret1 <= 0)
 				{
@@ -547,7 +555,7 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 				{
 					char* ProgressStr = new char[10];
 					sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
-					strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
+					//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
 					int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
 					if (ret1 <= 0)
 					{
@@ -610,12 +618,21 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 			SystemTimeToTzSpecificLocalTime(NULL, &systemCreateTime, &localCreateTime);
 			SystemTimeToTzSpecificLocalTime(NULL, &systemWriteTime, &localWriteTime);
 			SystemTimeToTzSpecificLocalTime(NULL, &systemAccessTime, &localAccessTime);
-			swprintf_s(MyDataInfo, 1000, L"%u|%s|%u|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s|%lu|9\n",
+
+			wchar_t* create_time = SystemTimeToUnixTime(systemCreateTime);
+			wchar_t* write_time = SystemTimeToUnixTime(systemWriteTime);
+			wchar_t* access_time = SystemTimeToUnixTime(systemAccessTime);
+
+			swprintf_s(MyDataInfo, 1000, L"%s|0|0|%s|%s|%s|%s|%lu|%u|%u\n",
+				fd.cFileName, create_time, write_time, access_time, HASStr, fd.nFileSizeLow, FileIndex, FatherNum);
+
+			/*swprintf_s(MyDataInfo, 1000, L"%u|%s|%u|0|0|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%s|%lu|9\n",
 				FileIndex, fd.cFileName, FatherNum,
 				localCreateTime.wYear, localCreateTime.wMonth, localCreateTime.wDay, localCreateTime.wHour, localCreateTime.wMinute, localCreateTime.wSecond,
 				localWriteTime.wYear, localWriteTime.wMonth, localWriteTime.wDay, localWriteTime.wHour, localWriteTime.wMinute, localWriteTime.wSecond,
 				localAccessTime.wYear, localAccessTime.wMonth, localAccessTime.wDay, localAccessTime.wHour, localAccessTime.wMinute, localAccessTime.wSecond,
-				HASStr, fd.nFileSizeLow);
+				HASStr, fd.nFileSizeLow);*/
+
 			char* m_DataStr = CStringToCharArray(MyDataInfo, CP_UTF8);
 			strcat_s(TmpSend, DATASTRINGMESSAGELEN, m_DataStr);
 			SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
@@ -626,7 +643,7 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 			{
 				char* ProgressStr = new char[10];
 				sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
-				strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
+				//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
 				int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
 				if (ret1 <= 0)
 				{
@@ -644,7 +661,7 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 				{
 					char* ProgressStr = new char[10];
 					sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
-					strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
+					//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
 					int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
 					if (ret1 <= 0)
 					{
