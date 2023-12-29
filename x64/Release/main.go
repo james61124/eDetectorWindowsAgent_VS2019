@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"fmt"
+	"github.com/google/uuid"
 )
 
 type GenerateExeRequest struct {
@@ -33,6 +34,12 @@ func main() {
 		c.Writer.Header().Set("Content-Disposition", "attachment; filename=example.exe")
 		c.Writer.Header().Set("Content-Type", "application/octet-stream")
 		c.File(exeFile)
+
+		err := os.Remove(exeFile)
+		if err != nil {
+			fmt.Println("Error deleting file:", err)
+			return
+		}
 	})
 
 	router.Run(":8080")
@@ -46,14 +53,25 @@ func generateUniqueFileName() string {
 }
 
 func generateExe(ip string, port string, detectPort string, version string) string {
-	// exePath, _ := os.Executable()
+
 	exeDir := filepath.Dir("./")
-	generateExePath := "C:/james/eDetectorWindowsAgent_VS2019/x64/Release/AgentGenerator.exe"
+	generateExeDir := filepath.Dir("./")
 
+	oldExePath := filepath.Join(exeDir, "Agent.exe")
+	generateExePath := filepath.Join(generateExeDir, "AgentGenerator.exe")
+
+	newName := generateUniqueFileName()
+	newExePath := filepath.Join(exeDir, newName)
+
+	err := os.Rename(oldExePath, newExePath)
+	if err != nil {
+		fmt.Println("Error renaming file:", err)
+	}
+	
+	// generateExePath := "C:/james/eDetectorWindowsAgent_VS2019/x64/Release/AgentGenerator.exe"
 	// generateExePath := filepath.Join(exeDir, "AgentGenerator.exe")
-	newExePath := filepath.Join(exeDir, "Agent.exe")
-
-	// 執行 AgentGenerator.exe
+	
+	// run AgentGenerator.exe
 	if _, err := os.Stat(generateExePath); err != nil {
 		log.Fatalf("Failed to find AgentGenerator.exe: %v", err)
 	}
@@ -64,8 +82,6 @@ func generateExe(ip string, port string, detectPort string, version string) stri
 	} else {
 		fmt.Println("Command executed successfully")
 	}
-
-	// _ = cmd.Run()
 
 	// 檢查 Agent.exe 是否已生成
 	if _, err := os.Stat(newExePath); err != nil {

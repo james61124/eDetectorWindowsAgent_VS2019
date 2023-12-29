@@ -15,6 +15,8 @@
 #include "DetectNetwork.h"
 #include "UpdateAgent.h"
 
+
+
 bool IsProcessAlive(DWORD pid) {
 	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
 	if (hProcess == NULL) {
@@ -129,6 +131,8 @@ void CheckIfAdmin() {
 
 
 int main(int argc, char* argv[]) {
+
+	
 
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " <serverIP> <port>" << std::endl;

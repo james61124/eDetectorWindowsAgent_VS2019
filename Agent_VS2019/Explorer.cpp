@@ -14,14 +14,8 @@ void Explorer::DoTask() {
 	size_t convertedChars = 0;
 	mbstowcs_s(&convertedChars, DriveName, sizeof(DriveName) / sizeof(wchar_t), Drive, sizeof(Drive) - 1);
 
-
-	//log.logger("Debug", FileSystem);
-
 	m_Info->Drive = static_cast<wchar_t>(Drive[0]);
-	//mbstowcs_s(&convertedChars, m_Info->DriveInfo, sizeof(m_Info->DriveInfo) / sizeof(wchar_t), FileSystem, sizeof(FileSystem) - 1);
 	MultiByteToWideChar(CP_ACP, 0, FileSystem, -1, m_Info->DriveInfo, _countof(m_Info->DriveInfo));
-	//_tcscpy(m_Info->DriveInfo, FileSystem);
-	//wcscpy(m_Info->DriveInfo, FileSystem);
 
 	/*m_Info->Drive = 'F';
 	_tcscpy_s(m_Info->DriveInfo, _T("FAT32"));*/
@@ -33,7 +27,6 @@ void Explorer::DoTask() {
 	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
 	std::string str(bufferSize, '\0');
 	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
-	//log.logger("Debug", str);
 
 	wchar_t* volname = new wchar_t[_MAX_FNAME];
 	wchar_t* filesys = new wchar_t[_MAX_FNAME];
@@ -338,10 +331,58 @@ int Explorer::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSoc
 	_tcscat_s(Explorer_zip, MAX_PATH_EX, _T("\\Explorer.zip"));
 	DeleteFile(Explorer_zip);
 
-
 	std::wofstream outFile(Explorer_txt, std::ios::app);
 	if (!outFile.is_open()) {
 		log.logger("Error", "Explorer.txt open failed");
+	}
+
+	// Calculate datalen of directory
+	std::unordered_map<int, int> datalen_map;
+	for (m_progressIdx = MFT_IDX_MFT; m_progressIdx < m_curSelectedVol->GetRecordsCount(); m_progressIdx++) {
+		CFileRecord* fr = new CFileRecord(m_curSelectedVol);
+		if (fr == NULL) {
+			continue;
+		}
+
+		// Only parse Standard Information and File Name attributes
+		fr->SetAttrMask(MASK_FILE_NAME | MASK_DATA);
+		if (!fr->ParseFileRecord(m_progressIdx)) {
+			delete fr;
+			continue;
+		}
+
+		if (!fr->ParseFileAttrs()) {
+			delete fr;
+			continue;
+		}
+
+		TCHAR fn[MAX_PATH];
+		if (fr->GetFileName(fn, MAX_PATH) <= 0) {
+			delete fr;
+			continue;
+		}
+
+		ULONGLONG ParentId = 0;
+		ParentId = fr->GetParentRef();
+		if (ParentId == 0) ParentId = 5;
+		else ParentId = ParentId & 0x0000FFFFFFFFFFFF;
+
+		ULONGLONG datalen = 0;
+		if (!fr->IsDirectory()) {
+			const CAttrBase* data = fr->FindStream();
+			if (data) {
+				datalen = data->GetDataSize();
+				if (fr->IsCompressed() && datalen == 0) datalen = fr->GetFileSize();
+			}
+			else {
+				if (fr->IsCompressed() && datalen == 0) datalen = fr->GetFileSize();
+			}
+			datalen_map[m_progressIdx] = datalen;
+			datalen_map[ParentId] += datalen;
+		}
+		else {
+			datalen_map[m_progressIdx] += datalen;
+		}
 	}
 
 	// collect Explorer
@@ -381,23 +422,25 @@ int Explorer::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSoc
 			continue;	// skip to next
 		}
 
-		ULONGLONG datalen = 0;
+		//ULONGLONG datalen = 0;
 
-		if (!fr->IsDirectory())
-		{
-			const CAttrBase* data = fr->FindStream();
-			if (data)
-			{
-				datalen = data->GetDataSize();
-				if (fr->IsCompressed() && datalen == 0)
-					datalen = fr->GetFileSize();
-			}
-			else
-			{
-				if (fr->IsCompressed() && datalen == 0)
-					datalen = fr->GetFileSize();
-			}
-		}
+		//if (!fr->IsDirectory())
+		//{
+		//	const CAttrBase* data = fr->FindStream();
+		//	if (data)
+		//	{
+		//		datalen = data->GetDataSize();
+		//		if (fr->IsCompressed() && datalen == 0)
+		//			datalen = fr->GetFileSize();
+		//	}
+		//	else
+		//	{
+		//		if (fr->IsCompressed() && datalen == 0)
+		//			datalen = fr->GetFileSize();
+		//	}
+		//}
+
+
 		ULONGLONG ParentId = 0;
 		ParentId = fr->GetParentRef();
 		if (ParentId == 0)
@@ -430,7 +473,7 @@ int Explorer::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSoc
 		else swprintf_s(EntryModifiedTimeWstr, 50, L"1");
 
 		wchar_t* wstr = new wchar_t[1024];
-		swprintf_s(wstr, 1024, L"%s|%d|%d|%s|%s|%s|%s|%llu|%u|%llu\n", fn, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen, m_progressIdx, ParentId);
+		swprintf_s(wstr, 1024, L"%s|%d|%d|%s|%s|%s|%s|%llu|%u|%llu\n", fn, fr->IsDeleted(), fr->IsDirectory(), CreateTimeWstr, WriteTimeWstr, AccessTimeWstr, EntryModifiedTimeWstr, datalen_map[m_progressIdx], m_progressIdx, ParentId);
 
 		// write to Explorer.txt
 		char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
@@ -485,6 +528,21 @@ int Explorer::NTFSSearch(wchar_t vol_name, char* pMAC, char* pIP, SOCKET* tcpSoc
 }
 void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned int& FileIndex, char* TmpSend, unsigned int& m_ProgressCount, unsigned int& m_Count)
 {
+
+	TCHAR* Explorer_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Explorer_txt);
+	_tcscat_s(Explorer_txt, MAX_PATH_EX, _T("\\Explorer.txt"));
+	DeleteFile(Explorer_txt);
+	TCHAR* Explorer_zip = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Explorer_zip);
+	_tcscat_s(Explorer_zip, MAX_PATH_EX, _T("\\Explorer.zip"));
+	DeleteFile(Explorer_zip);
+
+	std::wofstream outFile(Explorer_txt, std::ios::app);
+	if (!outFile.is_open()) {
+		log.logger("Error", "Explorer.txt open failed");
+	}
+
 	TCHAR szTempPath[MAX_PATH_EX];
 	lstrcpy(szTempPath, m_Path);
 	lstrcat(szTempPath, TEXT("*.*"));
@@ -517,7 +575,7 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 			wchar_t* write_time = SystemTimeToUnixTime(systemWriteTime);
 			wchar_t* access_time = SystemTimeToUnixTime(systemAccessTime);
 			
-			swprintf_s(MyDataInfo, 1000, L"%s|0|2|%s|%s|%s|null|%lu|%u|%u\n",
+			swprintf_s(MyDataInfo, 1000, L"%s|0|2|%s|%s|%s|null,null|%lu|%u|%u\n",
 				fd.cFileName, create_time, write_time, access_time, fd.nFileSizeLow, FileIndex, FatherNum);
 
 			/*swprintf_s(MyDataInfo, 1000, L"%u|%s|%u|0|2|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|%02hu/%02hu/%02hu %02hu:%02hu:%02hu|null|%lu|9\n",
@@ -538,7 +596,11 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 				char* ProgressStr = new char[10];
 				sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
 				//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
-				int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+				//int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+				if (outFile.good()) outFile << TmpSend;
+				else log.logger("Error", "write to explorer txt failed");
+
+				int ret1 = 1;
 				if (ret1 <= 0)
 				{
 					delete[] ProgressStr;
@@ -556,7 +618,10 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 					char* ProgressStr = new char[10];
 					sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
 					//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
-					int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+					//int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+					if (outFile.good()) outFile << TmpSend;
+					else log.logger("Error", "write to explorer txt failed");
+					int ret1 = 1;
 					if (ret1 <= 0)
 					{
 						delete[] ProgressStr;
@@ -635,7 +700,10 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 
 			char* m_DataStr = CStringToCharArray(MyDataInfo, CP_UTF8);
 			strcat_s(TmpSend, DATASTRINGMESSAGELEN, m_DataStr);
-			SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+			//SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+			if (outFile.good()) outFile << TmpSend;
+			else log.logger("Error", "write to explorer txt failed");
+
 			m_ProgressCount++;
 			m_Count++;
 			end = clock();
@@ -644,7 +712,10 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 				char* ProgressStr = new char[10];
 				sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
 				//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
-				int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+				//int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+				if (outFile.good()) outFile << TmpSend;
+				else log.logger("Error", "write to explorer txt failed");
+				int ret1 = 1;
 				if (ret1 <= 0)
 				{
 					delete[] ProgressStr;
@@ -662,7 +733,10 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 					char* ProgressStr = new char[10];
 					sprintf_s(ProgressStr, 10, "%u", m_ProgressCount);
 					//strcat_s(TmpSend, DATASTRINGMESSAGELEN, ProgressStr);
-					int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+					//int ret1 = SendDataPacketToServer("GiveExplorerData", TmpSend, info->tcpSocket);
+					if (outFile.good()) outFile << TmpSend;
+					else log.logger("Error", "write to explorer txt failed");
+					int ret1 = 1;
 					if (ret1 <= 0)
 					{
 						delete[] ProgressStr;
@@ -684,4 +758,28 @@ void Explorer::SysExplorerSearch(TCHAR* m_Path, unsigned int FatherNum, unsigned
 		}
 	} while (FindNextFile(hSearch, &fd) != FALSE);
 	FindClose(hSearch);
+
+	// Get Explorer.txt Size
+	std::ifstream file(Explorer_zip, std::ios::binary);
+	if (!file.is_open()) {
+		std::cout << "Failed to open file." << std::endl;
+		log.logger("Error", "failed to open zip file");
+		return;
+	}
+	file.seekg(0, std::ios::end);
+	std::streampos fileSize = file.tellg();
+	file.close();
+	long long fileSizeLL = static_cast<long long>(fileSize);
+
+	// send GiveExplorerInfo
+	char* FileSize = new char[DATASTRINGMESSAGELEN];
+	sprintf_s(FileSize, DATASTRINGMESSAGELEN, "%lld", fileSizeLL);
+	SendDataPacketToServer("GiveExplorerInfo", FileSize, info->tcpSocket);
+	delete[] FileSize;
+
+	// send zip file
+	SendFileToServer("Explorer", Explorer_zip, info->tcpSocket);
+
+	DeleteFile(Explorer_txt);
+	DeleteFile(Explorer_zip);
 }

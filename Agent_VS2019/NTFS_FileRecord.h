@@ -4,7 +4,7 @@
 
 //#include "NTFS_Common.h"
 
-#include <windows.h>
+//#include <windows.h>
 #include "NTFS_Common.h"
 //#include "NTFS_Attribute.h"
 

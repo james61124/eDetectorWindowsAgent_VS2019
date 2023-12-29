@@ -33,11 +33,13 @@
     <ClCompile Include="CVolumeAccess.cpp" />
     <ClCompile Include="DetectNetwork.cpp" />
     <ClCompile Include="DetectProcess.cpp" />
+    <ClCompile Include="DumpProcess.cpp" />
     <ClCompile Include="Explorer.cpp" />
     <ClCompile Include="FAT32General.cpp" />
     <ClCompile Include="GlobalFunction.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="info.cpp" />
+    <ClCompile Include="LoadDll.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MemoryTree.cpp" />
     <ClCompile Include="MemProcess.cpp" />
@@ -51,6 +53,8 @@
     <ClCompile Include="tools.cpp" />
     <ClCompile Include="unzip.cpp" />
     <ClCompile Include="UpdateAgent.cpp" />
+    <ClCompile Include="YaraManager.cpp" />
+    <ClCompile Include="YaraRule.cpp" />
     <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +71,7 @@
     <ClInclude Include="CVolumeAccess.h" />
     <ClInclude Include="DetectNetwork.h" />
     <ClInclude Include="DetectProcess.h" />
+    <ClInclude Include="DumpProcess.h" />
     <ClInclude Include="Explorer.h" />
     <ClInclude Include="FAT32General.h" />
     <ClInclude Include="File.h" />
@@ -75,6 +80,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="internal.h" />
+    <ClInclude Include="LoadDll.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MemoryTree.h" />
     <ClInclude Include="MemProcess.h" />
@@ -95,6 +101,8 @@
     <ClInclude Include="tools.h" />
     <ClInclude Include="unzip.h" />
     <ClInclude Include="UpdateAgent.h" />
+    <ClInclude Include="YaraManager.h" />
+    <ClInclude Include="YaraRule.h" />
     <ClInclude Include="zip.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -217,12 +225,15 @@ _HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/utf-16 %(AdditionalOptions)</AdditionalOptions>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\james\eDetectorWindowsAgent_VS2019\libyara\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\james\eDetectorWindowsAgent_VS2019\windows\vs2017\libyara\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\james\eDetectorWindowsAgent_VS2019\windows\vs2017\libyara\Release\libyara64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -8,9 +8,27 @@ Scan::Scan(Info* infoInstance, SocketSend* socketSendInstance) {
 
 void Scan::DoTask() {
 
+	// 14948
+	// 2568
+	// C:\Users\test\AppData\Local\Microsoft\OneDrive\23.246.1127.0002\CheckboxWindows.dll
+	// C:\\ProgramData\\A-Volute\\A-Volute.Nahimic\\Modules\\Scheduled\\x64\\AudioDevProps2.dll
 	//DumpMemoryInfo* pInfo = new DumpMemoryInfo;
-	//pInfo->ProcessID = 8388;
-	//ProcessDump(pInfo);
+	//pInfo->ProcessID = 14948;
+	////ProcessDump(pInfo);
+	//GetProcessExecute(pInfo);
+
+	//log.logger("Debug", "DoTask");
+
+	//TCHAR* FileName;
+	//FileName = new TCHAR[MAX_PATH_EX];
+	//log.logger("Debug", "FileName");
+	//_tcscat_s(FileName, MAX_PATH_EX, _T("C:\\ProgramData\\A-Volute\\A-Volute.Nahimic\\Modules\\Scheduled\\x64\\AudioDevProps2.dll"));
+	//log.logger("Debug", "OnlyProcessDump");
+	//OnlyProcessDump(14948, FileName);
+
+	/*TCHAR FileName[MAX_PATH_EX];
+	_tcscat_s(FileName, MAX_PATH_EX, _T("\\Scan.txt"));
+	int ProcessID;*/
 
 	char* Scan = new char[5];
 	strcpy_s(Scan, 5, "Scan");
@@ -1016,4 +1034,366 @@ int Scan::ScanInjectedProcessDump(ScanMemoryInfo* pInfo)
 		CloseHandle(hProc);
 	}
 	return retNum;
+}
+int Scan::GetProcessExecute(DumpMemoryInfo* pInfo) {
+	TCHAR* Scan_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Scan_txt);
+	_tcscat_s(Scan_txt, MAX_PATH_EX, _T("\\Scan.txt"));
+	DeleteFile(Scan_txt);
+	std::wofstream outFile(Scan_txt, std::ios::app);
+	if (!outFile.is_open()) log.logger("Error", "Scan.txt open failed");
+
+	MemProcess* m_MemPro = new MemProcess;
+	int ret = 0;
+	set<wstring> wtr;
+	HANDLE hSnapshot;
+	MODULEENTRY32 me32;
+	hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pInfo->ProcessID);
+	if (hSnapshot != INVALID_HANDLE_VALUE) {
+		me32.dwSize = sizeof(MODULEENTRY32);
+		if (Module32First(hSnapshot, &me32)) {
+			do {
+				wtr.insert(me32.szExePath);
+			} while (Module32Next(hSnapshot, &me32));
+		}
+		CloseHandle(hSnapshot);
+	}
+	int Injected = m_MemPro->CheckIsInjection(pInfo->ProcessID, NULL, NULL, NULL);
+	if (Injected == 2) wtr.insert(_T("Unknown"));
+	if (!wtr.empty()) {
+		int DataCount = 0;
+		char* TempStr = new char[DATASTRINGMESSAGELEN];
+		memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+		set<wstring>::iterator it;
+		for (it = wtr.begin();it != wtr.end();it++)
+		{
+			wchar_t* wstr = new wchar_t[1024];
+			swprintf_s(wstr, 1024, L"%s\n", (*it).c_str());
+			DataCount++;
+			char* m_DataStr = CStringToCharArray(wstr, CP_UTF8);
+			strcat_s(TempStr, DATASTRINGMESSAGELEN, m_DataStr);
+			delete[] wstr;
+			delete[] m_DataStr;
+			if ((DataCount % 255) == 0 && DataCount >= 255)
+			{
+				if (outFile.good()) outFile << "GiveExecuteInfoData\n";
+				if (outFile.good()) outFile << TempStr;
+				if (outFile.good()) outFile << "\n";
+
+				int ret = 1;
+				//int ret = m_Client->SendDataMsgToServer(pInfo->MAC, pInfo->IP, "GiveExecuteInfoData", TempStr);
+				if (ret == 0 || ret == -1) {
+					ret = -3;
+					break;
+				}
+				memset(TempStr, '\0', DATASTRINGMESSAGELEN);
+			}
+		}
+		if (TempStr[0] != '\0' && ret != -3)
+		{
+			if (outFile.good()) outFile << "GiveExecuteInfoData\n";
+			if (outFile.good()) outFile << TempStr;
+			if (outFile.good()) outFile << "\n";
+			int ret = 1;
+			//int ret = m_Client->SendDataMsgToServer(pInfo->MAC, pInfo->IP, "GiveExecuteInfoData", TempStr);
+			if (ret == 0 || ret == -1) ret = -3;
+		}
+	}
+	else
+	{
+		ret = -1;
+	}
+	wtr.clear();
+	return ret;
+}
+int Scan::OnlyProcessDump(int ProcessID, TCHAR* FileName)
+{
+	log.logger("Debug", "OnlyProcessDump");
+	TCHAR* Scan_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(Scan_txt);
+	_tcscat_s(Scan_txt, MAX_PATH_EX, _T("\\Scan.txt"));
+	DeleteFile(Scan_txt);
+	std::wofstream outFile(Scan_txt, std::ios::app);
+	if (!outFile.is_open()) log.logger("Error", "Scan.txt open failed");
+
+	log.logger("Debug", "MemProcess");
+	MemProcess* m_MemPro = new MemProcess;
+	int ret = 0;
+	if (!_tcsicmp(FileName, _T("Unknown")))
+	{
+		log.logger("Debug", "Unknown");
+		HANDLE hProc = OpenProcess(PROCESS_ALL_ACCESS, false, ProcessID);
+		if (!hProc)
+			return -1;
+
+#ifndef _M_IX86
+		SIZE_T ptype = m_MemPro->Process32or64(hProc);
+		SIZE_T startmem = 0;
+		SIZE_T maxmem = 0x7FFF0000;
+		if (ptype == 64)
+		{
+			maxmem = 0x7FFFFFEFFFF;
+		}
+#else
+		SIZE_T ptype = 32;
+		SIZE_T startmem = 0;
+		SIZE_T maxmem = 0x7FFF0000;
+#endif
+		wchar_t lastfilename[MAX_PATH];
+		while (startmem < maxmem)
+		{
+			MEMORY_BASIC_INFORMATION mbi;
+			SIZE_T size = VirtualQueryEx(hProc, (LPVOID)startmem, &mbi, sizeof(MEMORY_BASIC_INFORMATION));
+			if (!size)
+			{
+				CloseHandle(hProc);
+				return -1;
+			}
+			if (mbi.State == MEM_COMMIT)
+			{
+				char* buffer = new char[mbi.RegionSize];
+				SIZE_T nread = 0;
+				//DWORD oldprotect;
+				//if (VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,PAGE_EXECUTE_READWRITE,&oldprotect))
+				//{
+				//	mbi.AllocationProtect = oldprotect;
+				//	VirtualProtectEx(hProc,mbi.BaseAddress,mbi.RegionSize,oldprotect,&oldprotect);
+				ReadProcessMemory(hProc, mbi.BaseAddress, buffer, mbi.RegionSize, &nread);
+				if (nread == mbi.RegionSize)
+				{
+					bool typeok = false;
+					if (mbi.AllocationProtect & PAGE_EXECUTE_READWRITE)
+					{
+						//output1 = L"PAGE_EXECUTE_READWRITE-"+output1;
+						//typeok = true;
+						if (!m_MemPro->GetProcessMappedFileName(hProc, mbi.BaseAddress, lastfilename))
+						{
+							typeok = true;
+						}
+					}
+					else if (mbi.AllocationProtect & PAGE_EXECUTE_WRITECOPY)
+					{
+						//output1 = L"PAGE_EXECUTE_WRITECOPY-"+output1;
+						//typeok = true;
+						if (!m_MemPro->GetProcessMappedFileName(hProc, mbi.BaseAddress, lastfilename))
+						{
+							typeok = true;
+						}
+					}
+					if (typeok)
+					{
+						if (IsPESignature((BYTE*)buffer, (int)mbi.RegionSize))
+						{
+							int Sendret = 1;
+							char* InfoStr = new char[MAX_PATH_EX];
+#ifndef _M_IX86
+							sprintf_s(InfoStr, MAX_PATH_EX, "%llu", mbi.RegionSize);
+#else
+							sprintf_s(InfoStr, MAX_PATH_EX, "%lu", mbi.RegionSize);
+#endif
+
+							if (outFile.good()) outFile << "GiveOnlyMemDataInfo\n";
+							if (outFile.good()) outFile << InfoStr;
+							if (outFile.good()) outFile << "\n";
+
+							/*BYTE* TmpBuffer1 = new BYTE[DATABUFFER];
+							memset(TmpBuffer1, '\x0', DATABUFFER);
+							memcpy(TmpBuffer1, InfoStr, strlen(InfoStr));
+							Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveOnlyMemDataInfo", TmpBuffer1);
+							delete[] TmpBuffer1;
+							if (Sendret == 0 || Sendret == -1)
+								ret = -3;
+							delete[] InfoStr;
+							if (ret == -3)
+								break;*/
+							if (mbi.RegionSize > STRDATAPACKETSIZE /*&& ret != -3*/)
+							{
+								SIZE_T tmplen = mbi.RegionSize;
+								for (SIZE_T i = 0;i < mbi.RegionSize;i += STRDATAPACKETSIZE)
+								{
+									BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+									memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+									if (tmplen < STRDATAPACKETSIZE)
+										memcpy(TmpBuffer, buffer + i, tmplen);
+									else
+									{
+										memcpy(TmpBuffer, buffer + i, STRDATAPACKETSIZE);
+										tmplen -= STRDATAPACKETSIZE;
+									}
+									//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, WorkStr, TmpBuffer);
+
+									char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+									if (outFile.good()) outFile << "GiveDllData\n";
+									if (outFile.good()) outFile << charBuffer;
+									if (outFile.good()) outFile << "\n";
+
+									delete[] TmpBuffer;
+									if (Sendret == 0 || Sendret == -1)
+									{
+										ret = -3;
+										break;
+									}
+								}
+								if (ret == -3)
+									break;
+							}
+							else
+							{
+								BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+								memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+								memcpy(TmpBuffer, buffer, mbi.RegionSize);
+								//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, WorkStr, TmpBuffer);
+								char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+								if (outFile.good()) outFile << "GiveDllData\n";
+								if (outFile.good()) outFile << charBuffer;
+								if (outFile.good()) outFile << "\n";
+								delete[] TmpBuffer;
+								if (Sendret == 0 || Sendret == -1)
+								{
+									ret = -3;
+								}
+								if (ret == -3)
+									break;
+							}
+						}
+					}
+				}
+				//}
+				//delete [] buffer;
+			}
+			startmem = (SIZE_T)mbi.BaseAddress + (SIZE_T)mbi.RegionSize;
+		}
+		CloseHandle(hProc);
+	}
+	else
+	{
+		log.logger("Debug", "not Unknown");
+		HMODULE hResult = NULL;
+		HANDLE hSnapshot;
+		MODULEENTRY32 me32;
+		hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, (DWORD)ProcessID);
+		if (hSnapshot != INVALID_HANDLE_VALUE)
+		{
+			log.logger("Debug", "process exsits");
+			me32.dwSize = sizeof(MODULEENTRY32);
+			if (Module32First(hSnapshot, &me32))
+			{
+				log.logger("Debug", "Module32First(hSnapshot, &me32)");
+				do
+				{
+					std::wstring wideString(me32.szExePath);
+					int utf8Length = WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, nullptr, 0, nullptr, nullptr);
+					std::string utf8String(utf8Length, 0);
+					WideCharToMultiByte(CP_UTF8, 0, wideString.c_str(), -1, &utf8String[0], utf8Length, nullptr, nullptr);
+					utf8String = "newname: " + utf8String;
+
+					std::wstring wideString_(FileName);
+					int utf8Length_ = WideCharToMultiByte(CP_UTF8, 0, wideString_.c_str(), -1, nullptr, 0, nullptr, nullptr);
+					std::string utf8String_(utf8Length_, 0);
+					WideCharToMultiByte(CP_UTF8, 0, wideString_.c_str(), -1, &utf8String_[0], utf8Length_, nullptr, nullptr);
+					utf8String_ = "oldname: " + utf8String_;
+
+					// FileName
+
+					log.logger("Debug", utf8String);
+					log.logger("Debug", utf8String_);
+
+					if (!_tcsicmp(me32.szExePath, FileName))
+					{
+						log.logger("Debug", "!_tcsicmp(me32.szExePath, FileName)");
+						char* buffer = new char[me32.modBaseSize];
+						//HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pInfo->ProcessID);
+						//ReadProcessMemory(hProcess, me32.modBaseAddr, buffer, me32.modBaseSize, 0);
+						if (Toolhelp32ReadProcessMemory(ProcessID, me32.modBaseAddr, buffer, me32.modBaseSize, 0))
+						{
+							//char * cFileName = CStringToCharArray(me32.szModule,CP_UTF8);
+							log.logger("Debug", "Toolhelp32ReadProcessMemory");
+							int Sendret = 1;
+							char* InfoStr = new char[MAX_PATH_EX];
+							sprintf_s(InfoStr, MAX_PATH_EX, "%lu", me32.modBaseSize);
+							BYTE* TmpBuffer1 = new BYTE[STRDATAPACKETSIZE];
+							memset(TmpBuffer1, '\x0', STRDATAPACKETSIZE);
+							memcpy(TmpBuffer1, InfoStr, strlen(InfoStr));
+							//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, "GiveOnlyMemDataInfo", TmpBuffer1);
+							char* charBuffer = reinterpret_cast<char*>(TmpBuffer1);
+							if (outFile.good()) outFile << "GiveOnlyMemDataInfo\n";
+							if (outFile.good()) outFile << charBuffer;
+							if (outFile.good()) outFile << "\n";
+							delete[] TmpBuffer1;
+							if (Sendret == 0 || Sendret == -1)
+								ret = -3;
+							delete[] InfoStr;
+							if (ret != -3)
+							{
+								if (me32.modBaseSize > STRDATAPACKETSIZE /*&& ret != -3*/)
+								{
+									DWORD tmplen = me32.modBaseSize;
+									for (SIZE_T i = 0;i < me32.modBaseSize;i += STRDATAPACKETSIZE)
+									{
+										BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+										memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+										if (tmplen < STRDATAPACKETSIZE)
+											memcpy(TmpBuffer, buffer + i, tmplen);
+										else
+										{
+											memcpy(TmpBuffer, buffer + i, STRDATAPACKETSIZE);
+											tmplen -= STRDATAPACKETSIZE;
+										}
+										//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, WorkStr, TmpBuffer);
+										char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+										if (outFile.good()) outFile << "GiveDllData\n";
+										if (outFile.good()) outFile << charBuffer;
+										if (outFile.good()) outFile << "\n";
+
+										delete[] TmpBuffer;
+										if (Sendret == 0 || Sendret == -1)
+										{
+											ret = -3;
+											break;
+										}
+									}
+								}
+								else
+								{
+									BYTE* TmpBuffer = new BYTE[STRDATAPACKETSIZE];
+									memset(TmpBuffer, '\x00', STRDATAPACKETSIZE);
+									memcpy(TmpBuffer, buffer, me32.modBaseSize);
+									//Sendret = m_Client->SendDataBufToServer(pInfo->MAC, pInfo->IP, WorkStr, TmpBuffer);
+									char* charBuffer = reinterpret_cast<char*>(TmpBuffer);
+									if (outFile.good()) outFile << "GiveDllData\n";
+									if (outFile.good()) outFile << charBuffer;
+									if (outFile.good()) outFile << "\n";
+									delete[] TmpBuffer;
+									if (Sendret == 0 || Sendret == -1)
+									{
+										ret = -3;
+									}
+								}
+							}
+							//delete [] cFileName;
+						}
+						else
+							ret = -1;
+						delete[] buffer;
+						//CloseHandle(hProcess);
+						break;
+					}
+					else {
+						log.logger("Debug", "_tcsicmp(me32.szExePath, FileName)");
+					}
+					
+				} while (Module32Next(hSnapshot, &me32));
+			}
+			else {
+				log.logger("Debug", "!Module32First(hSnapshot, &me32)");
+			}
+			
+			CloseHandle(hSnapshot);
+		}
+		else
+			ret = -1;
+	}
+
+
+	return ret;
 }

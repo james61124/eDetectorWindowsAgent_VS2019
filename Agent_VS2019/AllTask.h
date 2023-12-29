@@ -42,6 +42,9 @@ public:
 	Log log;
 	Tool tool;
 
+	TCHAR* filename;
+	TCHAR* zip_filename;
+
 private:
 	
 	

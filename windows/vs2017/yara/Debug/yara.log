@@ -1,0 +1,6 @@
+﻿  args.c
+  common.c
+  threading.c
+  yara.c
+  Generating Code...
+  yara.vcxproj -> C:\Users\user\yara-4.3.2\windows\vs2017\Debug\yara64.exe

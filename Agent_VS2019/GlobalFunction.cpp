@@ -3462,7 +3462,6 @@ void GetThisClientKey(char* pKeyStr)
 
 	if (lResult == ERROR_SUCCESS)
 	{
-
 		DWORD dwValues, dwMaxValueNameLen, dwMaxValueLen;
 		LONG lRet = ::RegQueryInfoKey(hKey,
 			NULL, NULL,    // lpClass, lpcClass

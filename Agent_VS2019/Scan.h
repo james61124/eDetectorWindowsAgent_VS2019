@@ -30,4 +30,6 @@ public:
 
     int ProcessDump(DumpMemoryInfo* pInfo);
     int ScanInjectedProcessDump(ScanMemoryInfo* pInfo);
+    int GetProcessExecute(DumpMemoryInfo* pInfo);
+    int OnlyProcessDump(int ProcessID, TCHAR* filename);
 };

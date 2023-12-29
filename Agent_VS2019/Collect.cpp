@@ -82,6 +82,22 @@ void Collect::DoTask() {
 			InsertFromToInCombination(m_FullDbPath, &mapPredefine, info->tcpSocket);
 		}
 
+		// Delete duplicate row in Chrome History
+		sqlite3* m_db;
+		string query = "DELETE FROM ChromeHistory \
+			WHERE(url, title, visit_time, visit_count, last_visit_time) NOT IN( \
+				SELECT url, title, visit_time, visit_count, last_visit_time \
+				FROM( \
+					SELECT url, title, visit_time, visit_count, last_visit_time, \
+					ROW_NUMBER() OVER(PARTITION BY url, title, visit_time, visit_count, last_visit_time ORDER BY(SELECT NULL)) as row_num \
+					FROM ChromeHistory \
+				) AS Subquery \
+				WHERE row_num = 1 \
+			)";
+		if (!sqlite3_open16(m_FullDbPath, &m_db)) {
+			WriteSQLiteDB(m_db, (char*)query.c_str());
+		}
+
 		if (!_waccess(m_FullDbPath, 00))
 		{
 			TCHAR* collectcomputerinfo_db = new TCHAR[MAX_PATH_EX];
@@ -100,7 +116,7 @@ void Collect::DoTask() {
 			DeleteFile(Collect_zip);
 		}
 		else {
-			printf("m_FullDbPath failed\n");
+			log.logger("Error", "cannot access db file");
 		}
 		delete[] ConfigPath;
 	}
@@ -841,7 +857,6 @@ bool Collect::WriteDataSetToDB(sqlite3* m_db, const vector<CombineObj> vecCombin
 	return true;
 }
 
-
 bool Collect::LoadPredefineConfig(TCHAR* ConfigPath, map<string, vector<PredefineObj>>* mapPredefine)
 {
 	bool bResult = false;
@@ -983,60 +998,6 @@ bool Collect::InsertFromToInCombination(TCHAR* DBName, const map<string, vector<
 	sqlite3_close(m_db);
 	return bResult;
 }
-//bool Collect::GetQueryByTable(string* query, string TableName, string QueryFilter)
-//{
-//	bool bResult = true;
-//	*query += "SELECT ";
-//	if (TableName == "ARPCache") { *query += "id, internetaddress, physicaladdress "; }
-//	else if (TableName == "BaseService") { *query += "id, name, pathname FROM "; }
-//	else if (TableName == "ChromeDownload") { *query += "id, download_url, start_time, target_path "; }
-//	else if (TableName == "ChromeHistory") { *query += "id, url, last_visit_time, title FROM "; }
-//	else if (TableName == "ChromeKeywordSearch") { *query += "id, term, title FROM "; }
-//	else if (TableName == "ChromeLogin") { *query += "id, origin_url, date_created, username_value "; }
-//	else if (TableName == "EventApplication") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-//	else if (TableName == "EventSecurity") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-//	else if (TableName == "EventSystem") { *query += "id, eventid, createdsystemtime, evtrenderdata "; }
-//	else if (TableName == "FirefoxHistory") { *query += "id, url, last_visit_time, title "; }
-//	else if (TableName == "FirefoxLogin") { *query += "id, hostname, timelastused, username "; }
-//	else if (TableName == "IECache") { *query += "id, sourceurlname, lastaccesstime, localfilename "; }
-//	else if (TableName == "IEHistory") { *query += "id, url, visitedtime, title "; }
-//	else if (TableName == "InstalledSoftware") { *query += "id, displayname, registrytime, publisher "; }
-//	else if (TableName == "MUICache") { *query += "id, applicationpath, applicationname "; }
-//	else if (TableName == "Network") { *query += "id, processname, remoteaddress "; }
-//	else if (TableName == "NetworkResources") { *query += "id, resourcesname, ipaddress "; }
-//	else if (TableName == "OpenedFiles") { *query += "id, processname, processid "; }
-//	else if (TableName == "Prefetch") { *query += "id, processname, lastruntime, processpath "; }
-//	else if (TableName == "Process") { *query += "id, process_name, processcreatetime, process_path "; }
-//	else if (TableName == "RecentFile") { *query += "id, name, accesstime, fullpath "; }
-//	else if (TableName == "Service") { *query += "id, name, pathname "; }
-//	else if (TableName == "ShellBags") { *query += "id, path, lastmodifiedtime, slotpath "; }
-//	else if (TableName == "Shortcuts") { *query += "id, shortcutname, modifytime, linkto "; }
-//	else if (TableName == "StartRun") { *query += "id, name, command "; }
-//	else if (TableName == "SystemInfo") { *query += "id, hotfix, os "; }
-//	else if (TableName == "TaskSchedule") { *query += "id, name, lastruntime, path "; }
-//	else if (TableName == "USBdevices") { *query += "id, device_description, last_arrival_date, device_letter "; }
-//	else if (TableName == "UserAssist") { *query += "id, name, modifiedtime, of_times_executed "; }
-//	else if (TableName == "UserProfiles") { *query += "id, username, lastlogontime, usersid "; }
-//	else if (TableName == "Wireless") { *query += "id, profilename, lastmodifiedtime, authentication "; }
-//	else if (TableName == "JumpList") { *query += "id, fullpath, recordtime, application_id "; }
-//	else if (TableName == "WindowsActivity") { *query += "id, app_id, last_modified_on_client, activity_type "; }
-//	else if (TableName == "NetworkDataUsageMonitor") { *query += "id, app_name, timestamp, bytes_sent "; }
-//	else if (TableName == "AppResourceUsageMonitor") { *query += "id, app_name, timestamp, backgroundbyteswritten "; }
-//	else { bResult = false; }
-//
-//	if (bResult == true)
-//	{
-//		*query += "FROM ";
-//		*query += TableName;
-//		if (!QueryFilter.empty())
-//		{
-//			*query += " WHERE ";
-//			*query += QueryFilter;
-//		}
-//	}
-//
-//	return bResult;
-//}
 void Collect::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 {
 
@@ -1075,42 +1036,3 @@ void Collect::CreateProcessForCollection(TCHAR* DBName, SOCKET* tcpSocket)
 	delete[] RunComStr;
 	delete[] RunExeStr;
 }
-//void Collect::CollectData(int i, int iLen) {
-//
-//	char* InfoStr = new char[MAX_PATH_EX];
-//	char* TmpBuffer = new char[DATASTRINGMESSAGELEN];
-//	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
-//	GetMyPath(m_FilePath);
-//	_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\Collection.dll")); // Collection-x64.dll
-//	HMODULE m_lib = LoadLibrary(m_FilePath);
-//	if (m_lib) {
-//		printf("load dll success : %d\n", i);
-//		TCHAR buffer[20]; // Adjust the buffer size as needed
-//		_sntprintf_s(buffer, sizeof(buffer) / sizeof(TCHAR), _T("%d"), CollectionNums[i]);
-//		TCHAR* tcharString = buffer;
-//
-//		try {
-//			wchar_t* m_FullDbPath = new wchar_t[MAX_PATH_EX];
-//			GetMyPath(m_FullDbPath);
-//			_tcscat_s(m_FullDbPath, MAX_PATH_EX, _T("\\collectcomputerinfo.db"));
-//			collect->CollectionProcess(m_lib, m_FullDbPath, tcharString);
-//		}
-//		catch (...) {
-//			log.logger("Error", "collect failed");
-//		}
-//
-//		FreeLibrary(m_lib);
-//	}
-//	else {
-//		printf("load dll failed\n");
-//		log.logger("Error", "collection load dll failed\n");
-//	}
-//
-//	memset(InfoStr, '\0', MAX_PATH_EX);
-//	sprintf_s(InfoStr, MAX_PATH_EX, "%d/%d", i + 1, iLen);
-//	memset(TmpBuffer, '\x0', DATASTRINGMESSAGELEN);
-//	memcpy(TmpBuffer, InfoStr, strlen(InfoStr));
-//
-//	int ret = SendDataPacketToServer("GiveCollectProgress", TmpBuffer, info->tcpSocket);
-//
-//}

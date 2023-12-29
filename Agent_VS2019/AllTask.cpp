@@ -28,6 +28,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 
 		if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectDataInfo", TmpBuffer, tcpSocket);
 		else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageInfo", TmpBuffer, tcpSocket);
+		else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcessInfo", TmpBuffer, tcpSocket);
 
 		if (Sendret > 0)
 		{
@@ -43,11 +44,12 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 						memcpy(TmpBuffer, buffer + i, DATASTRINGMESSAGELEN);
 						tmplen -= DATASTRINGMESSAGELEN;
 					}
-
+					
 					if (!strcmp(feature, "Scan")) Sendret = SendDataPacketToServer("GiveScan", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
+					else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcess", TmpBuffer, tcpSocket);
 					else log.logger("Error", "feature not found");
 
 
@@ -64,6 +66,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 				else if (!strcmp(feature, "Explorer")) Sendret = SendDataPacketToServer("GiveExplorerData", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
+				else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcess", TmpBuffer, tcpSocket);
 				else log.logger("Error", "feature not found");
 
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -85,6 +88,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 				tool.DeleteAllCsvFiles(m_Path);
 			}
 			else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageEnd", TmpBuffer, tcpSocket);
+			else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcessEnd", TmpBuffer, tcpSocket);
 			else log.logger("Error", "feature not found");
 
 			CloseHandle(m_File);
