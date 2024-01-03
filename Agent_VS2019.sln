@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Agent_VS2019", "Agent_VS201
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AgentGenerator", "AgentGenerator\AgentGenerator.vcxproj", "{876BC079-1A02-4D00-84D6-D9034F4B2576}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shell", "Shell\Shell.vcxproj", "{B73435AF-95A2-4AB9-AE35-704CE9221C21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x64.Build.0 = Release|x64
 		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x86.ActiveCfg = Release|Win32
 		{876BC079-1A02-4D00-84D6-D9034F4B2576}.Release|x86.Build.0 = Release|Win32
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Debug|x64.ActiveCfg = Debug|x64
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Debug|x64.Build.0 = Debug|x64
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Debug|x86.ActiveCfg = Debug|Win32
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Debug|x86.Build.0 = Debug|Win32
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x64.ActiveCfg = Release|x64
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x64.Build.0 = Release|x64
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x86.ActiveCfg = Release|Win32
+		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

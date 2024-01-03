@@ -14,6 +14,7 @@
 #include "DetectProcess.h"
 #include "DetectNetwork.h"
 #include "UpdateAgent.h"
+#include "YaraRule.h"
 
 
 
@@ -193,7 +194,8 @@ int main(int argc, char* argv[]) {
 			{"Image", new Image(info, socketsend, cmd)},
 			{"DetectProcess", new DetectProcess(info, socketsend)},
 			{"DetectNetwork", new DetectNetwork(info, socketsend, MyPid)},
-			{"UpdateAgent", new UpdateAgent(info, socketsend)}
+			{"UpdateAgent", new UpdateAgent(info, socketsend)},
+			{"YaraRule", new YaraRule(info, socketsend)}
 		};
 
 

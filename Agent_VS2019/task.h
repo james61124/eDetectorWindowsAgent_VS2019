@@ -112,6 +112,8 @@ public:
     //int GiveUpdateInfo();
     //int GiveUpdateEnd();
 
+    int YaraRule(StrPacket* udata);
+
     int TerminateAll(StrPacket* udata);
     int RemoveAgent(StrPacket* udata);
     //int TerminateAllTask();

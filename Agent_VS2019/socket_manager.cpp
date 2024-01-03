@@ -150,8 +150,8 @@ void SocketManager::HandleTaskToServer(std::string functionName) {
 }
 int SocketManager::HandleTaskFromServer(StrPacket* udata) {
     //printf("receive: %s, %s\n", udata->DoWorking, udata->csMsg);
-    //std::string LogMessage = "receive -> " + std::string(udata->DoWorking) + " : " + std::string(udata->csMsg) + "";
-    //tool.log(LogMessage);
+   /* std::string LogMessage = "receive -> " + std::string(udata->DoWorking) + " : " + std::string(udata->csMsg) + "";
+    tool.log(LogMessage);*/
     //std::cout << "Thread ID: " << std::this_thread::get_id() << std::endl;
 
     //UpdateTaskStatus(udata->DoWorking, std::this_thread::get_id());

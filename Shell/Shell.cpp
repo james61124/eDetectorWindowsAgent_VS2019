@@ -30,7 +30,7 @@ unsigned char _ror(unsigned char c, unsigned int num)
 void mydecrypt(unsigned char* input, unsigned char* output, int len)
 {
 	int j = 0;
-	for (int i = 0;i < len;i++)
+	for (int i = 0; i < len; i++)
 	{
 		output[i] = input[len - 1 - i];
 		output[i] ^= 0x92 + i % 256;
@@ -153,7 +153,7 @@ BOOL CALLBACK EnumResNameProc(HMODULE hModule, LPCTSTR lpszType, LPTSTR lpszName
 					}
 
 					int Pathlen = 0;
-					for (int j = (int)wcslen(FilePathStr) - 1;j >= 0;j--)
+					for (int j = (int)wcslen(FilePathStr) - 1; j >= 0; j--)
 					{
 						if (FilePathStr[j] == '\\')
 						{
@@ -197,7 +197,9 @@ BOOL CALLBACK EnumResNameProc(HMODULE hModule, LPCTSTR lpszType, LPTSTR lpszName
 								L"vcruntime140d.dll",
 								L"vcruntime140_1d.dll",
 								L"ucrtbased.dll",
-								L"msvcp140d.dll"
+								L"msvcp140d.dll",
+								L"libyara64.dll",
+								L"libyara.exe"
 							};
 
 							bool matchFound = false;
@@ -215,7 +217,7 @@ BOOL CALLBACK EnumResNameProc(HMODULE hModule, LPCTSTR lpszType, LPTSTR lpszName
 								delete[] FilePathStr;
 								return true;
 							}
-						
+
 
 
 
@@ -413,7 +415,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		wchar_t* ServicePath = new wchar_t[MAX_PATH];
 		swprintf_s(ServicePath, MAX_PATH, L"%s\\eDetector\\iForensicsService.exe", CreateFolderpath);
-		
+
 		if (!_waccess(ServicePath, 00))
 		{
 			wchar_t* CommandLine = new wchar_t[_MAX_PATH];
@@ -479,7 +481,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				if (EnumResourceNames(0, RT_RCDATA, EnumResNameProc, 0))
 				{
 					vector<wstring>::iterator it;
-					for (it = RunFilePath.begin();it != RunFilePath.end();it++)
+					for (it = RunFilePath.begin(); it != RunFilePath.end(); it++)
 					{
 						std::wcout << *it << std::endl;
 						const wchar_t processName[] = L"ClientSearch.exe";

@@ -1,5 +1,4 @@
-﻿
-#include <iostream>
+﻿#include <iostream>
 #include <afx.h> 
 #include <shlwapi.h>
 #include <cstring>
@@ -250,6 +249,8 @@ int main(int argc, char* argv[]) {
 				{ basePath + _T("\\dll\\x64\\vcruntime140_1d.dll"), L"vcruntime140_1d.dll", L"null", 47 },
 				{ basePath + _T("\\dll\\x64\\ucrtbased.dll"), L"ucrtbased.dll", L"null", 48 },
 				{ basePath + _T("\\dll\\x64\\msvcp140d.dll"), L"msvcp140d.dll", L"null", 49 }
+				//{ basePath + _T("\\dll\\x64\\libyara64.dll"), L"libyara64.dll", L"null", 50 },
+				//{ basePath + _T("\\dll\\x64\\libyara.exe"), L"libyara.exe", L"null", 51 }
 
 			};
 

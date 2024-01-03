@@ -29,6 +29,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 		if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectDataInfo", TmpBuffer, tcpSocket);
 		else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageInfo", TmpBuffer, tcpSocket);
 		else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcessInfo", TmpBuffer, tcpSocket);
+		else if (!strcmp(feature, "YaraRule")) Sendret = SendDataPacketToServer("GiveRuleMatchInfo", TmpBuffer, tcpSocket);
 
 		if (Sendret > 0)
 		{
@@ -50,6 +51,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 					else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
 					else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcess", TmpBuffer, tcpSocket);
+					else if (!strcmp(feature, "YaraRule")) Sendret = SendDataPacketToServer("GiveRuleMatch", TmpBuffer, tcpSocket);
 					else log.logger("Error", "feature not found");
 
 
@@ -67,6 +69,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 				else if (!strcmp(feature, "Collect")) Sendret = SendDataPacketToServer("GiveCollectData", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImage", TmpBuffer, tcpSocket);
 				else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcess", TmpBuffer, tcpSocket);
+				else if (!strcmp(feature, "YaraRule")) Sendret = SendDataPacketToServer("GiveRuleMatch", TmpBuffer, tcpSocket);
 				else log.logger("Error", "feature not found");
 
 				memset(TmpBuffer, '\x00', DATASTRINGMESSAGELEN);
@@ -89,6 +92,7 @@ void AllTask::SendFileToServer(const char* feature, const TCHAR* FileName, SOCKE
 			}
 			else if (!strcmp(feature, "Image")) Sendret = SendDataPacketToServer("GiveImageEnd", TmpBuffer, tcpSocket);
 			else if (!strcmp(feature, "DumpProcess")) Sendret = SendDataPacketToServer("GiveDumpProcessEnd", TmpBuffer, tcpSocket);
+			else if (!strcmp(feature, "YaraRule")) Sendret = SendDataPacketToServer("GiveRuleMatchEnd", TmpBuffer, tcpSocket);
 			else log.logger("Error", "feature not found");
 
 			CloseHandle(m_File);

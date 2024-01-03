@@ -33,6 +33,8 @@ Task::Task(Info* infoInstance, SocketSend* socketSendInstance) {
 	// Update Agent 
 	functionFromServerMap["UpdateAgent"] = &Task::OpenUpdateAgentProcess;
 
+	functionFromServerMap["YaraRule"] = &Task::YaraRule;
+
 	// TerminateAll
 	functionFromServerMap["TerminateAll"] = &Task::TerminateAll;
 
@@ -443,6 +445,34 @@ int Task::OpenUpdateAgentProcess(StrPacket* udata) {
 
 	return 1;
 
+}
+
+int Task::YaraRule(StrPacket* udata) {
+	DWORD m_YaraRuleProcessPid = 0;
+	TCHAR* RunExeStr = new TCHAR[MAX_PATH];
+	TCHAR* RunComStr = new TCHAR[512];
+	GetModuleFileName(GetModuleHandle(NULL), RunExeStr, MAX_PATH);
+
+	wstring filename = tool.GetFileName();
+	TCHAR MyName[MAX_PATH];
+	wcscpy_s(MyName, filename.c_str());
+
+	TCHAR ServerIP[MAX_PATH];
+	swprintf_s(ServerIP, MAX_PATH, L"%hs", info->ServerIP);
+
+	swprintf_s(RunComStr, 512, L"\"%s\" %s %d YaraRule", MyName, ServerIP, info->Port);
+	wprintf(L"Run Process: %ls\n", RunComStr);
+	RunProcessEx(RunExeStr, RunComStr, 1024, FALSE, FALSE, m_YaraRuleProcessPid);
+
+	std::wstring wstr = RunExeStr;
+	int bufferSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	std::string str(bufferSize, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+	info->processMap["YaraRule"] = m_YaraRuleProcessPid;
+	log.logger("Debug", "YaraRule enabled.");
+
+	return 1;
 }
 
 // Terminate Task
