@@ -224,7 +224,7 @@ int main(int argc, char* argv[]) {
 				{ basePath + _T("\\dll\\x86\\msvcp140_1.dll"), L"msvcp140_1.dll", L"null", 23 },
 				{ basePath + _T("\\dll\\x86\\msvcrt.dll"), L"msvcrt.dll", L"null", 24 },
 				{ basePath + _T("\\dll\\x86\\ucrtbase.dll"), L"ucrtbase.dll", L"null", 25 },
-				{ basePath + _T("\\dll\\x86\\vcruntime140.dll"), L"vcruntime140.dll", L"null", 26 },
+				//{ basePath + _T("\\dll\\x86\\vcruntime140.dll"), L"vcruntime140.dll", L"null", 26 },
 				{ basePath + _T("\\dll\\x86\\wlanapi.dll"), L"wlanapi.dll", L"null", 27 },
 
 				{ basePath + _T("\\dll\\x64\\api-ms-win-core-heap-l1-1-0.dll"), L"api-ms-win-core-heap-l1-1-0.dll", L"null", 28 },
@@ -242,11 +242,12 @@ int main(int argc, char* argv[]) {
 				{ basePath + _T("\\dll\\x64\\msvcp140_1.dll"), L"msvcp140_1.dll", L"null", 40 },
 				{ basePath + _T("\\dll\\x64\\msvcrt.dll"), L"msvcrt.dll", L"null", 41 },
 				{ basePath + _T("\\dll\\x64\\ucrtbase.dll"), L"ucrtbase.dll", L"null", 42 },
-				{ basePath + _T("\\dll\\x64\\vcruntime140.dll"), L"vcruntime140.dll", L"null", 43 },
+				/*{ basePath + _T("\\dll\\x64\\vcruntime140.dll"), L"vcruntime140.dll", L"null", 43 },
+				{ basePath + _T("\\dll\\x64\\vcruntime140d.dll"), L"vcruntime140d.dll", L"null", 46 },
+				{ basePath + _T("\\dll\\x64\\vcruntime140_1d.dll"), L"vcruntime140_1d.dll", L"null", 47 },*/
 				{ basePath + _T("\\dll\\x64\\wlanapi.dll"), L"wlanapi.dll", L"null", 44 },
 				{ basePath + _T("\\dll\\x64\\api-ms-win-core-heap-l2-1-0.dll"), L"api-ms-win-core-heap-l2-1-0.dll", L"null", 45 },
-				{ basePath + _T("\\dll\\x64\\vcruntime140d.dll"), L"vcruntime140d.dll", L"null", 46 },
-				{ basePath + _T("\\dll\\x64\\vcruntime140_1d.dll"), L"vcruntime140_1d.dll", L"null", 47 },
+				
 				{ basePath + _T("\\dll\\x64\\ucrtbased.dll"), L"ucrtbased.dll", L"null", 48 },
 				{ basePath + _T("\\dll\\x64\\msvcp140d.dll"), L"msvcp140d.dll", L"null", 49 },
 				{ basePath + _T("\\dll\\x64\\libyara64.dll"), L"libyara64.dll", L"null", 50 },

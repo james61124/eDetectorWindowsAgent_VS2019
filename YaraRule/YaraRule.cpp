@@ -314,19 +314,26 @@ void SysExplorerSearch(TCHAR* m_Path, unsigned int& FileIndex, YaraManger* yaraM
 
 int main()
 {
+	//printf("YaraRule\n");
+	TCHAR* YaraRule_txt = new TCHAR[MAX_PATH_EX];
+	GetMyPath(YaraRule_txt);
+	_tcscat_s(YaraRule_txt, MAX_PATH_EX, _T("\\YaraRule.txt"));
+	std::wofstream outFile(YaraRule_txt, std::ios::app);
+	//if (outFile.good()) outFile << "test" << ";";
+	outFile.close();
 
 	YaraManger* yaraManger = new YaraManger();
 
 	TCHAR* YaraRule_folder = new TCHAR[MAX_PATH_EX];
 	GetMyPath(YaraRule_folder);
-	_tcscat_s(YaraRule_folder, MAX_PATH_EX, _T("\\YaraRule\\"));
+	_tcscat_s(YaraRule_folder, MAX_PATH_EX, _T("\\YaraRule\\YaraRule\\"));
 	unsigned int FileIndex = 0;
 	SysExplorerSearch(YaraRule_folder, FileIndex, yaraManger, "AddYaraRule");
 
 	yaraManger->GetRules();
 	FileIndex = 0;
 	TCHAR* drive = new TCHAR[256];
-	swprintf_s(drive, 256, L"%s", L"C:\\james\\eDetectorWindowsAgent_VS2019\\x64\\");
+	swprintf_s(drive, 256, L"%s", L"C:\\test\\");
 	SysExplorerSearch(drive, FileIndex, yaraManger, "CheckIsMatchYaraRule");
 
 
