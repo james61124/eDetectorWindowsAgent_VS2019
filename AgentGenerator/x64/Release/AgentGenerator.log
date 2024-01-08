@@ -1,13 +1,1 @@
-﻿  AgentGenerator.cpp
-  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
-C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): warning C4477: 'printf' : 格式字串 '%s' 需要 'char *' 類型的引數，但 variadic 引數 1 的類型為 'const wchar_t *'
-C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%ls'
-C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%lls'
-C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%Ls'
-C:\james\eDetectorWindowsAgent_VS2019\AgentGenerator\AgentGenerator.cpp(97,11): message : 請考慮在格式字串中使用 '%ws'
-  正在產生程式碼
-  1 of 531 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  已完成程式碼產生
-  AgentGenerator.vcxproj -> C:\james\eDetectorWindowsAgent_VS2019\x64\Release\AgentGenerator.exe
+﻿
