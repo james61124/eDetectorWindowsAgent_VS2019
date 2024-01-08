@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\james\eDetectorWindowsAgent_VS2019\x64\Release\AgentGenerator.exe</FullPath>
+      <FullPath>C:\Users\user\source\repos\eDetectorWindowsAgent_VS2019\x64\Release\AgentGenerator.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
