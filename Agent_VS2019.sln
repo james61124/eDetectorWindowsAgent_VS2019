@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AgentGenerator", "AgentGene
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shell", "Shell\Shell.vcxproj", "{B73435AF-95A2-4AB9-AE35-704CE9221C21}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "YaraRule", "YaraRule\YaraRule.vcxproj", "{9F379DAF-08B2-49A6-89D0-72764474AF70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x64.Build.0 = Release|x64
 		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x86.ActiveCfg = Release|Win32
 		{B73435AF-95A2-4AB9-AE35-704CE9221C21}.Release|x86.Build.0 = Release|Win32
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Debug|x64.ActiveCfg = Debug|x64
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Debug|x64.Build.0 = Debug|x64
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Debug|x86.ActiveCfg = Debug|Win32
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Debug|x86.Build.0 = Debug|Win32
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Release|x64.ActiveCfg = Release|x64
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Release|x64.Build.0 = Release|x64
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Release|x86.ActiveCfg = Release|Win32
+		{9F379DAF-08B2-49A6-89D0-72764474AF70}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

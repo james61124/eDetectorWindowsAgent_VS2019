@@ -8,8 +8,8 @@
 #include <string>
 #include <iostream>
 using namespace std;
-//#define IsService
-//#define IsDeleteMySelf
+//#define IsService //
+#define IsDeleteMySelf
 #define startupkeyname L"ClientSearch"
 #define SERVICE_NAME _T("iForensics_ClientSearch_Service")
 vector<wstring> RunFilePath;

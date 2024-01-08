@@ -133,6 +133,52 @@ void CheckIfAdmin() {
 
 int main(int argc, char* argv[]) {
 
+	// unzip YaraRule.zip
+	//TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+	//GetMyPath(m_FilePath);
+	//_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\YaraRule.zip"));
+	//HANDLE m_File = CreateFile(m_FilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	//DWORD m_Filesize = GetFileSize(m_File, NULL);
+	//DWORD readsize;
+	//BYTE* buffer = new BYTE[m_Filesize];
+	//if (m_File != INVALID_HANDLE_VALUE) {
+	//	m_Filesize = GetFileSize(m_File, NULL);
+	//	ReadFile(m_File, buffer, m_Filesize, &readsize, NULL);
+	//}
+
+	/*TCHAR* folderPath = new TCHAR[MAX_PATH_EX];
+	GetMyPath(folderPath);
+	_tcscat_s(folderPath, MAX_PATH_EX, _T("\\YaraRule"));
+	CreateDirectory(folderPath, NULL);
+	SetCurrentDirectory(folderPath);
+	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+	GetMyPath(m_FilePath);
+	_tcscat_s(m_FilePath, MAX_PATH_EX, _T("\\YaraRule.zip"));
+	HZIP hz = OpenZip(m_FilePath,0);
+	ZIPENTRY ze; 
+	GetZipItem(hz,-1,&ze); 
+	int numitems=ze.index;
+	for (int i=0; i<numitems; i++) {	
+		GetZipItem(hz,i,&ze);
+		UnzipItem(hz,i,ze.name);
+	}
+	CloseZip(hz);*/
+
+	//HZIP hz;
+	//ZRESULT zr;
+	//ZIPENTRY ze;
+	//BYTE* buf;
+	//DWORD pSize = 0;
+	//hz = OpenZip(buffer, m_Filesize, 0);
+	//zr = GetZipItem(hz, -1, &ze);
+	//int numitems = ze.index;
+	//TCHAR* UnZipName = new TCHAR[MAX_PATH];
+	//for (int i = 0; i < numitems; i++) {
+	//	zr = GetZipItem(hz, i, &ze);
+	//	zr = UnzipItem(hz, i, ze.name);
+	//}
+	//zr = CloseZip(hz);
+
 	
 
     if (argc < 3) {
@@ -234,6 +280,11 @@ int main(int argc, char* argv[]) {
 			// handshake
 			std::thread receiveThread([&]() { socketManager.receiveTCP(); });
 			socketManager.HandleTaskToServer("GiveInfo");
+			std::this_thread::sleep_for(std::chrono::seconds(10));
+			
+			StrPacket* udata = new StrPacket;
+			socketManager.task->YaraRule(udata);
+
 			std::thread CheckConnectThread([&]() { socketManager.task->CheckConnect(); });
 			CheckConnectThread.detach();
 			receiveThread.join();

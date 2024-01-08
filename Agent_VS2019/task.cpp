@@ -76,7 +76,7 @@ int Task::GiveInfo() {
 
 	// file version
 	char* FileVersion = new char[64];
-	strcpy_s(FileVersion, 64, "1.0.5");
+	strcpy_s(FileVersion, 64, "1.0.6");
 	strcpy_s(functionName, 24, "GiveInfo");
 
 	int VMret = VirtualMachine(info->MAC);

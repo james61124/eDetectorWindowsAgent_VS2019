@@ -233,7 +233,7 @@ _HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\james\eDetectorWindowsAgent_VS2019\windows\vs2017\libyara\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\james\eDetectorWindowsAgent_VS2019\windows\vs2017\libyara\Release\libyara64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
